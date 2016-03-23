@@ -8,7 +8,6 @@ body{
 #main-content{
     padding-left: 220px;
     position: relative;
-    z-index: 0;
 }
 
 #main-content header{
@@ -108,4 +107,32 @@ h1{
 
 .clearfix{
     overflow: hidden;
+}
+
+/* FORM */
+
+form label {
+    width: 135px;
+    float: left;
+}
+
+
+form input[type="text"],form textarea {
+    min-width: 400px;
+}
+
+form input, form textarea, form select{
+    padding: 5px;
+    margin-bottom: 10px;
+    float: left;
+    margin-right: 10px;
+}
+
+.btn-primary{
+    background-color: #32637c;
+    border-color: #32637c;
+}
+
+.btn-primary:hover{
+    background-color: #2A566D;
 }

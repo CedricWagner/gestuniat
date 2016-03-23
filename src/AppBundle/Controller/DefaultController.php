@@ -7,6 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use AppBundle\Entity\Alerte;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use AppBundle\Form\AlerteCreationType;
 
 
 
@@ -56,11 +59,28 @@ class DefaultController extends Controller
      * @Route("/dashboard", name="dashboard")
      * @Security("has_role('ROLE_USER')")
      */
-    public function dashboardAction()
+    public function dashboardAction(Request $request)
     {
 
-        return $this->render('operateur/dashboard.html.twig', [
+        $alerte = new Alerte();
+        $alerteForm = $this->createForm(AlerteCreationType::class, $alerte);
+        $alerteForm->handleRequest($request);
 
+        if ($alerteForm->isValid()) {
+                
+            $datetime = new \DateTime();
+
+            $alerte->setDateCreation($datetime);
+            $alerte->setOperateur($this->getUser());
+
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($alerte);
+            $em->flush();
+
+        }
+
+        return $this->render('operateur/dashboard.html.twig', [
+            'alerteForm' => $alerteForm->createView(),
         ]);
 
     }

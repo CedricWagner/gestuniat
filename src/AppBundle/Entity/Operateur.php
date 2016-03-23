@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -59,6 +60,18 @@ class Operateur implements UserInterface
 
     private $plainPassword;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Alerte", mappedBy="operateur")
+     */
+    protected $alertes;
+
+
+
+
+    public function __construct()
+    {
+        $this->alertes = new ArrayCollection();
+    }
 
     /**
      * Get id
