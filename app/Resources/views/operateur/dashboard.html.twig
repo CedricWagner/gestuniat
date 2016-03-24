@@ -10,6 +10,29 @@ Gestuniat - Votre Dashboard
 	<p class="grey-text">Liste des termes des dossiers en cours et notes personnelles</p>
 	<button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#ajouter-alerte"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Ajouter alerte perso.</button>
 	{% include 'modals/ajouter-alerte.html.twig' %}
-	
+	<button class="btn btn-default" type="submit">Historique</button>
+	<button class="btn btn-default" type="submit">Liste des termes</button>
+	<select class="select-default">
+		<option>Termes et alertes</option>
+		<option>Termes uniquement</option>
+		<option>Alertes uniquement</option>
+	</select>
+
+	<div class="spacer-10"></div>
+
+	<div class="row no-gutter">
+		<div class="col-md-4">
+			<div class="col-header"><h4>En retard</h4></div>
+			{% include 'operateur/dashboard/listing-suivis.html.twig' with {'deadline': 'late'} %}
+		</div>
+		<div class="col-md-4">
+			<div class="col-header"><h4>Aujourd'hui</h4></div>
+			{% include 'operateur/dashboard/listing-suivis.html.twig' with {'deadline': 'now'} %}
+		</div>
+		<div class="col-md-4">
+			<div class="col-header"><h4>Plus tard</h4></div>
+			{% include 'operateur/dashboard/listing-suivis.html.twig' with {'deadline': 'incoming'} %}
+		</div>
+	</div>
 
 {% endblock %}

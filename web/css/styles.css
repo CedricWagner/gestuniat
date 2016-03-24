@@ -93,6 +93,8 @@ body{
     background-color: white; 
 }
 
+
+
 /* CONTENT */
 
 h1{
@@ -107,6 +109,45 @@ h1{
 
 .clearfix{
     overflow: hidden;
+}
+
+.row.no-gutter {
+  margin-right: 0;
+  margin-left: 0;
+}
+.row.no-gutter > [class^="col-"],
+.row.no-gutter > [class*=" col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.spacer-10{
+    height: 10px;
+}
+
+.spacer-25{
+    height: 25px;
+}
+
+.spacer-50{
+    height: 50px;
+}
+
+.spacer-100{
+    height: 100px;
+}
+
+.col-header{
+    background-color: #cdcdcd;      
+}
+
+.col-header h4{
+    color: #555555;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+    margin:0;
 }
 
 /* FORM */
@@ -128,6 +169,8 @@ form input, form textarea, form select{
     margin-right: 10px;
 }
 
+/* BUTTONS */
+
 .btn-primary{
     background-color: #32637c;
     border-color: #32637c;
@@ -135,4 +178,54 @@ form input, form textarea, form select{
 
 .btn-primary:hover{
     background-color: #2A566D;
+}
+
+.btn-default{
+    border-color: white;
+    color: #32637c;
+}
+
+.btn-default:hover{
+    background-color: #eeeeee;
+    border-color:#eeeeee;
+    color: #32637c;
+}
+
+.select-default{
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* DASHBOARD */
+
+.listing-item{
+    border:solid thin #cccccc;
+    border-left: solid 5px #cccccc;
+    border-radius: 5px 0px 0px 5px;
+    padding: 10px;
+    margin: 10px;
+    margin-left: 0px;
+}
+
+.listing-item.alerte{
+    border-left-color: #32438b;
+}
+
+.listing-item.alerte h4{
+    color: #32438b;
+}
+
+.listing-item-side{
+    width: 10%;
+    float: left;
+}
+
+.listing-item-content{
+    width: 80%;
+    float: left;
+}
+
+.contextual-icon{
+    font-size: 20px;
+    text-align: right;
 }

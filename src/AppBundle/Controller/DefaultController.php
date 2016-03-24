@@ -79,8 +79,28 @@ class DefaultController extends Controller
 
         }
 
+        $alertes = $this->getDoctrine()
+        ->getRepository('AppBundle:Alerte')
+        ->findBy(array('operateur'=>$this->getUser()),array('dateEcheance'=>'ASC'));
+
+        $dateYesterday = new \DateTime(date('Y-m-d').' -1 day');
+        $dateTomorrow = new \DateTime(date('Y-m-d').' +1 day');
+
+        $lstAlertes = ['late'=>array(),'now'=>array(),'incoming'=>array()];
+
+        foreach ($alertes as $alerte) {
+            if ($alerte->getDateEcheance() <= $dateYesterday) {
+                $lstAlertes['late'][] = $alerte;
+            }elseif ($alerte->getDateEcheance() >= $dateTomorrow) {
+                $lstAlertes['incoming'][] = $alerte;
+            }else{
+                $lstAlertes['now'][] = $alerte;
+            }
+        }
+
         return $this->render('operateur/dashboard.html.twig', [
             'alerteForm' => $alerteForm->createView(),
+            'lstAlertes' => $lstAlertes,
         ]);
 
     }
