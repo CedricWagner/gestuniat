@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Alerte;
@@ -61,6 +62,7 @@ class DefaultController extends Controller
      */
     public function dashboardAction(Request $request)
     {
+        $session = $this->get('session');
 
         $alerte = new Alerte();
         $alerteForm = $this->createForm(AlerteCreationType::class, $alerte);
@@ -72,6 +74,7 @@ class DefaultController extends Controller
 
             $alerte->setDateCreation($datetime);
             $alerte->setOperateur($this->getUser());
+            $alerte->setIsOk(false);
 
             $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($alerte);
@@ -87,20 +90,34 @@ class DefaultController extends Controller
         $dateTomorrow = new \DateTime(date('Y-m-d').' +1 day');
 
         $lstAlertes = ['late'=>array(),'now'=>array(),'incoming'=>array()];
+        $lstHistory = array();
+        $nbAlertes = 0;
 
         foreach ($alertes as $alerte) {
             if ($alerte->getDateEcheance() <= $dateYesterday) {
-                $lstAlertes['late'][] = $alerte;
+                if(!$alerte->getIsOk()){
+                    $lstAlertes['late'][] = $alerte;
+                    $nbAlertes++;
+                }
             }elseif ($alerte->getDateEcheance() >= $dateTomorrow) {
                 $lstAlertes['incoming'][] = $alerte;
             }else{
-                $lstAlertes['now'][] = $alerte;
+                if(!$alerte->getIsOk()){
+                    $lstAlertes['now'][] = $alerte;
+                    $nbAlertes++;
+                }
+            }
+            if($alerte->getIsOk()){
+                $lstHistory[] = $alerte;
             }
         }
+
+        $session->set('nbAlertes', $nbAlertes);
 
         return $this->render('operateur/dashboard.html.twig', [
             'alerteForm' => $alerteForm->createView(),
             'lstAlertes' => $lstAlertes,
+            'lstHistory' => $lstHistory,
         ]);
 
     }
@@ -125,6 +142,43 @@ class DefaultController extends Controller
         // $em = $this->get('doctrine.orm.entity_manager');
         // $em->persist($operateur);
         // $em->flush();
+    }
+
+    /**
+     * @Route("/check-alerte", name="check_alerte")
+     * @Method("POST")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function checkAlerteAction(Request $request)
+    {
+        if($request->isXmlHttpRequest()){
+            $idAlerte = $request->request->get('idAlerte');
+            $target = $request->request->get('target'); 
+            $action = $request->request->get('action');
+
+            if($action=='done'){
+                $value = false;
+            }else{
+                $value = true;
+            }
+
+            if($target == 'alerte'){
+                $alerte = $this->getDoctrine()
+                   ->getRepository('AppBundle:Alerte')
+                   ->find($idAlerte);
+
+                $alerte->setIsOk($value);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($alerte);
+                $em->flush();
+            }
+
+
+            return new Response(json_encode(['state'=>'success'])); 
+       }else{
+            return new Response(json_encode(['state'=>'noXHR']));     
+       }
     }
 
 }

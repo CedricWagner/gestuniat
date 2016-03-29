@@ -5,6 +5,14 @@ body{
     font-weight: 300;
 }
 
+body.loading *:hover, body.loading:hover{
+    cursor: wait;
+}
+
+.glyphicons:before {
+    padding: 0px 0px; 
+}
+
 #main-content{
     padding-left: 220px;
     position: relative;
@@ -25,6 +33,20 @@ body{
     text-align: center;
     color: white;
     border-radius: 5px;
+    position: relative;
+}
+
+.header-button .glyphicons, .header-button .glyphicon{
+    display: block;
+    font-size: 35px;
+    line-height: 65px;
+}
+
+.header-button .badge.nb-alertes{
+    position: absolute;
+    top: -8px;
+    left: 40%;
+    background-color: #9e0039;
 }
 
 #global-search-zone{
@@ -107,9 +129,6 @@ h1{
     color: #9a9a9a;
 }
 
-.clearfix{
-    overflow: hidden;
-}
 
 .row.no-gutter {
   margin-right: 0;
@@ -148,6 +167,33 @@ h1{
     text-align: center;
     padding: 5px;
     margin:0;
+}
+
+.dropdown-menu > li > a.no-padding-top {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+
+.contextual-icon{
+    font-size: 20px;
+    text-align: right;
+    cursor: pointer;
+}
+
+.contextual-item .item-label{
+    display: inline-block;
+    border-left: solid thin #ccc;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.contextual-item .glyphicons{
+    display: inline-block;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 
 /* FORM */
@@ -218,6 +264,7 @@ form input, form textarea, form select{
 .listing-item-side{
     width: 10%;
     float: left;
+    position: relative;
 }
 
 .listing-item-content{
@@ -225,7 +272,7 @@ form input, form textarea, form select{
     float: left;
 }
 
-.contextual-icon{
-    font-size: 20px;
-    text-align: right;
+.listing-item.done h4 span{
+    text-decoration: line-through;
 }
+

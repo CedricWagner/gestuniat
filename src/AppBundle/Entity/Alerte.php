@@ -48,7 +48,12 @@ class Alerte
      * @ORM\Column(name="dateEcheance", type="datetime", nullable=true)
      */
     private $dateEcheance;
-    
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_ok", type="boolean", nullable=true)
+     */
+    private $isOk;
     /**
      * @ORM\ManyToOne(targetEntity="Operateur", inversedBy="alertes")
      * @ORM\JoinColumn(name="operateur_id", referencedColumnName="id")
@@ -159,6 +164,30 @@ class Alerte
     public function getDateEcheance()
     {
         return $this->dateEcheance;
+    }
+
+    /**
+     * Set isOk
+     *
+     * @param bool $isOk
+     *
+     * @return Alerte
+     */
+    public function setIsOk($isOk)
+    {
+        $this->isOk = $isOk;
+
+        return $this;
+    }
+
+    /**
+     * Get isOk
+     *
+     * @return bool
+     */
+    public function getIsOk()
+    {
+        return $this->isOk;
     }
 
     /**

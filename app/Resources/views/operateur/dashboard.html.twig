@@ -10,12 +10,13 @@ Gestuniat - Votre Dashboard
 	<p class="grey-text">Liste des termes des dossiers en cours et notes personnelles</p>
 	<button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#ajouter-alerte"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Ajouter alerte perso.</button>
 	{% include 'modals/ajouter-alerte.html.twig' %}
-	<button class="btn btn-default" type="submit">Historique</button>
+	<button class="btn btn-default" data-toggle="modal" data-target="#historique" type="submit">Historique</button>
+	{% include 'modals/historique.html.twig' %}
 	<button class="btn btn-default" type="submit">Liste des termes</button>
-	<select class="select-default">
-		<option>Termes et alertes</option>
-		<option>Termes uniquement</option>
-		<option>Alertes uniquement</option>
+	<select onchange="eval(this.value)" class="select-default">
+		<option value="toggleAlertes(['.alerte','.terme'])">Termes et alertes</option>
+		<option value="toggleAlertes(['.terme'])">Termes uniquement</option>
+		<option value="toggleAlertes(['.alerte'])">Alertes uniquement</option>
 	</select>
 
 	<div class="spacer-10"></div>
@@ -23,16 +24,37 @@ Gestuniat - Votre Dashboard
 	<div class="row no-gutter">
 		<div class="col-md-4">
 			<div class="col-header"><h4>En retard</h4></div>
-			{% include 'operateur/dashboard/listing-suivis.html.twig' with {'deadline': 'late'} %}
+			{% include 'operateur/dashboard/listing-suivis.inc.html.twig' with {'deadline': 'late'} %}
 		</div>
 		<div class="col-md-4">
 			<div class="col-header"><h4>Aujourd'hui</h4></div>
-			{% include 'operateur/dashboard/listing-suivis.html.twig' with {'deadline': 'now'} %}
+			{% include 'operateur/dashboard/listing-suivis.inc.html.twig' with {'deadline': 'now'} %}
 		</div>
 		<div class="col-md-4">
 			<div class="col-header"><h4>Plus tard</h4></div>
-			{% include 'operateur/dashboard/listing-suivis.html.twig' with {'deadline': 'incoming'} %}
+			{% include 'operateur/dashboard/listing-suivis.inc.html.twig' with {'deadline': 'incoming'} %}
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		function ajaxCheckAlerte(target,idAlerte,action){
+			ajax_start();
+			$.ajax({
+			  method: "POST",
+			  url: "{{ path('check_alerte') }}",
+			  data: { target: target, idAlerte: idAlerte, action: action }
+			})
+			.done(function(response) {
+				ajax_stop();
+				if (action == "done") {
+					$("#listing-"+target+"-"+idAlerte).removeClass('done');
+					$("#listing-"+target+"-"+idAlerte+' .cb-check-alerte').attr('value','');
+				}else{
+					$("#listing-"+target+"-"+idAlerte).addClass('done');
+					$("#listing-"+target+"-"+idAlerte+' .cb-check-alerte').attr('value','done');
+				}
+			});
+		}
+	</script>
 
 {% endblock %}
