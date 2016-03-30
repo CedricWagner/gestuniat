@@ -24,14 +24,11 @@ class DefaultController extends Controller
 
         $authenticationUtils = $this->get('security.authentication_utils');
 
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
 
-        // replace this example code with whatever you need
         return $this->render('front/authentication.html.twig', [
             'error' => $error,
         ]);
@@ -68,7 +65,7 @@ class DefaultController extends Controller
         $alerteForm = $this->createForm(AlerteCreationType::class, $alerte);
         $alerteForm->handleRequest($request);
 
-        if ($alerteForm->isValid()) {
+        if ($alerteForm->isSubmitted() && $alerteForm->isValid()) {
                 
             $datetime = new \DateTime();
 
@@ -80,45 +77,48 @@ class DefaultController extends Controller
             $em->persist($alerte);
             $em->flush();
 
-        }
+            return  $this->redirectToRoute('dashboard');
 
-        $alertes = $this->getDoctrine()
-        ->getRepository('AppBundle:Alerte')
-        ->findBy(array('operateur'=>$this->getUser()),array('dateEcheance'=>'ASC'));
+        }else{
 
-        $dateYesterday = new \DateTime(date('Y-m-d').' -1 day');
-        $dateTomorrow = new \DateTime(date('Y-m-d').' +1 day');
+            $alertes = $this->getDoctrine()
+            ->getRepository('AppBundle:Alerte')
+            ->findBy(array('operateur'=>$this->getUser()),array('dateEcheance'=>'ASC'));
 
-        $lstAlertes = ['late'=>array(),'now'=>array(),'incoming'=>array()];
-        $lstHistory = array();
-        $nbAlertes = 0;
+            $dateYesterday = new \DateTime(date('Y-m-d').' -1 day');
+            $dateTomorrow = new \DateTime(date('Y-m-d').' +1 day');
 
-        foreach ($alertes as $alerte) {
-            if ($alerte->getDateEcheance() <= $dateYesterday) {
-                if(!$alerte->getIsOk()){
-                    $lstAlertes['late'][] = $alerte;
-                    $nbAlertes++;
+            $lstAlertes = ['late'=>array(),'now'=>array(),'incoming'=>array()];
+            $lstHistory = array();
+            $nbAlertes = 0;
+
+            foreach ($alertes as $alerte) {
+                if ($alerte->getDateEcheance()->format('Y-m-d') <= $dateYesterday->format('Y-m-d')) {
+                    if(!$alerte->getIsOk()){
+                        $lstAlertes['late'][] = $alerte;
+                        $nbAlertes++;
+                    }
+                }elseif ($alerte->getDateEcheance()->format('Y-m-d') >= $dateTomorrow->format('Y-m-d')) {
+                    $lstAlertes['incoming'][] = $alerte;
+                }else{
+                    if(!$alerte->getIsOk()){
+                        $lstAlertes['now'][] = $alerte;
+                        $nbAlertes++;
+                    }
                 }
-            }elseif ($alerte->getDateEcheance() >= $dateTomorrow) {
-                $lstAlertes['incoming'][] = $alerte;
-            }else{
-                if(!$alerte->getIsOk()){
-                    $lstAlertes['now'][] = $alerte;
-                    $nbAlertes++;
+                if($alerte->getIsOk()){
+                    $lstHistory[] = $alerte;
                 }
             }
-            if($alerte->getIsOk()){
-                $lstHistory[] = $alerte;
-            }
+
+            $session->set('nbAlertes', $nbAlertes);
+
+            return $this->render('operateur/dashboard.html.twig', [
+                'alerteForm' => $alerteForm->createView(),
+                'lstAlertes' => $lstAlertes,
+                'lstHistory' => $lstHistory,
+            ]);
         }
-
-        $session->set('nbAlertes', $nbAlertes);
-
-        return $this->render('operateur/dashboard.html.twig', [
-            'alerteForm' => $alerteForm->createView(),
-            'lstAlertes' => $lstAlertes,
-            'lstHistory' => $lstHistory,
-        ]);
 
     }
 
@@ -179,6 +179,91 @@ class DefaultController extends Controller
        }else{
             return new Response(json_encode(['state'=>'noXHR']));     
        }
+    }
+
+    /**
+     * @Route("/delete-alerte", name="delete_alerte")
+     * @Method("GET")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function deleteAlerteAction(Request $request)
+    {
+        $idAlerte = $request->query->get('idAlerte');
+        $target = $request->query->get('target');
+
+        if($target == 'alerte'){
+            $alerte = $this->getDoctrine()
+               ->getRepository('AppBundle:Alerte')
+               ->find($idAlerte);
+
+            if ($alerte) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($alerte);
+                $em->flush();
+            }
+        }
+
+        return $this->redirectToRoute('dashboard');
+
+    }
+
+    /**
+     * @Route("/show-edit-alerte", name="show_edit_alerte")
+     * @Method("POST")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function showEditAlerteAction(Request $request)
+    {
+
+        $idAlerte = $request->request->get('idAlerte');
+        $target = $request->request->get('target');
+
+        $alerte = $this->getDoctrine()
+            ->getRepository('AppBundle:Alerte')
+            ->find($idAlerte);
+        $alerteForm = $this->createForm(AlerteCreationType::class, $alerte,array(
+            'action'=> $this->generateUrl('edit_alerte').'?idAlerte='.$idAlerte,
+        ));
+        $alerteForm->handleRequest($request);
+
+        return $this->render('modals/editer-alerte.html.twig', [
+            'alerte' => $alerte,
+            'alerteForm' => $alerteForm->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/edit-alerte", name="edit_alerte")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function editAlerteAction(Request $request)
+    {
+
+        $idAlerte = $request->query->get('idAlerte');
+
+        $alerte = $this->getDoctrine()
+            ->getRepository('AppBundle:Alerte')
+            ->find($idAlerte);
+        $alerteForm = $this->createForm(AlerteCreationType::class, $alerte,array(
+            'action'=> $this->generateUrl('edit_alerte').'?id='.$idAlerte,
+        ));
+        $alerteForm->handleRequest($request);
+
+        if ($alerteForm->isSubmitted() && $alerteForm->isValid()) {
+                
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($alerte);
+            $em->flush();
+
+            return  $this->redirectToRoute('dashboard');
+
+        }else{
+            
+            return  $this->redirectToRoute('dashboard');
+            
+        }
+
+
     }
 
 }

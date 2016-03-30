@@ -55,6 +55,20 @@ Gestuniat - Votre Dashboard
 				}
 			});
 		}
+
+		function ajaxShowEditAlerte(target,idAlerte){
+			ajax_start();
+			$.ajax({
+			  method: "POST",
+			  url: "{{ path('show_edit_alerte') }}",
+			  data: { target: target, idAlerte: idAlerte }
+			})
+			.done(function(response) {
+				ajax_stop();
+				$('body').append(response);
+				$('#editer-'+target+'-'+idAlerte).modal('show');
+			});
+		}
 	</script>
 
 {% endblock %}

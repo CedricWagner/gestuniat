@@ -23,6 +23,30 @@ body.loading *:hover, body.loading:hover{
     background-color: #32637c;
 }
 
+body.internal #main-content header{
+    padding: 0px 20px;
+}
+
+body.internal #main-content header .header-button{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: auto;
+}
+
+body.internal #main-content header .header-button .button-label{
+    display: none;
+}
+
+body.internal #main-content header .header-button .glyphicons{
+    font-size: 20px;
+    line-height: 40px;
+}
+
+body.internal #main-content header .header-button .nb-alertes{
+    top: 10px;
+    left: -8px;
+}
+
 #main-content header .header-button{
     float: left;
     width: 100px;
@@ -50,10 +74,11 @@ body.loading *:hover, body.loading:hover{
 }
 
 #global-search-zone{
-    width: 80%;
     padding: 20px;
+}
+
+#global-search-container{
     margin-top: 20px;
-    border-radius: 5px;
 }
 
 #left-sidebar{
@@ -115,7 +140,22 @@ body.loading *:hover, body.loading:hover{
     background-color: white; 
 }
 
+.filter-container{
+    display: none;
+}
 
+body.has-filter .filter-container{
+    display: block;
+    float: left;
+    width: 20%;
+    background-color: #ebf1f5;
+}
+
+body.has-filter .container-border{
+    float: left;
+    width: 80%;
+    padding-left: 15px;
+}
 
 /* CONTENT */
 
@@ -276,3 +316,37 @@ form input, form textarea, form select{
     text-decoration: line-through;
 }
 
+/* FILTER */
+.filter-container h2{
+    background-color: #8a95a5;
+    margin-top: 0px;
+    padding: 5px 15px; 
+    color: white;
+    font-size: 16px;
+}
+
+.filter-container h3{
+    background-color: #bac3cd;
+    margin-top: 0px;
+    padding: 5px 15px; 
+    color: #333333;
+    font-size: 16px;
+}
+
+.filter-container h3 a{
+    color: #333333;
+}
+
+.filter-container .filter-section input, .filter-container .filter-section select, .filter-container .filter-section label{
+    float: none;
+    min-width: inherit;
+}
+
+ .filter-container .filter-section label{
+    width: inherit;
+ }
+
+.filter-container .filter-section{
+    padding-left:15px; 
+    padding-right:15px; 
+}

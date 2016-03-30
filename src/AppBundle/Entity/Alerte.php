@@ -70,6 +70,7 @@ class Alerte
         return $this->id;
     }
 
+
     /**
      * Set label
      *

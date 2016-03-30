@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Contacts{% endblock %}
+
+{% block additionnal_classes %}internal has-filter{% endblock %}
+
+{% block filter %}
+<form>
+	<h2>Superfiltre Contacts</h2>
+	<div class="filter-section">
+		<select name="selFiltresPerso" class="form-control">
+			<option>Filtres personnalisés</option>
+			<option>filtre 1</option>
+			<option>filtre 2</option>
+			<option>filtre 3</option>
+		</select>
+	</div>
+	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionDateCreation" aria-controls="sectionDateCreation">Date de création</a></h3>
+	<div class="filter-section collapse" id="sectionDateCreation">
+		<input class="form-control" type="date" placeholder="jj/mm/aaaa" />
+	</div>
+	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionAnciennete" aria-controls="sectionAnciennete">Ancienneté</a></h3>
+	<div class="filter-section collapse" id="sectionAnciennete">
+		<input class="form-control" type="date" placeholder="jj/mm/aaaa" />
+	</div>
+	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionStatut" aria-controls="sectionStatut">Statut</a></h3>
+	<div class="filter-section collapse" id="sectionStatut">
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	non-membres
+		  </label>
+		</div>
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	adhérent
+		  </label>
+		</div>
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	prospect
+		  </label>
+		</div>
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	membres conjoints
+		  </label>
+		</div>
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	MOOOOORT
+		  </label>
+		</div>
+	</div>
+	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionSection" aria-controls="sectionSection">Section</a></h3>
+	<div class="filter-section collapse" id="sectionSection">
+		<input class="form-control" type="text" placeholder="Nom de section" />
+	</div>
+	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionFonctions" aria-controls="sectionFonctions">Fonctions</a></h3>
+	<div class="filter-section collapse" id="sectionFonctions">
+		<select name="selFonctionSection" class="form-control">
+			<option>Fonction de section</option>
+			<option>filtre 1</option>
+			<option>filtre 2</option>
+			<option>filtre 3</option>
+		</select>
+		<select name="selFonctionGroupement" class="form-control">
+			<option>Fonction de groupement</option>
+			<option>filtre 1</option>
+			<option>filtre 2</option>
+			<option>filtre 3</option>
+		</select>
+		<select name="selFonctionRepresentation" class="form-control">
+			<option>Fonction de représentation</option>
+			<option>filtre 1</option>
+			<option>filtre 2</option>
+			<option>filtre 3</option>
+		</select>
+	</div>
+	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionLocalisation" aria-controls="sectionLocalisation">Localisation</a></h3>
+	<div class="filter-section collapse" id="sectionLocalisation">
+		<input class="form-control" type="text" placeholder="Nom ville / village" />
+	</div>
+	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionPaiement" aria-controls="sectionPaiement">Paiement</a></h3>
+	<div class="filter-section collapse" id="sectionPaiement">
+		<select name="selPaiement" class="form-control">
+			<option>Tous</option>
+			<option>filtre 1</option>
+			<option>filtre 2</option>
+			<option>filtre 3</option>
+		</select>
+	</div>
+	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionRentier" aria-controls="sectionRentier">Rentier</a></h3>
+	<div class="filter-section collapse" id="sectionRentier">
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	Tous
+		  </label>
+		</div>
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	Dépositaires
+		  </label>
+		</div>
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	Déstinataires individuels
+		  </label>
+		</div>
+		<div class="checkbox">
+		  <label>
+		    <input type="checkbox" value="">
+		    	Offre Découverte
+		  </label>
+		</div>
+	</div>
+</form>
+{% endblock %}
+
+
+{% block content %}
+	<h1>Liste des contacts</h1>
+	
+
+{% endblock %}

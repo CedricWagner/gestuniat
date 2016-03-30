@@ -64,6 +64,10 @@ class Operateur implements UserInterface
      * @ORM\OneToMany(targetEntity="Alerte", mappedBy="operateur")
      */
     protected $alertes;
+    /**
+     * @ORM\OneToMany(targetEntity="FiltrePerso", mappedBy="operateur")
+     */
+    protected $filtresPerso;
 
 
 

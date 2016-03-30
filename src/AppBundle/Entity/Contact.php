@@ -1,0 +1,996 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Contact
+ *
+ * @ORM\Table(name="contact")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ContactRepository")
+ */
+class Contact
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=100)
+     */
+    private $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prenom", type="string", length=100)
+     */
+    private $prenom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mail", type="string", length=100, nullable=true)
+     */
+    private $mail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telFixe", type="string", length=20, nullable=true)
+     */
+    private $telFixe;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telPort", type="string", length=20, nullable=true)
+     */
+    private $telPort;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
+     */
+    private $adresse;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="adresseComp", type="string", length=255, nullable=true)
+     */
+    private $adresseComp;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cp", type="string", length=10, nullable=true)
+     */
+    private $cp;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pays", type="string", length=50, nullable=true)
+     */
+    private $pays;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bp", type="string", length=100, nullable=true)
+     */
+    private $bp;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isRentier", type="boolean")
+     */
+    private $isRentier;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isBI", type="boolean")
+     */
+    private $isBI;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isCourrier", type="boolean")
+     */
+    private $isCourrier;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isEnvoiIndiv", type="boolean")
+     */
+    private $isEnvoiIndiv;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isDossierPaye", type="boolean")
+     */
+    private $isDossierPaye;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="encaisseur", type="string", length=255, nullable=true)
+     */
+    private $encaisseur;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observation", type="text", nullable=true)
+     */
+    private $observation;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numAdh", type="integer")
+     */
+    private $numAdh;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEntree", type="date", nullable=true)
+     */
+    private $dateEntree;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateSortie", type="date", nullable=true)
+     */
+    private $dateSortie;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="statutMat", type="string", length=50, nullable=true)
+     */
+    private $statutMat;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateDelivranceFonc", type="date", nullable=true)
+     */
+    private $dateDelivranceFonc;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isCA", type="boolean")
+     */
+    private $isCA;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateDeces", type="date", nullable=true)
+     */
+    private $dateDeces;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mentionDeces", type="text", nullable=true)
+     */
+    private $mentionDeces;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isOffreDecouverte", type="boolean")
+     */
+    private $isOffreDecouverte;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateOffreDecouverte", type="date", nullable=true)
+     */
+    private $dateOffreDecouverte;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateAdhesion", type="date", nullable=true)
+     */
+    private $dateAdhesion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nomJeuneFille", type="string", length=100, nullable=true)
+     */
+    private $nomJeuneFille;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numSecu", type="string", length=100, nullable=true)
+     */
+    private $numSecu;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateCIF", type="date", nullable=true)
+     */
+    private $dateCIF;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     *
+     * @return Contact
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     *
+     * @return Contact
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * Get prenom
+     *
+     * @return string
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+
+    /**
+     * Set mail
+     *
+     * @param string $mail
+     *
+     * @return Contact
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    /**
+     * Get mail
+     *
+     * @return string
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * Set telFixe
+     *
+     * @param string $telFixe
+     *
+     * @return Contact
+     */
+    public function setTelFixe($telFixe)
+    {
+        $this->telFixe = $telFixe;
+
+        return $this;
+    }
+
+    /**
+     * Get telFixe
+     *
+     * @return string
+     */
+    public function getTelFixe()
+    {
+        return $this->telFixe;
+    }
+
+    /**
+     * Set telPort
+     *
+     * @param string $telPort
+     *
+     * @return Contact
+     */
+    public function setTelPort($telPort)
+    {
+        $this->telPort = $telPort;
+
+        return $this;
+    }
+
+    /**
+     * Get telPort
+     *
+     * @return string
+     */
+    public function getTelPort()
+    {
+        return $this->telPort;
+    }
+
+    /**
+     * Set adresse
+     *
+     * @param string $adresse
+     *
+     * @return Contact
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return string
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * Set adresseComp
+     *
+     * @param string $adresseComp
+     *
+     * @return Contact
+     */
+    public function setAdresseComp($adresseComp)
+    {
+        $this->adresseComp = $adresseComp;
+
+        return $this;
+    }
+
+    /**
+     * Get adresseComp
+     *
+     * @return string
+     */
+    public function getAdresseComp()
+    {
+        return $this->adresseComp;
+    }
+
+    /**
+     * Set cp
+     *
+     * @param string $cp
+     *
+     * @return Contact
+     */
+    public function setCp($cp)
+    {
+        $this->cp = $cp;
+
+        return $this;
+    }
+
+    /**
+     * Get cp
+     *
+     * @return string
+     */
+    public function getCp()
+    {
+        return $this->cp;
+    }
+
+    /**
+     * Set pays
+     *
+     * @param string $pays
+     *
+     * @return Contact
+     */
+    public function setPays($pays)
+    {
+        $this->pays = $pays;
+
+        return $this;
+    }
+
+    /**
+     * Get pays
+     *
+     * @return string
+     */
+    public function getPays()
+    {
+        return $this->pays;
+    }
+
+    /**
+     * Set bp
+     *
+     * @param string $bp
+     *
+     * @return Contact
+     */
+    public function setBp($bp)
+    {
+        $this->bp = $bp;
+
+        return $this;
+    }
+
+    /**
+     * Get bp
+     *
+     * @return string
+     */
+    public function getBp()
+    {
+        return $this->bp;
+    }
+
+    /**
+     * Set isRentier
+     *
+     * @param boolean $isRentier
+     *
+     * @return Contact
+     */
+    public function setIsRentier($isRentier)
+    {
+        $this->isRentier = $isRentier;
+
+        return $this;
+    }
+
+    /**
+     * Get isRentier
+     *
+     * @return bool
+     */
+    public function getIsRentier()
+    {
+        return $this->isRentier;
+    }
+
+    /**
+     * Set isBI
+     *
+     * @param boolean $isBI
+     *
+     * @return Contact
+     */
+    public function setIsBI($isBI)
+    {
+        $this->isBI = $isBI;
+
+        return $this;
+    }
+
+    /**
+     * Get isBI
+     *
+     * @return bool
+     */
+    public function getIsBI()
+    {
+        return $this->isBI;
+    }
+
+    /**
+     * Set isCourrier
+     *
+     * @param boolean $isCourrier
+     *
+     * @return Contact
+     */
+    public function setIsCourrier($isCourrier)
+    {
+        $this->isCourrier = $isCourrier;
+
+        return $this;
+    }
+
+    /**
+     * Get isCourrier
+     *
+     * @return bool
+     */
+    public function getIsCourrier()
+    {
+        return $this->isCourrier;
+    }
+
+    /**
+     * Set isEnvoiIndiv
+     *
+     * @param boolean $isEnvoiIndiv
+     *
+     * @return Contact
+     */
+    public function setIsEnvoiIndiv($isEnvoiIndiv)
+    {
+        $this->isEnvoiIndiv = $isEnvoiIndiv;
+
+        return $this;
+    }
+
+    /**
+     * Get isEnvoiIndiv
+     *
+     * @return bool
+     */
+    public function getIsEnvoiIndiv()
+    {
+        return $this->isEnvoiIndiv;
+    }
+
+    /**
+     * Set isDossierPaye
+     *
+     * @param boolean $isDossierPaye
+     *
+     * @return Contact
+     */
+    public function setIsDossierPaye($isDossierPaye)
+    {
+        $this->isDossierPaye = $isDossierPaye;
+
+        return $this;
+    }
+
+    /**
+     * Get isDossierPaye
+     *
+     * @return bool
+     */
+    public function getIsDossierPaye()
+    {
+        return $this->isDossierPaye;
+    }
+
+    /**
+     * Set encaisseur
+     *
+     * @param string $encaisseur
+     *
+     * @return Contact
+     */
+    public function setEncaisseur($encaisseur)
+    {
+        $this->encaisseur = $encaisseur;
+
+        return $this;
+    }
+
+    /**
+     * Get encaisseur
+     *
+     * @return string
+     */
+    public function getEncaisseur()
+    {
+        return $this->encaisseur;
+    }
+
+    /**
+     * Set observation
+     *
+     * @param string $observation
+     *
+     * @return Contact
+     */
+    public function setObservation($observation)
+    {
+        $this->observation = $observation;
+
+        return $this;
+    }
+
+    /**
+     * Get observation
+     *
+     * @return string
+     */
+    public function getObservation()
+    {
+        return $this->observation;
+    }
+
+    /**
+     * Set numAdh
+     *
+     * @param integer $numAdh
+     *
+     * @return Contact
+     */
+    public function setNumAdh($numAdh)
+    {
+        $this->numAdh = $numAdh;
+
+        return $this;
+    }
+
+    /**
+     * Get numAdh
+     *
+     * @return int
+     */
+    public function getNumAdh()
+    {
+        return $this->numAdh;
+    }
+
+    /**
+     * Set dateEntree
+     *
+     * @param \DateTime $dateEntree
+     *
+     * @return Contact
+     */
+    public function setDateEntree($dateEntree)
+    {
+        $this->dateEntree = $dateEntree;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEntree
+     *
+     * @return \DateTime
+     */
+    public function getDateEntree()
+    {
+        return $this->dateEntree;
+    }
+
+    /**
+     * Set dateSortie
+     *
+     * @param \DateTime $dateSortie
+     *
+     * @return Contact
+     */
+    public function setDateSortie($dateSortie)
+    {
+        $this->dateSortie = $dateSortie;
+
+        return $this;
+    }
+
+    /**
+     * Get dateSortie
+     *
+     * @return \DateTime
+     */
+    public function getDateSortie()
+    {
+        return $this->dateSortie;
+    }
+
+    /**
+     * Set statutMat
+     *
+     * @param string $statutMat
+     *
+     * @return Contact
+     */
+    public function setStatutMat($statutMat)
+    {
+        $this->statutMat = $statutMat;
+
+        return $this;
+    }
+
+    /**
+     * Get statutMat
+     *
+     * @return string
+     */
+    public function getStatutMat()
+    {
+        return $this->statutMat;
+    }
+
+    /**
+     * Set dateDelivranceFonc
+     *
+     * @param \DateTime $dateDelivranceFonc
+     *
+     * @return Contact
+     */
+    public function setDateDelivranceFonc($dateDelivranceFonc)
+    {
+        $this->dateDelivranceFonc = $dateDelivranceFonc;
+
+        return $this;
+    }
+
+    /**
+     * Get dateDelivranceFonc
+     *
+     * @return \DateTime
+     */
+    public function getDateDelivranceFonc()
+    {
+        return $this->dateDelivranceFonc;
+    }
+
+    /**
+     * Set isCA
+     *
+     * @param boolean $isCA
+     *
+     * @return Contact
+     */
+    public function setIsCA($isCA)
+    {
+        $this->isCA = $isCA;
+
+        return $this;
+    }
+
+    /**
+     * Get isCA
+     *
+     * @return bool
+     */
+    public function getIsCA()
+    {
+        return $this->isCA;
+    }
+
+    /**
+     * Set dateDeces
+     *
+     * @param \DateTime $dateDeces
+     *
+     * @return Contact
+     */
+    public function setDateDeces($dateDeces)
+    {
+        $this->dateDeces = $dateDeces;
+
+        return $this;
+    }
+
+    /**
+     * Get dateDeces
+     *
+     * @return \DateTime
+     */
+    public function getDateDeces()
+    {
+        return $this->dateDeces;
+    }
+
+    /**
+     * Set mentionDeces
+     *
+     * @param string $mentionDeces
+     *
+     * @return Contact
+     */
+    public function setMentionDeces($mentionDeces)
+    {
+        $this->mentionDeces = $mentionDeces;
+
+        return $this;
+    }
+
+    /**
+     * Get mentionDeces
+     *
+     * @return string
+     */
+    public function getMentionDeces()
+    {
+        return $this->mentionDeces;
+    }
+
+    /**
+     * Set isOffreDecouverte
+     *
+     * @param boolean $isOffreDecouverte
+     *
+     * @return Contact
+     */
+    public function setIsOffreDecouverte($isOffreDecouverte)
+    {
+        $this->isOffreDecouverte = $isOffreDecouverte;
+
+        return $this;
+    }
+
+    /**
+     * Get isOffreDecouverte
+     *
+     * @return bool
+     */
+    public function getIsOffreDecouverte()
+    {
+        return $this->isOffreDecouverte;
+    }
+
+    /**
+     * Set dateOffreDecouverte
+     *
+     * @param \DateTime $dateOffreDecouverte
+     *
+     * @return Contact
+     */
+    public function setDateOffreDecouverte($dateOffreDecouverte)
+    {
+        $this->dateOffreDecouverte = $dateOffreDecouverte;
+
+        return $this;
+    }
+
+    /**
+     * Get dateOffreDecouverte
+     *
+     * @return \DateTime
+     */
+    public function getDateOffreDecouverte()
+    {
+        return $this->dateOffreDecouverte;
+    }
+
+    /**
+     * Set dateAdhesion
+     *
+     * @param \DateTime $dateAdhesion
+     *
+     * @return Contact
+     */
+    public function setDateAdhesion($dateAdhesion)
+    {
+        $this->dateAdhesion = $dateAdhesion;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAdhesion
+     *
+     * @return \DateTime
+     */
+    public function getDateAdhesion()
+    {
+        return $this->dateAdhesion;
+    }
+
+    /**
+     * Set nomJeuneFille
+     *
+     * @param string $nomJeuneFille
+     *
+     * @return Contact
+     */
+    public function setNomJeuneFille($nomJeuneFille)
+    {
+        $this->nomJeuneFille = $nomJeuneFille;
+
+        return $this;
+    }
+
+    /**
+     * Get nomJeuneFille
+     *
+     * @return string
+     */
+    public function getNomJeuneFille()
+    {
+        return $this->nomJeuneFille;
+    }
+
+    /**
+     * Set numSecu
+     *
+     * @param string $numSecu
+     *
+     * @return Contact
+     */
+    public function setNumSecu($numSecu)
+    {
+        $this->numSecu = $numSecu;
+
+        return $this;
+    }
+
+    /**
+     * Get numSecu
+     *
+     * @return string
+     */
+    public function getNumSecu()
+    {
+        return $this->numSecu;
+    }
+
+    /**
+     * Set dateCIF
+     *
+     * @param \DateTime $dateCIF
+     *
+     * @return Contact
+     */
+    public function setDateCIF($dateCIF)
+    {
+        $this->dateCIF = $dateCIF;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCIF
+     *
+     * @return \DateTime
+     */
+    public function getDateCIF()
+    {
+        return $this->dateCIF;
+    }
+}
+

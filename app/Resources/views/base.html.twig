@@ -13,7 +13,7 @@
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}" />
     </head>
-    <body>
+    <body class="{% block additionnal_classes %}{% endblock %}">
         {% block body %}
             {% block left_sidebar_container %}
                 <div id="left-sidebar">
@@ -29,7 +29,7 @@
                             <div class="spacer"></div>
                             <ul class="menu">
                                 <li><a href="{{ path('dashboard') }}">Accueil</a></li>
-                                <li><a href="">Contacts</a></li>
+                                <li><a href="{{ path('list_contacts') }}">Contacts</a></li>
                                 <li><a href="">Sections</a></li>
                                 <li><a href="">Dossiers</a></li>
                                 <li><a href="">Organismes</a></li>
@@ -51,25 +51,32 @@
                             <header class="clearfix">
                                 {% block header %}
                                     <div class="col-md-6">
-                                        <input type="text" id="global-search-zone" placeholder="Rechercher une personne, une section ou numéro" />
+                                        <div class="input-group" id="global-search-container">
+                                            <input type="text" class="form-control" id="global-search-zone" placeholder="Rechercher une personne, une section ou numéro" />
+                                            <span class="input-group-addon"><span class="glyphicons glyphicons-search"></span></span>
+                                        </div>
                                     </div>
                                     <div class="col-md-6 clearfix">
                                         <a class="header-button button-exit" href="{{ path('logout') }}">
-                                            <span class="glyphicons glyphicons-power" aria-hidden="true"></span>Quitter
+                                            <span class="glyphicons glyphicons-power" aria-hidden="true"></span><span class="button-label">Quitter</span>
                                         </a>
                                         <a class="header-button button-option" href="{# path('reglages') #}">
-                                            <span class="glyphicons glyphicons-cogwheel" aria-hidden="true"></span>Réglages
+                                            <span class="glyphicons glyphicons-cogwheel" aria-hidden="true"></span><span class="button-label">Réglages</span>
                                         </a>
-                                        <a class="header-button button-alert" href="{# path('alertes') #}">
-                                            <span class="glyphicons glyphicons-warning-sign" aria-hidden="true"></span><span class="badge nb-alertes">{{ app.session.get('nbAlertes') }}</span>Alertes
+                                        <a class="header-button button-alert" href="{{ path('dashboard') }}">
+                                            <span class="glyphicons glyphicons-warning-sign" aria-hidden="true"></span><span class="badge nb-alertes">{{ app.session.get('nbAlertes') }}</span><span class="button-label">Alertes</span>
                                         </a>
                                         <a class="header-button button-window" href="" target="_blank">
-                                            <span class="glyphicons glyphicons-multiple-displays" aria-hidden="true"></span>Fenêtre
+                                            <span class="glyphicons glyphicons-multiple-displays" aria-hidden="true"></span><span class="button-label">Fenêtre</span>
                                         </a>
                                     </div>
                                 {% endblock %}
                             </header>
                         {% endblock %}
+                        <div class="filter-container">
+                            {% block filter %}
+                            {% endblock %}
+                        </div>
                         <div class="container-border">
                             <div class="container fullwidth">
                                 {% block content %}

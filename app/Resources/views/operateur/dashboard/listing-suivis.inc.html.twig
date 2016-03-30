@@ -12,8 +12,8 @@
 	        	<div class="listing-item-side right-side">
 	        		<p class="contextual-icon dropdown-toggle" id="options-alerte-{{ alerte.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></p>
 	        		  <ul class="dropdown-menu" aria-labelledby="options-alerte-{{ alerte.id }}">
-					    <li class="contextual-item"><a class="no-padding-top" href="#"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
-					    <li class="contextual-item"><a class="no-padding-top" href="#"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+					    <li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditAlerte('alerte',{{ alerte.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+					    <li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_alerte') }}?target=alerte&idAlerte={{ alerte.id }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
 					  </ul>
 	        	</div>
 	        </div>
