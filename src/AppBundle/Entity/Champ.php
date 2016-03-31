@@ -24,7 +24,7 @@ class Champ
     /**
      * @var string
      *
-     * @ORM\Column(name="label", type="string", length=50, unique=true)
+     * @ORM\Column(name="label", type="string", length=50)
      */
     private $label;
 
@@ -34,6 +34,12 @@ class Champ
      * @ORM\Column(name="type", type="string", length=20)
      */
     private $type;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contexte", type="string", length=20, nullable=true)
+     */
+    private $contexte;
 
 
     /**
@@ -92,6 +98,30 @@ class Champ
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set contexte
+     *
+     * @param string $contexte
+     *
+     * @return Champ
+     */
+    public function setContexte($contexte)
+    {
+        $this->contexte = $contexte;
+
+        return $this;
+    }
+
+    /**
+     * Get contexte
+     *
+     * @return string
+     */
+    public function getContexte()
+    {
+        return $this->contexte;
     }
 
 }

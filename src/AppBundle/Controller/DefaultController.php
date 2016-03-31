@@ -90,20 +90,17 @@ class DefaultController extends Controller
 
             $lstAlertes = ['late'=>array(),'now'=>array(),'incoming'=>array()];
             $lstHistory = array();
-            $nbAlertes = 0;
 
             foreach ($alertes as $alerte) {
                 if ($alerte->getDateEcheance()->format('Y-m-d') <= $dateYesterday->format('Y-m-d')) {
                     if(!$alerte->getIsOk()){
                         $lstAlertes['late'][] = $alerte;
-                        $nbAlertes++;
                     }
                 }elseif ($alerte->getDateEcheance()->format('Y-m-d') >= $dateTomorrow->format('Y-m-d')) {
                     $lstAlertes['incoming'][] = $alerte;
                 }else{
                     if(!$alerte->getIsOk()){
                         $lstAlertes['now'][] = $alerte;
-                        $nbAlertes++;
                     }
                 }
                 if($alerte->getIsOk()){
@@ -111,7 +108,8 @@ class DefaultController extends Controller
                 }
             }
 
-            $session->set('nbAlertes', $nbAlertes);
+
+            $this->updateAlertesInSession();
 
             return $this->render('operateur/dashboard.html.twig', [
                 'alerteForm' => $alerteForm->createView(),
@@ -174,6 +172,7 @@ class DefaultController extends Controller
                 $em->flush();
             }
 
+            $this->updateAlertesInSession();
 
             return new Response(json_encode(['state'=>'success'])); 
        }else{
@@ -255,6 +254,8 @@ class DefaultController extends Controller
             $em->persist($alerte);
             $em->flush();
 
+            $this->updateAlertesInSession();
+
             return  $this->redirectToRoute('dashboard');
 
         }else{
@@ -263,6 +264,26 @@ class DefaultController extends Controller
             
         }
 
+
+    }
+
+    private function updateAlertesInSession(){
+        $alertes = $this->getDoctrine()
+            ->getRepository('AppBundle:Alerte')
+            ->findBy(array('operateur'=>$this->getUser(),'isOk'=>false),array('dateEcheance'=>'ASC'));
+
+        $dateToday = new \DateTime(date('Y-m-d'));
+
+        $lateAlertes = array();
+        foreach ($alertes as $alerte) {
+            if ($alerte->getDateEcheance()->format('Y-m-d') <= $dateToday->format('Y-m-d')) {
+                $lateAlertes[] = $alerte;
+            }
+        }
+
+        $session = $this->get('session');
+        $session->set('nbAlertes', sizeof($lateAlertes));
+        $session->set('lateAlertes', $lateAlertes);
 
     }
 

@@ -8,9 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use AppBundle\Entity\Alerte;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use AppBundle\Form\AlerteCreationType;
 
 
 
@@ -23,8 +20,12 @@ class ContactController extends Controller
     public function listContactsAction(Request $request)
     {
 
-        return $this->render('operateur/contacts.html.twig', [
+        $filtresPerso = $this->getDoctrine()
+                      ->getRepository('AppBundle:FiltrePerso')
+                      ->findBy(array(),array('label'=>'ASC'));
 
+        return $this->render('operateur/contacts.html.twig', [
+            'filtresPerso' => $filtresPerso
         ]);
     }
 

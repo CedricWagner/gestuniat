@@ -28,17 +28,17 @@
                         <div class="menu-container">
                             <div class="spacer"></div>
                             <ul class="menu">
-                                <li><a href="{{ path('dashboard') }}">Accueil</a></li>
-                                <li><a href="{{ path('list_contacts') }}">Contacts</a></li>
-                                <li><a href="">Sections</a></li>
-                                <li><a href="">Dossiers</a></li>
-                                <li><a href="">Organismes</a></li>
-                                <li><a href="">Filtres perso.</a></li>
-                                <li><a href="">Rentier</a></li>
+                                <li><a href="{{ path('dashboard') }}"><span class="glyphicons glyphicons-home"></span>Accueil</a></li>
+                                <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-user"></span>Contacts</a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-flag"></span>Sections</a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-folder-open"></span>Dossiers</a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-government"></span>Organismes</a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-adjust-alt"></span>Filtres perso.</a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-book"></span>Rentier</a></li>
                             </ul>
                             <div class="spacer"></div>
                             <ul class="menu">
-                                <li><a href="">Support</a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-life-preserver"></span>Support</a></li>
                             </ul>
                         </div>
                     {% endblock %}    
@@ -63,12 +63,31 @@
                                         <a class="header-button button-option" href="{# path('reglages') #}">
                                             <span class="glyphicons glyphicons-cogwheel" aria-hidden="true"></span><span class="button-label">Réglages</span>
                                         </a>
-                                        <a class="header-button button-alert" href="{{ path('dashboard') }}">
+                                        <a class="header-button button-alert" href="#" data-toggle="modal" data-target="#lateAlertes">
                                             <span class="glyphicons glyphicons-warning-sign" aria-hidden="true"></span><span class="badge nb-alertes">{{ app.session.get('nbAlertes') }}</span><span class="button-label">Alertes</span>
                                         </a>
                                         <a class="header-button button-window" href="" target="_blank">
                                             <span class="glyphicons glyphicons-multiple-displays" aria-hidden="true"></span><span class="button-label">Fenêtre</span>
                                         </a>
+                                    </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="lateAlertes" tabindex="-1" role="dialog" aria-labelledby="lateAlertesLabel">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="lateAlertesLabel">Tâches urgentes</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            {% for history in app.session.get('lateAlertes') %}
+                                                {% include 'operateur/dashboard/alerte-item.inc.html.twig' with {'alerte': history} %}
+                                            {% endfor %}
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
                                 {% endblock %}
                             </header>

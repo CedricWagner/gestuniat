@@ -31,9 +31,9 @@ class FiltrePerso
     /**
      * @var string
      *
-     * @ORM\Column(name="zone", type="string", length=20)
+     * @ORM\Column(name="contexte", type="string", length=20)
      */
-    private $zone;
+    private $contexte;
 
     /**
      * @ORM\ManyToOne(targetEntity="Operateur", inversedBy="filtresPerso")
@@ -77,30 +77,6 @@ class FiltrePerso
     }
 
     /**
-     * Set zone
-     *
-     * @param string $zone
-     *
-     * @return FiltrePerso
-     */
-    public function setZone($zone)
-    {
-        $this->zone = $zone;
-
-        return $this;
-    }
-
-    /**
-     * Get zone
-     *
-     * @return string
-     */
-    public function getZone()
-    {
-        return $this->zone;
-    }
-
-    /**
      * Set operateur
      *
      * @param \Operateur $operateur
@@ -122,6 +98,30 @@ class FiltrePerso
     public function getOperateur()
     {
         return $this->operateur;
+    }
+
+    /**
+     * Set contexte
+     *
+     * @param string $contexte
+     *
+     * @return FiltrePerso
+     */
+    public function setContexte($contexte)
+    {
+        $this->contexte = $contexte;
+
+        return $this;
+    }
+
+    /**
+     * Get contexte
+     *
+     * @return string
+     */
+    public function getContexte()
+    {
+        return $this->contexte;
     }
 }
 

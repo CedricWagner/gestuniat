@@ -110,11 +110,21 @@ body.internal #main-content header .header-button .nb-alertes{
     color: white;
 }
 
+.menu-container ul{
+    padding-left: 20px;
+}
+
 .menu-container ul li{
     font-weight: bold;
     text-transform: uppercase;
     padding-top: 10px;
     padding-bottom: 10px;
+    list-style-type: none;
+}
+
+.menu-container ul li .glyphicons{
+    display: inline-block;
+    padding-right: 30px;
 }
 
 .menu-container ul li a{
@@ -333,6 +343,25 @@ form input, form textarea, form select{
     font-size: 16px;
 }
 
+.filter-container h3 a .glyphicons, .filter-container h2 .glyphicons{
+    float: right;
+    color: white;
+    display: none;
+    cursor: pointer;
+}
+
+.filter-container h2 .glyphicons{
+    display: inline-block;
+}
+
+.filter-container h3 a.collapsed .glyphicons.rotate90{
+    display: inline-block;
+}
+
+.filter-container h3 a:not(.collapsed) .glyphicons.rotate270{
+    display: inline-block;
+}
+
 .filter-container h3 a{
     color: #333333;
 }
@@ -349,4 +378,19 @@ form input, form textarea, form select{
 .filter-container .filter-section{
     padding-left:15px; 
     padding-right:15px; 
+}
+
+.filter-section{
+
+}
+
+.filter-section.section-save-filter{
+    background-color: #c4df9b;
+    text-align: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.filter-section.section-save-filter a{
+    color: #468847;
 }

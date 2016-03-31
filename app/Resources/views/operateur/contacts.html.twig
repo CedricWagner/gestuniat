@@ -5,121 +5,143 @@
 {% block additionnal_classes %}internal has-filter{% endblock %}
 
 {% block filter %}
-<form>
-	<h2>Superfiltre Contacts</h2>
-	<div class="filter-section">
-		<select name="selFiltresPerso" class="form-control">
-			<option>Filtres personnalisés</option>
-			<option>filtre 1</option>
-			<option>filtre 2</option>
-			<option>filtre 3</option>
+<form class="filter" id="filter-contact" data-context="contact">
+	<h2>Superfiltre Contacts<span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('show')" class="glyphicons glyphicons-chevron-right rotate90"></span><span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('hide')" class="glyphicons glyphicons-chevron-right rotate270"></span></h2>
+	<div class="filter-section head">
+		<select name="selFiltresPerso" onchange="$('.filter-section').collapse('show')" class="form-control ignore">
+			<option value="0">Filtres personnalisés</option>
+			{% for filtrePerso in filtresPerso %}
+				<option value="{{ filtrePerso.id }}">{{ filtrePerso.label }}</option>
+			{% endfor %}
 		</select>
 	</div>
-	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionDateCreation" aria-controls="sectionDateCreation">Date de création</a></h3>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDateCreation" aria-controls="sectionDateCreation">Date de création<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionDateCreation">
-		<input class="form-control" type="date" placeholder="jj/mm/aaaa" />
+		<input class="form-control" type="date" name="dateCreation" placeholder="jj/mm/aaaa" />
 	</div>
-	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionAnciennete" aria-controls="sectionAnciennete">Ancienneté</a></h3>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionAnciennete" aria-controls="sectionAnciennete">Ancienneté<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionAnciennete">
-		<input class="form-control" type="date" placeholder="jj/mm/aaaa" />
+		<input class="form-control" type="date" name="dateAnciennete" placeholder="jj/mm/aaaa" />
 	</div>
-	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionStatut" aria-controls="sectionStatut">Statut</a></h3>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionStatut" aria-controls="sectionStatut">Statut<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionStatut">
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" name="cbStatut" value="1">
 		    	non-membres
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" name="cbStatut" value="2">
 		    	adhérent
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" name="cbStatut" value="3">
 		    	prospect
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" name="cbStatut" value="4">
 		    	membres conjoints
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" name="cbStatut" value="5">
 		    	MOOOOORT
 		  </label>
 		</div>
 	</div>
-	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionSection" aria-controls="sectionSection">Section</a></h3>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionSection" aria-controls="sectionSection">Section<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionSection">
-		<input class="form-control" type="text" placeholder="Nom de section" />
+		<input class="form-control" name="txtSection" type="text" placeholder="Nom de section" />
 	</div>
-	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionFonctions" aria-controls="sectionFonctions">Fonctions</a></h3>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionFonctions" aria-controls="sectionFonctions">Fonctions<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionFonctions">
 		<select name="selFonctionSection" class="form-control">
-			<option>Fonction de section</option>
-			<option>filtre 1</option>
-			<option>filtre 2</option>
-			<option>filtre 3</option>
+			<option value="0">Fonction de section</option>
+			<option value="0">filtre 1</option>
+			<option value="0">filtre 2</option>
+			<option value="0">filtre 3</option>
 		</select>
 		<select name="selFonctionGroupement" class="form-control">
-			<option>Fonction de groupement</option>
-			<option>filtre 1</option>
-			<option>filtre 2</option>
-			<option>filtre 3</option>
+			<option value="0">Fonction de groupement</option>
+			<option value="0">filtre 1</option>
+			<option value="0">filtre 2</option>
+			<option value="0">filtre 3</option>
 		</select>
 		<select name="selFonctionRepresentation" class="form-control">
-			<option>Fonction de représentation</option>
-			<option>filtre 1</option>
-			<option>filtre 2</option>
-			<option>filtre 3</option>
+			<option value="0">Fonction de représentation</option>
+			<option value="0">filtre 1</option>
+			<option value="0">filtre 2</option>
+			<option value="0">filtre 3</option>
 		</select>
 	</div>
-	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionLocalisation" aria-controls="sectionLocalisation">Localisation</a></h3>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionLocalisation" aria-controls="sectionLocalisation">Localisation<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionLocalisation">
 		<input class="form-control" type="text" placeholder="Nom ville / village" />
 	</div>
-	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionPaiement" aria-controls="sectionPaiement">Paiement</a></h3>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionPaiement" aria-controls="sectionPaiement">Paiement<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionPaiement">
 		<select name="selPaiement" class="form-control">
-			<option>Tous</option>
-			<option>filtre 1</option>
-			<option>filtre 2</option>
-			<option>filtre 3</option>
+			<option value="0">Tous</option>
+			<option value="0">filtre 1</option>
+			<option value="0">filtre 2</option>
+			<option value="0">filtre 3</option>
 		</select>
 	</div>
-	<h3><a data-toggle="collapse" aria-expanded="false" href="#sectionRentier" aria-controls="sectionRentier">Rentier</a></h3>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionRentier" aria-controls="sectionRentier">Rentier<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionRentier">
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" value="0">
 		    	Tous
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" value="0">
 		    	Dépositaires
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" value="0">
 		    	Déstinataires individuels
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="">
+		    <input type="checkbox" value="0">
 		    	Offre Découverte
 		  </label>
 		</div>
+	</div>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionPrevoyance" aria-controls="sectionPrevoyance">Contrats prévoyance<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionPrevoyance">
+		<select name="selPrevoyance" class="form-control">
+			<option value="0">Tous</option>
+			<option value="0">filtre 1</option>
+			<option value="0">filtre 2</option>
+			<option value="0">filtre 3</option>
+		</select>
+	</div>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDiplome" aria-controls="sectionDiplome">Diplômes<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionDiplome">
+		<select name="selDiplome" class="form-control">
+			<option value="0">Tous</option>
+			<option value="0">filtre 1</option>
+			<option value="0">filtre 2</option>
+			<option value="0">filtre 3</option>
+		</select>
+	</div>
+	<div class="filter-section section-save-filter">
+		<input class="form-control ignore" type="text" id="filter-name" placeholder="Nommez votre filtre" />
+		<a href="#" onclick="ajaxSaveFilter('#filter-contact','{{ path('save_filter') }}','{{ path('list_contacts') }}')">Sauvegarde de votre filtre</a>
 	</div>
 </form>
 {% endblock %}

@@ -37,38 +37,7 @@ Gestuniat - Votre Dashboard
 	</div>
 
 	<script type="text/javascript">
-		function ajaxCheckAlerte(target,idAlerte,action){
-			ajax_start();
-			$.ajax({
-			  method: "POST",
-			  url: "{{ path('check_alerte') }}",
-			  data: { target: target, idAlerte: idAlerte, action: action }
-			})
-			.done(function(response) {
-				ajax_stop();
-				if (action == "done") {
-					$("#listing-"+target+"-"+idAlerte).removeClass('done');
-					$("#listing-"+target+"-"+idAlerte+' .cb-check-alerte').attr('value','');
-				}else{
-					$("#listing-"+target+"-"+idAlerte).addClass('done');
-					$("#listing-"+target+"-"+idAlerte+' .cb-check-alerte').attr('value','done');
-				}
-			});
-		}
 
-		function ajaxShowEditAlerte(target,idAlerte){
-			ajax_start();
-			$.ajax({
-			  method: "POST",
-			  url: "{{ path('show_edit_alerte') }}",
-			  data: { target: target, idAlerte: idAlerte }
-			})
-			.done(function(response) {
-				ajax_stop();
-				$('body').append(response);
-				$('#editer-'+target+'-'+idAlerte).modal('show');
-			});
-		}
 	</script>
 
 {% endblock %}
