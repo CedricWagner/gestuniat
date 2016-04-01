@@ -29,7 +29,7 @@ class FiltreValeur
     private $valeur;
 
     /**
-     * @ORM\ManyToOne(targetEntity="FiltrePerso")
+     * @ORM\ManyToOne(targetEntity="FiltrePerso", inversedBy="filtreValeurs")
      * @ORM\JoinColumn(name="filtre_perso_id", referencedColumnName="id")
      */
     protected $filtrePerso;

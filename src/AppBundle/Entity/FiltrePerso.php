@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * FiltrePerso
@@ -40,6 +41,15 @@ class FiltrePerso
      * @ORM\JoinColumn(name="operateur_id", referencedColumnName="id")
      */
     protected $operateur;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="FiltreValeur", mappedBy="filtrePerso")
+     */
+    protected $filtreValeurs;
+
+    public function __construct() {
+        $this->filtreValeurs = new ArrayCollection();
+    }
 
 
     /**
@@ -123,5 +133,44 @@ class FiltrePerso
     {
         return $this->contexte;
     }
+
+    /**
+     * Set filtreValeurs
+     *
+     * @param ArrayCollection $filtreValeurs
+     *
+     * @return FiltrePerso
+     */
+    public function setFiltreValeurs($filtreValeurs)
+    {
+        $this->filtreValeurs = $filtreValeurs;
+
+        return $this;
+    }
+
+    /**
+     * Get filtreValeurs
+     *
+     * @return ArrayCollection 
+     */
+    public function getFiltreValeurs()
+    {
+        return $this->filtreValeurs;   
+    }
+
+    public function getFiltreValeur($label)
+    {
+        $_filtreValeur = null;
+        foreach ($this->filtreValeurs as $filtreValeur) {
+            if ($filtreValeur->getChamp()->getLabel()==$label) {
+                $_filtreValeur = $filtreValeur;
+            }
+        }
+
+        return $_filtreValeur?$_filtreValeur->getValeur():false;
+
+    }
+
+
 }
 

@@ -45,15 +45,20 @@ class FilterController extends Controller
 			$qb->setParameter('filtrePerso', $filtrePerso);
 			$qb->getQuery()->execute();
 
+            $action = 'edit';
+
         }else{
-        	$filtrePerso = new FiltrePerso();
-        	$filtrePerso->setLabel($name);
-        	$filtrePerso->setContexte($context);
-        	$filtrePerso->setOperateur($operateur);
+            $filtrePerso = new FiltrePerso();
+            $filtrePerso->setLabel($name);
+            $filtrePerso->setContexte($context);
+            $filtrePerso->setOperateur($operateur);
 
             $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($filtrePerso);
             $em->flush();
+
+            $action = 'add';
+
         }
 
         foreach ($fields as $field) {
@@ -94,7 +99,7 @@ class FilterController extends Controller
 
 
 
-        return new Response(json_encode(array('state'=>'success')));
+        return new Response(json_encode(array('state'=>'success','action'=>$action,'id'=>$filtrePerso->getId(),'label'=>$filtrePerso->getLabel())));
     }
 
 }

@@ -71,8 +71,6 @@ function ajaxSaveFilter(formFilter,ajaxUrl){
 			}
 		}
 	});
-	
-	console.log(fields);
 
 	ajax_start();
 	$.ajax({
@@ -81,8 +79,11 @@ function ajaxSaveFilter(formFilter,ajaxUrl){
 	  data: { context: $(formFilter).data('context'), name: $(formFilter).find('#filter-name').val(), fields:fields }
 	})
 	.done(function(response) {
+		response = JSON.parse(response);
 		ajax_stop();
-		console.log(response);
+		if(response.action=='add'){
+			$(formFilter).find('.select-filtre-perso').append('<option selected="selected" value="'+response.id+'">'+response.label+'</option>');
+		}
 	});
 }
 

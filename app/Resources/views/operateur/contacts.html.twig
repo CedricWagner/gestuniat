@@ -8,53 +8,31 @@
 <form class="filter" id="filter-contact" data-context="contact">
 	<h2>Superfiltre Contacts<span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('show')" class="glyphicons glyphicons-chevron-right rotate90"></span><span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('hide')" class="glyphicons glyphicons-chevron-right rotate270"></span></h2>
 	<div class="filter-section head">
-		<select name="selFiltresPerso" onchange="$('.filter-section').collapse('show')" class="form-control ignore">
+		<select name="selFiltresPerso" onchange="document.location = '/contact/liste/'+this.value" class="form-control ignore select-filtre-perso">
 			<option value="0">Filtres personnalisés</option>
 			{% for filtrePerso in filtresPerso %}
-				<option value="{{ filtrePerso.id }}">{{ filtrePerso.label }}</option>
+				<option {{ currentFilter and currentFilter.id == filtrePerso.id ? 'selected="selected"' : '' }} value="{{ filtrePerso.id }}">{{ filtrePerso.label }}</option>
 			{% endfor %}
 		</select>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDateCreation" aria-controls="sectionDateCreation">Date de création<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionDateCreation">
-		<input class="form-control" type="date" name="dateCreation" placeholder="jj/mm/aaaa" />
+		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateCreation') : '' }}" type="date" name="dateCreation" placeholder="jj/mm/aaaa" />
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionAnciennete" aria-controls="sectionAnciennete">Ancienneté<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionAnciennete">
-		<input class="form-control" type="date" name="dateAnciennete" placeholder="jj/mm/aaaa" />
+		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateAnciennete') : '' }}" type="date" name="dateAnciennete" placeholder="jj/mm/aaaa" />
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionStatut" aria-controls="sectionStatut">Statut<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionStatut">
-		<div class="checkbox">
-		  <label>
-		    <input type="checkbox" name="cbStatut" value="1">
-		    	non-membres
-		  </label>
-		</div>
-		<div class="checkbox">
-		  <label>
-		    <input type="checkbox" name="cbStatut" value="2">
-		    	adhérent
-		  </label>
-		</div>
-		<div class="checkbox">
-		  <label>
-		    <input type="checkbox" name="cbStatut" value="3">
-		    	prospect
-		  </label>
-		</div>
-		<div class="checkbox">
-		  <label>
-		    <input type="checkbox" name="cbStatut" value="4">
-		    	membres conjoints
-		  </label>
-		</div>
-		<div class="checkbox">
-		  <label>
-		    <input type="checkbox" name="cbStatut" value="5">
-		    	MOOOOORT
-		  </label>
-		</div>
+		{% for sj in statutsJuridiques %}
+			<div class="checkbox">
+			  <label>
+			    <input type="checkbox" {{ currentFilter and currentFilter.getFiltreValeur('cbStatut') == sj.id ? 'checked="checked"' : '' }} name="cbStatut" value="{{ sj.id }}">
+			    	{{ sj.label }}
+			  </label>
+			</div>
+		{% endfor %}
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionSection" aria-controls="sectionSection">Section<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionSection">
@@ -64,59 +42,54 @@
 	<div class="filter-section collapse" id="sectionFonctions">
 		<select name="selFonctionSection" class="form-control">
 			<option value="0">Fonction de section</option>
-			<option value="0">filtre 1</option>
-			<option value="0">filtre 2</option>
-			<option value="0">filtre 3</option>
+			{% for fs in fonctionsSection %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selFonctionSection') == fs.id ? 'selected="selected"' : '' }} value="{{ fs.id }}">{{ fs.label }}</option>
+			{% endfor %}
 		</select>
 		<select name="selFonctionGroupement" class="form-control">
 			<option value="0">Fonction de groupement</option>
-			<option value="0">filtre 1</option>
-			<option value="0">filtre 2</option>
-			<option value="0">filtre 3</option>
+			{% for fg in fonctionsGroupement %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selFonctionGroupement') == fg.id ? 'selected="selected"' : '' }} value="{{ fg.id }}">{{ fg.label }}</option>
+			{% endfor %}
 		</select>
-		<select name="selFonctionRepresentation" class="form-control">
-			<option value="0">Fonction de représentation</option>
-			<option value="0">filtre 1</option>
-			<option value="0">filtre 2</option>
-			<option value="0">filtre 3</option>
-		</select>
+		<input class="form-control" name="txtRepresentation" type="text" {{ currentFilter ? currentFilter.getFiltreValeur('txtRepresentation') : '' }} placeholder="Fonction de représentation" />
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionLocalisation" aria-controls="sectionLocalisation">Localisation<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionLocalisation">
-		<input class="form-control" type="text" placeholder="Nom ville / village" />
+		<input class="form-control" type="text" name="txtLocalisation" value="{{ currentFilter ? currentFilter.getFiltreValeur('txtLocalisation') : '' }}" placeholder="Nom ville / village" />
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionPaiement" aria-controls="sectionPaiement">Paiement<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionPaiement">
 		<select name="selPaiement" class="form-control">
-			<option value="0">Tous</option>
-			<option value="0">filtre 1</option>
-			<option value="0">filtre 2</option>
-			<option value="0">filtre 3</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selPaiement') == '0' ? 'selected="selected"' : '' }} value="0">Tous</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selPaiement') == 'V_PAYEE' ? 'selected="selected"' : '' }} value="V_PAYEE">Vignette contributive payée</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selPaiement') == 'V_RETARD' ? 'selected="selected"' : '' }} value="V_RETARD">Vignette contributive en retard</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selPaiement') == 'DON' ? 'selected="selected"' : '' }} value="DON">Dons</option>
 		</select>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionRentier" aria-controls="sectionRentier">Rentier<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionRentier">
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="0">
+		    <input type="checkbox" name="cbRentier" {{ currentFilter and currentFilter.getFiltreValeur('cbRentier') == '0' ? 'checked="checked"' : '' }} value="0">
 		    	Tous
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="0">
+		    <input type="checkbox" name="cbRentier" {{ currentFilter and currentFilter.getFiltreValeur('cbRentier') == 'RENTIER' ? 'checked="checked"' : '' }} value="RENTIER">
 		    	Dépositaires
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="0">
+		    <input type="checkbox"  name="cbRentier" {{ currentFilter and currentFilter.getFiltreValeur('cbRentier') == 'DESTINATAIRE_INDIV' ? 'checked="checked"' : '' }} value="DESTINATAIRE_INDIV">
 		    	Déstinataires individuels
 		  </label>
 		</div>
 		<div class="checkbox">
 		  <label>
-		    <input type="checkbox" value="0">
+		    <input type="checkbox"  name="cbRentier" {{ currentFilter and currentFilter.getFiltreValeur('cbRentier') == 'OFFRE_DECOUVERTE' ? 'checked="checked"' : '' }} value="OFFRE_DECOUVERTE">
 		    	Offre Découverte
 		  </label>
 		</div>
@@ -125,18 +98,17 @@
 	<div class="filter-section collapse" id="sectionPrevoyance">
 		<select name="selPrevoyance" class="form-control">
 			<option value="0">Tous</option>
-			<option value="0">filtre 1</option>
-			<option value="0">filtre 2</option>
-			<option value="0">filtre 3</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selPrevoyance') == 'OBS' ? 'selected="selected"' : '' }} value="OBS">Prévoyance obsèque</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selPrevoyance') == 'AGRR' ? 'selected="selected"' : '' }} value="AGRR">Prévoyance AGRR</option>
 		</select>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDiplome" aria-controls="sectionDiplome">Diplômes<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionDiplome">
 		<select name="selDiplome" class="form-control">
 			<option value="0">Tous</option>
-			<option value="0">filtre 1</option>
-			<option value="0">filtre 2</option>
-			<option value="0">filtre 3</option>
+			{% for diplome in diplomes %}
+				<option  {{ currentFilter and currentFilter.getFiltreValeur('selDiplome') == diplome.id ? 'selected="selected"' : '' }}  value="{{ diplome.id }}">{{ diplome.label }}</option>
+			{% endfor %}
 		</select>
 	</div>
 	<div class="filter-section section-save-filter">
@@ -151,4 +123,14 @@
 	<h1>Liste des contacts</h1>
 	
 
+{% endblock %}
+
+{% block additionnal_javascripts %}
+	{% if currentFilter %}
+		<script type="text/javascript">
+			$(function(){
+				$('.filter-section:not(.head, .section-save-filter)').collapse('show');
+			});
+		</script>
+	{% endif %}
 {% endblock %}
