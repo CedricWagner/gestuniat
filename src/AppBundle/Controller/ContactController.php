@@ -14,10 +14,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class ContactController extends Controller
 {
     /**
-     * @Route("/contact/liste/{idFilter}", name="list_contacts", defaults={"idFilter" = 0})
+     * @Route("/contact/liste/{idFilter}/{page}/{nb}", name="list_contacts", defaults={"idFilter" = 0,"page" = 1,"nb" = 20})
      * @Security("has_role('ROLE_USER')")
      */
-    public function listContactsAction($idFilter)
+    public function listContactsAction($idFilter,$page,$nb)
     {
 
         $currentFilter = null;
@@ -54,6 +54,16 @@ class ContactController extends Controller
                               ->getRepository('AppBundle:Diplome')
                               ->findAll();
 
+        if($currentFilter){
+          $contacts = $this->getDoctrine()
+                      ->getRepository('AppBundle:Contact')
+                      ->findByFilter($filtreValeurs,$page,$nb);
+        }else{
+          $contacts = $this->getDoctrine()
+                      ->getRepository('AppBundle:Contact')
+                      ->findAllWithPagination($page,$nb);
+        }
+
         return $this->render('operateur/contacts.html.twig', [
             'filtresPerso' => $filtresPerso,
             'statutsJuridiques' => $statutsJuridiques,
@@ -61,6 +71,8 @@ class ContactController extends Controller
             'fonctionsSection' => $fonctionsSection,
             'diplomes' => $diplomes,
             'currentFilter' => $currentFilter,
+            'contacts' => $contacts,
+            'pagination' => array('count'=>count($contacts),'nb'=>$nb,'page'=>$page),
         ]);
     }
 

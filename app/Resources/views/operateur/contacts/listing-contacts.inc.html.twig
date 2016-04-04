@@ -1,0 +1,51 @@
+
+{% set nbPages = pagination.count/pagination.nb %}
+{% set nbPages = nbPages|round(0,'ceil') %}
+<nav class="pull-right">
+  <ul class="pagination">
+    <li>
+      <a href="#" aria-label="Précédent">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% for i in 1..nbPages %}
+    	<li {{ i == pagination.page ? 'class="active"' : '' }} ><a href="#">{{ i }}</a></li>
+    {% endfor %}
+    <li>
+      <a href="#" aria-label="Suivant">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<table class="table table-striped table-hover selectable">
+	<thead>
+		<tr>
+			<th><input class="cb-select cb-select-all" type="checkbox" /></th>
+			<th>Prénom</th>
+			<th>Nom</th>
+			<th>Num. adhérent</th>
+			<th>Statut</th>
+			<th>Adresse</th>
+			<th>Commune</th>
+			<th>Section</th>
+			<th>Date de création</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for contact in contacts %}
+			<tr>
+				<td><input class="cb-select cb-select-line" type="checkbox" /></td>
+				<td>{{ contact.prenom }}</td>
+				<td>{{ contact.nom }}</td>
+				<td>{{ contact.numAdh }}</td>
+				<td>Statut</td>
+				<td>{{ contact.adresse }}</td>
+				<td>{{ contact.commune }}</td>
+				<td>Section</td>
+				<td>{{ contact.dateEntree.format('d/m/Y') }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

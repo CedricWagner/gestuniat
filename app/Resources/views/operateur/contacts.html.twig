@@ -52,7 +52,7 @@
 				<option {{ currentFilter and currentFilter.getFiltreValeur('selFonctionGroupement') == fg.id ? 'selected="selected"' : '' }} value="{{ fg.id }}">{{ fg.label }}</option>
 			{% endfor %}
 		</select>
-		<input class="form-control" name="txtRepresentation" type="text" {{ currentFilter ? currentFilter.getFiltreValeur('txtRepresentation') : '' }} placeholder="Fonction de représentation" />
+		<input class="form-control" name="txtRepresentation" type="text" value="{{ currentFilter ? currentFilter.getFiltreValeur('txtRepresentation') : '' }}" placeholder="Fonction de représentation" />
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionLocalisation" aria-controls="sectionLocalisation">Localisation<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionLocalisation">
@@ -69,12 +69,6 @@
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionRentier" aria-controls="sectionRentier">Rentier<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionRentier">
-		<div class="checkbox">
-		  <label>
-		    <input type="checkbox" name="cbRentier" {{ currentFilter and currentFilter.getFiltreValeur('cbRentier') == '0' ? 'checked="checked"' : '' }} value="0">
-		    	Tous
-		  </label>
-		</div>
 		<div class="checkbox">
 		  <label>
 		    <input type="checkbox" name="cbRentier" {{ currentFilter and currentFilter.getFiltreValeur('cbRentier') == 'RENTIER' ? 'checked="checked"' : '' }} value="RENTIER">
@@ -121,7 +115,9 @@
 
 {% block content %}
 	<h1>Liste des contacts</h1>
-	
+	<div id="list-contact">
+		{% include 'operateur/contacts/listing-contacts.inc.html.twig' %}
+	</div>
 
 {% endblock %}
 

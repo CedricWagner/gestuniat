@@ -1122,28 +1122,5 @@ class Contact
     {
         return $this->fonctionGroupement;
     }
-
-    /**
-     * Set fonctionRepresentation
-     *
-     * @param string $fonctionRepresentation
-     *
-     * @return Contact
-     */
-    public function setFonctionRepresentation($fonctionRepresentation)
-    {
-        $this->fonctionRepresentation = $fonctionRepresentation;
-
-        return $this;
-    }
-
-    /**
-     * Get fonctionRepresentation
-     *
-     * @return string
-     */
-    public function getFonctionRepresentation()
-    {
-        return $this->fonctionRepresentation;
-    }
 }
+

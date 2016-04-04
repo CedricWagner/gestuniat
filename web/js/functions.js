@@ -87,3 +87,66 @@ function ajaxSaveFilter(formFilter,ajaxUrl){
 	});
 }
 
+
+function ajaxApplyFilter(formFilter,ajaxUrl){
+	
+	var fields = new Array();
+	$(formFilter).find('.filter-section input, .filter-section select').each(function(){
+		if(!$(this).hasClass('ignore')){
+			//case cb
+			if ($(this).attr('type')&&$(this).attr('type')=='checkbox') {
+				if($(this).is(':checked')){
+					fields.push({'type':'text','name':$(this).attr('name'),'value':$(this).val()});
+				}
+			}
+			//case text
+			if ($(this).attr('type')&&$(this).attr('type')=='text') {
+				fields.push({'type':'text','name':$(this).attr('name'),'value':$(this).val()});
+			}
+			//case date
+			if ($(this).attr('type')&&$(this).attr('type')=='date') {
+				fields.push({'type':'date','name':$(this).attr('name'),'value':$(this).val()});
+			}
+			//case select
+			if ($(this).prop('tagName')=='SELECT') {
+				fields.push({'type':'select','name':$(this).attr('name'),'value':$(this).val()});
+			}
+		}
+	});
+
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: '/filter/render',
+	  data: { context: $(formFilter).data('context'), fields:fields }
+	})
+	.done(function(response) {
+		response = JSON.parse(response);
+		ajax_stop();
+		history.pushState({filtre:response.idFiltre}, "", response.path);
+		$('#list-'+$(formFilter).data('context')).html(response.html);
+	});
+}
+
+$('form.filter select, form.filter input').change(function(){
+	ajaxApplyFilter($(this).parents('form.filter'));
+});
+
+$('table.selectable .cb-select-all').change(function(){
+	$(this).parents('table.selectable').find('tbody tr .cb-select-line').prop('checked', $(this).prop("checked"));
+	$('table.selectable .cb-select-line').each(function(){
+		toggleTableLine($(this));
+	})
+});
+
+$('table.selectable .cb-select-line').change(function(){
+	toggleTableLine($(this));
+});
+
+function toggleTableLine(elem){
+	if($(elem).is(':checked')){
+		$(elem).parents('tr').addClass('info');
+	}else{
+		$(elem).parents('tr').removeClass('info');
+	}
+}
