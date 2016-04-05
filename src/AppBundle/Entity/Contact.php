@@ -99,6 +99,20 @@ class Contact
     private $bp;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="dateNaissance", type="date", nullable=true)
+     */
+    private $dateNaissance;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lieuNaissance", type="string", length=255, nullable=true)
+     */
+    private $lieuNaissance;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="isRentier", type="boolean")
@@ -254,19 +268,19 @@ class Contact
 
     /**
      * @ORM\ManyToOne(targetEntity="StatutJuridique")
-     * @ORM\JoinColumn(name="statut_juridique_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="statutJuridique_id", referencedColumnName="id")
      */
     protected $statutJuridique;
 
     /**
      * @ORM\ManyToOne(targetEntity="FonctionSection")
-     * @ORM\JoinColumn(name="fonction_section_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="fonctionSection_id", referencedColumnName="id")
      */
     protected $fonctionSection;
     
     /**
      * @ORM\ManyToOne(targetEntity="FonctionGroupement")
-     * @ORM\JoinColumn(name="fonction_groupement_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="fonctionGroupement_id", referencedColumnName="id")
      */
     protected $fonctionGroupement;
 
@@ -1145,5 +1159,53 @@ class Contact
     public function getFonctionRepresentation()
     {
         return $this->fonctionRepresentation;
+    }
+
+    /**
+     * Set dateNaissance
+     *
+     * @param \DateTime $dateNaissance
+     *
+     * @return Contact
+     */
+    public function setDateNaissance($dateNaissance)
+    {
+        $this->dateNaissance = $dateNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get dateNaissance
+     *
+     * @return \DateTime
+     */
+    public function getDateNaissance()
+    {
+        return $this->dateNaissance;
+    }
+
+    /**
+     * Set lieuNaissance
+     *
+     * @param string $lieuNaissance
+     *
+     * @return Contact
+     */
+    public function setLieuNaissance($lieuNaissance)
+    {
+        $this->lieuNaissance = $lieuNaissance;
+
+        return $this;
+    }
+
+    /**
+     * Get lieuNaissance
+     *
+     * @return string
+     */
+    public function getLieuNaissance()
+    {
+        return $this->lieuNaissance;
     }
 }

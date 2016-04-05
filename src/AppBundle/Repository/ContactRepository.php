@@ -28,7 +28,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 	}
 	
 	public function findByFilter($filterValues,$page=1,$nb=20){
-		$nb=1;
+		
 		$params = array();
 		
 		$qb = $this->createQueryBuilder('contact');

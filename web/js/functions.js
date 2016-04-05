@@ -88,8 +88,12 @@ function ajaxSaveFilter(formFilter,ajaxUrl){
 }
 
 
-function ajaxApplyFilter(formFilter,ajaxUrl){
+function ajaxApplyFilter(formFilter,ajaxUrl,page){
 	
+	if (page==null) {
+		page = 1;
+	}
+
 	var fields = new Array();
 	$(formFilter).find('.filter-section input, .filter-section select').each(function(){
 		if(!$(this).hasClass('ignore')){
@@ -118,7 +122,7 @@ function ajaxApplyFilter(formFilter,ajaxUrl){
 	$.ajax({
 	  method: "POST",
 	  url: '/filter/render',
-	  data: { context: $(formFilter).data('context'), fields:fields }
+	  data: { context: $(formFilter).data('context'), fields:fields, nb:$('#sel-nb-per-page').val(), page:page }
 	})
 	.done(function(response) {
 		response = JSON.parse(response);

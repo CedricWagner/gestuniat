@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Profil complet de  {{ contact.prenom }} {{ contact.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/contacts/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Edition du profil</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">Accueil</a></li>
+	  <li class="active">Edition du profil</li>
+	</ol>
+	<ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#info-gen" aria-controls="info-gen" role="tab" data-toggle="tab">Informations générales</a></li>
+		<li role="presentation"><a href="#adhesion" aria-controls="adhesion" role="tab" data-toggle="tab">Adhésion</a></li>
+	</ul>
+	<div class="full-contact-form inline-form">	
+		{{ form_start(contactForm) }}
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="info-gen">
+				<div class="row">			
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.nom) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.prenom) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.mail) }}
+						</div>
+					</div>
+				</div>
+				<div class="row">			
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.telFixe) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.telPort) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.adresse) }}
+						</div>
+					</div>
+				</div>
+				<div class="row">			
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.adresseComp) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.cp) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.commune) }}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.bp) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.pays) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.dateNaissance) }}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.lieuNaissance) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.dateDeces) }}
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group clearfix">
+							{{ form_row(contactForm.mentionDeces) }}
+						</div>
+					</div>
+				</div>
+			</div><!-- end #info-gen -->
+			<div role="tabpanel" class="tab-pane" id="adhesion">
+				<div class="row">			
+					<div class="col-md-4">
+						Adhésion...
+					</div>
+				</div>
+			</div>
+		</div>
+		{{ form_end(contactForm) }}
+	</div>
+
+
+{% endblock %}

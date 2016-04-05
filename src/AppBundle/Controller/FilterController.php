@@ -40,11 +40,18 @@ class FilterController extends Controller
      */
     public function renderFilterAction(Request $request){
 
+        $session = $this->get('session');
         $context = $request->request->get('context');
         $fields = $request->request->get('fields');
         $nb = $request->request->get('nb');
         if($nb==null){
-            $nb=20;
+            if($session->get('pagination-nb')){
+                $nb = $session->get('pagination-nb');
+            }else{
+                $nb=20;
+            }
+        }else{
+            $session->set('pagination-nb', $nb);
         }
         $page = $request->request->get('page');
         if($page==null){
@@ -64,11 +71,11 @@ class FilterController extends Controller
         //Get contacts by filter values
         $contacts = $this->getDoctrine()
           ->getRepository('AppBundle:Contact')
-          ->findByFilter($filtreValeurs);
+          ->findByFilter($filtreValeurs,$page,$nb);
 
         return new Response(json_encode(array(
             'idFiltre'=>$filtrePerso->getId(),
-            'path'=>'/contact/liste/'.$filtrePerso->getId(),
+            'path'=>'/contact/liste/'.$filtrePerso->getId().'/'.$page,
             'html'=>$this->render('operateur/contacts/listing-contacts.inc.html.twig', array(
                 'contacts' => $contacts,
                 'pagination' => array('count'=>count($contacts),'nb'=>$nb,'page'=>$page),

@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
+{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+
+{% block left_column %}
+
+	{% include 'operateur/contacts/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Accueil contact</h2>
+	<br />
+	<div class="row">
+		<div class="col-md-4 col-sm-12">
+			<div class="section-block">
+				<div class="section-header">
+					<h3>Suivi contact</h3>
+				</div>
+				<div class="section-main-content">
+					<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Rédiger un nouveau commentaire</button>
+				</div>
+				<div class="section-sub-content">
+					{% for i in 0..5 %}
+						<div class="listing-item clearfix">
+							<div class="listing-item-side left-side">
+								<input type="checkbox"/>
+							</div>
+							<div class="listing-item-content">
+								<p>Nulla at sagittis nunc, vitae hendrerit ex. Integer vel ultrices tellus. Vivamus in mollis eros, non vehicula urna. Phasellus sollicitudin a justo a sodales. ... <a href="#">voir la suite</a>
+								</p>
+								<p>
+									16/02/2016&nbsp;&nbsp;|&nbsp;&nbsp;<span class="due-to">26/04/2016</span>&nbsp;&nbsp;|&nbsp;&nbsp;Cycy la chenille
+								</p>
+							</div>
+							<div class="listing-item-side right-side">
+								<p class="contextual-icon dropdown-toggle" id="options-suivi-1" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></p>
+								<ul class="dropdown-menu" aria-labelledby="options-suivi-1">
+									<li class="contextual-item"><a class="no-padding-top" href="#"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+									<li class="contextual-item"><a class="no-padding-top" href="#"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+								</ul>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				<div class="section-main-content">
+					<button class="btn btn-default btn-block">Voir tous les commentaires >></button>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-12">
+			<div class="row">
+				<div class="col-md-4 col-sm-12">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Documents</h3>
+						</div>
+						<div class="section-main-content">
+							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-folder-open"></span>Créer un dossier</button>
+							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-folder-open"></span>Créer un document</button>
+							<button class="btn btn-default btn-block"><span class="glyphicons glyphicons-eye-open"></span>Explorer</button>
+						</div>
+					</div>
+					
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Vignettes contributives</h3>
+						</div>
+						<div class="section-main-content">
+							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-tag"></span>Ajouter une vignette</button>
+							<button class="btn btn-default btn-block"><span class="glyphicons glyphicons-eye-open"></span>Explorer</button>
+						</div>
+					</div>
+					
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Dons</h3>
+						</div>
+						<div class="section-main-content">
+							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-tag"></span>Ajouter un don</button>
+							<button class="btn btn-default btn-block"><span class="glyphicons glyphicons-eye-open"></span>Explorer</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="section-separator"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Prévoyances en cours</h3>
+						</div>
+						<div class="section-main-content">
+							<p>
+								<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-notes"></span>Gestion des prévoyances</button>
+							</p>
+							<div class="btn-group-vertical" role="group">
+								<button class="btn btn-default btn-block">AGRR Prévoyance <span class="badge">3</span></button>
+								<button class="btn btn-default btn-block">Prévoyance obsèques <span class="badge">3</span></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Kit Adhésion</h3>
+						</div>
+						<div class="section-main-content">
+							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-note"></span>Bulletin d'adhésion</button>
+							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre de remerciement</button>
+							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre section</button>
+							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'accompagnement</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

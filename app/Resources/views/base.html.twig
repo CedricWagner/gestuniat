@@ -28,17 +28,17 @@
                         <div class="menu-container">
                             <div class="spacer"></div>
                             <ul class="menu">
-                                <li><a href="{{ path('dashboard') }}"><span class="glyphicons glyphicons-home"></span>Accueil</a></li>
-                                <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-user"></span>Contacts</a></li>
-                                <li><a href=""><span class="glyphicons glyphicons-flag"></span>Sections</a></li>
-                                <li><a href=""><span class="glyphicons glyphicons-folder-open"></span>Dossiers</a></li>
-                                <li><a href=""><span class="glyphicons glyphicons-government"></span>Organismes</a></li>
-                                <li><a href=""><span class="glyphicons glyphicons-adjust-alt"></span>Filtres perso.</a></li>
-                                <li><a href=""><span class="glyphicons glyphicons-book"></span>Rentier</a></li>
+                                <li><a href="{{ path('dashboard') }}"><span class="glyphicons glyphicons-home"></span><span class="menu-label">Accueil</span></a></li>
+                                <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-user"></span><span class="menu-label">Contacts</span></a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-flag"></span><span class="menu-label">Sections</span></a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-folder-open"></span><span class="menu-label">Dossiers</span></a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-government"></span><span class="menu-label">Organismes</span></a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-adjust-alt"></span><span class="menu-label">Filtres perso.</span></a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-book"></span><span class="menu-label">Rentier</span></a></li>
                             </ul>
                             <div class="spacer"></div>
                             <ul class="menu">
-                                <li><a href=""><span class="glyphicons glyphicons-life-preserver"></span>Support</a></li>
+                                <li><a href=""><span class="glyphicons glyphicons-life-preserver"></span><span class="menu-label">Support</span></a></li>
                             </ul>
                         </div>
                     {% endblock %}    
@@ -94,6 +94,10 @@
                         {% endblock %}
                         <div class="filter-container">
                             {% block filter %}
+                            {% endblock %}
+                        </div>
+                        <div class="left-column-container">
+                            {% block left_column %}
                             {% endblock %}
                         </div>
                         <div class="container-border">

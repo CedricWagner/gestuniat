@@ -127,6 +127,20 @@
 			$(function(){
 				$('.filter-section:not(.head, .section-save-filter)').collapse('show');
 			});
+
+			$('.contact-line td:not(.cb-container)').click(function(){
+				location.href = '/contact/'+$(this).parents('.contact-line').data('id');
+			})
+
 		</script>
 	{% endif %}
+	<script type="text/javascript">
+			$(function(){
+				$('.contact-line td:not(.cb-container)').click(function(){
+					location.href = '/contact/'+$(this).parents('.contact-line').data('id');
+				})
+			});
+
+
+		</script>
 {% endblock %}

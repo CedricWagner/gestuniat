@@ -1,0 +1,34 @@
+<div class="section">
+	<h1>{{ contact.prenom }} {{ contact.nom|upper }}</h1>
+
+	<p>Type de profil <span class="label label-default statut-{{ contact.statutJuridique.id }}">{{ contact.statutJuridique.label }}</span></p>
+	<p>N° <b>{{ contact.numAdh }}</b></p>
+</div>
+<div class="section">
+	<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Cotisation</p>
+	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Profil créé le <a href="#">{{ contact.dateEntree.format('d M Y') }}</a></p>
+	<p class="underlined"><span class="glyphicons glyphicons-envelope"></span>&nbsp;&nbsp;<a href="mailto:{{ contact.mail }}">{{ contact.mail }}</a></p>
+	{% if contact.telPort %}
+		<p class="underlined"><span class="glyphicons glyphicons-iphone"></span>&nbsp;&nbsp;<a href="callto:{{ contact.telPort }}">{{ contact.telPort }}</a></p>
+	{% endif %}
+	{% if contact.telFixe %}
+		<p class="underlined"><span class="glyphicons glyphicons-phone-alt"></span>&nbsp;&nbsp;<a href="callto:{{ contact.telFixe }}">{{ contact.telFixe }}</a></p>
+	{% endif %}
+	{% if contact.numSecu %}
+		<p class="underlined"><span class="glyphicons glyphicons-credit-card"></span>&nbsp;&nbsp;{{ contact.numSecu }}</p>
+	{% endif %}
+	<p class="underlined"><span class="glyphicons glyphicons-marriage"></span>&nbsp;&nbsp;Membre conjoint : Aucun</p>
+	<p class="underlined"><span class="glyphicons glyphicons-home"></span>&nbsp;&nbsp;{{ contact.adresse }} {{ contact.cp }} {{ contact.commune }}</p>
+	<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a></p>
+</div>
+<div class="section">
+	<p><input type="button" class="btn btn-default btn-block" value="Gestionnaire des suivis"/></p>
+	<p><input type="button" class="btn btn-default btn-block" value="Gestionnaire des documents"/></p>
+	<p><input type="button" class="btn btn-default btn-block" value="Vignettes contributives"/></p>
+	<p><input type="button" class="btn btn-default btn-block" value="Kit adhésion"/></p>
+	<p><input type="button" class="btn btn-default btn-block" value="Etiquettes"/></p>
+	<p><input type="button" class="btn btn-default btn-block" value="Procuration"/></p>
+	<p><input type="button" class="btn btn-default btn-block" value="Pouvoirs"/></p>
+	<p><input type="button" class="btn btn-default btn-block" value="Diplômes"/></p>
+	<p><input type="button" class="btn btn-default btn-block" value="Pièces à fournir"/></p>
+</div>

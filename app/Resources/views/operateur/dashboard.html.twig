@@ -10,9 +10,9 @@ Gestuniat - Votre Dashboard
 	<p class="grey-text">Liste des termes des dossiers en cours et notes personnelles</p>
 	<button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#ajouter-alerte"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Ajouter alerte perso.</button>
 	{% include 'modals/ajouter-alerte.html.twig' %}
-	<button class="btn btn-default" data-toggle="modal" data-target="#historique" type="submit">Historique</button>
+	<button class="btn btn-default borderless" data-toggle="modal" data-target="#historique" type="submit">Historique</button>
 	{% include 'modals/historique.html.twig' %}
-	<button class="btn btn-default" type="submit">Liste des termes</button>
+	<button class="btn btn-default borderless" type="submit">Liste des termes</button>
 	<select onchange="eval(this.value)" class="select-default">
 		<option value="toggleAlertes(['.alerte','.terme'])">Termes et alertes</option>
 		<option value="toggleAlertes(['.terme'])">Termes uniquement</option>
