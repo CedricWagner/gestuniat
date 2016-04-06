@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\ContactFullEditionType;
-
+use AppBundle\Entity\Contact;
 
 
 class ContactController extends Controller
@@ -89,7 +89,9 @@ class ContactController extends Controller
     }
 
     /**
-     * @Route("/contact/{idContact}", name="view_contact")
+     * @Route("/contact/{idContact}", name="view_contact"), requirements={
+     *     "idContact": "\d+"
+     * })
      * @Security("has_role('ROLE_USER')")
      */
     public function viewContactAction($idContact)
@@ -108,7 +110,7 @@ class ContactController extends Controller
      * @Route("/contact/{idContact}/profil-complet", name="full_contact")
      * @Security("has_role('ROLE_USER')")
      */
-    public function fullContactAction($idContact)
+    public function fullContactAction(Request $request, $idContact)
     {
       $contact = $this->getDoctrine()
               ->getRepository('AppBundle:Contact')
@@ -116,9 +118,147 @@ class ContactController extends Controller
 
       $contactForm = $this->createForm(ContactFullEditionType::class, $contact);
 
+      $contactForm->handleRequest($request);
+
+      if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($contact);
+        $em->flush();      
+      }
+
       return $this->render('operateur/contacts/full-contact.html.twig', [
             'contact' => $contact,
             'contactForm' => $contactForm->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/search/contact", name="contact_search")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function ajaxContactSearchAction(Request $request)
+    {
+      
+      if($request->request->get('idContact')){
+        $exclude = $this->getDoctrine()
+          ->getRepository('AppBundle:Contact')
+          ->find($request->request->get('idContact'));
+      }else{
+        $exclude = false;
+      }
+
+      $contacts = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->search($request->request->get('txtSearch'),$exclude);
+
+      $arrContacts = array();
+      foreach ($contacts as $contact) {
+        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getprenom(),'numAdh'=>$contact->getNumAdh());
+      }  
+
+      return new Response(json_encode($arrContacts)); 
+    }
+
+    /**
+     * @Route("/contact/{idContact}/editer-membre-conjoint", name="contact_edit_conjoint")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function editConjointAction(Request $request,$idContact)
+    {
+
+      $contact = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->find($idContact);
+
+      $type = $request->request->get('rbTypeContact');
+
+      if($type=='new'){
+
+        $conjoint = new Contact();
+        $conjoint->setNom($request->request->get('txtNom'));
+        $conjoint->setPrenom($request->request->get('txtPrenom'));
+        
+        $civilite =  $this->getDoctrine()
+          ->getRepository('AppBundle:Civilite')
+          ->find($request->request->get('selCivilite'));
+
+
+        $conjoint->setCivilite($civilite);
+
+        //setting default values
+        $conjoint->setIsRentier(false);
+        $conjoint->setIsBI(false);
+        $conjoint->setIsCourrier(false);
+        $conjoint->setIsEnvoiIndiv(false);
+        $conjoint->setIsDossierPaye(false);
+        $conjoint->setIsCA(false);
+        $conjoint->setIsoffreDecouverte(false);
+
+        $today = new \DateTime();
+        $conjoint->setDateEntree($today);
+        
+        $defaultStatut =  $this->getDoctrine()
+          ->getRepository('AppBundle:StatutJuridique')
+          ->findOneBy(array('label'=>'Non-membre'));
+        $conjoint->setStatutJuridique($defaultStatut);
+        
+        $nextNum =  $this->getDoctrine()
+          ->getRepository('AppBundle:Contact')
+          ->findMaxNumAdh();
+        $conjoint->setNumAdh($nextNum+1);
+        $conjoint->setMembreConjoint($contact);
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($conjoint);
+        $em->flush(); 
+
+        $contact->setMembreConjoint($conjoint);
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($contact);
+        $em->flush(); 
+
+      }elseif ($type=='existing' && $request->request->get('idMembreConjoint')){
+
+        $conjoint = $this->getDoctrine()
+          ->getRepository('AppBundle:Contact')
+          ->find($request->request->get('idMembreConjoint'));
+
+        $contact->setMembreConjoint($conjoint);
+        $conjoint->setMembreConjoint($contact);
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($contact);
+        $em->flush(); 
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($conjoint);
+        $em->flush(); 
+
+      }else{
+
+        if ($contact->getMembreConjoint()) {
+
+          $conjoint = $this->getDoctrine()
+            ->getRepository('AppBundle:Contact')
+            ->find($contact->getMembreConjoint()->getId());
+
+          $contact->setMembreConjoint(null);
+          $conjoint->setMembreConjoint(null);
+
+          $em = $this->get('doctrine.orm.entity_manager');
+          $em->persist($contact);
+          $em->flush(); 
+
+          $em = $this->get('doctrine.orm.entity_manager');
+          $em->persist($conjoint);
+          $em->flush(); 
+
+        }
+
+      }
+
+      return $this->redirectToRoute('view_contact',array('idContact'=>$contact->getId()));
+
     }
 }

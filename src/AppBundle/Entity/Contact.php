@@ -183,13 +183,6 @@ class Contact
     private $dateSortie;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="statutMat", type="string", length=50, nullable=true)
-     */
-    private $statutMat;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="dateDelivranceFonc", type="date", nullable=true)
@@ -283,6 +276,24 @@ class Contact
      * @ORM\JoinColumn(name="fonctionGroupement_id", referencedColumnName="id")
      */
     protected $fonctionGroupement;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="StatutMatrimonial")
+     * @ORM\JoinColumn(name="statutMatrimonial_id", referencedColumnName="id")
+     */
+    protected $statutMatrimonial;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Civilite")
+     * @ORM\JoinColumn(name="civilite_id", referencedColumnName="id")
+     */
+    protected $civilite;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Contact")
+     * @ORM\JoinColumn(name="membreConjoint_id", referencedColumnName="id")
+     */
+    protected $membreConjoint;
 
 
     /**
@@ -1207,5 +1218,77 @@ class Contact
     public function getLieuNaissance()
     {
         return $this->lieuNaissance;
+    }
+
+    /**
+     * Set statutMatrimonial
+     *
+     * @param \AppBundle\Entity\StatutMatrimonial $statutMatrimonial
+     *
+     * @return Contact
+     */
+    public function setStatutMatrimonial(\AppBundle\Entity\StatutMatrimonial $statutMatrimonial = null)
+    {
+        $this->statutMatrimonial = $statutMatrimonial;
+
+        return $this;
+    }
+
+    /**
+     * Get statutMatrimonial
+     *
+     * @return \AppBundle\Entity\StatutMatrimonial
+     */
+    public function getStatutMatrimonial()
+    {
+        return $this->statutMatrimonial;
+    }
+
+    /**
+     * Set civilite
+     *
+     * @param \AppBundle\Entity\Civilite $civilite
+     *
+     * @return Contact
+     */
+    public function setCivilite(\AppBundle\Entity\Civilite $civilite = null)
+    {
+        $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    /**
+     * Get civilite
+     *
+     * @return \AppBundle\Entity\Civilite
+     */
+    public function getCivilite()
+    {
+        return $this->civilite;
+    }
+
+    /**
+     * Set membreConjoint
+     *
+     * @param \AppBundle\Entity\Contact $membreConjoint
+     *
+     * @return Contact
+     */
+    public function setMembreConjoint(\AppBundle\Entity\Contact $membreConjoint = null)
+    {
+        $this->membreConjoint = $membreConjoint;
+
+        return $this;
+    }
+
+    /**
+     * Get membreConjoint
+     *
+     * @return \AppBundle\Entity\Contact
+     */
+    public function getMembreConjoint()
+    {
+        return $this->membreConjoint;
     }
 }

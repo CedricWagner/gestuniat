@@ -154,3 +154,45 @@ function toggleTableLine(elem){
 		$(elem).parents('tr').removeClass('info');
 	}
 }
+
+function ajaxAutocompMembreConjoint(idContact,container){
+	
+	$(container).find('.autocomp-result').html('');
+
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: '/search/contact',
+	  data: { txtSearch:$(container).find('.autocomp-value').val(), idContact:idContact }
+	})
+	.done(function(response) {
+		response = JSON.parse(response);
+		ajax_stop();
+		var lis = '';
+		for(line in response){
+			var id = response[line].id;
+			var nom = response[line].nom;
+			var prenom = response[line].prenom;
+			var numAdh = response[line].numAdh;
+			lis = lis + '<li class="list-group-item" id="result-amc-'+id+'"><a onclick="proceedAutocompMembreConjoint('+id+')" href="#">['+numAdh+'] '+prenom+' '+nom+'</a></li>';
+		}
+		$(container).find('.autocomp-result').html('<ul class="list-group">'+lis+'</ul>');
+	});
+}
+
+function proceedAutocompMembreConjoint(id){
+	$('#result-amc-'+id).addClass('active');
+	$('#result-amc-'+id).append('<input type="hidden" name="idMembreConjoint" value="'+id+'" />');
+	$('#result-amc-'+id).parents('ul').find('li:not(.active)').remove();
+	$('#autocomp-membre-conjoint .autocomp-value').val($('#result-amc-'+id).find('a').html());
+}
+
+function toggleView(obj,show,hide){
+	if($(obj).is('checked')){ 
+		$(show).hide();
+		$(hide).show();
+	}else{ 
+		$(show).show();
+		$(hide).hide(); 
+	}
+}

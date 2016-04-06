@@ -95,4 +95,31 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
         
         return $pag;
 	}
+
+	public function search($txtSearch, $exclude=false){
+
+
+		$qb = $this->createQueryBuilder('contact');
+		$qb
+			->select('contact')
+			->where('contact.dateSortie IS NULL')
+			->andwhere('contact.nom LIKE :nom OR contact.prenom LIKE :prenom OR contact.numAdh = :numAdh')
+			->setParameters(array('nom'=>$txtSearch.'%','prenom'=>$txtSearch.'%','numAdh'=>$txtSearch))
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+
+        $pag = new Paginator($qb);
+
+        return $pag;
+	}
+
+	public function findMaxNumAdh(){
+		$qb = $this->createQueryBuilder('contact');
+		$result = $qb
+			->select('MAX(contact.numAdh)')
+			->getQuery()
+    		->execute();
+
+        return $result[0][1];
+	}
 }

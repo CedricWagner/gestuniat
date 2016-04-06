@@ -19,104 +19,121 @@
 	<ul class="nav nav-tabs" role="tablist">
 		<li role="presentation" class="active"><a href="#info-gen" aria-controls="info-gen" role="tab" data-toggle="tab">Informations générales</a></li>
 		<li role="presentation"><a href="#adhesion" aria-controls="adhesion" role="tab" data-toggle="tab">Adhésion</a></li>
+		<li role="presentation"><a href="#rentier" aria-controls="rentier" role="tab" data-toggle="tab">Rentier</a></li>
 	</ul>
 	<div class="full-contact-form inline-form">	
-		{{ form_start(contactForm) }}
+		{{ form_start(contactForm,{'attr':{'novalidate':'novalidate'}}) }}
 		<div class="tab-content">
-			<div role="tabpanel" class="tab-pane active" id="info-gen">
-				<div class="row">			
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.nom) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.prenom) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.mail) }}
-						</div>
-					</div>
+			<div role="tabpanel" class="tab-pane clearfix active" id="info-gen">
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.civilite) }}
 				</div>
-				<div class="row">			
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.telFixe) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.telPort) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.adresse) }}
-						</div>
-					</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.prenom) }}
 				</div>
-				<div class="row">			
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.adresseComp) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.cp) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.commune) }}
-						</div>
-					</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.nom) }}
 				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.bp) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.pays) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.dateNaissance) }}
-						</div>
-					</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.nomJeuneFille) }}
 				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.lieuNaissance) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.dateDeces) }}
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group clearfix">
-							{{ form_row(contactForm.mentionDeces) }}
-						</div>
-					</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.mail) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.telFixe) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.telPort) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.adresse) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.adresseComp) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.cp) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.commune) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.bp) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.pays) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.dateNaissance) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.lieuNaissance) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.statutMatrimonial) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.dateDeces) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.mentionDeces) }}
 				</div>
 			</div><!-- end #info-gen -->
-			<div role="tabpanel" class="tab-pane" id="adhesion">
-				<div class="row">			
-					<div class="col-md-4">
-						Adhésion...
-					</div>
+			<div role="tabpanel" class="tab-pane clearfix" id="adhesion">
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.statutJuridique) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.dateAdhesion) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.numSecu) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.fonctionSection) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.fonctionGroupement) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.fonctionRepresentation) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.dateDelivranceFonc) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.isDossierPaye) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.encaisseur) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.isCA) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.dateCIF) }}
 				</div>
 			</div>
+			<div role="tabpanel" class="tab-pane clearfix" id="rentier">
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.isRentier) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.isBI) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.isEnvoiIndiv) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.isOffreDecouverte) }}
+				</div>
+				<div class="form-group clearfix">
+					{{ form_row(contactForm.dateOffreDecouverte) }}
+				</div>
+			</div>
+				{{ form_row(contactForm.save,{'attr':{'class':'btn btn-lg btn-primary'}}) }}
+			<br />
 		</div>
 		{{ form_end(contactForm) }}
 	</div>

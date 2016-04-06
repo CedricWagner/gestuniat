@@ -6,8 +6,10 @@
 </div>
 <div class="section">
 	<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Cotisation</p>
-	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Profil créé le <a href="#">{{ contact.dateEntree.format('d M Y') }}</a></p>
+	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Profil créé le <a href="#">{{ contact.dateEntree ? contact.dateEntree.format('d M Y') :'' }}</a></p>
+	{% if contact.mail %}
 	<p class="underlined"><span class="glyphicons glyphicons-envelope"></span>&nbsp;&nbsp;<a href="mailto:{{ contact.mail }}">{{ contact.mail }}</a></p>
+	{% endif %}
 	{% if contact.telPort %}
 		<p class="underlined"><span class="glyphicons glyphicons-iphone"></span>&nbsp;&nbsp;<a href="callto:{{ contact.telPort }}">{{ contact.telPort }}</a></p>
 	{% endif %}
@@ -17,7 +19,13 @@
 	{% if contact.numSecu %}
 		<p class="underlined"><span class="glyphicons glyphicons-credit-card"></span>&nbsp;&nbsp;{{ contact.numSecu }}</p>
 	{% endif %}
-	<p class="underlined"><span class="glyphicons glyphicons-marriage"></span>&nbsp;&nbsp;Membre conjoint : Aucun</p>
+	<p class="underlined"><span class="glyphicons glyphicons-marriage"></span>&nbsp;&nbsp;Membre conjoint : 
+		{% if contact.membreConjoint %}
+			<a href="{{ path('view_contact',{'idContact':contact.membreConjoint.id }) }}">{{ contact.membreConjoint.prenom }} {{ contact.membreConjoint.nom }}</a>&nbsp;<a href="#" data-toggle="modal" data-target="#modal-conjoint"><span class="glyphicons glyphicons-edit clickable"></span></a>
+		{% else %}
+			Aucun <a href="#" data-toggle="modal" data-target="#modal-conjoint"><span class="glyphicons glyphicons-plus-sign"></span></a>
+		{% endif %}
+	</p>
 	<p class="underlined"><span class="glyphicons glyphicons-home"></span>&nbsp;&nbsp;{{ contact.adresse }} {{ contact.cp }} {{ contact.commune }}</p>
 	<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a></p>
 </div>
@@ -32,3 +40,5 @@
 	<p><input type="button" class="btn btn-default btn-block" value="Diplômes"/></p>
 	<p><input type="button" class="btn btn-default btn-block" value="Pièces à fournir"/></p>
 </div>
+
+{% include 'modals/editer-membre-conjoint.html.twig' %}

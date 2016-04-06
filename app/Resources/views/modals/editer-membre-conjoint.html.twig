@@ -1,0 +1,72 @@
+<!-- Modal -->
+<div class="modal fade" id="modal-conjoint" tabindex="-1" role="dialog" aria-labelledby="modal-conjoint-title">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal-conjoint-title">Gestion du membre conjoint</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" class="clearfix" id="form-conjoint" action="{{ path('contact_edit_conjoint',{'idContact':contact.id}) }}">
+          <div class="row">
+            <div class="col-md-12">
+              <input type="radio" onchange="toggleView(this,'','#existing-contact-area,#new-contact-area')" value="none" name="rbTypeContact" />
+              <label>
+                &nbsp;Aucun conjoint
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <input type="radio" onchange="toggleView(this,'#existing-contact-area','#new-contact-area')" value="existing" name="rbTypeContact" />
+              <label>
+                &nbsp;Contact existant
+              </label>
+            </div>
+          </div>
+          <div class="row" id="existing-contact-area" style="display:none">
+            <div class="col-md-12">
+              <div class="autocomp-container" id="autocomp-membre-conjoint">
+                <input type="text" onkeyup="ajaxAutocompMembreConjoint({{ contact.id }},'#autocomp-membre-conjoint')" placeholder="Saisissez puis sélectionnez un contact dans la liste" class="input autocomp-value" />
+                <div class="autocomp-result">
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <input type="radio" value="new" onclick="toggleView(this,'#new-contact-area','#existing-contact-area')" name="rbTypeContact" />
+              <label>
+                &nbsp;Nouveau contact
+              </label>
+            </div>
+          </div>
+          <div class="row" id="new-contact-area" style="display:none">
+            <div class="col-md-12">
+              <div class="clearfix">
+                <label>Civilité</label>
+                <select name="selCivilite">
+                  <option value="1">Monsieur</option>
+                  <option selected="selected" value="2">Madame</option>
+                </select>
+              </div>
+              <div class="clearfix">
+                <label>Nom</label>
+                <input value="" name="txtNom" required="required" />
+              </div>
+              <div class="clearfix">
+                <label>Prénom</label>
+                <input value="" name="txtPrenom" required="required" />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="$('#form-conjoint').submit()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
