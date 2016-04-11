@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+// use AppBundle\Entity\TermeInterface;
 
 /**
  * Alerte
@@ -91,6 +92,16 @@ class Alerte
      * @return string
      */
     public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return string
+     */
+    public function getTitre()
     {
         return $this->label;
     }
@@ -213,6 +224,16 @@ class Alerte
     public function getOperateur()
     {
         return $this->operateur;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return 'alerte';
     }
 }
 

@@ -32,6 +32,25 @@ function ajaxCheckAlerte(target,idAlerte,action){
 	});
 }
 
+function ajaxCheckSuivi(target,idSuivi,action){
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: "/check-suivi",
+	  data: { target: target, idSuivi: idSuivi, action: action }
+	})
+	.done(function(response) {
+		ajax_stop();
+		if (action == "done") {
+			$("#listing-"+target+"-"+idSuivi).removeClass('done');
+			$("#listing-"+target+"-"+idSuivi+' .cb-check-alerte').attr('value','');
+		}else{
+			$("#listing-"+target+"-"+idSuivi).addClass('done');
+			$("#listing-"+target+"-"+idSuivi+' .cb-check-alerte').attr('value','done');
+		}
+	});
+}
+
 function ajaxShowEditAlerte(target,idAlerte){
 	ajax_start();
 	$.ajax({
@@ -43,6 +62,20 @@ function ajaxShowEditAlerte(target,idAlerte){
 		ajax_stop();
 		$('body').append(response);
 		$('#editer-'+target+'-'+idAlerte).modal('show');
+	});
+}
+
+function ajaxShowEditSuivi(idSuivi){
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: "/suivi/show-edit",
+	  data: { idSuivi: idSuivi }
+	})
+	.done(function(response) {
+		ajax_stop();
+		$('body').append(response);
+		$('#editer-suivi-'+idSuivi).modal('show');
 	});
 }
 

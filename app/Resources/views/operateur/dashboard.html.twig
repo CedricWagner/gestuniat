@@ -14,8 +14,8 @@ Gestuniat - Votre Dashboard
 	{% include 'modals/historique.html.twig' %}
 	<button class="btn btn-default borderless" type="submit">Liste des termes</button>
 	<select onchange="eval(this.value)" class="select-default">
-		<option value="toggleAlertes(['.alerte','.terme'])">Termes et alertes</option>
-		<option value="toggleAlertes(['.terme'])">Termes uniquement</option>
+		<option value="toggleAlertes(['.alerte','.terme','.suivi'])">Termes et alertes</option>
+		<option value="toggleAlertes(['.suivi'])">Termes uniquement</option>
 		<option value="toggleAlertes(['.alerte'])">Alertes uniquement</option>
 	</select>
 

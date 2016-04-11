@@ -1,7 +1,12 @@
 <div class="listing-container">
 	{% if lstAlertes[deadline] %}
-		{% for alerte in lstAlertes[deadline] %}
-	        {% include 'operateur/dashboard/alerte-item.inc.html.twig' with {'alerte': alerte} %}
+		{% for term in lstAlertes[deadline] %}
+			{% if term.type == 'alerte' %}
+	        	{% include 'operateur/dashboard/alerte-item.inc.html.twig' with {'alerte': term} %}
+			{% endif %}
+			{% if term.type == 'suivi' %}
+	        	{% include 'operateur/dashboard/suivi-item.inc.html.twig' with {'suivi': term} %}
+			{% endif %}
 	    {% endfor %}
 	{% endif %}
 </div>

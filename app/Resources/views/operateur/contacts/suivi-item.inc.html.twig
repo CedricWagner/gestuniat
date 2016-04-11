@@ -1,0 +1,22 @@
+<div class="listing-item suivi clearfix">
+	<div class="listing-item-side left-side">
+		<input type="checkbox"/>
+	</div>
+	<div class="listing-item-content">
+		<p>
+			{{ suivi.dateEcheance and suivi.isOk ? '<s>' : ''  }}
+			{{ suivi.texte }}
+			{{ suivi.dateEcheance and suivi.isOk ? '</s>' : ''  }}
+		</p>
+		<p>
+			{{ suivi.dateCreation.format('d/m/Y') }}&nbsp;&nbsp;|&nbsp;&nbsp;<span class="due-to">{{ suivi.dateEcheance ? suivi.dateEcheance.format('d/m/Y') : '---' }}</span>&nbsp;&nbsp;|&nbsp;&nbsp;{{ suivi.operateur.nom }} {{ suivi.operateur.prenom }}
+		</p>
+	</div>
+	<div class="listing-item-side right-side">
+		<p class="contextual-icon dropdown-toggle" id="options-suivi-1" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></p>
+		<ul class="dropdown-menu" aria-labelledby="options-suivi-1">
+			<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditSuivi({{ suivi.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+			<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_suivi',{'idSuivi':suivi.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+		</ul>
+	</div>
+</div>

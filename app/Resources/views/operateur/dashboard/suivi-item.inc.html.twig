@@ -1,0 +1,16 @@
+<div id="listing-suivi-{{ suivi.id }}" class="listing-item clearfix suivi {% if suivi.isOk == true %} done {% endif %}">
+	<div class="listing-item-side left-side">
+		<input type="checkbox" class="cb-check-suivi" onchange="ajaxCheckSuivi('suivi',{{ suivi.id }}, this.value)" value="{% if suivi.isOk == true %}done{% endif %}" {% if suivi.isOk == true %} checked="checked" {% endif %} />
+	</div>
+	<div class="listing-item-content">
+		<h4><span>{{ suivi.titre|raw }}</span> <small>{{ suivi.dateEcheance ? suivi.dateEcheance.format('d/m/Y') : '' }}</small></h4>
+		<p>{{ suivi.texte }}</p>
+	</div>
+	<div class="listing-item-side right-side">
+		<p class="contextual-icon dropdown-toggle" id="options-suivi-{{ suivi.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></p>
+		  <ul class="dropdown-menu" aria-labelledby="options-suivi-{{ suivi.id }}">
+		    <li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditSuivi({{ suivi.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+			<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_suivi',{'idSuivi':suivi.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+		  </ul>
+	</div>
+</div>

@@ -3,7 +3,7 @@
 		<input type="checkbox" class="cb-check-alerte" onchange="ajaxCheckAlerte('alerte',{{ alerte.id }}, this.value)" value="{% if alerte.isOk == true %}done{% endif %}" {% if alerte.isOk == true %} checked="checked" {% endif %} />
 	</div>
 	<div class="listing-item-content">
-		<h4><span>{{ alerte.label }}</span> <small>{{ alerte.dateEcheance.format('d/m/Y') }}</small></h4>
+		<h4><span>{{ alerte.titre }}</span> <small>{{ alerte.dateEcheance.format('d/m/Y') }}</small></h4>
 		<p>{{ alerte.texte }}</p>
 	</div>
 	<div class="listing-item-side right-side">

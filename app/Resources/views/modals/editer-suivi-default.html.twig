@@ -1,0 +1,17 @@
+<div class="modal fade" id="editer-suivi-{{ suivi.id }}" tabindex="-1" role="dialog" aria-labelledby="editer-suivi-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editer-suivi-label">Editer un suivi</h4>
+      </div>
+      <div class="modal-body">
+        {{ form(suiviForm, {'attr': {'novalidate': 'novalidate','id' : 'suivi-default','class' : 'clearfix modal-form'}}) }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="$('form#suivi-default').submit()">Enregistrer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

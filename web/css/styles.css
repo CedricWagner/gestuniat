@@ -305,6 +305,10 @@ form input, form textarea, form select{
     color: white;
 }
 
+.modal-form > div{
+    overflow: hidden;
+}
+
 /* BUTTONS */
 
 .btn-primary{
@@ -353,8 +357,16 @@ form input, form textarea, form select{
     border-left-color: #32438b;
 }
 
+.listing-item.suivi{
+    border-left-color: #4cae4c;
+}
+
 .listing-item.alerte h4{
     color: #32438b;
+}
+
+.listing-item.suivi h4, .listing-item.suivi h4 a{
+    color: #4cae4c;
 }
 
 .listing-item-side{
@@ -417,9 +429,9 @@ form input, form textarea, form select{
     min-width: inherit;
 }
 
- .filter-container .filter-section label{
+.filter-container .filter-section label{
     width: inherit;
- }
+}
 
 .filter-container .filter-section{
     padding-left:15px; 

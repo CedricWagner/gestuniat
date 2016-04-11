@@ -80,7 +80,12 @@
                                           </div>
                                           <div class="modal-body">
                                             {% for history in app.session.get('lateAlertes') %}
-                                                {% include 'operateur/dashboard/alerte-item.inc.html.twig' with {'alerte': history} %}
+                                                {% if history.type == 'alerte' %}
+                                                  {% include 'operateur/dashboard/alerte-item.inc.html.twig' with {'alerte': history} %}
+                                                {% endif %}
+                                                {% if history.type == 'suivi' %}
+                                                  {% include 'operateur/dashboard/suivi-item.inc.html.twig' with {'suivi': history} %}
+                                                {% endif %}
                                             {% endfor %}
                                           </div>
                                           <div class="modal-footer">

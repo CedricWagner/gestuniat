@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\ContactFullEditionType;
+use AppBundle\Form\SuiviDefaultType;
+use AppBundle\Entity\Suivi;
 use AppBundle\Entity\Contact;
 
 
@@ -94,14 +96,50 @@ class ContactController extends Controller
      * })
      * @Security("has_role('ROLE_USER')")
      */
-    public function viewContactAction($idContact)
+    public function viewContactAction(Request $request,$idContact)
     {
+      // Contact
       $contact = $this->getDoctrine()
               ->getRepository('AppBundle:Contact')
               ->find($idContact);
 
+      // Suivis
+      $suivi = new Suivi();
+
+      $suiviForm = $this->createForm(SuiviDefaultType::class, $suivi);
+      $suiviForm->handleRequest($request);
+
+      if ($suiviForm->isSubmitted() && $suiviForm->isValid()) {
+                
+        $datetime = new \DateTime();
+
+        $suivi->setDateCreation($datetime);
+        $suivi->setDateEdition($datetime);
+        $suivi->setOperateur($this->getUser());
+        $suivi->setContact($contact);
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($suivi);
+        $em->flush();
+
+        return  $this->redirectToRoute('view_contact', array('idContact' => $contact->getId()));
+      }
+
+      $lstSuivis = $this->getDoctrine()
+        ->getRepository('AppBundle:Suivi')
+        ->findBy(array('operateur'=>$this->getUser(),'contact'=>$contact,'isOk'=>false),array('dateCreation'=>'DESC'),5);
+
+
+      $lstAllSuivis = $this->getDoctrine()
+        ->getRepository('AppBundle:Suivi')
+        ->findBy(array('operateur'=>$this->getUser(),'contact'=>$contact),array('dateCreation'=>'DESC'));
+
+
       return $this->render('operateur/contacts/view-contact.html.twig', [
             'contact' => $contact,
+            'suiviForm' => $suiviForm->createView(),
+            'lstSuivis' => $lstSuivis,
+            'lstAllSuivis' => $lstAllSuivis,
         ]);
     }
 
@@ -261,4 +299,5 @@ class ContactController extends Controller
       return $this->redirectToRoute('view_contact',array('idContact'=>$contact->getId()));
 
     }
+
 }

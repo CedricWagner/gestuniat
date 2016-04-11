@@ -85,26 +85,44 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Alerte')
             ->findBy(array('operateur'=>$this->getUser()),array('dateEcheance'=>'ASC'));
 
+            $suivis = $this->getDoctrine()
+            ->getRepository('AppBundle:Suivi')
+            ->findBy(array('operateur'=>$this->getUser()),array('dateEcheance'=>'ASC'));
+
+            $lstTerms = array();
+
+            foreach ($alertes as $_alerte) {
+                $lstTerms[$_alerte->getDateEcheance()->format('Y-m-d')] = $_alerte;
+            }
+            foreach ($suivis as $suivi) {
+                if ($suivi->getDateEcheance()) {
+                    $lstTerms[$suivi->getDateEcheance()->format('Y-m-d')] = $suivi;
+                }
+            }
+            dump($lstTerms);
+            ksort($lstTerms);
+            dump($lstTerms);
+
             $dateYesterday = new \DateTime(date('Y-m-d').' -1 day');
             $dateTomorrow = new \DateTime(date('Y-m-d').' +1 day');
 
             $lstAlertes = ['late'=>array(),'now'=>array(),'incoming'=>array()];
             $lstHistory = array();
 
-            foreach ($alertes as $alerte) {
-                if ($alerte->getDateEcheance()->format('Y-m-d') <= $dateYesterday->format('Y-m-d')) {
-                    if(!$alerte->getIsOk()){
-                        $lstAlertes['late'][] = $alerte;
+            foreach ($lstTerms as $key => $term) {
+                if ($term->getDateEcheance()->format('Y-m-d') <= $dateYesterday->format('Y-m-d')) {
+                    if(!$term->getIsOk()){
+                        $lstAlertes['late'][] = $term;
                     }
-                }elseif ($alerte->getDateEcheance()->format('Y-m-d') >= $dateTomorrow->format('Y-m-d')) {
-                    $lstAlertes['incoming'][] = $alerte;
+                }elseif ($term->getDateEcheance()->format('Y-m-d') >= $dateTomorrow->format('Y-m-d')) {
+                    $lstAlertes['incoming'][] = $term;
                 }else{
-                    if(!$alerte->getIsOk()){
-                        $lstAlertes['now'][] = $alerte;
+                    if(!$term->getIsOk()){
+                        $lstAlertes['now'][] = $term;
                     }
                 }
-                if($alerte->getIsOk()){
-                    $lstHistory[] = $alerte;
+                if($term->getIsOk()){
+                    $lstHistory[] = $term;
                 }
             }
 
@@ -256,14 +274,10 @@ class DefaultController extends Controller
 
             $this->updateAlertesInSession();
 
-            return  $this->redirectToRoute('dashboard');
 
-        }else{
-            
-            return  $this->redirectToRoute('dashboard');
-            
         }
-
+        
+        return  $this->redirectToRoute('dashboard');
 
     }
 
@@ -272,12 +286,30 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Alerte')
             ->findBy(array('operateur'=>$this->getUser(),'isOk'=>false),array('dateEcheance'=>'ASC'));
 
+        $suivis = $this->getDoctrine()
+            ->getRepository('AppBundle:Suivi')
+            ->findBy(array('operateur'=>$this->getUser(),'isOk'=>false),array('dateEcheance'=>'ASC'));
+
+
+        $lstTerms = array();
+
+        foreach ($alertes as $_alerte) {
+            $lstTerms[$_alerte->getDateCreation()->format('Y-m-d H:i:s')] = $_alerte;
+        }
+        foreach ($suivis as $suivi) {
+            if ($suivi->getDateEcheance()) {
+                $lstTerms[$suivi->getDateCreation()->format('Y-m-d H:i:s')] = $suivi;
+            }
+        }
+
+        ksort($lstTerms);
+
         $dateToday = new \DateTime(date('Y-m-d'));
 
         $lateAlertes = array();
-        foreach ($alertes as $alerte) {
-            if ($alerte->getDateEcheance()->format('Y-m-d') <= $dateToday->format('Y-m-d')) {
-                $lateAlertes[] = $alerte;
+        foreach ($lstTerms as $key => $term) {
+            if ($term->getDateEcheance()->format('Y-m-d') <= $dateToday->format('Y-m-d')) {
+                $lateAlertes[] = $term;
             }
         }
 
