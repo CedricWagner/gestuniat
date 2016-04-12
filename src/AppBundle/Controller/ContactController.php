@@ -134,12 +134,31 @@ class ContactController extends Controller
         ->getRepository('AppBundle:Suivi')
         ->findBy(array('operateur'=>$this->getUser(),'contact'=>$contact),array('dateCreation'=>'DESC'));
 
+      if ($contact->getMembreConjoint()) {
+        $conjoint = $this->getDoctrine()
+          ->getRepository('AppBundle:Contact')
+          ->find($contact->getMembreConjoint()->getId());
+      }else{
+        //shortcut
+        $conjoint = $contact;
+      }
+
+      $agrrs = $this->getDoctrine()
+        ->getRepository('AppBundle:ContratPrevoyance')
+        ->findByContactAndConjoint($contact,$conjoint);
+
+
+      $obseques = $this->getDoctrine()
+        ->getRepository('AppBundle:ContratPrevObs')
+        ->findByContactAndConjoint($contact,$conjoint);
 
       return $this->render('operateur/contacts/view-contact.html.twig', [
             'contact' => $contact,
             'suiviForm' => $suiviForm->createView(),
             'lstSuivis' => $lstSuivis,
             'lstAllSuivis' => $lstAllSuivis,
+            'agrrs' => $agrrs,
+            'obseques' => $obseques,
         ]);
     }
 

@@ -10,4 +10,16 @@ namespace AppBundle\Repository;
  */
 class ContratPrevoyanceRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findByContactAndConjoint($contact, $conjoint){
+
+		$qb = $this->createQueryBuilder('contratPrevoyance');
+		$result = $qb
+			->select('contratPrevoyance')
+			->where('contratPrevoyance.contact = :contact OR contratPrevoyance.contact = :conjoint')
+			->setParameters(array('contact'=>$contact,'conjoint'=>$conjoint))
+			->getQuery()
+    		->execute();
+
+        return $result;
+	}
 }

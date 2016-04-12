@@ -48,7 +48,7 @@
 				<td>{{ contact.prenom }}</td>
 				<td>{{ contact.nom }}</td>
 				<td>{{ contact.numAdh }}</td>
-				<td>Statut</td>
+				<td>{{ contact.statutJuridique ? contact.statutJuridique.label : '--' }}</td>
 				<td>{{ contact.adresse }}</td>
 				<td>{{ contact.commune }}</td>
 				<td>Section</td>

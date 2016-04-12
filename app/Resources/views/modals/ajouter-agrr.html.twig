@@ -1,0 +1,17 @@
+<div class="modal fade" id="ajouter-agrr" tabindex="-1" role="dialog" aria-labelledby="ajouter-agrr-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="ajouter-agrr-label">Ajouter un contrat AGRR</h4>
+      </div>
+      <div class="modal-body">
+        {{ form(agrrForm, {'attr': {'novalidate': 'novalidate','id' : 'agrr-add','class' : 'clearfix modal-form'}}) }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="$('form#agrr-add').submit()">Enregistrer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

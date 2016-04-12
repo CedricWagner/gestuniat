@@ -79,6 +79,35 @@ function ajaxShowEditSuivi(idSuivi){
 	});
 }
 
+
+function ajaxShowEditContratAgrr(idAgrr){
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: "/agrr/show-edit",
+	  data: { idAgrr: idAgrr }
+	})
+	.done(function(response) {
+		ajax_stop();
+		$('body').append(response);
+		$('#editer-agrr-'+idAgrr).modal('show');
+	});
+}
+
+function ajaxShowEditContratObseque(idObseque){
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: "/obseque/show-edit",
+	  data: { idObseque: idObseque }
+	})
+	.done(function(response) {
+		ajax_stop();
+		$('body').append(response);
+		$('#editer-obseque-'+idObseque).modal('show');
+	});
+}
+
 function ajaxSaveFilter(formFilter,ajaxUrl){
 	
 	var fields = new Array();

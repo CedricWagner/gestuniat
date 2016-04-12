@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Contrats de  {{ contact.prenom }} {{ contact.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/contacts/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Gestion des prévoyances</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">Accueil</a></li>
+	  <li class="active">Gestion des prévoyances</li>
+	</ol>
+	<ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#agrr" aria-controls="agrr" role="tab" data-toggle="tab">AGRR Prévoyances</a></li>
+		<li role="presentation"><a href="#obseque" aria-controls="obseque" role="tab" data-toggle="tab">Prévoyances obsèques</a></li>
+	</ul>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane clearfix active" id="agrr">
+			<table class="table table-striped table-hover selectable">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Num. contrat</th>
+						<th>Cible</th>
+						<th>Etat</th>
+						<th>Option</th>
+						<th>Régime d'affiliation</th>
+						<th>Date effet</th>
+						<th>Date effet modification</th>
+						<th>Date résiliation</th>
+						<th>Date effet résiliation</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for agrr in agrrs %}
+						<tr>
+							<td style="position:relative">
+								<a href="#" class="dropdown-toggle" id="options-agrr-{{ agrr.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+								<ul class="dropdown-menu" aria-labelledby="options-agrr-{{ agrr.id }}">
+									<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditContratAgrr({{ agrr.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
+									<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_agrr', {'idAgrr':agrr.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+								</ul>
+							</td>
+							<td>{{ agrr.numContrat }}</td>
+							<td>
+								{% if agrr.cible == 'CONTACT' and contact.id == agrr.contact.id  %}
+									{{ agrr.contact.nom }} {{ agrr.contact.prenom }} (membre principal)
+								{% elseif contact.membreConjoint and agrr.contact.id == contact.membreConjoint.id %}
+									<a href="{{ path('list_contrats',{'idContact':agrr.contact.id}) }}">{{ agrr.contact.nom }} {{ agrr.contact.prenom }}</a> (membre conjoint)
+								{% endif %}
+								{% if agrr.cible == 'AD' %}
+									{{ agrr.nomPrenomAD }} (ayant droit)
+								{% endif %}
+							</td>
+							<td>{{ agrr.etat == 0 ? 'En attente' : agrr.etat == 1 ? 'Actif' : agrr.etat == 2 ? 'Résilié' : '' }}</td>
+							<td>{{ agrr.option }}</td>
+							<td>{{ agrr.regimeAffiliation ? agrr.regimeAffiliation.label : 'Non défini' }}</td>
+							<td>{{ agrr.dateEffet ? agrr.dateEffet.format('d/m/Y') : '--' }}</td>
+							<td>{{ agrr.dateEffetModif ? agrr.dateEffetModif.format('d/m/Y') : '--' }}</td>
+							<td>{{ agrr.dateRes ? agrr.dateRes.format('d/m/Y') : '--' }}</td>
+							<td>{{ agrr.dateEffetRes ? agrr.dateEffetRes.format('d/m/Y') : '--' }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-md-12">
+					<button class="btn btn-primary" data-toggle="modal" data-target="#ajouter-agrr">Saisir un nouveau contrat AGRR Prévoyance</button>
+					{% include 'modals/ajouter-agrr.html.twig' %}
+				</div>
+			</div>
+			<br />
+		</div>
+		<div role="tabpanel" class="tab-pane clearfix" id="obseque">
+			<table class="table table-striped table-hover selectable">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Num. contrat</th>
+						<th>Cible</th>
+						<th>Option</th>
+						<th>Date effet</th>
+						<th>Résiliation</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for obseque in obseques %}
+						<tr>
+							<td style="position:relative">
+								<a href="#" class="dropdown-toggle" id="options-obseque-{{ obseque.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+								<ul class="dropdown-menu" aria-labelledby="options-obseque-{{ obseque.id }}">
+									<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditContratObseque({{ obseque.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
+									<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_obseque', {'idObseque':obseque.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+								</ul>
+							</td>
+							<td>{{ obseque.numContrat }}</td>
+							<td>
+								{% if obseque.cible == 'CONTACT' and contact.id == obseque.contact.id  %}
+									{{ obseque.contact.nom }} {{ obseque.contact.prenom }} (membre principal)
+								{% elseif contact.membreConjoint and obseque.contact.id == contact.membreConjoint.id %}
+									<a href="{{ path('list_contrats',{'idContact':obseque.contact.id}) }}">{{ obseque.contact.nom }} {{ obseque.contact.prenom }}</a> (membre conjoint)
+								{% endif %}
+								{% if obseque.cible == 'AD' %}
+									{{ obseque.nomPrenomAD }} (ayant droit)
+								{% endif %}
+							</td>
+							<td>{{ obseque.option }}</td>
+							<td>{{ obseque.dateEffet ? obseque.dateEffet.format('d/m/Y') : '--' }}</td>
+							<td>
+								{% if obseque.isResilie %}
+									Le {{ obseque.dateRes ? obseque.dateRes.format('d/m/Y') : '--' }}
+								{% else %}
+									Non
+								{% endif %}
+							</td>
+
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-md-12">
+					<button class="btn btn-primary" data-toggle="modal" data-target="#ajouter-obseque">Saisir un nouveau contrat de prévoyance obsèques</button>
+					{% include 'modals/ajouter-obseque.html.twig' %}
+				</div>
+			</div>
+			<br />
+		</div>
+	</div>
+
+{% endblock %}

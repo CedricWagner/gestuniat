@@ -535,7 +535,15 @@ table.table tr.clickable{
     float: right;
 }
 
+.label-print-all{
+    position: relative;
+    top: 5px;
+}
 
+.label-print-all a{
+    color: #797979;
+    text-decoration: underline;
+}
 
 
 @media(max-width: 1024px){

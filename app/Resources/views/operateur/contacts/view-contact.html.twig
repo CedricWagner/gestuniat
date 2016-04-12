@@ -25,6 +25,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 				<div class="section-main-content">
 					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Rédiger un nouveau commentaire</button>
 					{% include 'modals/ajouter-suivi-default.html.twig' %}
+					<small class="label-print-all"><a href="#">Imprimer la sélection</a></small>
 				</div>
 				<div class="section-sub-content">
 					{% for suivi in lstSuivis %}
@@ -89,11 +90,50 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						</div>
 						<div class="section-main-content">
 							<p>
-								<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-notes"></span>Gestion des prévoyances</button>
+								<a href="{{ path('list_contrats',{'idContact':contact.id}) }}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-notes"></span>Gestion des prévoyances</a>
 							</p>
 							<div class="btn-group-vertical" role="group">
-								<button class="btn btn-default btn-block">AGRR Prévoyance <span class="badge">3</span></button>
-								<button class="btn btn-default btn-block">Prévoyance obsèques <span class="badge">3</span></button>
+								<button class="btn btn-default btn-block" role="button" data-toggle="collapse" href="#collapseAgrr" aria-expanded="false" aria-controls="collapseAgrr">AGRR Prévoyance <span class="badge">{{ agrrs|length }}</span></button>
+								<div class="collapse" id="collapseAgrr">
+								  <div class="section-sub-content">
+								  	{% for agrr in agrrs %}
+								  		<div class="listing-item clearfix">
+								  			<div class="listing-item-content">
+								  				<p>
+								  					{% if agrr.cible == 'CONTACT' and contact.id == agrr.contact.id  %}
+														{{ agrr.contact.nom }} {{ agrr.contact.prenom }} (membre principal)
+													{% elseif contact.membreConjoint and agrr.contact.id == contact.membreConjoint.id %}
+														<a href="{{ path('list_contrats',{'idContact':agrr.contact.id}) }}">{{ agrr.contact.nom }} {{ agrr.contact.prenom }}</a> (membre conjoint)
+													{% endif %}
+													{% if agrr.cible == 'AD' %}
+														{{ agrr.nomPrenomAD }} (ayant droit)
+													{% endif %}
+												</p>
+								  				<p>{{ agrr.etat == 0 ? 'En attente' : agrr.etat == 1 ? 'Actif' : agrr.etat == 2 ? 'Résilié' : '' }}&nbsp;&nbsp;|&nbsp;&nbsp;Date d'effet : {{ agrr.dateEffet ? agrr.dateEffet.format('d/m/Y') : '--' }}</p>
+								  			</div>
+								  		</div>
+								  	{% endfor %}
+								  </div>
+								</div>
+								<button class="btn btn-default btn-block"role="button" data-toggle="collapse" href="#collapseObseque" aria-expanded="false" aria-controls="collapseObseque">Prévoyance obsèques <span class="badge">{{ obseques|length }}</span></button>
+								<div class="collapse" id="collapseObseque">
+								  <div class="section-sub-content">
+								  	{% for obseque in obseques %}
+								  		<div class="listing-item clearfix">
+								  			<div class="listing-item-content">
+								  				<p>
+								  					{% if obseque.cible == 'CONTACT' and contact.id == obseque.contact.id  %}
+														{{ obseque.contact.nom }} {{ obseque.contact.prenom }} (membre principal)
+													{% elseif contact.membreConjoint and obseque.contact.id == contact.membreConjoint.id %}
+														<a href="{{ path('list_contrats',{'idContact':obseque.contact.id}) }}">{{ obseque.contact.nom }} {{ obseque.contact.prenom }}</a> (membre conjoint)
+													{% endif %}
+												</p>
+								  				<p>Date d'effet : {{ obseque.dateEffet ? obseque.dateEffet.format('d/m/Y') : '--' }}</p>
+								  			</div>
+								  		</div>
+								  	{% endfor %}
+								  </div>
+								</div>
 							</div>
 						</div>
 					</div>
