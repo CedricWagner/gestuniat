@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Diplômes de  {{ contact.prenom }} {{ contact.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/contacts/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Gestion des diplomes</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">Accueil</a></li>
+	  <li class="active">Gestion des diplômes</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Diplome</th>
+				<th>Date obtention</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for cd in contactDiplomes %}
+				<tr>
+					<td style="position:relative">
+						<a href="#" class="dropdown-toggle" id="options-cd-{{ cd.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+						<ul class="dropdown-menu" aria-labelledby="options-cd-{{ cd.id }}">
+							<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-cd-{{ cd.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
+							<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_contact_diplome', {'idContactDiplome':cd.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+						</ul>
+						{% include 'modals/editer-remise-diplome.html.twig' %}
+					</td>
+					<td>{{ cd.diplome.label }}</td>
+					<td>{{ cd.dateObtention.format('d/m/Y') }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-cd">Saisir une nouvelle remise de diplôme</button>
+	<br />
+	{% include 'modals/ajouter-remise-diplome.html.twig' %}
+{% endblock %}

@@ -30,14 +30,14 @@
 	<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a></p>
 </div>
 <div class="section">
-	<p><a class="btn btn-default btn-block" href="{{ path('list_contrats',{'idContact':contact.id}) }}">Gestionnaire des prévoyances</a></p>
 	<p><a class="btn btn-default btn-block">Gestionnaire des documents</a></p>
 	<p><a class="btn btn-default btn-block">Vignettes contributives</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_contrats',{'idContact':contact.id}) }}">Prévoyances</a></p>
 	<p><a class="btn btn-default btn-block">Kit adhésion</a></p>
 	<p><a class="btn btn-default btn-block">Etiquettes</a></p>
-	<p><a class="btn btn-default btn-block">Procuration</a></p>
-	<p><a class="btn btn-default btn-block">Pouvoirs</a></p>
-	<p><a class="btn btn-default btn-block">Diplômes</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_procurations',{'idContact':contact.id}) }}">Procuration</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_pouvoirs',{'idContact':contact.id}) }}">Pouvoirs</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_diplomes',{'idContact':contact.id}) }}">Diplômes</a></p>
 	<p><a class="btn btn-default btn-block">Pièces à fournir</a></p>
 </div>
 

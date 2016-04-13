@@ -307,6 +307,12 @@ form input, form textarea, form select{
 
 .modal-form > div{
     overflow: hidden;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.modal-form > div label{
+    margin-right: 10px;
 }
 
 /* BUTTONS */
@@ -545,6 +551,9 @@ table.table tr.clickable{
     text-decoration: underline;
 }
 
+label[for*="procuration_is"]{
+    width: 80%;
+}
 
 @media(max-width: 1024px){
     #left-sidebar{

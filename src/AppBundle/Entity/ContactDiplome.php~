@@ -1,0 +1,78 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ContactDiplome
+ *
+ * @ORM\Table(name="contact_diplome")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ContactDiplomeRepository")
+ */
+class ContactDiplome
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateObtention", type="date", nullable=true)
+     */
+    private $dateObtention;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Contact")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     */
+    protected $contact;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Diplome")
+     * @ORM\JoinColumn(name="diplome_id", referencedColumnName="id")
+     */
+    protected $diplome;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dateObtention
+     *
+     * @param \DateTime $dateObtention
+     *
+     * @return ContactDiplome
+     */
+    public function setDateObtention($dateObtention)
+    {
+        $this->dateObtention = $dateObtention;
+
+        return $this;
+    }
+
+    /**
+     * Get dateObtention
+     *
+     * @return \DateTime
+     */
+    public function getDateObtention()
+    {
+        return $this->dateObtention;
+    }
+}
+

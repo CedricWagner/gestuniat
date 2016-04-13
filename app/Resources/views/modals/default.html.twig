@@ -1,0 +1,31 @@
+{% if object %}
+  {% set verb = 'edit' %}
+  {% set id = object.id %}
+{% else %}
+  {% set verb = 'add' %}
+  {% set id = 0 %}
+{% endif %}
+
+{% if additionalClass is not defined  %}
+  {% set additionalClass = '' %}
+{% endif %}
+
+
+
+<div class="modal fade" id="{{ verb }}-{{ entity }}-{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ verb }}-{{ entity }}-{{ id }}-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="{{ verb }}-{{ entity }}-{{ id }}-label">{{ title }}</h4>
+      </div>
+      <div class="modal-body">
+        {{ form(form, {'attr': {'novalidate': 'novalidate','id' : entity ~ '-' ~ verb ~ '-' ~ id,'class' : additionalClass ~ ' clearfix modal-form'}}) }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="$('form#{{ entity }}-{{ verb }}-{{ id }}').submit()">Enregistrer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

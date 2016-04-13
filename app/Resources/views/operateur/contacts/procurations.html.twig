@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Procurations de  {{ contact.prenom }} {{ contact.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/contacts/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Gestion des procurations</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">Accueil</a></li>
+	  <li class="active">Gestion des procurations</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Date</th>
+				<th>Statut</th>
+				<th>Lieu</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for procuration in procurations %}
+				<tr>
+					<td style="position:relative">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'procuration','object':procuration,'deletePath':path('delete_procuration',{'idProcuration':procuration.id})} %}
+						{% include 'modals/default.html.twig' with {'additionalClass':'label-large', 'form':procurationForms[procuration.id],'entity':'procuration','object':procuration,'title':'Edition de la procuration'} %}
+					</td>
+					<td>{{ procuration.date ? procuration.date.format('d/m/Y') : '' }}</td>
+					<td>{{ procuration.statut }}</td>
+					<td>{{ procuration.lieu }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-procuration-0">Saisir une nouvelle procuration</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'additionalClass':'label-large', 'form':newProcurationForm,'entity':'procuration','object':false,'title':'Ajouter une procuration'} %}
+{% endblock %}

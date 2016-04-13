@@ -72,6 +72,18 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 					case 'selPaiement':
 						//TODO
 						break;
+					case 'selDiplome':
+						$qb->join('AppBundle:ContactDiplome', 'cd', 'WITH', 'cd.contact = contact');
+						$qb->andwhere('cd.diplome = :p_diplome');
+						$params['p_diplome'] = $fv->getValeur();
+						break;
+					case 'selPrevoyance':
+						if ($fv->getValeur()=='OBS') {
+							$qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.contact = contact');
+						}elseif($fv->getValeur()=='AGRR'){
+							$qb->join('AppBundle:ContratPrevoyance', 'cp', 'WITH', 'cp.contact = contact');
+						}
+						break;
 					case 'cbRentier':
 						if ($fv->getValeur()=='RENTIER') {
 							$qb->andwhere('contact.isRentier = :p_is_rentier');

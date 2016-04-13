@@ -58,3 +58,13 @@
 	</tbody>
 </table>
 
+<script type="text/javascript">
+	$(function(){
+		$('.contact-line td:not(.cb-container)').click(function(){
+			location.href = '/contact/'+$(this).parents('.contact-line').data('id');
+		})
+	});
+
+
+</script>
+
