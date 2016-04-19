@@ -31,7 +31,8 @@
 </div>
 <div class="section">
 	<p><a class="btn btn-default btn-block">Gestionnaire des documents</a></p>
-	<p><a class="btn btn-default btn-block">Vignettes contributives</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_vignettes',{'idContact':contact.id}) }}">Vignettes contributives</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_dons',{'idContact':contact.id}) }}">Dons</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_contrats',{'idContact':contact.id}) }}">Prévoyances</a></p>
 	<p><a class="btn btn-default btn-block">Kit adhésion</a></p>
 	<p><a class="btn btn-default btn-block">Etiquettes</a></p>
