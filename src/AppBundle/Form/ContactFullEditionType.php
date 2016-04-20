@@ -57,6 +57,7 @@ class ContactFullEditionType extends AbstractType
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('fonctionGroupement',EntityType::class,array('label' => 'Fonction de groupement','class'=>'AppBundle:FonctionGroupement','choice_label'=>'label','placeholder' => 'Aucune'))
+            ->add('section',EntityType::class,array('label' => 'Section','class'=>'AppBundle:Section','choice_label'=>'nom','placeholder' => 'Aucune'))
             ->add('encaisseur',TextType::class,array('label' => 'Nom encaisseur'))
             ->add('isDossierPaye',CheckboxType::class,array('label' => 'Frais de dossier payé'))
             ->add('isCA',CheckboxType::class,array('label' => 'Est membre du CA'))
@@ -67,6 +68,7 @@ class ContactFullEditionType extends AbstractType
                 )))
             ->add('isRentier',CheckboxType::class,array('label' => 'Est rentier'))
             ->add('isBI',CheckboxType::class,array('label' => 'Reçoit le bulletin d\'information'))
+            ->add('isCourrier',CheckboxType::class,array('label' => 'Courrier'))
             ->add('isEnvoiIndiv',CheckboxType::class,array('label' => 'Envoi individuel'))
             ->add('isOffreDecouverte',CheckboxType::class,array('label' => 'Profite de l\'offre découverte'))
             ->add('dateOffreDecouverte',DateType::class,array('label' => 'Début de l\'offre découverte','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(

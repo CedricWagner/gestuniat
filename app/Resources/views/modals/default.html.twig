@@ -10,6 +10,12 @@
   {% set additionalClass = '' %}
 {% endif %}
 
+{% if action is not defined  %}
+  {% set action = '' %}
+{% endif %}
+
+
+
 
 
 <div class="modal fade" id="{{ verb }}-{{ entity }}-{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ verb }}-{{ entity }}-{{ id }}-label">
@@ -20,7 +26,7 @@
         <h4 class="modal-title" id="{{ verb }}-{{ entity }}-{{ id }}-label">{{ title }}</h4>
       </div>
       <div class="modal-body">
-        {{ form(form, {'attr': {'novalidate': 'novalidate','id' : entity ~ '-' ~ verb ~ '-' ~ id,'class' : additionalClass ~ ' clearfix modal-form'}}) }}
+        {{ form(form, {'attr': {'novalidate': 'novalidate','id' : entity ~ '-' ~ verb ~ '-' ~ id,'class' : additionalClass ~ ' clearfix modal-form','action':action}}) }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>

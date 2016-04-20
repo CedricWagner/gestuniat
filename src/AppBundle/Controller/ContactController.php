@@ -12,6 +12,14 @@ use AppBundle\Form\ContactFullEditionType;
 use AppBundle\Form\SuiviDefaultType;
 use AppBundle\Entity\Suivi;
 use AppBundle\Entity\Contact;
+use AppBundle\Entity\Don;
+use AppBundle\Entity\Vignette;
+use AppBundle\Entity\Dossier;
+use AppBundle\Entity\Document;
+use AppBundle\Form\DonType;
+use AppBundle\Form\VignetteType;
+use AppBundle\Form\DossierType;
+use AppBundle\Form\DocumentType;
 
 
 class ContactController extends Controller
@@ -152,6 +160,29 @@ class ContactController extends Controller
         ->getRepository('AppBundle:ContratPrevObs')
         ->findByContactAndConjoint($contact,$conjoint);
 
+      // Contributions
+      //    Don
+      $don = new Don();
+      $donForm = $this->createForm(DonType::class, $don);
+      $donForm->handleRequest($request);
+
+      //    Vignette
+      $vignette = new Vignette();
+      $vignetteForm = $this->createForm(VignetteType::class, $vignette);
+      $vignetteForm->handleRequest($request);
+
+      // Documents
+      //    Doc
+      $document = new Document();
+      $documentForm = $this->createForm(DocumentType::class, $document);
+      $documentForm->handleRequest($request);
+
+      //    Dossier
+      $dossier = new Dossier();
+      $dossierForm = $this->createForm(DossierType::class, $dossier);
+      $dossierForm->handleRequest($request);
+
+
       return $this->render('operateur/contacts/view-contact.html.twig', [
             'contact' => $contact,
             'suiviForm' => $suiviForm->createView(),
@@ -159,6 +190,10 @@ class ContactController extends Controller
             'lstAllSuivis' => $lstAllSuivis,
             'agrrs' => $agrrs,
             'obseques' => $obseques,
+            'vignetteForm' => $vignetteForm->createView(),
+            'dossierForm' => $dossierForm->createView(),
+            'documentForm' => $documentForm->createView(),
+            'donForm' => $donForm->createView(),
         ]);
     }
 
@@ -185,6 +220,7 @@ class ContactController extends Controller
 
       return $this->render('operateur/contacts/full-contact.html.twig', [
             'contact' => $contact,
+            'isInsert' => false,
             'contactForm' => $contactForm->createView(),
         ]);
     }
@@ -210,7 +246,7 @@ class ContactController extends Controller
 
       $arrContacts = array();
       foreach ($contacts as $contact) {
-        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getprenom(),'numAdh'=>$contact->getNumAdh());
+        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getprenom(),'numAdh'=>$contact->getNumAdh(),'path'=>$this->generateUrl('view_contact',array('idContact'=>$contact->getId())));
       }  
 
       return new Response(json_encode($arrContacts)); 
@@ -317,6 +353,77 @@ class ContactController extends Controller
 
       return $this->redirectToRoute('view_contact',array('idContact'=>$contact->getId()));
 
+    }
+
+
+    /**
+     * @Route("/contact/{idContact}/kit-adhesion", name="kit_adh_contact")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function kitAdhContactAction($idContact)
+    {
+       $contact = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->find($idContact);
+
+        return $this->render('operateur/contacts/kit-adhesion.html.twig',array(
+            'contact' => $contact
+          ));
+    }
+
+
+    /**
+     * @Route("/contact/{idContact}/suppression", name="delete_contact")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function deleteContactAction($idContact)
+    {
+
+      $contact = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->find($idContact);
+    
+      $contact = $procuration->getContact();
+
+      $em = $this->get('doctrine.orm.entity_manager');
+      $em->remove($contact);
+      $em->flush();
+
+      return $this->redirectToRoute('list_contacts');
+    }
+
+    /**
+     * @Route("/nouveau-contact", name="add_contact")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function addContactAction(Request $request)
+    {
+      $contact = new Contact();
+
+      $contactForm = $this->createForm(ContactFullEditionType::class, $contact);
+
+      $maxNumAdh = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->findMaxNumAdh();
+
+      $maxNumAdh++;
+
+      $contact->setNumAdh($maxNumAdh);
+
+      $contactForm->handleRequest($request);
+
+      if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($contact);
+        $em->flush();
+        return $this->redirectToRoute('view_contact',array('idContact'=>$contact->getId()));
+      }
+
+      return $this->render('operateur/contacts/full-contact.html.twig', [
+            'contact' => $contact,
+            'isInsert' => true,
+            'contactForm' => $contactForm->createView(),
+        ]);
     }
 
 }

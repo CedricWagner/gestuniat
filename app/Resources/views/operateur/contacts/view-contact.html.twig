@@ -46,10 +46,12 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 							<h3>Documents</h3>
 						</div>
 						<div class="section-main-content">
-							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-folder-open"></span>Créer un dossier</button>
-							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-folder-open"></span>Créer un document</button>
-							<button class="btn btn-default btn-block"><span class="glyphicons glyphicons-eye-open"></span>Explorer</button>
+							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-dossier-0"><span class="glyphicons glyphicons-folder-open"></span>Créer un dossier</button>
+							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-document-0"><span class="glyphicons glyphicons-folder-open"></span>Créer un document</button>
+							<a class="btn btn-default btn-block" href="{{ path('list_documents',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
 						</div>
+							{% include 'modals/default.html.twig' with {'action':path('save_dossier',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':dossierForm,'entity':'dossier','object':false,'title':'Ajouter un dossier'} %}
+							{% include 'modals/default.html.twig' with {'action':path('save_document',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':documentForm,'entity':'document','object':false,'title':'Ajouter un document'} %}
 					</div>
 					
 				</div>
@@ -59,8 +61,9 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 							<h3>Vignettes contributives</h3>
 						</div>
 						<div class="section-main-content">
-							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-tag"></span>Ajouter une vignette</button>
-							<button class="btn btn-default btn-block"><span class="glyphicons glyphicons-eye-open"></span>Explorer</button>
+							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-vignette-0"><span class="glyphicons glyphicons-tag"></span>Ajouter une vignette</button>
+							<a class="btn btn-default btn-block" href="{{ path('list_vignettes',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
+							{% include 'modals/default.html.twig' with {'action':path('save_vignette',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':vignetteForm,'entity':'vignette','object':false,'title':'Ajouter une vignette'} %}
 						</div>
 					</div>
 					
@@ -71,9 +74,10 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 							<h3>Dons</h3>
 						</div>
 						<div class="section-main-content">
-							<button class="btn btn-primary btn-block"><span class="glyphicons glyphicons-tag"></span>Ajouter un don</button>
-							<button class="btn btn-default btn-block"><span class="glyphicons glyphicons-eye-open"></span>Explorer</button>
+							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-don-0"><span class="glyphicons glyphicons-tag"></span>Ajouter un don</button>
+							<a class="btn btn-default btn-block" href="{{ path('list_dons',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
 						</div>
+						{% include 'modals/default.html.twig' with {'action':path('save_don',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':donForm,'entity':'don','object':false,'title':'Ajouter un don'} %}
 					</div>
 				</div>
 			</div>

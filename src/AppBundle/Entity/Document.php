@@ -48,6 +48,18 @@ class Document
      */
     protected $dossier;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Operateur")
+     * @ORM\JoinColumn(name="operateur_id", referencedColumnName="id")
+     */
+    protected $operateur;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Contact")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     */
+    protected $contact;
+
 
     /**
      * Get id
@@ -153,5 +165,53 @@ class Document
     public function getDossier()
     {
         return $this->dossier;
+    }
+
+    /**
+     * Set operateur
+     *
+     * @param \AppBundle\Entity\Operateur $operateur
+     *
+     * @return Document
+     */
+    public function setOperateur(\AppBundle\Entity\Operateur $operateur = null)
+    {
+        $this->operateur = $operateur;
+
+        return $this;
+    }
+
+    /**
+     * Get operateur
+     *
+     * @return \AppBundle\Entity\Operateur
+     */
+    public function getOperateur()
+    {
+        return $this->operateur;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param \AppBundle\Entity\Contact $contact
+     *
+     * @return Document
+     */
+    public function setContact(\AppBundle\Entity\Contact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \AppBundle\Entity\Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
     }
 }

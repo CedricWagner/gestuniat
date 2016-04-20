@@ -48,11 +48,11 @@
 				<td>{{ contact.prenom }}</td>
 				<td>{{ contact.nom }}</td>
 				<td>{{ contact.numAdh }}</td>
-				<td>{{ contact.statutJuridique ? contact.statutJuridique.label : '--' }}</td>
+				<td><span class="label label-default statut-{{ contact.statutJuridique.id }}">{{ contact.statutJuridique.label }}</span></td>
 				<td>{{ contact.adresse }}</td>
 				<td>{{ contact.commune }}</td>
-				<td>Section</td>
-				<td>{{ contact.dateEntree.format('d/m/Y') }}</td>
+				<td>{{ contact.section ? contact.section.nom : 'Aucune' }}</td>
+				<td>{{ contact.dateEntree ? contact.dateEntree.format('d/m/Y') : '' }}</td>
 			</tr>
 		{% endfor %}
 	</tbody>

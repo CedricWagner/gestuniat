@@ -29,7 +29,12 @@
                             <div class="spacer"></div>
                             <ul class="menu">
                                 <li><a href="{{ path('dashboard') }}"><span class="glyphicons glyphicons-home"></span><span class="menu-label">Accueil</span></a></li>
-                                <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-user"></span><span class="menu-label">Contacts</span></a></li>
+                                <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-user"></span><span class="menu-label">Contacts</span></a>
+                                    <ul>
+                                        <li class="item-add"><a href="{{ path('add_contact') }}"><span class="glyphicons glyphicons-plus"></span>Ajouter un contact</a></li>
+                                        <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des contacts</a></li>
+                                    </ul>
+                                </li>
                                 <li><a href=""><span class="glyphicons glyphicons-flag"></span><span class="menu-label">Sections</span></a></li>
                                 <li><a href=""><span class="glyphicons glyphicons-folder-open"></span><span class="menu-label">Dossiers</span></a></li>
                                 <li><a href=""><span class="glyphicons glyphicons-government"></span><span class="menu-label">Organismes</span></a></li>
@@ -51,9 +56,14 @@
                             <header class="clearfix">
                                 {% block header %}
                                     <div class="col-md-6">
-                                        <div class="input-group" id="global-search-container">
-                                            <input type="text" class="form-control" id="global-search-zone" placeholder="Rechercher une personne, une section ou numéro" />
-                                            <span class="input-group-addon"><span class="glyphicons glyphicons-search"></span></span>
+                                        <div class="autocomp-container" id="autocomp-search-contact">
+                                            <div class="input-group" id="global-search-container">
+                                                <input type="text" class="form-control autocomp-value" id="global-search-zone" placeholder="Rechercher une personne, une section ou numéro" onkeyup='ajaxAutocompSearchContact("#autocomp-search-contact")' onchange='ajaxAutocompSearchContact("#autocomp-search-contact")' />
+                                                <span class="input-group-addon"><span class="glyphicons glyphicons-search"></span></span>
+                                            </div>
+                                            <div class="autocomp-result">
+                                              
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 clearfix">

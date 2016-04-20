@@ -242,6 +242,35 @@ function ajaxAutocompMembreConjoint(idContact,container){
 	});
 }
 
+function ajaxAutocompSearchContact(container){
+	if($(container).find('.autocomp-value').val()!=''){
+		$(container).find('.autocomp-result').html('');
+
+		ajax_start();
+		$.ajax({
+		  method: "POST",
+		  url: '/search/contact',
+		  data: { txtSearch:$(container).find('.autocomp-value').val() }
+		})
+		.done(function(response) {
+			response = JSON.parse(response);
+			ajax_stop();
+			var lis = '';
+			for(line in response){
+				var id = response[line].id;
+				var nom = response[line].nom;
+				var prenom = response[line].prenom;
+				var numAdh = response[line].numAdh;
+				var path = response[line].path;
+				lis = lis + '<li class="list-group-item" id="result-amc-'+id+'"><a href="'+path+'">['+numAdh+'] '+prenom+' '+nom+'</a></li>';
+			}
+			$(container).find('.autocomp-result').html('<ul class="list-group">'+lis+'</ul>');
+		});
+	}else{
+		$(container).find('.autocomp-result').html('');
+	}
+}
+
 function proceedAutocompMembreConjoint(id){
 	$('#result-amc-'+id).addClass('active');
 	$('#result-amc-'+id).append('<input type="hidden" name="idMembreConjoint" value="'+id+'" />');

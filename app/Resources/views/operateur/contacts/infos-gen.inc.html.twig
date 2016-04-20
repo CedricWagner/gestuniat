@@ -27,14 +27,19 @@
 		{% endif %}
 	</p>
 	<p class="underlined"><span class="glyphicons glyphicons-home"></span>&nbsp;&nbsp;{{ contact.adresse }} {{ contact.cp }} {{ contact.commune }}</p>
-	<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a></p>
+	<div class="row">
+		<div class="col-md-6">
+			<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a></p>
+			<p><a class="btn btn-danger" onclick="if(confirm('Valider la suppression du contact (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_contact',{'idContact':contact.id }) }}"> Supprimer </a></p>
+		</div>
+	</div>
 </div>
 <div class="section">
 	<p><a class="btn btn-default btn-block">Gestionnaire des documents</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_vignettes',{'idContact':contact.id}) }}">Vignettes contributives</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_dons',{'idContact':contact.id}) }}">Dons</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_contrats',{'idContact':contact.id}) }}">Prévoyances</a></p>
-	<p><a class="btn btn-default btn-block">Kit adhésion</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('kit_adh_contact',{'idContact':contact.id}) }}">Kit adhésion</a></p>
 	<p><a class="btn btn-default btn-block">Etiquettes</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_procurations',{'idContact':contact.id}) }}">Procuration</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_pouvoirs',{'idContact':contact.id}) }}">Pouvoirs</a></p>

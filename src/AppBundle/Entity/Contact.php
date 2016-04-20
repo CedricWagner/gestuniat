@@ -295,6 +295,12 @@ class Contact
      */
     protected $membreConjoint;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Section")
+     * @ORM\JoinColumn(name="section_id", referencedColumnName="id")
+     */
+    protected $section;
+
 
     /**
      * Get id
@@ -1290,5 +1296,29 @@ class Contact
     public function getMembreConjoint()
     {
         return $this->membreConjoint;
+    }
+
+    /**
+     * Set section
+     *
+     * @param \AppBundle\Entity\Section $section
+     *
+     * @return Contact
+     */
+    public function setSection(\AppBundle\Entity\Section $section = null)
+    {
+        $this->section = $section;
+
+        return $this;
+    }
+
+    /**
+     * Get section
+     *
+     * @return \AppBundle\Entity\Section
+     */
+    public function getSection()
+    {
+        return $this->section;
     }
 }

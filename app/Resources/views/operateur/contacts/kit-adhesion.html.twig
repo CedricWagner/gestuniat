@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Kit adhésion pour  {{ contact.prenom }} {{ contact.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/contacts/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Kit Adhésion</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">Accueil</a></li>
+	  <li class="active">Kit adhésion</li>
+	</ol>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="kit-container">
+				<div class="kit-label">
+					Bulletin d'adhésion
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-notes-2"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="kit-container">
+				<div class="kit-label">
+					Lettre de remerciement
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-message-full"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="kit-container">
+				<div class="kit-label">
+					Lettre section
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-message-full"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="kit-container">
+				<div class="kit-label">
+					Lettre d'accompagnement
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-message-full"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}
