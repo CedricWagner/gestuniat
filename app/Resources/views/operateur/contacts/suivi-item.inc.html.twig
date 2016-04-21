@@ -3,6 +3,11 @@
 		<input type="checkbox"/>
 	</div>
 	<div class="listing-item-content">
+		{% if suivi.dossier %}
+			<p>
+				<i><a href="{{ path('view_dossier',{'idContact':contact.id,'idDossier':dossier.id}) }}">Dossier "{{ dossier.nom }}"</a></i>
+			</p>
+		{% endif %}
 		<p>
 			{{ suivi.dateEcheance and suivi.isOk ? '<s>' : ''  }}
 			{{ suivi.texte }}

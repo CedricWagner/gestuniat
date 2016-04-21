@@ -30,7 +30,7 @@ class DocumentType extends AbstractType
         $builder
             ->add('label',TextType::class,array('label' => 'Libellé'))
             ->add('dossier',EntityType::class,array('label' => 'Dossier parent','class'=>'AppBundle:Dossier','placeholder'=>'Racine','choice_label'=>'nom'))
-            ->add('path',FileType::class,array('label' => 'Fichier joint'))
+            ->add('file',FileType::class,array('label' => 'Fichier joint'))
         ;
     }
     

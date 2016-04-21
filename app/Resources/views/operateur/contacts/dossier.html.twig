@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Gestuniat - Dossier {{ dossier.nom }}
+{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+
+{% block left_column %}
+
+	{% include 'operateur/contacts/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Accueil contact</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">{{ contact.prenom }} {{ contact.nom }}</a></li>
+	  <li><a href="{{ path('list_documents',{'idContact':contact.id }) }}">Explorateur de documents</a></li>
+	  <li class="active">Dossier "{{ dossier.nom }}"</li>
+	</ol>
+	<div class="row">
+		<div class="col-md-4 col-sm-12">
+			<div class="section-block">
+				<div class="section-header">
+					<h3>Suivi contact</h3>
+				</div>
+				<div class="section-main-content">
+					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Rédiger un nouveau commentaire</button>
+					{% include 'modals/ajouter-suivi-default.html.twig' %}
+					<small class="label-print-all"><a href="#">Imprimer la sélection</a></small>
+				</div>
+				<div class="section-sub-content">
+					{% for suivi in lstSuivis %}
+						{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
+					{% endfor %}
+				</div>
+				<div class="section-main-content">
+					<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les commentaires >></button>
+					{% include 'modals/liste-suivis.html.twig' %}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-12">
+			{% include 'operateur/contacts/listing-documents.inc.html.twig' %}
+		</div>
+	</div>
+{% endblock %}
+

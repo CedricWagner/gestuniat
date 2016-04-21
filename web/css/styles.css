@@ -417,16 +417,24 @@ form input, form textarea, form select{
     border-left-color: #32438b;
 }
 
-.listing-item.suivi{
+.listing-item.suivi.contact{
     border-left-color: #4cae4c;
+}
+
+.listing-item.suivi.dossier{
+    border-left-color: #b92e4c;
 }
 
 .listing-item.alerte h4{
     color: #32438b;
 }
 
-.listing-item.suivi h4, .listing-item.suivi h4 a{
+.listing-item.suivi.contact h4, .listing-item.suivi.contact h4 a{
     color: #4cae4c;
+}
+
+.listing-item.suivi.dossier h4, .listing-item.suivi.dossier h4 a{
+    color: #b92e4c;
 }
 
 .listing-item-side{

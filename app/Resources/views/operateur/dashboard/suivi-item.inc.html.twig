@@ -1,4 +1,4 @@
-<div id="listing-suivi-{{ suivi.id }}" class="listing-item clearfix suivi {% if suivi.isOk == true %} done {% endif %}">
+<div id="listing-suivi-{{ suivi.id }}" class="listing-item clearfix suivi {{ suivi.dossier ? 'dossier' : 'contact' }} {% if suivi.isOk == true %} done {% endif %}">
 	<div class="listing-item-side left-side">
 		<input type="checkbox" class="cb-check-suivi" onchange="ajaxCheckSuivi('suivi',{{ suivi.id }}, this.value)" value="{% if suivi.isOk == true %}done{% endif %}" {% if suivi.isOk == true %} checked="checked" {% endif %} />
 	</div>

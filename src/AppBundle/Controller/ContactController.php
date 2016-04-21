@@ -135,12 +135,12 @@ class ContactController extends Controller
 
       $lstSuivis = $this->getDoctrine()
         ->getRepository('AppBundle:Suivi')
-        ->findBy(array('operateur'=>$this->getUser(),'contact'=>$contact,'isOk'=>false),array('dateCreation'=>'DESC'),5);
+        ->findByContact($contact,5);
 
 
       $lstAllSuivis = $this->getDoctrine()
         ->getRepository('AppBundle:Suivi')
-        ->findBy(array('operateur'=>$this->getUser(),'contact'=>$contact),array('dateCreation'=>'DESC'));
+        ->findAllByContact($contact);
 
       if ($contact->getMembreConjoint()) {
         $conjoint = $this->getDoctrine()

@@ -18,7 +18,7 @@
 	{% if isInsert %}
 	  <li class="active">Ajout d'un profil</li>
 	{% else %}
-	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">Accueil</a></li>
+	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">{{ contact.prenom }} {{ contact.nom }}</a></li>
 	  <li class="active">Edition du profil</li>
 	{% endif %} 
 	</ol>

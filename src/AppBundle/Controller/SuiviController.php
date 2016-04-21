@@ -65,6 +65,45 @@ class SuiviController extends Controller
   }
 
   /**
+   * @Route("/suivi/dossier/save", name="save_suivi_dossier")
+   * @Security("has_role('ROLE_USER')")
+   */
+  public function editSuiviDossierAction(Request $request)
+  {
+
+    $datetime = new \DateTime();
+    
+    if($request->query->get('idSuivi')){
+      $suivi = $this->getDoctrine()
+        ->getRepository('AppBundle:Suivi')
+        ->find($request->query->get('idSuivi'));
+    }else{
+      $suivi = new Suivi();
+      $dossier = $this->getDoctrine()
+        ->getRepository('AppBundle:Dossier')
+        ->find($request->query->get('idDossier'));
+      $suivi->setDossier($dossier);
+      $suivi->setOperateur($this->getUser());
+      $suivi->setDateCreation($datetime);
+    }
+
+    $suiviForm = $this->createForm(SuiviDefaultType::class, $suivi);
+    $suiviForm->handleRequest($request);
+
+    if ($suiviForm->isSubmitted() && $suiviForm->isValid()) {
+
+
+      $suivi->setDateEdition($datetime);
+
+      $em = $this->get('doctrine.orm.entity_manager');
+      $em->persist($suivi);
+      $em->flush();
+    }
+
+    return $this->redirect($request->headers->get('referer'));
+  }
+
+  /**
    * @Route("/suivi/delete/{idSuivi}", name="delete_suivi")
    * @Security("has_role('ROLE_USER')")
    */
@@ -84,39 +123,39 @@ class SuiviController extends Controller
      return $this->redirect($request->headers->get('referer'));
   }
 
-      /**
-     * @Route("/check-suivi", name="check_suivi")
-     * @Method("POST")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function checkSuiviAction(Request $request)
-    {
-        if($request->isXmlHttpRequest()){
-            $idSuivi = $request->request->get('idSuivi');
-            $target = $request->request->get('target'); 
-            $action = $request->request->get('action');
+    /**
+   * @Route("/check-suivi", name="check_suivi")
+   * @Method("POST")
+   * @Security("has_role('ROLE_USER')")
+   */
+  public function checkSuiviAction(Request $request)
+  {
+      if($request->isXmlHttpRequest()){
+          $idSuivi = $request->request->get('idSuivi');
+          $target = $request->request->get('target'); 
+          $action = $request->request->get('action');
 
-            if($action=='done'){
-                $value = false;
-            }else{
-                $value = true;
-            }
+          if($action=='done'){
+              $value = false;
+          }else{
+              $value = true;
+          }
 
-            if($target == 'suivi'){
-                $suivi = $this->getDoctrine()
-                   ->getRepository('AppBundle:Suivi')
-                   ->find($idSuivi);
+          if($target == 'suivi'){
+              $suivi = $this->getDoctrine()
+                 ->getRepository('AppBundle:Suivi')
+                 ->find($idSuivi);
 
-                $suivi->setIsOk($value);
+              $suivi->setIsOk($value);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($suivi);
-                $em->flush();
-            }
+              $em = $this->getDoctrine()->getManager();
+              $em->persist($suivi);
+              $em->flush();
+          }
 
-            return new Response(json_encode(['state'=>'success'])); 
-       }else{
-            return new Response(json_encode(['state'=>'noXHR']));     
-       }
-    }
+          return new Response(json_encode(['state'=>'success'])); 
+     }else{
+          return new Response(json_encode(['state'=>'noXHR']));     
+     }
+  }
 }

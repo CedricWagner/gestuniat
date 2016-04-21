@@ -99,9 +99,8 @@ class DefaultController extends Controller
                     $lstTerms[$suivi->getDateEcheance()->format('Y-m-d')] = $suivi;
                 }
             }
-            dump($lstTerms);
+
             ksort($lstTerms);
-            dump($lstTerms);
 
             $dateYesterday = new \DateTime(date('Y-m-d').' -1 day');
             $dateTomorrow = new \DateTime(date('Y-m-d').' +1 day');

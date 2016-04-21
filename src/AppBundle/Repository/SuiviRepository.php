@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * SuiviRepository
  *
@@ -10,4 +12,32 @@ namespace AppBundle\Repository;
  */
 class SuiviRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function findByContact($contact,$nb=5){
+
+		$qb = $this->createQueryBuilder('suivi');
+		$qb
+			->select('suivi')
+			->where('suivi.isOk = 0')
+			->andwhere('suivi.contact = :contact')
+			->leftjoin('AppBundle:Dossier', 'd', 'WITH', 'suivi.dossier = d')
+			->setParameters(array('contact'=>$contact))
+            ->setFirstResult(0)
+            ->setMaxResults($nb);
+
+        $pag = new Paginator($qb);
+        return $pag;
+	}
+
+	public function findAllByContact($contact){
+
+		$qb = $this->createQueryBuilder('suivi');
+		$qb
+			->select('suivi')
+			->where('suivi.contact = :contact')
+			->leftjoin('AppBundle:Dossier', 'd', 'WITH', 'suivi.dossier = d')
+			->setParameters(array('contact'=>$contact));
+
+        return $qb->getQuery()->execute();
+	}
 }
