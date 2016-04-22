@@ -54,8 +54,9 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 						$qb->andwhere('contact.statutJuridique = :p_statut_juridique');
 						$params['p_statut_juridique'] = $fv->getValeur();
 						break;
-					case 'section':
-						//TODO
+					case 'selSection':
+						$qb->andwhere('contact.section = :p_section');
+						$params['p_section'] = $fv->getValeur();
 						break;
 					case 'selFonctionSection':
 						$qb->andwhere('contact.fonctionSection = :p_fonction_section');

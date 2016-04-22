@@ -316,6 +316,10 @@ h1{
     width: 92%;
 }
 
+.badge.red{
+    background-color: #ed1c24;
+}
+
 /* FORM */
 
 form label {
@@ -645,6 +649,11 @@ table.table tr.clickable{
 
 label[for*="procuration_is"]{
     width: 80%;
+}
+
+/* SECTION */
+.label.section-active{
+    background-color: #bb3050;
 }
 
 @media(max-width: 1024px){

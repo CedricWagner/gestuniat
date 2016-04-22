@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * SectionRepository
  *
@@ -10,4 +12,17 @@ namespace AppBundle\Repository;
  */
 class SectionRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findAllWithPagination($page=1,$nb=20){
+		
+
+		$qb = $this->createQueryBuilder('section');
+		$qb
+			->select('section')
+			->orderBy('section.nom','ASC')
+            ->setFirstResult(($nb*$page)-$nb)
+            ->setMaxResults($nb*$page);
+
+        $pag = new Paginator($qb);
+        return $pag;
+	}
 }

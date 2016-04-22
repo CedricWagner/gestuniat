@@ -36,7 +36,12 @@
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionSection" aria-controls="sectionSection">Section<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionSection">
-		<input class="form-control" name="txtSection" type="text" placeholder="Nom de section" />
+		<select name="selSection" class="form-control">
+			<option value="0">Section</option>
+			{% for section in sections %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selSection') == section.id ? 'selected="selected"' : '' }} value="{{ section.id }}">{{ section.nom }}</option>
+			{% endfor %}
+		</select>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionFonctions" aria-controls="sectionFonctions">Fonctions<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionFonctions">

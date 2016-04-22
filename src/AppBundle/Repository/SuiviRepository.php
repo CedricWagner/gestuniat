@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * SuiviRepository
@@ -13,30 +14,24 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 class SuiviRepository extends \Doctrine\ORM\EntityRepository
 {
 
-	public function findByContact($contact,$nb=5){
+	public function findByDossier($contact,$isOk=false,$nb=false){
 
 		$qb = $this->createQueryBuilder('suivi');
 		$qb
 			->select('suivi')
-			->where('suivi.isOk = 0')
-			->andwhere('suivi.contact = :contact')
 			->leftjoin('AppBundle:Dossier', 'd', 'WITH', 'suivi.dossier = d')
-			->setParameters(array('contact'=>$contact))
-            ->setFirstResult(0)
-            ->setMaxResults($nb);
-
-        $pag = new Paginator($qb);
-        return $pag;
-	}
-
-	public function findAllByContact($contact){
-
-		$qb = $this->createQueryBuilder('suivi');
-		$qb
-			->select('suivi')
-			->where('suivi.contact = :contact')
-			->leftjoin('AppBundle:Dossier', 'd', 'WITH', 'suivi.dossier = d')
+			->where('d.contact = :contact')
+			->orderBy('suivi.dateCreation','ASC')
 			->setParameters(array('contact'=>$contact));
+
+		if(!$isOk){
+			$qb->andwhere('suivi.isOk = 0');
+		}
+
+		if ($nb){
+            $qb->setFirstResult(0);
+            $qb->setMaxResults($nb);
+		}
 
         return $qb->getQuery()->execute();
 	}

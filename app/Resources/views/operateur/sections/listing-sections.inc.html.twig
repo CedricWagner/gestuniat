@@ -1,0 +1,62 @@
+
+{% set nbPages = pagination.count/pagination.nb %}
+{% set nbPages = nbPages|round(0,'ceil') %}
+
+<nav class="pull-right">
+  <ul class="pagination">
+    <li>
+      <a href="#" onclick="ajaxApplyFilter('#filter-section','{{ path('render_filter') }}',{{ pagination.page - 1 }})" aria-label="Précédent">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% for i in 1..nbPages %}
+    	<li {{ i == pagination.page ? 'class="active"' : '' }} ><a href="#" onclick="ajaxApplyFilter('#filter-section','{{ path('render_filter') }}',{{ i }})">{{ i }}</a></li>
+    {% endfor %}
+    <li>
+      <a href="#" onclick="ajaxApplyFilter('#filter-section','{{ path('render_filter') }}',{{ pagination.page + 1 }})" aria-label="Suivant">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+{% set nbs = [1,10,20,40,100] %}
+<select id="sel-nb-per-page" style="margin:20px" class="select-default pull-right" onchange="ajaxApplyFilter('#filter-section','{{ path('render_filter') }}')">
+	{% for nb in nbs %}
+		<option {{ pagination.nb == nb ? 'selected="selected"' : '' }} value="{{ nb }}">{{ nb }}</option>
+	{% endfor %}
+</select>
+
+<table class="table table-striped table-hover selectable">
+	<thead>
+		<tr>
+			<th><input class="cb-select cb-select-all" type="checkbox" /></th>
+			<th>Nom</th>
+			<th>Date de création</th>
+			<th>Délégué</th>
+			<th>Statut</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for section in sections %}
+			<tr class="clickable section-line" data-id="{{ section.id }}">
+				<td class="cb-container"><input class="cb-select cb-select-line" type="checkbox" /></td>
+				<td>{{ section.nom }}</td>
+				<td>{{ section.dateCreation ? section.dateCreation.format('d/m/Y') : '-' }}</td>
+				<td>{{ section.delegue ? (section.delegue.prenom ~ ' ' ~ section.delegue.nom) : 'Non défini' }}</td>
+				<td>{{ section.isActive ? 'Actif' : 'Fermé' }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<script type="text/javascript">
+	$(function(){
+		$('.section-line td:not(.cb-container)').click(function(){
+			location.href = '/section/'+$(this).parents('.section-line').data('id').'/accueil';
+		})
+	});
+
+
+</script>
+

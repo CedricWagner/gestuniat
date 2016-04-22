@@ -74,6 +74,12 @@ class Suivi
      */
     protected $operateur;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Section")
+     * @ORM\JoinColumn(name="section_id", referencedColumnName="id")
+     */
+    protected $section;
+
 
     /**
      * Get id
@@ -301,5 +307,29 @@ class Suivi
     public function getType()
     {
         return 'suivi';
+    }
+
+    /**
+     * Set section
+     *
+     * @param \AppBundle\Entity\Section $section
+     *
+     * @return Suivi
+     */
+    public function setSection(\AppBundle\Entity\Section $section = null)
+    {
+        $this->section = $section;
+
+        return $this;
+    }
+
+    /**
+     * Get section
+     *
+     * @return \AppBundle\Entity\Section
+     */
+    public function getSection()
+    {
+        return $this->section;
     }
 }

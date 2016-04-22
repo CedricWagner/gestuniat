@@ -31,11 +31,11 @@
                                 <li><a href="{{ path('dashboard') }}"><span class="glyphicons glyphicons-home"></span><span class="menu-label">Accueil</span></a></li>
                                 <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-user"></span><span class="menu-label">Contacts</span></a>
                                     <ul>
-                                        <li class="item-add"><a href="{{ path('add_contact') }}"><span class="glyphicons glyphicons-plus"></span>Ajouter un contact</a></li>
                                         <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des contacts</a></li>
+                                        <li class="item-add"><a href="{{ path('add_contact') }}"><span class="glyphicons glyphicons-plus"></span>Ajouter un contact</a></li>
                                     </ul>
                                 </li>
-                                <li><a href=""><span class="glyphicons glyphicons-flag"></span><span class="menu-label">Sections</span></a></li>
+                                <li><a href="{{ path('list_sections') }}"><span class="glyphicons glyphicons-flag"></span><span class="menu-label">Sections</span></a></li>
                                 <li><a href=""><span class="glyphicons glyphicons-folder-open"></span><span class="menu-label">Dossiers</span></a></li>
                                 <li><a href=""><span class="glyphicons glyphicons-government"></span><span class="menu-label">Organismes</span></a></li>
                                 <li><a href=""><span class="glyphicons glyphicons-adjust-alt"></span><span class="menu-label">Filtres perso.</span></a></li>

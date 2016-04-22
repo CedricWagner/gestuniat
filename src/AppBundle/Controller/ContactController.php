@@ -58,7 +58,7 @@ class ContactController extends Controller
 
         $filtresPerso = $this->getDoctrine()
                           ->getRepository('AppBundle:FiltrePerso')
-                          ->findBy(array(),array('label'=>'ASC'));
+                          ->findBy(array('operateur'=>$this->getUser(),'contexte'=>'contact'),array('label'=>'ASC'));
 
         $statutsJuridiques = $this->getDoctrine()
                               ->getRepository('AppBundle:StatutJuridique')
@@ -74,6 +74,10 @@ class ContactController extends Controller
 
         $diplomes = $this->getDoctrine()
                               ->getRepository('AppBundle:Diplome')
+                              ->findAll();
+
+        $sections = $this->getDoctrine()
+                              ->getRepository('AppBundle:Section')
                               ->findAll();
 
         if($currentFilter){
@@ -94,6 +98,7 @@ class ContactController extends Controller
             'diplomes' => $diplomes,
             'currentFilter' => $currentFilter,
             'contacts' => $contacts,
+            'sections' => $sections,
             'pagination' => array('count'=>count($contacts),'nb'=>$nb,'page'=>$page),
         ]);
     }
@@ -133,14 +138,45 @@ class ContactController extends Controller
         return  $this->redirectToRoute('view_contact', array('idContact' => $contact->getId()));
       }
 
-      $lstSuivis = $this->getDoctrine()
+      $lstSuivisContact = $this->getDoctrine()
         ->getRepository('AppBundle:Suivi')
-        ->findByContact($contact,5);
+        ->findBy(array('contact'=>$contact,'isOk'=>false),array('dateCreation'=>'ASC'),5);
 
-
-      $lstAllSuivis = $this->getDoctrine()
+      $lstSuivisDossier = $this->getDoctrine()
         ->getRepository('AppBundle:Suivi')
-        ->findAllByContact($contact);
+        ->findByDossier($contact,false,5);
+
+      $lstSuivis = array();
+
+      foreach ($lstSuivisContact as $suiviContact) {
+        $lstSuivis[$suiviContact->getDateCreation()->format('Y-m-d').'_'.$suivi->getId()] = $suiviContact;
+      }
+      
+      foreach ($lstSuivisDossier as $suiviDossier) {
+        $lstSuivis[$suiviDossier->getDateCreation()->format('Y-m-d').'_'.$suivi->getId()] = $suiviDossier;
+      }
+
+      ksort($lstSuivis);
+
+      $lstAllSuivisContact = $this->getDoctrine()
+        ->getRepository('AppBundle:Suivi')
+        ->findBy(array('contact'=>$contact),array('dateCreation'=>'ASC'));
+
+      $lstAllSuivisDossier = $this->getDoctrine()
+        ->getRepository('AppBundle:Suivi')
+        ->findByDossier($contact,true);
+
+      $lstAllSuivis = array();
+
+      foreach ($lstAllSuivisContact as $suiviContact) {
+        $lstAllSuivis[$suiviContact->getDateCreation()->format('Y-m-d').'_'.$suivi->getId()] = $suiviContact;
+      }
+      
+      foreach ($lstAllSuivisDossier as $suiviDossier) {
+        $lstAllSuivis[$suiviDossier->getDateCreation()->format('Y-m-d').'_'.$suivi->getId()] = $suiviDossier;
+      }
+
+      ksort($lstAllSuivis);
 
       if ($contact->getMembreConjoint()) {
         $conjoint = $this->getDoctrine()

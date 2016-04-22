@@ -40,7 +40,7 @@ class Suivi
      *
      * @ORM\Column(name="text", type="text")
      */
-    private $text;
+    private $texte;
 
     /**
      * @var \DateTime
@@ -73,6 +73,12 @@ class Suivi
      * @ORM\JoinColumn(name="operateur_id", referencedColumnName="id")
      */
     protected $operateur;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Section")
+     * @ORM\JoinColumn(name="section_id", referencedColumnName="id")
+     */
+    protected $section;
 
 
     /**
@@ -134,15 +140,30 @@ class Suivi
     }
 
     /**
+     * Get titre
+     *
+     * @return string
+     */
+    public function getTitre()
+    {
+        if ($this->dossier) {
+            return '<a href="/contact/'.$this->dossier->getContact()->getId().'/dossier/'.$this->dossier->getId().'">'.$this->dossier->getNom().'</a>';
+        }
+        if ($this->contact) {
+            return '<a href="/contact/'.$this->contact->getId().'">'.$this->contact->getPrenom().' '.$this->contact->getNom().'</a>';
+        }
+    }
+
+    /**
      * Set text
      *
      * @param string $text
      *
      * @return Suivi
      */
-    public function setText($text)
+    public function setTexte($texte)
     {
-        $this->text = $text;
+        $this->texte = $texte;
 
         return $this;
     }
@@ -152,9 +173,9 @@ class Suivi
      *
      * @return string
      */
-    public function getText()
+    public function getTexte()
     {
-        return $this->text;
+        return $this->texte;
     }
 
     /**
@@ -204,5 +225,87 @@ class Suivi
     {
         return $this->isOk;
     }
-}
 
+    /**
+     * Set contact
+     *
+     * @param \AppBundle\Entity\Contact $contact
+     *
+     * @return Suivi
+     */
+    public function setContact(\AppBundle\Entity\Contact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \AppBundle\Entity\Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * Set dossier
+     *
+     * @param \AppBundle\Entity\Dossier $dossier
+     *
+     * @return Suivi
+     */
+    public function setDossier(\AppBundle\Entity\Dossier $dossier = null)
+    {
+        $this->dossier = $dossier;
+
+        return $this;
+    }
+
+    /**
+     * Get dossier
+     *
+     * @return \AppBundle\Entity\Dossier
+     */
+    public function getDossier()
+    {
+        return $this->dossier;
+    }
+
+    /**
+     * Set operateur
+     *
+     * @param \AppBundle\Entity\Operateur $operateur
+     *
+     * @return Suivi
+     */
+    public function setOperateur(\AppBundle\Entity\Operateur $operateur = null)
+    {
+        $this->operateur = $operateur;
+
+        return $this;
+    }
+
+    /**
+     * Get operateur
+     *
+     * @return \AppBundle\Entity\Operateur
+     */
+    public function getOperateur()
+    {
+        return $this->operateur;
+    }
+
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return 'suivi';
+    }
+}

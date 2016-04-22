@@ -1,0 +1,40 @@
+<div class="section">
+	<h1>{{ section.nom|upper }}</h1>
+
+	<p>Etat : <span class="label label-default section-{{ section.isActive ? 'active' : 'closed' }}">{{ section.isActive ? 'Active' : 'Fermé' }}</span></p>
+	<p>N° <b>{{ section.id }}</b></p>
+</div>
+<div class="section">
+	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Délégué : <a href="#">{{ section.delegue ? (section.delegue.prenom~' '~section.delegue.nom) : '' }}</a></p>
+	<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Sub. Communale : {{ section.subventions }}</p>
+	{% if section.dateDerniereAG %}
+	<p class="underlined"><span class="glyphicons glyphicons-note-2"></span>&nbsp;&nbsp;{{ section.dateDerniereAG.format('d/m/Y') }}</p>
+	{% endif %}
+	{% if section.dateDernierListing %}
+	<p class="underlined"><span class="glyphicons glyphicons-note-2"></span>&nbsp;&nbsp;{{ section.dateDernierlisting.format('d/m/Y') }}</p>
+	{% endif %}
+	{% if section.destDernierListing %}
+	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;{{ section.destDernierListing }}</p>
+	{% endif %}
+	{% if section.dateRemiseBulletin %}
+	<p class="underlined"><span class="glyphicons glyphicons-newspaper"></span>&nbsp;&nbsp;{{ section.dateRemiseBulletin.format('d/m/Y') }}</p>
+	{% endif %}
+	<div class="row">
+		<div class="col-md-6">
+			<p><a class="btn btn-default" href="{{ path('full_section',{'idSection':section.id }) }}"> Profil complet >> </a></p>
+			<p><a class="btn btn-danger" onclick="if(confirm('Valider la suppression du section (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_section',{'idSection':section.id }) }}"> Supprimer </a></p>
+		</div>
+	</div>
+</div>
+<div class="section">
+	<p><a class="btn btn-default btn-block">Cotisation annuelles</a></p>
+	<p><a class="btn btn-default btn-block">Vignettes contributives</a></p>
+	<p><a class="btn btn-default btn-block">Dons</a></p>
+	<p><a class="btn btn-default btn-block">Gestion des timbres</a></p>
+	<p><a class="btn btn-default btn-block">Fonctions des adhérents</a></p>
+	<p><a class="btn btn-default btn-block">Assemblées Générales</a></p>
+	<p><a class="btn btn-default btn-block">Permanences</a></p>
+	<p><a class="btn btn-default btn-block">Documents</a></p>
+	<p><a class="btn btn-default btn-block">Destinataires Rentier</a></p>
+
+</div>

@@ -71,6 +71,13 @@ class Section
     private $dateMaj;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateCreation", type="date", nullable=true)
+     */
+    private $dateCreation;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="infosComp", type="text", nullable=true)
@@ -87,9 +94,9 @@ class Section
     /**
      * @var string
      *
-     * @ORM\Column(name="statut", type="string", length=20, nullable=true)
+     * @ORM\Column(name="isActive", type="boolean")
      */
-    private $statut;
+    private $isActive;
 
     /**
      * @ORM\ManyToOne(targetEntity="Contact")
@@ -370,5 +377,53 @@ class Section
     public function getDelegue()
     {
         return $this->delegue;
+    }
+
+    /**
+     * Set dateCreation
+     *
+     * @param \DateTime $dateCreation
+     *
+     * @return Section
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreation
+     *
+     * @return \DateTime
+     */
+    public function getDateCreation()
+    {
+        return $this->dateCreation;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     *
+     * @return Section
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

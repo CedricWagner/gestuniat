@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Gestuniat - Section {{ section.nom }}
+{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+
+{% block left_column %}
+
+	{% include 'operateur/sections/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Accueil section</h2>
+	<br />
+	<div class="row">
+		<div class="col-md-4 col-sm-12">
+			<div class="section-block">
+				<div class="section-header">
+					<h3>Suivi section</h3>
+				</div>
+				<div class="section-main-content">
+					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Rédiger un nouveau commentaire</button>
+					{% include 'modals/ajouter-suivi-default.html.twig' %}
+					<small class="label-print-all"><a href="#">Imprimer la sélection</a></small>
+				</div>
+				<div class="section-sub-content">
+					{% for suivi in lstSuivis %}
+						{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
+					{% endfor %}
+				</div>
+				<div class="section-main-content">
+					<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
+					{% include 'modals/liste-suivis.html.twig' %}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-12">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Gestion des timbres</h3>
+						</div>
+						<div class="section-main-content">
+							<p>Pour l'année en cours : </p>
+							<div class="btn-group-vertical" role="group">
+								<button class="btn btn-default btn-block" role="button">Timbres<span class="badge">9</span></button>
+								<button class="btn btn-default btn-block" role="button">Adhérents<span class="badge">15</span></button>
+								<button class="btn btn-default btn-block" role="button">Reste à régler<span class="badge red">6</span></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="section-separator"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Permanences</h3>
+						</div>
+						<div class="section-main-content">
+							<div class="row">
+								<div class="col-md-6">
+									<button class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-table"></span>Ajouter perm.</button>
+								</div>
+								<div class="col-md-6">
+									<button class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste perm.</button>
+								</div>
+							</div>
+						</div>
+						<div class="section-sub-content text-center">
+							<h4>3ème mercredi des mois pairs</h4>
+							<div class="row">
+								<div class="col-md-4">
+									<p>Lieu :<br />
+										Local perm.... <br />
+										Place V.Fischer
+									</p>
+								</div>
+								<div class="col-md-4">
+									<p>Orateur :<br />
+										Local perm.... <br />
+										Place V.Fischer
+									</p>
+								</div>
+								<div class="col-md-4">
+									<p>Horaire :<br />
+										Local perm.... <br />
+										Place V.Fischer
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Assemblées générales</h3>
+						</div>
+						<div class="section-main-content">
+							<div class="row">
+								<div class="col-md-6">
+									<button class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-table"></span>Ajouter AG</button>
+								</div>
+								<div class="col-md-6">
+									<button class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste AG</button>
+								</div>
+							</div>
+						</div>
+						<div class="section-sub-content text-center">
+							<h4>3ème mercredi des mois pairs</h4>
+							<div class="row">
+								<div class="col-md-4">
+									<p>Lieu :<br />
+										Local perm.... <br />
+										Place V.Fischer
+									</p>
+								</div>
+								<div class="col-md-4">
+									<p>Orateur :<br />
+										Local perm.... <br />
+										Place V.Fischer
+									</p>
+								</div>
+								<div class="col-md-4">
+									<p>Horaire :<br />
+										Local perm.... <br />
+										Place V.Fischer
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
