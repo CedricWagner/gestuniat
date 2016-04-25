@@ -87,16 +87,16 @@ class DefaultController extends Controller
 
             $suivis = $this->getDoctrine()
             ->getRepository('AppBundle:Suivi')
-            ->findBy(array('operateur'=>$this->getUser()),array('dateEcheance'=>'ASC'));
+            ->findBy(array(),array('dateEcheance'=>'ASC'));
 
             $lstTerms = array();
 
             foreach ($alertes as $_alerte) {
-                $lstTerms[$_alerte->getDateEcheance()->format('Y-m-d')] = $_alerte;
+                $lstTerms[$_alerte->getDateEcheance()->format('Y-m-d').'_'.$_alerte->getId()] = $_alerte;
             }
             foreach ($suivis as $suivi) {
                 if ($suivi->getDateEcheance()) {
-                    $lstTerms[$suivi->getDateEcheance()->format('Y-m-d')] = $suivi;
+                    $lstTerms[$suivi->getDateEcheance()->format('Y-m-d').'_'.$suivi->getId()] = $suivi;
                 }
             }
 

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Profil complet de la section {{ section ? section.nom : '' }}{% endblock %}
+
+{% block additionnal_classes %}internal {{ isInsert ? '' : 'has-left-column'}}{% endblock %}
+
+{% block left_column %}
+
+	{% if not isInsert %}
+		{% include 'operateur/sections/infos-gen.inc.html.twig'  %}
+	{% endif %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Edition du profil</h2>
+	<ol class="breadcrumb">
+	{% if isInsert %}
+	  <li class="active">Ajout d'une section</li>
+	{% else %}
+	  <li><a href="{{ path('view_section',{'idSection':section.id }) }}">{{ section.nom }}</a></li>
+	  <li class="active">Edition d'une section</li>
+	{% endif %} 
+	</ol>
+	<div class="full-contact-form inline-form">	
+		{{ form_start(sectionForm,{'attr':{'novalidate':'novalidate'}}) }}
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.nom) }}
+			</div>
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.subventions) }}
+			</div>
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.destDernierListing) }}
+			</div>
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.dateDernierListing) }}
+			</div>
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.numBulletin) }}
+			</div>
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.dateRemiseBulletin) }}
+			</div>
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.dateDerniereAG) }}
+			</div>
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.isActive) }}
+			</div>
+			<div class="form-group clearfix">
+				{{ form_row(sectionForm.infosComp) }}
+			</div>
+			<div class="clearfix">
+				{{ form_row(sectionForm.save,{'attr':{'class':'btn btn-lg btn-primary'}}) }}
+			</div>
+		{{ form_end(sectionForm) }}
+	</div>
+
+
+{% endblock %}

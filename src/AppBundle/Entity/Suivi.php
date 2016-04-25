@@ -147,7 +147,10 @@ class Suivi
     public function getTitre()
     {
         if ($this->dossier) {
-            return '<a href="/contact/'.$this->dossier->getContact()->getId().'/dossier/'.$this->dossier->getId().'">'.$this->dossier->getNom().'</a>';
+            return '<a href="/contact/'.$this->dossier->getContact()->getId().'/dossier/'.$this->dossier->getId().'">Dossier "'.$this->dossier->getNom().'"</a>';
+        }
+        if ($this->section) {
+            return '<a href="/section/'.$this->section->getId().'/accueil'.'">Section "'.$this->section->getNom().'"</a>';
         }
         if ($this->contact) {
             return '<a href="/contact/'.$this->contact->getId().'">'.$this->contact->getPrenom().' '.$this->contact->getNom().'</a>';

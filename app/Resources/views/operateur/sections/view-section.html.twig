@@ -55,6 +55,16 @@ Gestuniat - Section {{ section.nom }}
 						</div>
 					</div>
 				</div>
+				<div class="col-md-8">
+					<div class="section-block block-text">
+						<div class="section-header">
+							<h3>Note</h3>
+						</div>
+						<div class="section-main-content">
+							<p>{{ section.infosComp }}</p>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
@@ -140,6 +150,91 @@ Gestuniat - Section {{ section.nom }}
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="section-separator"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="section-block">
+						<div class="section-header">
+							<h3>Patrimoine</h3>
+						</div>
+						<div class="section-main-content">
+							<table>
+								<thead>
+									<tr>
+										<th>
+											Année
+										</th>
+										{% for year in displayedYears %}
+											<th><button class="btn btn-link" data-toggle="modal" data-target="#edit-patrimoine-{{ year }}">{{ year }}</button>
+											</th>
+										{% endfor %}
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										{% set lastPatrimoine = 0 %}
+										<td>Patrimoine</td>
+										{% for year in displayedYears %}
+											<td>{{ patrimoines[year].valeur }}</td>
+										{% endfor %}
+									</tr>
+									<tr>
+										<td>Variation</td>
+										{% for year in displayedYears %}
+											<td>
+												{% if patrimoines[year].valeur != 0 and lastPatrimoine != 0 %}
+													{% if patrimoines[year].valeur > lastPatrimoine %}
+														 +{{ ((patrimoines[year].valeur - lastPatrimoine) / lastPatrimoine * 100)|round(1,'common') }}%
+													{% elseif patrimoines[year].valeur < lastPatrimoine %}
+														{{ ((patrimoines[year].valeur - lastPatrimoine) / lastPatrimoine * 100)|round(1,'common') }}%
+													{% else %}
+														+0%
+													{% endif %}
+												{% else %}
+													-
+												{% endif %}
+											</td>
+											{% set lastPatrimoine = patrimoines[year].valeur %}
+										{% endfor %}
+									</tr>
+									<tr>
+										<td>Intérêts</td>
+										{% for year in displayedYears %}
+											<td>{{ patrimoines[year].interets }}</td>
+										{% endfor %}
+									</tr>
+								</tbody>
+							</table>
+							<br />
+							{% include 'modals/liste-patrimoines.html.twig' %}
+							<button class="btn btn-default" data-toggle="modal" data-target="#all-patrimoines">Voir tout le patrimoine >></button>
+						</div>
+						{% for year in allYears %}
+							<div class="modal fade" id="edit-patrimoine-{{year}}" tabindex="-1" role="dialog" aria-labelledby="edit-patrimoine-label">
+							  <div class="modal-dialog" role="document">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							        <h4 class="modal-title" id="edit-patrimoine-label">Editer un patrimoine</h4>
+							      </div>
+							      <div class="modal-body">
+							        {{ form(patrimoineForms[year], {'attr': {'novalidate': 'novalidate','id' : 'patrimoine-edit-'~year,'class' : 'clearfix modal-form large-input'}}) }}
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+							        <button type="button" class="btn btn-primary" onclick="$('form#patrimoine-edit-{{year}}').submit()">Enregistrer</button>
+							      </div>
+							    </div><!-- /.modal-content -->
+							  </div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
+						{% endfor %}
 					</div>
 				</div>
 			</div>

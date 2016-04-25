@@ -5,19 +5,23 @@
 	<p>N° <b>{{ section.id }}</b></p>
 </div>
 <div class="section">
-	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Délégué : <a href="#">{{ section.delegue ? (section.delegue.prenom~' '~section.delegue.nom) : '' }}</a></p>
+	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Délégué : 
+		{% if section.delegue %}
+			<a href="{{ path('view_contact',{'idContact':section.delegue.id}) }}">{{ section.delegue ? (section.delegue.prenom~' '~section.delegue.nom) : '' }}</a>
+		{% endif %}
+		</p>
 	<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Sub. Communale : {{ section.subventions }}</p>
 	{% if section.dateDerniereAG %}
-	<p class="underlined"><span class="glyphicons glyphicons-note-2"></span>&nbsp;&nbsp;{{ section.dateDerniereAG.format('d/m/Y') }}</p>
+	<p class="underlined"><span class="glyphicons glyphicons-note"></span>&nbsp;&nbsp;Dernière AG&nbsp;:&nbsp;{{ section.dateDerniereAG.format('d/m/Y') }}</p>
 	{% endif %}
 	{% if section.dateDernierListing %}
-	<p class="underlined"><span class="glyphicons glyphicons-note-2"></span>&nbsp;&nbsp;{{ section.dateDernierlisting.format('d/m/Y') }}</p>
+	<p class="underlined"><span class="glyphicons glyphicons-note"></span>&nbsp;&nbsp;Dernier listing&nbsp;:&nbsp;{{ section.dateDernierlisting.format('d/m/Y') }}</p>
 	{% endif %}
 	{% if section.destDernierListing %}
-	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;{{ section.destDernierListing }}</p>
+	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Dest. listing&nbsp;:&nbsp;{{ section.destDernierListing }}</p>
 	{% endif %}
 	{% if section.dateRemiseBulletin %}
-	<p class="underlined"><span class="glyphicons glyphicons-newspaper"></span>&nbsp;&nbsp;{{ section.dateRemiseBulletin.format('d/m/Y') }}</p>
+	<p class="underlined"><span class="glyphicons glyphicons-newspaper"></span>&nbsp;&nbsp;Bulletin municipal&nbsp;:&nbsp;{{ section.dateRemiseBulletin.format('d/m/Y') }}</p>
 	{% endif %}
 	<div class="row">
 		<div class="col-md-6">

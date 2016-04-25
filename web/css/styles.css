@@ -1,7 +1,7 @@
 body{
     margin: 0px;
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 300;
 }
 
@@ -429,6 +429,10 @@ form input, form textarea, form select{
     border-left-color: #b92e4c;
 }
 
+.listing-item.suivi.section{
+    border-left-color: #b92e4c;
+}
+
 .listing-item.alerte h4{
     color: #32438b;
 }
@@ -438,6 +442,10 @@ form input, form textarea, form select{
 }
 
 .listing-item.suivi.dossier h4, .listing-item.suivi.dossier h4 a{
+    color: #b92e4c;
+}
+
+.listing-item.suivi.section h4, .listing-item.suivi.section h4 a{
     color: #b92e4c;
 }
 
@@ -655,6 +663,45 @@ label[for*="procuration_is"]{
 .label.section-active{
     background-color: #bb3050;
 }
+
+.section-block table{
+    width: 100%;
+}
+
+.section-block table tbody{
+    background-color: #fff;
+    box-shadow: 0px 0px 5px #333;
+    border-top: solid thin #ddd;
+}
+
+.section-block table tbody tr{
+    border-top: solid thin #ddd;
+}
+
+.section-block table td, .section-block table th{
+    padding: 5px;
+}
+
+.section-block.block-text .section-header{
+    background-color: #fde274;
+    color: #e5ad52;
+    padding: 5px;
+}
+
+.section-block.block-text .section-header h3{
+    font-size: 14px;
+}
+
+.section-block.block-text .section-main-content{
+    background-color: #fffcd7;
+    border:solid thin #fde274;
+    padding: 5px;
+    color: #e5ad52;
+}
+
+
+
+
 
 @media(max-width: 1024px){
     #left-sidebar{

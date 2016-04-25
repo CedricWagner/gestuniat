@@ -1,0 +1,29 @@
+<div class="modal fade" id="all-patrimoines" tabindex="-1" role="dialog" aria-labelledby="all-patrimoines-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="all-patrimoines-label">Liste des patrimoines</h4>
+      </div>
+      <div class="modal-body">
+        <table>
+          <tr>
+            <th>Année</th>
+            <th>Patrimoine</th>
+            <th>Intérêts</th>
+          </tr>
+          {% for year in allYears %}
+              <tr>
+                <td><button class="btn btn-link" data-toggle="modal" data-target="#edit-patrimoine-{{ year }}">{{ patrimoines[year].annee }}</button></td>
+                <td>{{ patrimoines[year].valeur }}€</td>
+                <td>{{ patrimoines[year].interets }}€</td>
+              </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
