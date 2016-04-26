@@ -14,7 +14,6 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
 {
 	public function findAllWithPagination($page=1,$nb=20){
 		
-
 		$qb = $this->createQueryBuilder('section');
 		$qb
 			->select('section')
@@ -23,6 +22,82 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
             ->setMaxResults($nb*$page);
 
         $pag = new Paginator($qb);
+        return $pag;
+	}
+
+	public function findByFilter($filterValues,$page=1,$nb=20){
+		
+		$params = array();
+		
+		$datetime = new \DateTime();
+
+		$qb = $this->createQueryBuilder('section');
+		$qb
+			->select('section')
+			->where('1 = 1');
+		foreach ($filterValues as $fv) {
+			if($fv->getValeur()!=''&&$fv->getValeur()!='0'){
+				switch ($fv->getChamp()->getLabel()) {
+					case 'dateCreation':
+						$qb->andwhere('section.dateCreation > :p_date_creation');
+						$params['p_date_creation'] = $fv->getValeur();
+						break;
+					case 'dateDebutAG':
+						// $qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.section = section');
+						// $params['p_date_creation'] = $fv->getValeur();
+						break;
+					case 'dateFinAG':
+						// $qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.section = section');
+						// $params['p_date_creation'] = $fv->getValeur();
+						break;
+					case 'selTimbre':
+						if ($fv->getValeur()=='MANQUANT') {
+							// $qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.section = section');
+						}elseif($fv->getValeur()=='COMPLET'){
+							// $qb->join('AppBundle:ContratPrevoyance', 'cp', 'WITH', 'cp.section = section');
+						}
+						break;
+					case 'selTresorerie':
+						if ($fv->getValeur()=='EXCEDENTAIRE') {
+							$qb->join('AppBundle:Patrimoine', 'pat', 'WITH', 'pat.section = section');
+							$qb->andwhere('pat.annee = :p_annee');
+							$qb->andwhere('pat.valeur > 0');
+							$params['p_annee'] = $datetime->format('Y');
+						}elseif($fv->getValeur()=='DEFICITAIRE'){
+							$qb->join('AppBundle:Patrimoine', 'pat', 'WITH', 'pat.section = section');
+							$qb->andwhere('pat.annee = :p_annee');
+							$qb->andwhere('pat.valeur < 0');
+							$params['p_annee'] = $datetime->format('Y');
+						}
+						break;
+					case 'selPrevoyance':
+						if ($fv->getValeur()=='OBS') {
+							$qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.section = section');
+						}elseif($fv->getValeur()=='AGRR'){
+							$qb->join('AppBundle:ContratPrevoyance', 'cp', 'WITH', 'cp.section = section');
+						}
+						break;
+					case 'cbRentier':
+						if ($fv->getValeur()=='RENTIER') {
+							$qb->andwhere('section.isRentier = :p_is_rentier');
+							$params['p_is_rentier'] = true;
+						}elseif ($fv->getValeur()=='DESTINATAIRE_INDIV') {
+							$qb->andwhere('section.isEnvoiIndiv LIKE :p_is_envoi_indiv');
+							$params['p_is_envoi_indiv'] = true;
+						}elseif ($fv->getValeur()=='OFFRE_DECOUVERTE') {
+							$qb->andwhere('section.isOffreDecouverte LIKE :p_is_offre_decouverte');
+							$params['p_is_offre_decouverte'] = true;
+						}
+						break;
+				}
+			}
+		}
+		$qb ->setParameters($params)
+            ->setFirstResult(($nb*$page)-$nb)
+            ->setMaxResults($nb*$page);
+
+        $pag = new Paginator($qb);
+        
         return $pag;
 	}
 }

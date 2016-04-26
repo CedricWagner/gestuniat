@@ -1,0 +1,29 @@
+<!-- Modal -->
+<div class="modal fade" id="modal-delegue" tabindex="-1" role="dialog" aria-labelledby="modal-delegue-title">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modal-delegue-title">Gestion délégué</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" class="clearfix" id="form-delegue" action="{{ path('section_edit_delegue',{'idSection':section.id}) }}">
+          <div class="row" id="delegue-area">
+            <div class="col-md-12">
+              <div class="autocomp-container" id="autocomp-delegue">
+                <input type="text" onkeyup="ajaxAutocompDelegue('#autocomp-delegue')" placeholder="Saisissez puis sélectionnez un contact dans la liste" class="input autocomp-value" />
+                <div class="autocomp-result">
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="$('#form-delegue').submit()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>

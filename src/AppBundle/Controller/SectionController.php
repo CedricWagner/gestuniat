@@ -11,9 +11,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Suivi;
 use AppBundle\Entity\Patrimoine;
 use AppBundle\Entity\Section;
+use AppBundle\Entity\Permanence;
+use AppBundle\Entity\AssembleeGenerale;
 use AppBundle\Form\SuiviDefaultType;
 use AppBundle\Form\PatrimoineType;
 use AppBundle\Form\SectionFullType;
+use AppBundle\Form\PermanenceType;
+use AppBundle\Form\AssembleeGeneraleType;
 
 class SectionController extends Controller
 {
@@ -66,7 +70,7 @@ class SectionController extends Controller
         return $this->render('operateur/sections/sections.html.twig', [
             'filtresPerso' => $filtresPerso,
             'currentFilter' => $currentFilter,
-            'sections' => $sections,
+            'items' => $sections,
             'pagination' => array('count'=>count($sections),'nb'=>$nb,'page'=>$page),
         ]);
 
@@ -121,6 +125,23 @@ class SectionController extends Controller
         $patrimoine->setAnnee($datetime->format('Y'));
         $newPatrimoineForm = $this->createForm(PatrimoineType::class, $patrimoine);
 
+        $permanence = $this->getDoctrine()
+            ->getRepository('AppBundle:Permanence')
+            ->findOneBy(array('section'=>$section));
+        
+        $assembleeGenerale = $this->getDoctrine()
+            ->getRepository('AppBundle:AssembleeGenerale')
+            ->findOneBy(array('section'=>$section),array('date'=>'DESC'));
+            
+        $newPermanence = new Permanence();
+        $newPermanenceForm = $this->createForm(PermanenceType::class, $newPermanence);
+            
+        $newAssembleeGenerale = new AssembleeGenerale();
+        $newAssembleeGeneraleForm = $this->createForm(AssembleeGeneraleType::class, $newAssembleeGenerale);
+
+        $assembleeGeneraleForm = $this->createForm(AssembleeGeneraleType::class, $assembleeGenerale);
+       
+        $permanenceForm = $this->createForm(PermanenceType::class, $permanence);
 
         $patrimoineForms = array();
         $patrimoines = array();
@@ -158,6 +179,12 @@ class SectionController extends Controller
             'displayedYears' => $displayedYears,
             'allYears' => $allYears,
             'patrimoines' => $patrimoines,
+            'permanence' => $permanence,
+            'assembleeGenerale' => $assembleeGenerale,
+            'newPermanenceForm' => $newPermanenceForm->createView(),
+            'assembleeGeneraleForm' => $assembleeGeneraleForm->createView(),
+            'newAssembleeGeneraleForm' => $newAssembleeGeneraleForm->createView(),
+            'permanenceForm' => $permanenceForm->createView(),
 		    'patrimoineForms' => $patrimoineForms,
             'suiviForm' => $suiviForm->createView(),
 		    'newPatrimoineForm' => $newPatrimoineForm->createView(),
@@ -233,6 +260,34 @@ class SectionController extends Controller
     public function deleteSectionAction($idSection)
     {
 
+    }
+
+    /**
+     * @Route("/section/{idSection}/delegue/edition", name="section_edit_delegue")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function editDelegueAction(request $request, $idSection)
+    {
+        $section = $this->getDoctrine()
+            ->getRepository('AppBundle:Section')
+            ->find($idSection);
+
+        $idContact = $request->request->get('idDelegue');
+
+        if($idContact){
+            $contact = $this->getDoctrine()
+                ->getRepository('AppBundle:Contact')
+                ->find($idContact);
+
+            $section->setDelegue($contact);
+
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($section);
+            $em->flush();
+
+        }        
+
+        return $this->redirectToRoute('view_section',array('idSection'=>$section->getId()));
     }
 
 

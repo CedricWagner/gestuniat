@@ -80,35 +80,46 @@ Gestuniat - Section {{ section.nom }}
 						<div class="section-main-content">
 							<div class="row">
 								<div class="col-md-6">
-									<button class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-table"></span>Ajouter perm.</button>
+									<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-permanence-0"><span class="glyphicons glyphicons-table"></span>Ajouter perm.</button>
+									{% include 'modals/default.html.twig' with {'form':newPermanenceForm,'entity':'permanence','object':false,'title':'Ajouter une nouvelle permanence','action':path('save_permanence',{'idSection':section.id})} %}	
 								</div>
 								<div class="col-md-6">
-									<button class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste perm.</button>
+									<a href="{{ path('list_permanences',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste perm.</a>
 								</div>
 							</div>
 						</div>
-						<div class="section-sub-content text-center">
-							<h4>3ème mercredi des mois pairs</h4>
-							<div class="row">
-								<div class="col-md-4">
-									<p>Lieu :<br />
-										Local perm.... <br />
-										Place V.Fischer
-									</p>
+						<div class="section-sub-content text-center clearfix">
+							{% if permanence %}
+								<h4>{{ permanence.label }}</h4>
+								<div class="row">
+									<div class="col-md-4">
+										<p>Type de tournée :<br />
+											{{ permanence.typeTournee ? permanence.typeTournee.label : '' }}
+										</p>
+									</div>
+									<div class="col-md-4">
+										<p>Lieu :<br />
+											{{ permanence.lieu }}
+										</p>
+									</div>
+									<div class="col-md-4">
+										<p>Horaire :<br />
+											{{ permanence.horaire }}
+										</p>
+									</div>
 								</div>
-								<div class="col-md-4">
-									<p>Orateur :<br />
-										Local perm.... <br />
-										Place V.Fischer
-									</p>
+								<div style="position:relative" class="pull-right">
+									<a href="#" class="dropdown-toggle" id="options-ag-{{permanence.id}}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+									<ul class="dropdown-menu" aria-labelledby="options-ag-{{ permanence.id }}">
+										<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-permanence-{{ permanence.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+										<li class="contextual-item"><a class="no-padding-top" href="{# printpath #}"><span class="glyphicons glyphicons-print"></span><span class="item-label">Imprimer</span></a></li>
+										<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_permanence',{'idPermanence':permanence.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+									</ul>
+									{% include 'modals/default.html.twig' with {'form':permanenceForm,'entity':'permanence','object':permanence,'title':'Editer une assemblée générale','action':path('save_permanence',{'idSection':section.id,'idPermanence':permanence.id})} %}
 								</div>
-								<div class="col-md-4">
-									<p>Horaire :<br />
-										Local perm.... <br />
-										Place V.Fischer
-									</p>
-								</div>
-							</div>
+							{% else %}
+								<h4>Aucune permanence</h4>
+							{% endif %}
 						</div>
 					</div>
 				</div>
@@ -120,35 +131,46 @@ Gestuniat - Section {{ section.nom }}
 						<div class="section-main-content">
 							<div class="row">
 								<div class="col-md-6">
-									<button class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-table"></span>Ajouter AG</button>
+									<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-assembleeGenerale-0"><span class="glyphicons glyphicons-table"></span>Ajouter AG</button>
+									{% include 'modals/default.html.twig' with {'form':newAssembleeGeneraleForm,'entity':'assembleeGenerale','object':false,'title':'Ajouter une nouvelle assemblée générale','action':path('save_assembleeGenerale',{'idSection':section.id})} %}	
 								</div>
 								<div class="col-md-6">
-									<button class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste AG</button>
+									<a href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste AG</a>
 								</div>
 							</div>
 						</div>
-						<div class="section-sub-content text-center">
-							<h4>3ème mercredi des mois pairs</h4>
-							<div class="row">
-								<div class="col-md-4">
-									<p>Lieu :<br />
-										Local perm.... <br />
-										Place V.Fischer
-									</p>
+						<div class="section-sub-content text-center clearfix">
+							{% if assembleeGenerale %}
+								<h4>Assemblée du {{ assembleeGenerale.date.format('d/m/Y') }}</h4>
+								<div class="row">
+									<div class="col-md-4">
+										<p>Lieu :<br />
+											{{ assembleeGenerale.lieu }}
+										</p>
+									</div>
+									<div class="col-md-4">
+										<p>Orateur :<br />
+											{{ assembleeGenerale.orateur }}
+										</p>
+									</div>
+									<div class="col-md-4">
+										<p>Heure :<br />
+											{{ assembleeGenerale.heure }}
+										</p>
+									</div>
 								</div>
-								<div class="col-md-4">
-									<p>Orateur :<br />
-										Local perm.... <br />
-										Place V.Fischer
-									</p>
+								<div style="position:relative" class="pull-right">
+									<a href="#" class="dropdown-toggle" id="options-ag-{{assembleeGenerale.id}}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+									<ul class="dropdown-menu" aria-labelledby="options-ag-{{ assembleeGenerale.id }}">
+										<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-assembleeGenerale-{{ assembleeGenerale.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+										<li class="contextual-item"><a class="no-padding-top" href="{# printpath #}"><span class="glyphicons glyphicons-print"></span><span class="item-label">Imprimer</span></a></li>
+										<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_assembleeGenerale',{'idAssembleeGenerale':assembleeGenerale.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+									</ul>
+									{% include 'modals/default.html.twig' with {'form':assembleeGeneraleForm,'entity':'assembleeGenerale','object':assembleeGenerale,'title':'Editer une assemblée générale','action':path('save_assembleeGenerale',{'idSection':section.id,'idAssembleeGenerale':assembleeGenerale.id})} %}
 								</div>
-								<div class="col-md-4">
-									<p>Horaire :<br />
-										Local perm.... <br />
-										Place V.Fischer
-									</p>
-								</div>
-							</div>
+							{% else %}
+								<h4>Aucune assemblée générale</h4>
+							{% endif %}
 						</div>
 					</div>
 				</div>

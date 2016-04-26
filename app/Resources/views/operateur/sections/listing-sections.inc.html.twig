@@ -38,7 +38,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for section in sections %}
+		{% for section in items %}
 			<tr class="clickable section-line" data-id="{{ section.id }}">
 				<td class="cb-container"><input class="cb-select cb-select-line" type="checkbox" /></td>
 				<td>{{ section.nom }}</td>
@@ -53,7 +53,7 @@
 <script type="text/javascript">
 	$(function(){
 		$('.section-line td:not(.cb-container)').click(function(){
-			location.href = '/section/'+$(this).parents('.section-line').data('id').'/accueil';
+			location.href = '/section/'+$(this).parents('.section-line').data('id')+'/accueil';
 		})
 	});
 

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Assemblées Générales de {{ section.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/sections/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Gestion des assemblées générales</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_section',{'idSection':section.id }) }}">{{ section.nom }}</a></li>
+	  <li class="active">Gestion des assemblées générales</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Date</th>
+				<th>Heure</th>
+				<th>Orateur</th>
+				<th>Lieu</th>
+				<th>Participants</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for assembleeGenerale in assembleeGenerales %}
+				<tr>
+					<td style="position:relative">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'assembleeGenerale','object':assembleeGenerale,'deletePath':path('delete_assembleeGenerale',{'idAssembleeGenerale':assembleeGenerale.id})} %}
+						{% include 'modals/default.html.twig' with {'form':assembleeGeneraleForms[assembleeGenerale.id],'entity':'assembleeGenerale','object':assembleeGenerale,'title':'Edition de l`assemblée générale'} %}
+					</td>
+					<td>{{ assembleeGenerale.date ? assembleeGenerale.date.format('d/m/Y') : '' }}</td>
+					<td>{{ assembleeGenerale.heure }}</td>
+					<td>{{ assembleeGenerale.orateur }}</td>
+					<td>{{ assembleeGenerale.lieu }}</td>
+					<td>{{ assembleeGenerale.nbParticipants }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-assembleeGenerale-0">Saisir une nouvelle assemblée générale</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newAssembleeGeneraleForm,'entity':'assembleeGenerale','object':false,'title':'Ajouter une nouvelle assemblée générale'} %}
+{% endblock %}

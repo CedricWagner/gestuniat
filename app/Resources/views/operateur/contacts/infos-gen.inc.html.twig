@@ -3,6 +3,13 @@
 
 	<p>Type de profil <span class="label label-default statut-{{ contact.statutJuridique.id }}">{{ contact.statutJuridique.label }}</span></p>
 	<p>N° <b>{{ contact.numAdh }}</b></p>
+	<p>Section : 
+		{% if contact.section %}
+			<a href="{{ path('view_section',{'idSection':contact.section.id}) }}">{{ contact.section.nom }}</a>
+		{% else %}
+			Aucune
+		{% endif %}
+	</p>
 </div>
 <div class="section">
 	<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Cotisation</p>

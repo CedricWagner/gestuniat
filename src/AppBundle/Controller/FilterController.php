@@ -68,17 +68,25 @@ class FilterController extends Controller
               ->getRepository('AppBundle:FiltreValeur')
               ->findBy(array('filtrePerso'=>$filtrePerso));
 
-        //Get contacts by filter values
-        $contacts = $this->getDoctrine()
-          ->getRepository('AppBundle:Contact')
-          ->findByFilter($filtreValeurs,$page,$nb);
+        if($context=='contact'){
+            //Get contacts by filter values
+            $items = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->findByFilter($filtreValeurs,$page,$nb);
+        }
+        if($context=='section'){
+            //Get contacts by filter values
+            $items = $this->getDoctrine()
+              ->getRepository('AppBundle:Section')
+              ->findByFilter($filtreValeurs,$page,$nb);
+        }
 
         return new Response(json_encode(array(
             'idFiltre'=>$filtrePerso->getId(),
-            'path'=>'/contact/liste/'.$filtrePerso->getId().'/'.$page,
-            'html'=>$this->render('operateur/contacts/listing-contacts.inc.html.twig', array(
-                'contacts' => $contacts,
-                'pagination' => array('count'=>count($contacts),'nb'=>$nb,'page'=>$page),
+            'path'=>'/'.$context.'/liste/'.$filtrePerso->getId().'/'.$page,
+            'html'=>$this->render('operateur/'.$context.'s/listing-'.$context.'s.inc.html.twig', array(
+                'items' => $items,
+                'pagination' => array('count'=>count($items),'nb'=>$nb,'page'=>$page),
             ))->getContent()
         )));
     }

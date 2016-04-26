@@ -97,7 +97,7 @@ class ContactController extends Controller
             'fonctionsSection' => $fonctionsSection,
             'diplomes' => $diplomes,
             'currentFilter' => $currentFilter,
-            'contacts' => $contacts,
+            'items' => $contacts,
             'sections' => $sections,
             'pagination' => array('count'=>count($contacts),'nb'=>$nb,'page'=>$page),
         ]);

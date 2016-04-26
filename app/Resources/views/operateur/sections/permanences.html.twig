@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Permanences de {{ section.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/sections/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Gestion des permanences</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_section',{'idSection':section.id }) }}">{{ section.nom }}</a></li>
+	  <li class="active">Gestion des permanences</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Type de tournée</th>
+				<th>Description</th>
+				<th>Mise à jour</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for permanence in permanences %}
+				<tr>
+					<td style="position:relative">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'permanence','object':permanence,'deletePath':path('delete_permanence',{'idPermanence':permanence.id})} %}
+						{% include 'modals/default.html.twig' with {'form':permanenceForms[permanence.id],'entity':'permanence','object':permanence,'title':'Edition de la permanence'} %}
+					</td>
+					<td>{{ permanence.typeTournee ? permanence.typeTournee.label : '' }}</td>
+					<td>{{ permanence.label }}</td>
+					<td>{{ permanence.dateMAJ ? permanence.dateMAJ.format('d/m/Y') : '' }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-permanence-0">Saisir une nouvelle permanence</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newPermanenceForm,'entity':'permanence','object':false,'title':'Ajouter une nouvelle permanence'} %}
+{% endblock %}

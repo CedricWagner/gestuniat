@@ -5,7 +5,7 @@
 {% block additionnal_classes %}internal has-filter{% endblock %}
 
 {% block filter %}
-<form class="filter" id="filter-contact" data-context="contact">
+<form class="filter" id="filter-section" data-context="section">
 	<h2>Superfiltre Sections<span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('show')" class="glyphicons glyphicons-chevron-right rotate90"></span><span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('hide')" class="glyphicons glyphicons-chevron-right rotate270"></span></h2>
 	<div class="filter-section head">
 		<select name="selFiltresPerso" onchange="document.location = '/section/liste/'+this.value" class="form-control ignore select-filtre-perso">
@@ -15,13 +15,42 @@
 			{% endfor %}
 		</select>
 	</div>
+
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDateCreation" aria-controls="sectionDateCreation">Date de création<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionDateCreation">
 		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateCreation') : '' }}" type="date" name="dateCreation" placeholder="jj/mm/aaaa" />
 	</div>
+
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionAG" aria-controls="sectionAG">Assemblées Générales<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionAG">
+		Du :
+		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateDebutAG') : '' }}" type="date" name="dateDebutAG" placeholder="jj/mm/aaaa" />
+		Au :
+		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateFinAG') : '' }}" type="date" name="dateFinAG" placeholder="jj/mm/aaaa" />
+	</div>
+
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionTimbre" aria-controls="sectionTimbre">Décompte Timbres<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionTimbre">
+		{% set timbreOptions = {'':'Tous','MANQUANT':'Manquants','COMPLET':'Complet'} %}
+		<select name="selTimbres" class="form-control">
+			{% for key, option in timbreOptions %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selTimbres') == key ? 'selected="selected"' : '' }} value="{{key}}">{{option}}</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionTresorerie" aria-controls="sectionTresorerie">Trésorerie<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionTresorerie">
+		{% set tresoOptions = {'':'Toutes','EXCEDENTAIRE':'Excédentaire','DEFICITAIRE':'Déficitaire'} %}
+		<select name="selTresorerie" class="form-control">
+			{% for key, option in tresoOptions %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selTresorerie') == key ? 'selected="selected"' : '' }} value="{{key}}">{{option}}</option>
+			{% endfor %}
+		</select>
+	</div>
 	<div class="filter-section section-save-filter">
 		<input class="form-control ignore" type="text" id="filter-name" placeholder="Nommez votre filtre" />
-		<a href="#" onclick="ajaxSaveFilter('#filter-contact','{{ path('save_filter') }}','{{ path('list_contacts') }}')">Sauvegarde de votre filtre</a>
+		<a href="#" onclick="ajaxSaveFilter('#filter-section','{{ path('save_filter') }}','{{ path('list_sections') }}')">Sauvegarde de votre filtre</a>
 	</div>
 </form>
 {% endblock %}
@@ -29,7 +58,7 @@
 
 {% block content %}
 	<h1>Liste des sections</h1>
-	<div id="list-sections">
+	<div id="list-section">
 		{% include 'operateur/sections/listing-sections.inc.html.twig' %}
 	</div>
 

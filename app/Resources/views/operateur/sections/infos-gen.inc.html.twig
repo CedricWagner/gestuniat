@@ -7,7 +7,9 @@
 <div class="section">
 	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Délégué : 
 		{% if section.delegue %}
-			<a href="{{ path('view_contact',{'idContact':section.delegue.id}) }}">{{ section.delegue ? (section.delegue.prenom~' '~section.delegue.nom) : '' }}</a>
+			<a href="{{ path('view_contact',{'idContact':section.delegue.id}) }}">{{ section.delegue ? (section.delegue.prenom~' '~section.delegue.nom) : '' }}</a>&nbsp;<a href="#" data-toggle="modal" data-target="#modal-delegue"><span class="glyphicons glyphicons-edit"></span></a>
+		{% else %}
+			Non défini <a href="#" data-toggle="modal" data-target="#modal-delegue"><span class="glyphicons glyphicons-plus-sign"></span></a>
 		{% endif %}
 		</p>
 	<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Sub. Communale : {{ section.subventions }}</p>
@@ -42,3 +44,6 @@
 	<p><a class="btn btn-default btn-block">Destinataires Rentier</a></p>
 
 </div>
+
+
+{% include 'modals/editer-delegue.html.twig' %}
