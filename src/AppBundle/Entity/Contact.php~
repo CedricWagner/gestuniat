@@ -122,6 +122,13 @@ class Contact
     /**
      * @var bool
      *
+     * @ORM\Column(name="nbRentiers", type="integer", nullable=true)
+     */
+    private $nbRentiers;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="isBI", type="boolean")
      */
     private $isBI;
@@ -1296,5 +1303,29 @@ class Contact
     public function getMembreConjoint()
     {
         return $this->membreConjoint;
+    }
+
+    /**
+     * Set section
+     *
+     * @param \AppBundle\Entity\Section $section
+     *
+     * @return Contact
+     */
+    public function setSection(\AppBundle\Entity\Section $section = null)
+    {
+        $this->section = $section;
+
+        return $this;
+    }
+
+    /**
+     * Get section
+     *
+     * @return \AppBundle\Entity\Section
+     */
+    public function getSection()
+    {
+        return $this->section;
     }
 }

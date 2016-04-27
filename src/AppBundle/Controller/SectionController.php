@@ -173,6 +173,19 @@ class SectionController extends Controller
             $allYears[]=$i;
         }
 
+        $currentTimbres = $this->getDoctrine()
+            ->getRepository('AppBundle:RemiseTimbre')
+            ->findBy(array(
+                'section'=>$section,
+                'annee'=>$datetime->format('Y')-1
+                ));
+
+        $etatTimbres = array('emis'=>0,'remis'=>0,'payes'=>0);    
+        foreach ($currentTimbres as $timbre) {
+            $etatTimbres['emis'] += $timbre->getNbEmis();
+            $etatTimbres['remis'] += $timbre->getNbRemis();
+            $etatTimbres['payes'] += $timbre->getNbPayes();
+        }
 
 		return $this->render('operateur/sections/view-section.html.twig', [
             'section' => $section,
@@ -189,7 +202,8 @@ class SectionController extends Controller
             'suiviForm' => $suiviForm->createView(),
 		    'newPatrimoineForm' => $newPatrimoineForm->createView(),
 		    'lstSuivis' => $lstSuivis,
-		    'lstAllSuivis' => $lstAllSuivis,
+            'lstAllSuivis' => $lstAllSuivis,
+		    'etatTimbres' => $etatTimbres,
 		]);
 
     }
@@ -323,4 +337,38 @@ class SectionController extends Controller
 
         return $this->redirectToRoute('view_section',array('idSection'=>$section->getId()));
     }
+
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function displayFonctionsAdherentsAction($section)
+    {
+        $contacts = $this->getDoctrine()
+            ->getRepository('AppBundle:Contact')
+            ->findFonctionsSection($section);
+
+        return new Response($this->render('modals/fonctions-adherents.html.twig', [
+            'section' => $section,
+            'contacts' => $contacts
+        ])->getContent());
+
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function displayDestinataireRentiersAction($section)
+    {
+        $contacts = $this->getDoctrine()
+            ->getRepository('AppBundle:Contact')
+            ->findBy(array('section'=>$section,'isRentier'=>true));
+
+        return new Response($this->render('modals/destinataires-rentier.html.twig', [
+            'section' => $section,
+            'contacts' => $contacts
+        ])->getContent());
+
+    }
+
 }

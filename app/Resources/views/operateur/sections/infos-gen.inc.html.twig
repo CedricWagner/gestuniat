@@ -33,16 +33,20 @@
 	</div>
 </div>
 <div class="section">
-	<p><a class="btn btn-default btn-block">Cotisation annuelles</a></p>
-	<p><a class="btn btn-default btn-block">Vignettes contributives</a></p>
-	<p><a class="btn btn-default btn-block">Dons</a></p>
-	<p><a class="btn btn-default btn-block">Gestion des timbres</a></p>
-	<p><a class="btn btn-default btn-block">Fonctions des adhérents</a></p>
-	<p><a class="btn btn-default btn-block">Assemblées Générales</a></p>
-	<p><a class="btn btn-default btn-block">Permanences</a></p>
-	<p><a class="btn btn-default btn-block">Documents</a></p>
-	<p><a class="btn btn-default btn-block">Destinataires Rentier</a></p>
-
+	<p><a class="btn btn-default btn-block" href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}">Gestion des timbres</a></p>
+	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-fonctions-adherents">Fonctions des adhérents</a></p>
+	{{ render(controller(
+        'AppBundle:Section:displayFonctionsAdherents',
+        { 'section': section }
+    )) }}
+	<p><a class="btn btn-default btn-block" href="{{ path('list_permanences',{'idSection':section.id}) }}">Permanences</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}">Assemblées Générales</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_documentSections',{'idSection':section.id}) }}">Documents</a></p>
+	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-destintaires-rentier">Destinataires Rentier</a></p>
+	{{ render(controller(
+        'AppBundle:Section:displayDestinataireRentiers',
+        { 'section': section }
+    )) }}
 </div>
 
 

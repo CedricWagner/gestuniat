@@ -66,7 +66,8 @@ class ContactFullEditionType extends AbstractType
             ->add('dateCIF',DateType::class,array('label' => 'Date CIF','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('isRentier',CheckboxType::class,array('label' => 'Est rentier'))
+            ->add('isRentier',CheckboxType::class,array('label' => 'Est dépositaire rentier'))
+            ->add('nbRentiers',null,array('label' => 'Nombre de rentiers'))
             ->add('isBI',CheckboxType::class,array('label' => 'Reçoit le bulletin d\'information'))
             ->add('isCourrier',CheckboxType::class,array('label' => 'Courrier'))
             ->add('isEnvoiIndiv',CheckboxType::class,array('label' => 'Envoi individuel'))

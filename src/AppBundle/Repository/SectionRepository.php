@@ -43,18 +43,26 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
 						$params['p_date_creation'] = $fv->getValeur();
 						break;
 					case 'dateDebutAG':
-						// $qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.section = section');
-						// $params['p_date_creation'] = $fv->getValeur();
+						$qb->join('AppBundle:AssembleeGenerale', 'dag', 'WITH', 'dag.section = section');
+						$qb->andwhere('dag.date >= :p_date_debut_ag');
+						$params['p_date_debut_ag'] = $fv->getValeur();
 						break;
 					case 'dateFinAG':
-						// $qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.section = section');
-						// $params['p_date_creation'] = $fv->getValeur();
+						$qb->join('AppBundle:AssembleeGenerale', 'fag', 'WITH', 'fag.section = section');
+						$qb->andwhere('fag.date <= :p_date_fin_ag');
+						$params['p_date_fin_ag'] = $fv->getValeur();
 						break;
-					case 'selTimbre':
+					case 'selTimbres':
 						if ($fv->getValeur()=='MANQUANT') {
-							// $qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.section = section');
+							$qb->join('AppBundle:RemiseTimbre', 'rt', 'WITH', 'rt.section = section');
+							$qb->andwhere('rt.annee = :p_annee_timbre');
+							$qb->andwhere('rt.nbRemis > 0');
+							$params['p_annee_timbre'] = $datetime->format('Y')-1;
 						}elseif($fv->getValeur()=='COMPLET'){
-							// $qb->join('AppBundle:ContratPrevoyance', 'cp', 'WITH', 'cp.section = section');
+							$qb->join('AppBundle:RemiseTimbre', 'rt', 'WITH', 'rt.section = section');
+							$qb->andwhere('rt.annee = :p_annee_timbre');
+							$qb->andwhere('rt.nbRemis = 0');
+							$params['p_annee_timbre'] = $datetime->format('Y')-1;
 						}
 						break;
 					case 'selTresorerie':

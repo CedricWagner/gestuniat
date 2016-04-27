@@ -122,6 +122,13 @@ class Contact
     /**
      * @var bool
      *
+     * @ORM\Column(name="nbRentiers", type="integer", nullable=true)
+     */
+    private $nbRentiers;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="isBI", type="boolean")
      */
     private $isBI;
@@ -1320,5 +1327,29 @@ class Contact
     public function getSection()
     {
         return $this->section;
+    }
+
+    /**
+     * Set nbRentiers
+     *
+     * @param integer $nbRentiers
+     *
+     * @return Contact
+     */
+    public function setNbRentiers($nbRentiers)
+    {
+        $this->nbRentiers = $nbRentiers;
+
+        return $this;
+    }
+
+    /**
+     * Get nbRentiers
+     *
+     * @return integer
+     */
+    public function getNbRentiers()
+    {
+        return $this->nbRentiers;
     }
 }

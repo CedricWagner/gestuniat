@@ -122,6 +122,20 @@ function ajaxShowEditDocument(idDocument){
 	});
 }
 
+function ajaxShowEditDocumentSection(idDocument){
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: "/section/document/show-edit",
+	  data: { idDocumentSection: idDocument }
+	})
+	.done(function(response) {
+		ajax_stop();
+		$('body').append(response);
+		$('#editer-documentSection-'+idDocument).modal('show');
+	});
+}
+
 function ajaxSaveFilter(formFilter,ajaxUrl){
 	
 	var fields = new Array();

@@ -609,6 +609,8 @@ table.table tr.clickable{
     color: #c24864;
 }
 
+
+
 .section-separator{
     border-bottom: solid thin #dddddd;
     margin-top: 15px;
@@ -680,6 +682,7 @@ label[for*="procuration_is"]{
 
 .section-block table td, .section-block table th{
     padding: 5px;
+    text-align: center;
 }
 
 .section-block.block-text .section-header{

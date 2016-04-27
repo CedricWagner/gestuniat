@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Documents de la section {{ section.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/sections/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Gestion des documents</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_section',{'idSection':section.id }) }}">{{ section.nom }}</a></li>
+	  <li class="active">Gestion des documents</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Libellé</th>
+				<th>Type</th>
+				<th>Créateur</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for document in documents %}
+				<tr>
+					<td style="position:relative">
+						<div class="position:relative">
+							<a href="#" class="dropdown-toggle" id="options-document-{{ document.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+							<ul class="dropdown-menu" aria-labelledby="options-document-{{ document.id }}">
+								<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditDocumentSection({{ document.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+								<li class="contextual-item"><a class="no-padding-top" href="{{ path('download_documentSection',{'idDocumentSection':document.id}) }}"><span class="glyphicons glyphicons-download-alt"></span><span class="item-label">Télécharger</span></a></li>
+								<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_documentSection',{'idDocumentSection':document.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+							</ul>
+						</div>
+					</td>
+					<td><span class="glyphicons glyphicons-file"></span>&nbsp;&nbsp;{{ document.label }}</td>
+					<td>{{ document.type }}</td>
+					<td>{{ document.operateur.nom }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-documentSection-0">Saisir un nouveau document</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newDocumentSectionForm,'entity':'documentSection','object':false,'title':'Ajouter un nouveau document'} %}
+{% endblock %}

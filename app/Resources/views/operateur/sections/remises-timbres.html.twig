@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Remise timbres de {{ section.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/sections/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Gestion des remises de timbres</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_section',{'idSection':section.id }) }}">{{ section.nom }}</a></li>
+	  <li class="active">Gestion des remises de timbres</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Année</th>
+				<th>Periodicité</th>
+				<th>Date de remise</th>
+				<th>Emis</th>
+				<th>Payés</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for remiseTimbre in remiseTimbres %}
+				<tr>
+					<td style="position:relative">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'remiseTimbre','object':remiseTimbre,'deletePath':path('delete_remiseTimbre',{'idRemiseTimbre':remiseTimbre.id})} %}
+						{% include 'modals/default.html.twig' with {'form':remiseTimbreForms[remiseTimbre.id],'entity':'remiseTimbre','object':remiseTimbre,'title':'Edition de la remise de timbres'} %}
+					</td>
+					<td>{{ remiseTimbre.annee }}</td>
+					<td>{{ remiseTimbre.isAnnuel ? 'Annuel' : 'Semestriel' }}</td>
+					<td>{{ remiseTimbre.dateRemise ? remiseTimbre.dateRemise.format('d/m/Y') : '' }}</td>
+					<td>{{ remiseTimbre.nbEmis }}</td>
+					<td>{{ remiseTimbre.nbPayes }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-remiseTimbre-0">Saisir une nouvelle remise de timbres</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newRemiseTimbreForm,'entity':'remiseTimbre','object':false,'title':'Ajouter une nouvelle remise de timbres'} %}
+{% endblock %}

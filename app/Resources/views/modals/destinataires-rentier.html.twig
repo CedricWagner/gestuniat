@@ -1,0 +1,31 @@
+<div class="modal fade" id="liste-destintaires-rentier" tabindex="-1" role="dialog" aria-labelledby="list-destintaires-rentier-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="list-destintaires-rentier-label">Fonctions des adhérents</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Prénom / Nom</th>
+              <th>Nombre de rentiers</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for contact in contacts %}
+                <tr>
+                  <td><a href="{{ path('view_contact',{'idContact':contact.id}) }}">{{ contact.prenom }} {{ contact.nom }}</a></td>
+                  <td><input value="{{ contact.nbRentiers }}" type="number" /></td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

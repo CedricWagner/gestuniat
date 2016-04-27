@@ -135,4 +135,17 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 
         return $result[0][1];
 	}
+
+	public function findFonctionsSection($section){
+		$qb = $this->createQueryBuilder('contact');
+		$result = $qb
+			->select('contact')
+			->join('AppBundle:FonctionSection','fs','WITH','contact.fonctionSection = fs')
+			->where('contact.section = :p_section')
+			->setParameters(array('p_section'=>$section))
+			->getQuery()
+    		->execute();
+
+        return $result;
+	}
 }
