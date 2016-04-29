@@ -62,5 +62,9 @@ class StatutJuridique
     {
         return $this->label;
     }
+
+    public static function getIdStatutAdherent(){
+        return 2;
+    }
 }
 

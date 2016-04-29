@@ -1,0 +1,5 @@
+services:
+  app.filter.controller:
+    class: "AppBundle\\Controller\\FilterController"
+    calls:
+            - [setContainer, ["@service_container"]]

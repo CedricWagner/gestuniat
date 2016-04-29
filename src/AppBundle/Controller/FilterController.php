@@ -91,7 +91,13 @@ class FilterController extends Controller
         )));
     }
 
-    private function registerFilter($fields,$name,$context){
+    public function registerFilterAction($fields,$name,$context){
+        $result = $this->registerFilter($fields,$name,$context);
+        $filtrePerso = $result['filtrePerso'];
+        return new Response($filtrePerso->getId());
+    }
+
+    public function registerFilter($fields,$name,$context){
         $operateur = $this->getUser();
 
         //Get the FiltrePerso
@@ -165,5 +171,6 @@ class FilterController extends Controller
         return array('action'=>$action, 'filtrePerso'=>$filtrePerso);
 
     } 
+
 
 }

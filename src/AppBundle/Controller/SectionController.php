@@ -236,6 +236,26 @@ class SectionController extends Controller
     }
 
     /**
+     * @Route("/section/{idSection}/liste-adherents", name="list_contacts_section")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function listAdherentsAction($idSection)
+    {
+
+        $fields = [
+            ['type'=>'select','name'=>'selSection','value'=>$idSection],
+            ['type'=>'checkbox','name'=>'cbStatut','value'=>2],
+        ];
+
+        $filterController = $this->get('app.filter.controller');
+        $result = $filterController->registerFilter($fields,'Derniers paramètres','contact');
+
+        $filter = $result['filtrePerso'];
+
+        return $this->redirectToRoute('list_contacts',array('idFilter'=>$filter->getId()));
+    }
+
+    /**
      * @Route("/section/ajout", name="add_section")
      * @Security("has_role('ROLE_USER')")
      */
@@ -273,7 +293,13 @@ class SectionController extends Controller
      */
     public function deleteSectionAction($idSection)
     {
+        $section = $this->getDoctrine()
+            ->getRepository('AppBundle:Section')
+            ->find($idSection);
 
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->remove($section);
+        $em->flush();
     }
 
     /**
@@ -340,6 +366,76 @@ class SectionController extends Controller
 
 
     /**
+     * @Route("/section/{idSection}/destinataires-rentiers/save", name="save_dest_rentiers")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function saveDestRentiersAction(Request $request, $idSection)
+    {
+
+        $section = $this->getDoctrine()
+                ->getRepository('AppBundle:Section')
+                ->find($idSection);
+
+        //edit nb rentiers
+        $ids = $request->request->get('idRentier');
+
+        if($ids){
+            foreach ($ids as $id) {
+
+                $contact = $this->getDoctrine()
+                    ->getRepository('AppBundle:Contact')
+                    ->find($id);
+
+                $contact->setNbRentiers($request->request->get('nbRentier-'.$id));
+
+                $em = $this->get('doctrine.orm.entity_manager');
+                $em->persist($contact);
+                $em->flush();
+                
+            }
+        }
+
+        //add if new
+        if($request->request->get('selNewRentier')!=0){
+
+            $contact = $this->getDoctrine()
+                    ->getRepository('AppBundle:Contact')
+                    ->find($request->request->get('selNewRentier'));
+
+            $contact->setIsRentier(true);
+            $contact->setNbRentiers($request->request->get('numNewRentier'));
+
+            $em = $this->get('doctrine.orm.entity_manager');
+                $em->persist($contact);
+                $em->flush();
+        }
+
+        //delete
+        $removalIds = $request->request->get('idRemoval');
+
+        if ($removalIds) {
+            foreach ($removalIds as $id) {
+
+                $contact = $this->getDoctrine()
+                    ->getRepository('AppBundle:Contact')
+                    ->find($id);
+
+                $contact->setNbRentiers(null);
+                $contact->setIsRentier(false);
+
+                $em = $this->get('doctrine.orm.entity_manager');
+                $em->persist($contact);
+                $em->flush();
+                
+            }
+        }
+
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+
+    /**
      * @Security("has_role('ROLE_USER')")
      */
     public function displayFonctionsAdherentsAction($section)
@@ -364,10 +460,45 @@ class SectionController extends Controller
             ->getRepository('AppBundle:Contact')
             ->findBy(array('section'=>$section,'isRentier'=>true));
 
+        $contactsSection = $this->getDoctrine()
+            ->getRepository('AppBundle:Contact')
+            ->findBy(array('section'=>$section));
+
+        $purgedArray = array();
+        foreach ($contactsSection as $contactSection) {
+            if($contactSection->getStatutJuridique()&&$contactSection->getStatutJuridique()->getLabel()=='Adhérent'){
+                $found = false;
+                foreach ($contacts as $contact) {
+                    if($contact->getId()==$contactSection->getId()){
+                        $found = true;
+                    }
+                }
+                if(!$found){
+                    $purgedArray[] = $contactSection;
+                }
+            }
+        }
+
         return new Response($this->render('modals/destinataires-rentier.html.twig', [
             'section' => $section,
-            'contacts' => $contacts
+            'contacts' => $contacts,
+            'contactsSection' => $purgedArray
         ])->getContent());
+
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function displayNbAdherentsAction($section)
+    {
+        $nbContacts = $this->getDoctrine()
+            ->getRepository('AppBundle:Contact')
+            ->countContactsBySection($section);
+
+        // dump($nbContacts);
+
+        return new Response($nbContacts);
 
     }
 

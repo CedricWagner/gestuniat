@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use AppBundle\Entity\StatutJuridique;
 
 /**
  * ContactRepository
@@ -147,5 +148,16 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
     		->execute();
 
         return $result;
+	}
+
+	public function countContactsBySection($section){
+		return $this->createQueryBuilder('contact')
+		 ->select('COUNT(contact)')
+		 ->where('contact.section = :section')
+		 ->andwhere('contact.statutJuridique = :statut')
+		 ->setParameters(array('section'=>$section,'statut'=>StatutJuridique::getIdStatutAdherent()))
+		 ->getQuery()
+		 ->getSingleScalarResult();
+
 	}
 }

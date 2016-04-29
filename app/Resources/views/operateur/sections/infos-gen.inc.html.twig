@@ -11,7 +11,7 @@
 		{% else %}
 			Non défini <a href="#" data-toggle="modal" data-target="#modal-delegue"><span class="glyphicons glyphicons-plus-sign"></span></a>
 		{% endif %}
-		</p>
+	</p>
 	<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Sub. Communale : {{ section.subventions }}</p>
 	{% if section.dateDerniereAG %}
 	<p class="underlined"><span class="glyphicons glyphicons-note"></span>&nbsp;&nbsp;Dernière AG&nbsp;:&nbsp;{{ section.dateDerniereAG.format('d/m/Y') }}</p>
@@ -33,16 +33,26 @@
 	</div>
 </div>
 <div class="section">
+	<p><a class="btn btn-default btn-block" href="{{ path('list_contacts_section',{'idSection':section.id}) }}">Liste des adhérents 
+		<span class="badge">
+			{{ render(controller(
+		        'AppBundle:Section:displayNbAdherents',
+		        { 'section': section }
+		    )) }}
+		</span>
+		</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}">Gestion des timbres</a></p>
-	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-fonctions-adherents">Fonctions des adhérents</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_permanences',{'idSection':section.id}) }}">Permanences</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}">Assemblées Générales</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('list_documentSections',{'idSection':section.id}) }}">Documents</a></p>
+</div>
+<div class="section">
+	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-fonctions-adherents"><span class="glyphicons glyphicons-more-windows"></span>&nbsp;Fonctions des adhérents</a></p>
 	{{ render(controller(
         'AppBundle:Section:displayFonctionsAdherents',
         { 'section': section }
     )) }}
-	<p><a class="btn btn-default btn-block" href="{{ path('list_permanences',{'idSection':section.id}) }}">Permanences</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}">Assemblées Générales</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_documentSections',{'idSection':section.id}) }}">Documents</a></p>
-	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-destintaires-rentier">Destinataires Rentier</a></p>
+	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-destintaires-rentier"><span class="glyphicons glyphicons-more-windows"></span>&nbsp;Destinataires Rentier</a></p>
 	{{ render(controller(
         'AppBundle:Section:displayDestinataireRentiers',
         { 'section': section }

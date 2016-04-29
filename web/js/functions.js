@@ -108,34 +108,6 @@ function ajaxShowEditContratObseque(idObseque){
 	});
 }
 
-function ajaxShowEditDocument(idDocument){
-	ajax_start();
-	$.ajax({
-	  method: "POST",
-	  url: "/document/show-edit",
-	  data: { idDocument: idDocument }
-	})
-	.done(function(response) {
-		ajax_stop();
-		$('body').append(response);
-		$('#editer-document-'+idDocument).modal('show');
-	});
-}
-
-function ajaxShowEditDocumentSection(idDocument){
-	ajax_start();
-	$.ajax({
-	  method: "POST",
-	  url: "/section/document/show-edit",
-	  data: { idDocumentSection: idDocument }
-	})
-	.done(function(response) {
-		ajax_stop();
-		$('body').append(response);
-		$('#editer-documentSection-'+idDocument).modal('show');
-	});
-}
-
 function ajaxSaveFilter(formFilter,ajaxUrl){
 	
 	var fields = new Array();
@@ -264,66 +236,10 @@ function ajaxAutocompMembreConjoint(idContact,container){
 			var nom = response[line].nom;
 			var prenom = response[line].prenom;
 			var numAdh = response[line].numAdh;
-			if (id != idContact) {
-				lis = lis + '<li class="list-group-item" id="result-amc-'+id+'"><a onclick="proceedAutocompMembreConjoint('+id+')" href="#">['+numAdh+'] '+prenom+' '+nom+'</a></li>';
-			}
+			lis = lis + '<li class="list-group-item" id="result-amc-'+id+'"><a onclick="proceedAutocompMembreConjoint('+id+')" href="#">['+numAdh+'] '+prenom+' '+nom+'</a></li>';
 		}
 		$(container).find('.autocomp-result').html('<ul class="list-group">'+lis+'</ul>');
 	});
-}
-
-function ajaxAutocompDelegue(container){
-	
-	$(container).find('.autocomp-result').html('');
-
-	ajax_start();
-	$.ajax({
-	  method: "POST",
-	  url: '/search/contact',
-	  data: { txtSearch:$(container).find('.autocomp-value').val() }
-	})
-	.done(function(response) {
-		ajax_stop();
-		response = JSON.parse(response);
-		var lis = '';
-		for(line in response){
-			var id = response[line].id;
-			var nom = response[line].nom;
-			var prenom = response[line].prenom;
-			var numAdh = response[line].numAdh;
-			lis = lis + '<li class="list-group-item" id="result-delegue-'+id+'"><a onclick="proceedAutocompDelegue('+id+')" href="#">['+numAdh+'] '+prenom+' '+nom+'</a></li>';
-		}
-		$(container).find('.autocomp-result').html('<ul class="list-group">'+lis+'</ul>');
-	});
-}
-
-function ajaxAutocompSearchContact(container){
-	if($(container).find('.autocomp-value').val()!=''){
-		$(container).find('.autocomp-result').html('');
-
-		ajax_start();
-		$.ajax({
-		  method: "POST",
-		  url: '/search/contact',
-		  data: { txtSearch:$(container).find('.autocomp-value').val() }
-		})
-		.done(function(response) {
-			response = JSON.parse(response);
-			ajax_stop();
-			var lis = '';
-			for(line in response){
-				var id = response[line].id;
-				var nom = response[line].nom;
-				var prenom = response[line].prenom;
-				var numAdh = response[line].numAdh;
-				var path = response[line].path;
-				lis = lis + '<li class="list-group-item" id="result-amc-'+id+'"><a href="'+path+'">['+numAdh+'] '+prenom+' '+nom+'</a></li>';
-			}
-			$(container).find('.autocomp-result').html('<ul class="list-group">'+lis+'</ul>');
-		});
-	}else{
-		$(container).find('.autocomp-result').html('');
-	}
 }
 
 function proceedAutocompMembreConjoint(id){
@@ -333,13 +249,6 @@ function proceedAutocompMembreConjoint(id){
 	$('#autocomp-membre-conjoint .autocomp-value').val($('#result-amc-'+id).find('a').html());
 }
 
-function proceedAutocompDelegue(id){
-	$('#result-delegue-'+id).addClass('active');
-	$('#result-delegue-'+id).append('<input type="hidden" name="idDelegue" value="'+id+'" />');
-	$('#result-delegue-'+id).parents('ul').find('li:not(.active)').remove();
-	$('#autocomp-delegue .autocomp-value').val($('#result-delegue-'+id).find('a').html());
-}
-
 function toggleView(obj,show,hide){
 	if($(obj).is('checked')){ 
 		$(show).hide();
@@ -347,5 +256,18 @@ function toggleView(obj,show,hide){
 	}else{ 
 		$(show).show();
 		$(hide).hide(); 
+	}
+}
+
+function removeRentierSection(idContact){
+	var line = $('#dest-rentiers-'+idContact);
+	if(!$(line).hasClass('removal')){
+		$(line).addClass('removal');
+		$(line).css('opacity','0.4');
+		$(line).append('<input type="hidden" class="removal-field" value="'+idContact+'" name="idRemoval[]"/>');
+	}else{
+		$(line).removeClass('removal');
+		$(line).css('opacity','1');
+		$(line).find('.removal-field').remove();	
 	}
 }
