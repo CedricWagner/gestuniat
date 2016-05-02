@@ -1,0 +1,22 @@
+<div class="modal fade" id="generer-facture-envois-individuels" tabindex="-1" role="dialog" aria-labelledby="generer-facture-envois-individuels-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="generer-facture-envois-individuels-label">Générer les factures pour les envois individuels</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" id="generate-envois-indiv" action="{{ path('generate_factures_envois_indiv',{'annee':annee,'numTrimestre':numTrimestre}) }}" class="modal-form clearfix">
+          <label>
+            Coût unitaire
+          </label>
+          <input name="txtCoutUnitaire" value="0.3" type="number" />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="$('form#generate-envois-indiv').submit()">Enregistrer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

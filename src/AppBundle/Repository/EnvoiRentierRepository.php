@@ -10,4 +10,26 @@ namespace AppBundle\Repository;
  */
 class EnvoiRentierRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findLastAnnee(){
+		$qb = $this->createQueryBuilder('envoiRentier');
+		$result = $qb
+			->select('MAX(envoiRentier.annee)')
+			->getQuery()
+    		->execute();
+
+        return $result[0][1];
+	}
+
+	public function findLastTrimestre($annee){
+		$qb = $this->createQueryBuilder('envoiRentier');
+		$result = $qb
+			->select('MAX(envoiRentier.numTrimestre)')
+			->where('envoiRentier.annee = :annee')
+			->setParameters(array('annee'=>$annee))
+			->getQuery()
+    		->execute();
+
+        return $result[0][1];
+	}
+
 }

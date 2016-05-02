@@ -45,7 +45,7 @@ class EnvoiRentier
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dateGenFacture", type="date", nullable=true)
+     * @ORM\Column(name="dateGenFacture", type="date")
      */
     private $dateGenFacture;
 
@@ -205,29 +205,5 @@ class EnvoiRentier
     public function getEnvoisIndiv()
     {
         return $this->envoisIndiv;
-    }
-
-    /**
-     * Set dateGenFacture
-     *
-     * @param \DateTime $dateGenFacture
-     *
-     * @return EnvoiRentier
-     */
-    public function setDateGenFacture($dateGenFacture)
-    {
-        $this->dateGenFacture = $dateGenFacture;
-
-        return $this;
-    }
-
-    /**
-     * Get dateGenFacture
-     *
-     * @return \DateTime
-     */
-    public function getDateGenFacture()
-    {
-        return $this->dateGenFacture;
     }
 }

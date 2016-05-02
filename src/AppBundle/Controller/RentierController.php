@@ -15,6 +15,71 @@ use AppBundle\Entity\DestIndivEnvoi;
 class RentierController extends Controller
 {
 
+    /**
+     * @Route("/rentier/liste/destinataires/individuels/{annee}/{numTrimestre}", name="list_dest_indivs", defaults={"annee" = 0,"numTrimestre" = 0})
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function listDestIndivsAction($annee,$numTrimestre)
+    {
+    	$datetime = new \DateTime();
+    	if ($annee==0) {
+    		$annee = $this->getDoctrine()
+    			->getRepository('AppBundle:EnvoiRentier')
+    			->findLastAnnee();
+    	}
+    	if ($numTrimestre==0) {
+    		$numTrimestre = $this->getDoctrine()
+    			->getRepository('AppBundle:EnvoiRentier')
+    			->findLastTrimestre($annee);
+    	}
+
+    	$envoisRentiers = $this->getDoctrine()
+    		->getRepository('AppBundle:EnvoiRentier')
+    		->findBy(array('annee'=>$annee,'numTrimestre'=>$numTrimestre),array('section'=>'ASC'));
+
+    	foreach ($envoisRentiers as $envoiRentier) {
+    		$envoiRentier->setEnvoisIndiv(
+				$this->getDoctrine()
+					->getRepository('AppBundle:DestIndivEnvoi')
+					->findBy(array('envoiRentier'=>$envoiRentier))
+			);
+    	}
+
+    	return $this->render('operateur/rentiers/envois-indiv.html.twig',[
+    			'envoisRentiers'=>$envoisRentiers,
+    			'annee'=>$annee,
+    			'numTrimestre'=>$numTrimestre,
+    		]);
+
+    }
+
+    /**
+     * @Route("/rentier/generer-factures/destinataires/individuels/{annee}/{numTrimestre}", name="generate_factures_envois_indiv", defaults={"annee" = 0,"numTrimestre" = 0})
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function generateFactureDestIndivsAction(Request $request,$annee,$numTrimestre)
+    {
+
+    	$datetime = new \DateTime();
+
+    	$cout =  $request->request->get('txtCoutUnitaire');
+
+    	$envoisRentiers = $this->getDoctrine()
+    		->getRepository('AppBundle:EnvoiRentier')
+    		->findBy(array('annee'=>$annee,'numTrimestre'=>$numTrimestre));
+
+    	foreach ($envoisRentiers as $envoiRentier) {
+    		$envoiRentier->setDateGenFacture($datetime);
+    		$envoiRentier->setCoutEnvoisIndiv($cout);
+
+			$em = $this->get('doctrine.orm.entity_manager');
+			$em->persist($envoiRentier);
+			$em->flush();
+    	}
+
+    	return $this->redirectToRoute('list_dest_indivs',['annee'=>$annee,'numTrimestre'=>$numTrimestre]);
+
+    }
 
     /**
      * @Route("/rentier/liste/{idFilter}/{page}/{nb}", name="list_rentiers", defaults={"idFilter" = 0,"page" = 1,"nb" = 0})
@@ -28,10 +93,6 @@ class RentierController extends Controller
             $currentFilter = $this->getDoctrine()
               ->getRepository('AppBundle:FiltrePerso')
               ->find($idFilter);
-
-            $filtreValeurs = $this->getDoctrine()
-              ->getRepository('AppBundle:FiltreValeur')
-              ->findBy(array('filtrePerso'=>$currentFilter));
 
             $currentFilter->setFiltreValeurs($filtreValeurs);
         }
@@ -52,11 +113,11 @@ class RentierController extends Controller
                   ->findBy(array('operateur'=>$this->getUser(),'contexte'=>'section'),array('label'=>'ASC'));
 
         if($currentFilter){
-			$sections = $this->getDoctrine()
+			$rentiers = $this->getDoctrine()
 			  ->getRepository('AppBundle:Section')
 			  ->findByFilter($filtreValeurs,$page,$nb);
         }else{
-			$sections = $this->getDoctrine()
+			$rentiers = $this->getDoctrine()
 			  ->getRepository('AppBundle:Section')
 			  ->findAllWithPagination($page,$nb);
         }
@@ -80,16 +141,16 @@ class RentierController extends Controller
 		$datetime = new \DateTime();
 
 		switch ($datetime->format('d/m')) {
-			case '01/01':
+			case '05/01':
 				$numTrimestre = 1;
 				break;
-			case '01/04':
+			case '05/04':
 				$numTrimestre = 2;
 				break;
-			case '01/07':
+			case '05/07':
 				$numTrimestre = 3;
 				break;
-			case '01/10':
+			case '05/10':
 				$numTrimestre = 4;
 				break;
 			default:
