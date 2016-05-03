@@ -1,0 +1,28 @@
+<div class="modal fade" id="lst-rentiers-envoi-{{ envoiRentier.id }}" tabindex="-1" role="dialog" aria-labelledby="lst-rentiers-envoi-{{ envoiRentier.id }}-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="lst-rentiers-envoi-{{ envoiRentier.id }}-label">Liste des destinataires du rentier</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <tr>
+            <th>Nom / Prénom</th>
+            <th>Nombre de rentiers</th>
+          </tr>
+          {% for dest in envoiRentier.envoisRentiers %}
+            <tr>
+              <td>{{dest.contact.nom}} {{dest.contact.prenom}}</td>
+              <td>{{dest.nb}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="$('form#generate-envois-indiv').submit()">Enregistrer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

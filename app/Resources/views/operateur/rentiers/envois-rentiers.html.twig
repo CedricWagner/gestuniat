@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestuniat - Liste des destinataires individuels (trimestre {{ numTrimestre }} / {{ annee }}){% endblock %}
+{% block title %}Gestuniat - Liste des destinataires rentiers (trimestre {{ numTrimestre }} / {{ annee }}){% endblock %}
 
 {% block additionnal_classes %}internal has-left-column{% endblock %}
 
 {% block left_column %}
 
 <div class="section">
-	<h1>Envois individuels</h1>
+	<h1>Envois aux dépositaires rentiers</h1>
 	<p>Année <b>{{ annee }}</b> </p>
 	<p>Trimestre N°<b>{{ numTrimestre }}</b> </p>
 </div>
@@ -45,36 +45,30 @@
 {% endblock %}
 
 {% block content %}
-	<h2>Liste des destinataires individuels</h2>
+	<h2>Liste des dépositaires rentiers</h2>
 	<div class="btn-group">
 	  <button type="button" class="btn btn-export dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	    Exporter la liste des destinataires &nbsp;<span class="caret"></span>
 	  </button>
 	  <ul class="dropdown-menu">
-	    <li><a href="{{ path('export_liste_dest_indiv',{'annee':annee,'numTrimestre':numTrimestre,'format':'pdf'}) }}">Format PDF</a></li>
-	    <li><a href="{{ path('export_liste_dest_indiv',{'annee':annee,'numTrimestre':numTrimestre,'format':'csv'}) }}">Format CSV</a></li>
+	    <li><a href="{{ path('export_liste_dest_rentiers',{'annee':annee,'numTrimestre':numTrimestre,'format':'pdf'}) }}">Format PDF</a></li>
+	    <li><a href="{{ path('export_liste_dest_rentiers',{'annee':annee,'numTrimestre':numTrimestre,'format':'csv'}) }}">Format CSV</a></li>
 	  </ul>
 	</div>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#generer-facture-envois-individuels">Générer les factures pour ce trimestre</button>
-	{% include 'modals/generer-facture-envois-indiv.html.twig' %}
 	<table class="table table-striped table-hover selectable">
 		<thead>
 			<tr>
+				<th></th>
 				<th>Section</th>
-				<th>Destinataires individuels</th>
-				<th>Facture</th>
-				<th>Coût unitaire</th>
-				<th>Coût total</th>
+				<th>Destinataires rentiers</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for envoiRentier in envoisRentiers %}
 				<tr>
+					<td><a href="#" data-toggle="modal" data-target="#lst-rentiers-envoi-{{ envoiRentier.id }}"><span class="glyphicons glyphicons-eye-open"></span></a>{% include 'modals/liste-rentiers-envoi.html.twig' %}</td>
 					<td>{{ envoiRentier.section.nom }}</td>
-					<td>{{ envoiRentier.envoisIndiv|length }}</td>
-					<td>{{ envoiRentier.coutEnvoisIndiv ? 'Généré le ' ~ envoiRentier.dateGenFacture.format('d/m/Y') : 'Non générée' }}</td>
-					<td>{{ envoiRentier.coutEnvoisIndiv ? envoiRentier.coutEnvoisIndiv : '-' }}</td>
-					<td>{{ envoiRentier.coutEnvoisIndiv ? envoiRentier.coutEnvoisIndiv * envoiRentier.envoisIndiv|length : '-' }}</td>
+					<td>{{ envoiRentier.envoisRentiers|length }}</td>
 				</tr>
 			{% endfor %}
 		</tbody>

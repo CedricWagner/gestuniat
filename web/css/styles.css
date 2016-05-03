@@ -401,6 +401,24 @@ form input, form textarea, form select{
     border-color:#eeeeee;
 }
 
+.btn-export{
+    background-color: #509FCA;
+    border-color: #4485A9;
+    color: white !important ;
+}
+
+.btn-export:hover{
+    background-color: #4485A9;
+    border-color: #4485A9;
+    color: white;
+}
+
+.btn-export:active{
+    background-color: #4485A9;
+    border-color: #4485A9;
+    color: white;
+}
+
 .select-default{
     padding: 5px;
     border-radius: 5px;

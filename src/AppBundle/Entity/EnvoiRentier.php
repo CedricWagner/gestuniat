@@ -63,6 +63,7 @@ class EnvoiRentier
     protected $section;
 
     private $envoisIndiv;
+    private $envoisRentiers;
 
 
     /**
@@ -205,6 +206,18 @@ class EnvoiRentier
     public function getEnvoisIndiv()
     {
         return $this->envoisIndiv;
+    }
+
+    public function setEnvoisRentiers($envoisRentiers)
+    {
+        $this->envoisRentiers = $envoisRentiers;
+
+        return $this;
+    }
+
+    public function getEnvoisRentiers()
+    {
+        return $this->envoisRentiers;
     }
 
     /**

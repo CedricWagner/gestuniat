@@ -41,6 +41,7 @@
 				<th>Adresse</th>
 				<th>Commune</th>
 				<th>Section</th>
+				<th>Fonction</th>
 				<th>Date de création</th>
 			</tr>
 		</thead>
@@ -55,6 +56,7 @@
 					<td>{{ contact.adresse }}</td>
 					<td>{{ contact.commune }}</td>
 					<td>{{ contact.section ? contact.section.nom : 'Aucune' }}</td>
+					<td>{{ contact.fonctionSection ? 'Section : '~contact.fonctionSection.label|upper : '' }}<br /> {{ contact.fonctionGroupement ? 'Groupement : '~contact.fonctionGroupement.label|upper : '' }}</td>
 					<td>{{ contact.dateEntree ? contact.dateEntree.format('d/m/Y') : '' }}</td>
 				</tr>
 			{% endfor %}

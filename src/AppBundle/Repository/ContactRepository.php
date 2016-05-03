@@ -64,8 +64,11 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 						$params['p_fonction_section'] = $fv->getValeur();
 						break;
 					case 'selFonctionGroupement':
-						$qb->andwhere('contact.fonctionGroupement = :p_fonction_groupement');
-						$params['p_fonction_groupement'] = $fv->getValeur();
+						if($fv->getValeur()=='TOUTES'){
+							$qb->andwhere('contact.fonctionGroupement IS NOT NULL');
+						}else{
+							$params['p_fonction_groupement'] = $fv->getValeur();
+						}
 						break;
 					case 'txtRepresentation':
 						$qb->andwhere('contact.fonctionRepresentation LIKE :p_fonction_representation');

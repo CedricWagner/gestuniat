@@ -53,6 +53,7 @@
 		</select>
 		<select name="selFonctionGroupement" class="form-control">
 			<option value="0">Fonction de groupement</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selFonctionGroupement') == 'TOUTES' ? 'selected="selected"' : '' }} value="TOUTES">Toutes</option>
 			{% for fg in fonctionsGroupement %}
 				<option {{ currentFilter and currentFilter.getFiltreValeur('selFonctionGroupement') == fg.id ? 'selected="selected"' : '' }} value="{{ fg.id }}">{{ fg.label }}</option>
 			{% endfor %}
