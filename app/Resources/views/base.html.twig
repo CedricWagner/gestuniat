@@ -42,7 +42,13 @@
                                     </ul>
                                 </li>
                                 <li><a href=""><span class="glyphicons glyphicons-folder-open"></span><span class="menu-label">Dossiers</span></a></li>
-                                <li><a href=""><span class="glyphicons glyphicons-government"></span><span class="menu-label">Organismes</span></a></li>
+                                <li>
+                                    <span class="glyphicons glyphicons-government"></span><span class="menu-label">Organismes</span>
+                                    <ul>
+                                        <li><a href="{{ path('list_organismes') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des organismes</a></li>
+                                        <li class="item-add"><a href="{# path('list_organismes',{'action':'ajout'}) #}"><span class="glyphicons glyphicons-plus"></span>Ajouter un organisme</a></li>
+                                    </ul>
+                                </li>
                                 <li><a href=""><span class="glyphicons glyphicons-adjust-alt"></span><span class="menu-label">Filtres perso.</span></a></li>
                                 <li><span class="glyphicons glyphicons-book"></span><span class="menu-label">Rentier</span>
                                     <ul>

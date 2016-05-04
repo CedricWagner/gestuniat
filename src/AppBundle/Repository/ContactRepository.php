@@ -75,7 +75,15 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 						$params['p_fonction_representation'] = $fv->getValeur();
 						break;
 					case 'selPaiement':
-						//TODO
+						if($fv->getValeur() == 'V_PAYEE'){
+							$qb->join('AppBundle:Vignette', 'vign', 'WITH', 'vign.contact = contact');
+							$qb->andwhere('vign.datePaiement IS NOT NULL');
+						}elseif($fv->getValeur() == 'V_RETARD'){
+							$qb->join('AppBundle:Vignette', 'vign', 'WITH', 'vign.contact = contact');
+							$qb->andwhere('vign.datePaiement IS NULL');
+						}elseif($fv->getValeur() == 'DON'){
+							$qb->join('AppBundle:Don', 'don', 'WITH', 'don.contact = contact');
+						}
 						break;
 					case 'selDiplome':
 						$qb->join('AppBundle:ContactDiplome', 'cd', 'WITH', 'cd.contact = contact');

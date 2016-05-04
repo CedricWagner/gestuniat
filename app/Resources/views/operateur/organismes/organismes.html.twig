@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Organismes{% endblock %}
+
+{% block additionnal_classes %}internal has-filter{% endblock %}
+
+{% block filter %}
+<form class="filter" id="filter-organisme" data-context="organisme">
+	<h2>Superfiltre Organismes<span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('show')" class="glyphicons glyphicons-chevron-right rotate90"></span><span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('hide')" class="glyphicons glyphicons-chevron-right rotate270"></span></h2>
+	<div class="filter-section head">
+		<select name="selFiltresPerso" onchange="document.location = '/organisme/liste/'+this.value" class="form-control ignore select-filtre-perso">
+			<option value="0">Filtres personnalisés</option>
+			{% for filtrePerso in filtresPerso %}
+				<option {{ currentFilter and currentFilter.id == filtrePerso.id ? 'selected="selected"' : '' }} value="{{ filtrePerso.id }}">{{ filtrePerso.label }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDateCreation" aria-controls="sectionDateCreation">Date de création<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionDateCreation">
+		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateCreation') : '' }}" type="date" name="dateCreation" placeholder="jj/mm/aaaa" />
+	</div>
+	<div class="filter-section section-save-filter">
+		<input class="form-control ignore" type="text" id="filter-name" placeholder="Nommez votre filtre" />
+		<a href="#" onclick="ajaxSaveFilter('#filter-organisme','{{ path('save_filter') }}','{{ path('list_organismes') }}')">Sauvegarde de votre filtre</a>
+	</div>
+</form>
+{% endblock %}
+
+
+{% block content %}
+	<h1>Liste des organismes <button class="btn btn-primary" data-toggle="modal" data-target="#add-organisme-0">Ajouter un organisme</button></h1>
+	{% include 'modals/default.html.twig' with {'form':newOrganismeForm,'entity':'organisme','object':false,'title':'Ajouter un nouvel organisme'} %}
+	<div id="list-organisme">
+		{% include 'operateur/organismes/listing-organismes.inc.html.twig' %}
+	</div>
+
+{% endblock %}
+
+{% block additionnal_javascripts %}
+	{% if currentFilter %}
+		<script type="text/javascript">
+			$(function(){
+				$('.filter-section:not(.head, .section-save-filter)').collapse('show');
+			});
+		</script>
+	{% endif %}
+
+{% endblock %}
