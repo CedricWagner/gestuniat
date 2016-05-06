@@ -26,4 +26,32 @@ class OrganismeRepository extends \Doctrine\ORM\EntityRepository
         return $pag;
 	}
 
+	public function findByFilter($filterValues,$page=1,$nb=20){
+		
+		$params = array();
+		
+		$qb = $this->createQueryBuilder('organisme');
+		$qb
+			->select('organisme')
+			->where('1=1');
+		foreach ($filterValues as $fv) {
+			if($fv->getValeur()!=''&&$fv->getValeur()!='0'){
+				switch ($fv->getChamp()->getLabel()) {
+					case 'selType':
+							$qb->join('AppBundle:TypeOrganisme','to','WITH','to = organisme.typeOrganisme');
+							$qb->andwhere('to.id LIKE :p_organisme');
+							$params['p_organisme'] = $fv->getValeur();
+						break;			
+				}
+			}
+		}
+		$qb ->setParameters($params)
+            ->setFirstResult(($nb*$page)-$nb)
+            ->setMaxResults($nb*$page);
+
+        $pag = new Paginator($qb);
+        
+        return $pag;
+	}
+
 }

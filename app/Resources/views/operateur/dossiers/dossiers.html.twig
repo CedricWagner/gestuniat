@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Dossiers{% endblock %}
+
+{% block additionnal_classes %}internal has-filter{% endblock %}
+
+{% block filter %}
+<form class="filter" id="filter-dossier" data-context="dossier">
+	<h2>Superfiltre Dossiers<span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('show')" class="glyphicons glyphicons-chevron-right rotate90"></span><span onclick="$('.filter-section:not(.head, .section-save-filter)').collapse('hide')" class="glyphicons glyphicons-chevron-right rotate270"></span></h2>
+	<div class="filter-section head">
+		<select name="selFiltresPerso" onchange="document.location = '/dossier/liste/'+this.value" class="form-control ignore select-filtre-perso">
+			<option value="0">Filtres personnalisés</option>
+			{% for filtrePerso in filtresPerso %}
+				<option {{ currentFilter and currentFilter.id == filtrePerso.id ? 'selected="selected"' : '' }} value="{{ filtrePerso.id }}">{{ filtrePerso.label }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDateOuverture" aria-controls="sectionDateOuverture">Date d'ouverture<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionDateOuverture">
+		<input class="form-control" name="dateOuverture" type="date" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateOuverture') : '' }}" />
+	</div>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionSelStatut" aria-controls="sectionSelStatut">Statut<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionSelStatut">
+		<select name="selStatut" class="form-control">
+			<option value="0">Tous</option>
+			{% set statuts = {'OUVERT':'Ouverts','FERME':'Fermé'} %}
+			{% for key, statut in statuts %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selStatut') == key ? 'selected="selected"' :'' }} value="{{key}}">{{statut}}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionTxtContact" aria-controls="sectionTxtContact">Contact<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionTxtContact">
+		<input class="form-control" type="text" value="{{ currentFilter ? currentFilter.getFiltreValeur('txtContact') : '' }}" />
+	</div>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionSelSection" aria-controls="sectionSelSection">Section<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionSelSection">
+		<select name="selSection" class="form-control">
+			<option value="0">Toutes</option>
+			{% for key, section in sections %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('setSection') == key ? 'selected="selected"' :'' }} value="{{section.id}}">{{section.nom}}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="filter-section section-save-filter">
+		<input class="form-control ignore" type="text" id="filter-name" placeholder="Nommez votre filtre" />
+		<a href="#" onclick="ajaxSaveFilter('#filter-dossier','{{ path('save_filter') }}','{{ path('list_dossiers') }}')">Sauvegarde de votre filtre</a>
+	</div>
+</form>
+{% endblock %}
+
+
+{% block content %}
+	<h1>Liste des dossiers</h1>
+	<div id="list-dossier">
+		{% include 'operateur/dossiers/listing-dossiers.inc.html.twig' %}
+	</div>
+
+{% endblock %}
+
+{% block additionnal_javascripts %}
+	{% if currentFilter %}
+		<script type="text/javascript">
+			$(function(){
+				$('.filter-section:not(.head, .section-save-filter)').collapse('show');
+			});
+		</script>
+	{% endif %}
+	<script type="text/javascript">
+		$(function(){
+			$('.dossier-line td:not(.cb-container)').click(function(){
+				location.href = $(this).parent().data('path');
+			})
+		});
+	</script>
+
+{% endblock %}

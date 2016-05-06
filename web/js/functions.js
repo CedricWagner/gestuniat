@@ -136,6 +136,20 @@ function ajaxShowEditDocumentSection(idDocument){
 	});
 }
 
+function ajaxShowEditOrganisme(idOrganisme){
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: "/organisme/show-edit",
+	  data: { idOrganisme: idOrganisme }
+	})
+	.done(function(response) {
+		ajax_stop();
+		$('body').append(response);
+		$('#edit-organisme-'+idOrganisme).modal('show');
+	});
+}
+
 function ajaxSaveFilter(formFilter,ajaxUrl){
 	
 	var fields = new Array();

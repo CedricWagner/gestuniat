@@ -65,14 +65,43 @@ class OrganismeController extends Controller
         		'action'=>$this->generateUrl('save_organisme')
         	));
 
+        $types = $this->getDoctrine()
+        	->getRepository('AppBundle:TypeOrganisme')
+        	->findAll();
+
         return $this->render('operateur/organismes/organismes.html.twig', [
             'filtresPerso' => $filtresPerso,
             'currentFilter' => $currentFilter,
+            'types' => $types,
             'newOrganismeForm' => $newOrganismeForm->createView(),
             'items' => $organismes,
             'pagination' => array('count'=>count($organismes),'nb'=>$nb,'page'=>$page),
         ]);
 
+    }
+
+    /**
+     * @Route("/organisme/show-edit", name="show_edit_organisme")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function showEditOrganismeAction(Request $request)
+    {
+
+    	$organisme = $this->getDoctrine()
+    		->getRepository('AppBundle:Organisme')
+    		->find($request->request->get('idOrganisme'));
+
+	    $organismeForm = $this->createForm(OrganismeType::class, $organisme,array(
+	    ));
+
+    	return new Response($this->render('modals/default.html.twig',
+    		[
+    			'object' => $organisme,
+    			'entity' => 'organisme',
+    			'title' => 'Editer un organisme',
+    			'form' => $organismeForm->createView(),
+    			'action' => $this->generateUrl('save_organisme').'?idOrganisme='.$organisme->getId(),
+    		])->getContent());
     }
 
 	/**

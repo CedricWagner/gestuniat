@@ -14,7 +14,7 @@ Gestuniat - Dossier {{ dossier.nom }}
 {% endblock %}
 
 {% block content %}
-	<h2>Accueil contact</h2>
+	<h2>Détails du dossier "{{dossier.nom}}"</h2>
 	<ol class="breadcrumb">
 	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">{{ contact.prenom }} {{ contact.nom }}</a></li>
 	  <li><a href="{{ path('list_documents',{'idContact':contact.id }) }}">Explorateur de documents</a></li>

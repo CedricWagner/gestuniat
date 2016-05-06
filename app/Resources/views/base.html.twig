@@ -41,7 +41,11 @@
                                         <li class="item-add"><a href="{{ path('add_section') }}"><span class="glyphicons glyphicons-plus"></span>Ajouter une section</a></li>
                                     </ul>
                                 </li>
-                                <li><a href=""><span class="glyphicons glyphicons-folder-open"></span><span class="menu-label">Dossiers</span></a></li>
+                                <li><span class="glyphicons glyphicons-folder-open"></span><span class="menu-label">Dossiers</span>
+                                    <ul>
+                                        <li><a href="{{ path('list_dossiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des dossiers</a></li>
+                                    </ul>
+                                </li>
                                 <li>
                                     <span class="glyphicons glyphicons-government"></span><span class="menu-label">Organismes</span>
                                     <ul>
@@ -49,7 +53,11 @@
                                         <li class="item-add"><a href="{# path('list_organismes',{'action':'ajout'}) #}"><span class="glyphicons glyphicons-plus"></span>Ajouter un organisme</a></li>
                                     </ul>
                                 </li>
-                                <li><a href=""><span class="glyphicons glyphicons-adjust-alt"></span><span class="menu-label">Filtres perso.</span></a></li>
+                                <li><span class="glyphicons glyphicons-adjust-alt"></span><span class="menu-label">Filtres perso.</span>
+                                    <ul>
+                                        {{ render(controller('AppBundle:Filter:displayMenuItems')) }}
+                                    </ul>
+                                </li>
                                 <li><span class="glyphicons glyphicons-book"></span><span class="menu-label">Rentier</span>
                                     <ul>
                                         <li><a href="{{ path('list_dest_indivs') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois individuels</a></li>

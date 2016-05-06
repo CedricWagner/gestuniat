@@ -80,6 +80,18 @@ class FilterController extends Controller
               ->getRepository('AppBundle:Section')
               ->findByFilter($filtreValeurs,$page,$nb);
         }
+        if($context=='organisme'){
+            //Get contacts by filter values
+            $items = $this->getDoctrine()
+              ->getRepository('AppBundle:Organisme')
+              ->findByFilter($filtreValeurs,$page,$nb);
+        }
+        if($context=='dossier'){
+            //Get contacts by filter values
+            $items = $this->getDoctrine()
+              ->getRepository('AppBundle:Dossier')
+              ->findByFilter($filtreValeurs,$page,$nb);
+        }
 
         return new Response(json_encode(array(
             'idFiltre'=>$filtrePerso->getId(),
@@ -171,6 +183,20 @@ class FilterController extends Controller
         return array('action'=>$action, 'filtrePerso'=>$filtrePerso);
 
     } 
+
+    public function displayMenuItemsAction(){
+
+        $filtresPerso = $this->getDoctrine()
+            ->getRepository('AppBundle:FiltrePerso')
+            ->findBy(array('operateur'=>$this->getUser()));
+
+        $filters = array();
+        foreach ($filtresPerso as $filtre) {
+            $filters[$filtre->getContexte()][] = $filtre;
+        }
+
+        return new Response($this->render('operateur/dashboard/menu-filtres.inc.html.twig',['filters'=>$filters])->getContent());
+    }
 
 
 }

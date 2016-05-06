@@ -1,3 +1,12 @@
+{#
+  params : 
+  object : instance
+  entity : instance name
+  title : modal's title
+  form : form's view
+  action : form's action attribute
+#}
+
 {% if object %}
   {% set verb = 'edit' %}
   {% set id = object.id %}
@@ -13,10 +22,6 @@
 {% if action is not defined  %}
   {% set action = '' %}
 {% endif %}
-
-
-
-
 
 <div class="modal fade" id="{{ verb }}-{{ entity }}-{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ verb }}-{{ entity }}-{{ id }}-label">
   <div class="modal-dialog" role="document">

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * DossierRepository
  *
@@ -10,4 +12,63 @@ namespace AppBundle\Repository;
  */
 class DossierRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function findAllWithPagination($page=1,$nb=20){
+		
+		$qb = $this->createQueryBuilder('dossier');
+		$qb
+			->select('dossier')
+			->join('AppBundle:Contact','contact','WITH','contact = dossier.contact')
+            ->setFirstResult(($nb*$page)-$nb)
+            ->setMaxResults($nb*$page);
+
+        $pag = new Paginator($qb);
+        return $pag;
+	}
+	
+	public function findByFilter($filterValues,$page=1,$nb=20){
+		
+		$params = array();
+		
+		$qb = $this->createQueryBuilder('dossier');
+		$qb
+			->select('dossier')
+			->where('1=1');
+		$qb->join('AppBundle:Contact','contact','WITH',' dossier.contact = contact');
+		foreach ($filterValues as $fv) {
+			if($fv->getValeur()!=''&&$fv->getValeur()!='0'){
+				switch ($fv->getChamp()->getLabel()) {
+					case 'dateOuverture':
+							$qb->andwhere('dossier.dateOuverture > :p_date_ouverture');
+							$params['p_date_ouverture'] = $fv->getValeur();
+						break;
+					case 'selStatut':
+						if($fv->getValeur() == 'OUVERT'){
+							$qb->andwhere('dossier.dateFermeture IS NULL');
+						}elseif($fv->getValeur() == 'FERME'){
+							$qb->andwhere('dossier.dateFermeture IS NOT NULL');
+						}
+						break;
+					case 'txtContact':
+						$qb->andwhere('(contact.nom LIKE ":p_search%" OR contact.prenom LIKE ":p_search%" OR contact.numAdh = :p_search) ');
+						$params['p_search'] = $fv->getValeur();
+						break;
+					case 'selSection':
+						$qb->join('AppBundle:Section', 'section', 'WITH', 'contact.section = section');
+						$qb->andwhere('section = :p_section');
+						$params['p_section'] = $fv->getValeur();
+						break;
+				}
+			}
+		}
+		$qb 
+			->orderBy('dossier.dateOuverture','DESC')
+			->setParameters($params)
+            ->setFirstResult(($nb*$page)-$nb)
+            ->setMaxResults($nb*$page);
+
+        $pag = new Paginator($qb);
+        
+        return $pag;
+	}
 }

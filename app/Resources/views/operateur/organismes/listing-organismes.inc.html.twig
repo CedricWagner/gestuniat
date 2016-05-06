@@ -30,11 +30,11 @@
 	</div>
 </div>
 
-<div class="table-responsive">
+<div class="">
 	<table class="table table-striped table-hover selectable">
 		<thead>
 			<tr>
-				<th><input class="cb-select cb-select-all" type="checkbox" /></th>
+				<th></th>
 				<th>Nom</th>
 				<th>Titulaire</th>
 				<th>Fonction</th>
@@ -43,8 +43,14 @@
 		</thead>
 		<tbody>
 			{% for organisme in items %}
-				<tr class="clickable organisme-line" data-id="{{ organisme.id }}">
-					<td class="cb-container"><input class="cb-select cb-select-line" type="checkbox" /></td>
+				<tr class="organisme-line" data-id="{{ organisme.id }}">
+					<td style="position:relative">
+						<a href="#" class="dropdown-toggle" id="options-organisme-{{ organisme.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+						<ul class="dropdown-menu" aria-labelledby="options-organisme-{{ organisme.id }}">
+							<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditOrganisme({{organisme.id}})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
+							<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_organisme', {'idOrganisme':organisme.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+						</ul>
+					</td>
 					<td>{{ organisme.nom }}</td>
 					<td>{{ organisme.nomTitulaire }}</td>
 					<td>{{ organisme.fonctionTitulaire }}</td>

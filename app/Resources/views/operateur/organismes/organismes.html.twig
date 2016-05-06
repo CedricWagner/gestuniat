@@ -15,9 +15,14 @@
 			{% endfor %}
 		</select>
 	</div>
-	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDateCreation" aria-controls="sectionDateCreation">Date de création<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
-	<div class="filter-section collapse" id="sectionDateCreation">
-		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateCreation') : '' }}" type="date" name="dateCreation" placeholder="jj/mm/aaaa" />
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionType" aria-controls="sectionType">Type d'organisme<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionType">
+		<select name="selType" class="form-control">
+			<option value="0">Tous</option>
+			{% for type in types %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selType') == type.id ? 'selected="selected"' : '' }} value="{{type.id}}">{{type.label}}</option>
+			{% endfor %}
+		</select>
 	</div>
 	<div class="filter-section section-save-filter">
 		<input class="form-control ignore" type="text" id="filter-name" placeholder="Nommez votre filtre" />
@@ -33,7 +38,6 @@
 	<div id="list-organisme">
 		{% include 'operateur/organismes/listing-organismes.inc.html.twig' %}
 	</div>
-
 {% endblock %}
 
 {% block additionnal_javascripts %}
