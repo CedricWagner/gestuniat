@@ -65,7 +65,7 @@ class DossierRepository extends \Doctrine\ORM\EntityRepository
 			->orderBy('dossier.dateOuverture','DESC')
 			->setParameters($params)
             ->setFirstResult(($nb*$page)-$nb)
-            ->setMaxResults($nb*$page);
+            ->setMaxResults($nb);
 
         $pag = new Paginator($qb);
         

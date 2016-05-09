@@ -376,3 +376,25 @@ function removeRentierSection(idContact){
 		$(line).find('.removal-field').remove();	
 	}
 }
+
+function doContactListingAction(value){
+
+	var selection = new Array();	
+	$('#list-contact .cb-select-line:checked').parents('.contact-line').each(function(){
+		selection.push($(this).data('id'));
+	});
+
+	console.log(selection);
+
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: '/contact/listing/action',
+	  data: { action:value, selection:selection }
+	})
+	.done(function(response) {
+		ajax_stop();
+		response = JSON.parse(response);
+		console.log(response);
+	});
+}

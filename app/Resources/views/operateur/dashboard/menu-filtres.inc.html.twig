@@ -1,6 +1,10 @@
 {% for key,filtre in filters %}
-	<li>{{key}}</li>
-	{% for _filtre in filtre[key]  %}
-		<li>{{_filtre.label}}</li>
-	{% endfor %}
+	<li class="item-header">{{key|capitalize}}<span class="glyphicons glyphicons-chevron-right pull-right"></span> 
+	{# {{ dump(filtre) }} #}
+		<ul>
+			{% for _filtre in filtre  %}
+				<li><a href="{{path('display_filter',{'idFiltre':_filtre.id})}}">{{_filtre.label}}</a></li>
+			{% endfor %}
+		</ul>
+	</li>
 {% endfor %}

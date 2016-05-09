@@ -102,7 +102,7 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
 		}
 		$qb ->setParameters($params)
             ->setFirstResult(($nb*$page)-$nb)
-            ->setMaxResults($nb*$page);
+            ->setMaxResults($nb);
 
         $pag = new Paginator($qb);
         

@@ -418,14 +418,35 @@ class ContactController extends Controller
       $contact = $this->getDoctrine()
         ->getRepository('AppBundle:Contact')
         ->find($idContact);
-    
-      $contact = $procuration->getContact();
 
       $em = $this->get('doctrine.orm.entity_manager');
       $em->remove($contact);
       $em->flush();
 
       return $this->redirectToRoute('list_contacts');
+    }
+
+    /**
+     * @Route("/contact/listing/action", name="contact_action_listing")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function contactListingAction(Request $request)
+    {
+
+      $action = $request->request->get('action');
+      switch ($action) {
+        case 'DELETE_ITEMS':
+          $selection = $request->request->get('selection');
+          foreach ($selection as $id) {
+            $this->deleteContactAction($id);
+          }
+          break;        
+        default:
+          
+          break;
+      }
+
+      return new Response('ok');
     }
 
     /**

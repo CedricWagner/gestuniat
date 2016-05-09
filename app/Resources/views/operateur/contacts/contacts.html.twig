@@ -121,6 +121,20 @@
 
 {% block content %}
 	<h1>Liste des contacts</h1>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="actions-container">
+				<span>Effectuer une action sur la sélection &nbsp;&nbsp;&nbsp;</span>
+				<select name="selAction" id="selAction" class="padded">
+					<option value="DELETE_ITEMS">Supprimer les éléments</option>
+					<option value="ETIQUETTES">Imprimer les étiquettes</option>
+					<option value="CARTE_ID">Imprimer les cartes d'identité</option>
+					<option value="EXPORT">Exporter la liste</option>
+				</select>
+				<button class="btn btn-primary" onclick="doContactListingAction($('#selAction').val())">Valider</button>
+			</div>
+		</div>
+	</div>
 	<div id="list-contact">
 		{% include 'operateur/contacts/listing-contacts.inc.html.twig' %}
 	</div>

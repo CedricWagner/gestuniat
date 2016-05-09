@@ -166,7 +166,11 @@ body.internal #main-content header .header-button .nb-alertes{
     border-right: solid 3px #bb3052;
 }
 
-.menu-container ul li:hover ul{
+.menu-container ul li:hover > ul{
+    display: block;
+}
+
+.menu-container ul li ul li:hover ul{
     display: block;
 }
 
@@ -318,6 +322,10 @@ h1{
 
 .badge.red{
     background-color: #ed1c24;
+}
+
+.padded{
+    padding: 5px;
 }
 
 /* FORM */
@@ -554,6 +562,22 @@ form input, form textarea, form select{
 /* LISTING */
 table.table tr.clickable{
     cursor: pointer;
+}
+
+.actions-container{
+    background-color: #5bc0de;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.actions-container span{
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.actions-container select{
+    border-radius: 5px;
 }
 
 /* CONTACT */

@@ -23,15 +23,29 @@ class FilterController extends Controller
     public function saveFilterAction(Request $request)
     {
 
-    	$context = $request->request->get('context');
-    	$fields = $request->request->get('fields');
-    	$name = $request->request->get('name');
+        $context = $request->request->get('context');
+        $fields = $request->request->get('fields');
+        $name = $request->request->get('name');
 
 
         $result = $this->registerFilter($fields,$name,$context);
         $filtrePerso = $result['filtrePerso'];
 
         return new Response(json_encode(array('state'=>'success','action'=>$result['action'],'id'=>$filtrePerso->getId(),'label'=>$filtrePerso->getLabel())));
+    }
+
+    /**
+     * @Route("/filter/voir/{idFiltre}", name="display_filter")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function displayFilterAction($idFiltre)
+    {
+
+        $filtrePerso = $this->getDoctrine()
+            ->getRepository('AppBundle:FiltrePerso')
+            ->find($idFiltre);
+
+        return $this->redirectToRoute('list_'.$filtrePerso->getContexte().'s',array('idFilter'=>$filtrePerso->getId()));
     }
 
     /**
