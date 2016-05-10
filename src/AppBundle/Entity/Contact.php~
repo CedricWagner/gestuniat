@@ -267,6 +267,13 @@ class Contact
     private $dateCIF;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="isActif", type="boolean", nullable=true)
+     */
+    private $isActif;
+
+    /**
      * @ORM\ManyToOne(targetEntity="StatutJuridique")
      * @ORM\JoinColumn(name="statutJuridique_id", referencedColumnName="id")
      */
@@ -1327,5 +1334,29 @@ class Contact
     public function getSection()
     {
         return $this->section;
+    }
+
+    /**
+     * Set nbRentiers
+     *
+     * @param integer $nbRentiers
+     *
+     * @return Contact
+     */
+    public function setNbRentiers($nbRentiers)
+    {
+        $this->nbRentiers = $nbRentiers;
+
+        return $this;
+    }
+
+    /**
+     * Get nbRentiers
+     *
+     * @return integer
+     */
+    public function getNbRentiers()
+    {
+        return $this->nbRentiers;
     }
 }

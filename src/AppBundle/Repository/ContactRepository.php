@@ -20,7 +20,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 		$qb = $this->createQueryBuilder('contact');
 		$qb
 			->select('contact')
-			->where('contact.dateSortie IS NULL')
+			->where('contact.isActif = true')
             ->setFirstResult(($nb*$page)-$nb)
             ->setMaxResults($nb*$page);
 
@@ -35,7 +35,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 		$qb = $this->createQueryBuilder('contact');
 		$qb
 			->select('contact')
-			->where('contact.dateSortie IS NULL');
+			->where('contact.isActif = true');
 		foreach ($filterValues as $fv) {
 			if($fv->getValeur()!=''&&$fv->getValeur()!='0'){
 				switch ($fv->getChamp()->getLabel()) {
@@ -127,7 +127,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 		$qb = $this->createQueryBuilder('contact');
 		$qb
 			->select('contact')
-			->where('contact.dateSortie IS NULL')
+			->where('contact.isActif = true')
 			->andwhere('contact.nom LIKE :nom OR contact.prenom LIKE :prenom OR contact.numAdh = :numAdh')
 			->setParameters(array('nom'=>$txtSearch.'%','prenom'=>$txtSearch.'%','numAdh'=>$txtSearch))
             ->setFirstResult(0)
@@ -154,6 +154,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 			->select('contact')
 			->join('AppBundle:FonctionSection','fs','WITH','contact.fonctionSection = fs')
 			->where('contact.section = :p_section')
+			->where('contact.isActif = true')
 			->setParameters(array('p_section'=>$section))
 			->getQuery()
     		->execute();
@@ -166,6 +167,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 		 ->select('COUNT(contact)')
 		 ->where('contact.section = :section')
 		 ->andwhere('contact.statutJuridique = :statut')
+		 ->andwhere('contact.isActif = true')
 		 ->setParameters(array('section'=>$section,'statut'=>StatutJuridique::getIdStatutAdherent()))
 		 ->getQuery()
 		 ->getSingleScalarResult();

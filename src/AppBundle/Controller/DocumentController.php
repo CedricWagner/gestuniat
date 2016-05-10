@@ -328,4 +328,22 @@ class DocumentController extends Controller
 	    return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));
 	}
 
+
+	/**
+	* @Route("/download/last/{fileName}", name="download_last_pdf")
+	* @Security("has_role('ROLE_USER')")
+	*/
+	public function downloadLastPdfAction($fileName)
+	{
+		$response = new Response();
+		$response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+		$response->headers->set(
+		   'Content-Type',
+		   'application/force-download'
+		);
+		$response->headers->set('Content-disposition', 'filename='.$fileName.'.pdf');
+
+		return $response;	
+	}
+
 }

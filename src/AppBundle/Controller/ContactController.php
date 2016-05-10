@@ -20,6 +20,9 @@ use AppBundle\Form\DonType;
 use AppBundle\Form\VignetteType;
 use AppBundle\Form\DossierType;
 use AppBundle\Form\DocumentType;
+use AppBundle\Utils\FPDF\FPDF;
+use AppBundle\Utils\FPDF\templates\Etiquette as PDF_Etiquette;
+use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
 
 
 class ContactController extends Controller
@@ -322,6 +325,7 @@ class ContactController extends Controller
         $conjoint->setIsDossierPaye(false);
         $conjoint->setIsCA(false);
         $conjoint->setIsoffreDecouverte(false);
+        $conjoint->setIsActif(true);
 
         $today = new \DateTime();
         $conjoint->setDateEntree($today);
@@ -419,8 +423,10 @@ class ContactController extends Controller
         ->getRepository('AppBundle:Contact')
         ->find($idContact);
 
+      $contact->setIsActif(false);
+
       $em = $this->get('doctrine.orm.entity_manager');
-      $em->remove($contact);
+      $em->persist($contact);
       $em->flush();
 
       return $this->redirectToRoute('list_contacts');
@@ -440,13 +446,28 @@ class ContactController extends Controller
           foreach ($selection as $id) {
             $this->deleteContactAction($id);
           }
-          break;        
+          $path = $this->generateUrl('list_contacts');
+          break;
+        case 'ETIQUETTES':
+          $selection = $request->request->get('selection');
+          $pdf = new PDF_Etiquette('L7163');
+          $pdf->AddPage();
+          foreach ($selection as $id) {
+            $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($id);
+            $text = sprintf("%s\n%s\n%s\n%s %s, %s", $contact->getNom().' '.$contact->getPrenom(), $contact->getAdresse(), $contact->getAdresseComp(), $contact->getCP(), $contact->getCommune(), $contact->getPays());
+            $pdf->Add_Label(utf8_decode($text));
+          }
+          $pdf->Output('F','pdf/last-'.$this->getUser()->getId().'.pdf');
+          $path = $this->generateUrl('download_last_pdf',['fileName'=>'export-etiquettes']);
+          break;
         default:
           
           break;
       }
 
-      return new Response('ok');
+      return new Response($path);
     }
 
     /**
@@ -466,6 +487,7 @@ class ContactController extends Controller
       $maxNumAdh++;
 
       $contact->setNumAdh($maxNumAdh);
+      $contact->setIsActif(true);
 
       $contactForm->handleRequest($request);
 
@@ -481,6 +503,31 @@ class ContactController extends Controller
             'isInsert' => true,
             'contactForm' => $contactForm->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/contact/{idContact}/generer/bulletin-adh", name="generate_bulletin_adhesion")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function generateBulletinAdhAction($idContact)
+    {
+
+      $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($idContact);
+
+      $pdf = new PDF_DefaultModel();
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+
     }
 
 }

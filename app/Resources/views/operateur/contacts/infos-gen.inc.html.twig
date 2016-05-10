@@ -35,9 +35,8 @@
 	</p>
 	<p class="underlined"><span class="glyphicons glyphicons-home"></span>&nbsp;&nbsp;{{ contact.adresse }} {{ contact.cp }} {{ contact.commune }}</p>
 	<div class="row">
-		<div class="col-md-6">
-			<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a></p>
-			<p><a class="btn btn-danger" onclick="if(confirm('Valider la suppression du contact (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_contact',{'idContact':contact.id }) }}"> Supprimer </a></p>
+		<div class="col-md-12">
+			<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-danger" onclick="if(confirm('Valider la suppression du contact (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_contact',{'idContact':contact.id }) }}"> Supprimer </a></p>
 		</div>
 	</div>
 </div>

@@ -267,6 +267,13 @@ class Contact
     private $dateCIF;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="isActif", type="boolean")
+     */
+    private $isActif;
+
+    /**
      * @ORM\ManyToOne(targetEntity="StatutJuridique")
      * @ORM\JoinColumn(name="statutJuridique_id", referencedColumnName="id")
      */
@@ -1351,5 +1358,29 @@ class Contact
     public function getNbRentiers()
     {
         return $this->nbRentiers;
+    }
+
+    /**
+     * Set isActif
+     *
+     * @param boolean $isActif
+     *
+     * @return Contact
+     */
+    public function setIsActif($isActif)
+    {
+        $this->isActif = $isActif;
+
+        return $this;
+    }
+
+    /**
+     * Get isActif
+     *
+     * @return boolean
+     */
+    public function getIsActif()
+    {
+        return $this->isActif;
     }
 }

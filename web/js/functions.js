@@ -394,7 +394,6 @@ function doContactListingAction(value){
 	})
 	.done(function(response) {
 		ajax_stop();
-		response = JSON.parse(response);
-		console.log(response);
+		location.href = response;
 	});
 }
