@@ -504,30 +504,4 @@ class ContactController extends Controller
             'contactForm' => $contactForm->createView(),
         ]);
     }
-
-    /**
-     * @Route("/contact/{idContact}/generer/bulletin-adh", name="generate_bulletin_adhesion")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function generateBulletinAdhAction($idContact)
-    {
-
-      $contact = $this->getDoctrine()
-              ->getRepository('AppBundle:Contact')
-              ->find($idContact);
-
-      $pdf = new PDF_DefaultModel();
-
-      $response = new Response();
-      $response->setContent($pdf->Output());
-      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
-      $response->headers->set(
-         'Content-Type',
-         'application/pdf'
-      );
-
-      return $response; 
-
-    }
-
 }
