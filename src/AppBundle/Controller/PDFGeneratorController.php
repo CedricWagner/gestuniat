@@ -118,4 +118,72 @@ class PDFGeneratorController extends Controller
       return $response; 
     }
 
+    /**
+     * @Route("pdf/contact/{idContact}/generer/lettre-section", name="generate_lettre_section")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function generateLettreSectionAction($idContact)
+    {
+
+      $date = New \DateTime();
+
+      $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($idContact);
+
+      $pdf = new PDF_DefaultModel();
+      $pdf->AddPage();
+      $pdf->Title('LETTRE SECTION');
+      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->SetLeftMargin(40);
+      $pdf->AddParagraphe('Cher Membre,');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+    }
+
+    /**
+     * @Route("pdf/contact/{idContact}/generer/lettre-section", name="generate_lettre_accompagnement")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function generateLettreAccompagnementAction($idContact)
+    {
+
+      $date = New \DateTime();
+
+      $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($idContact);
+
+      $pdf = new PDF_DefaultModel();
+      $pdf->AddPage();
+      $pdf->Title('LETTRE D\'ACCOMPAGNEMENT');
+      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->SetLeftMargin(40);
+      $pdf->AddParagraphe('Cher Membre,');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+    }
+
 }

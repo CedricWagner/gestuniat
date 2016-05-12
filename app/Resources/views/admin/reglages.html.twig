@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Réglages{% endblock %}
+
+{% block additionnal_classes %}internal{% endblock %}
+
+{% block content %}
+	<h2>Réglages</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('dashboard') }}">Accueil</a></li>
+	  <li>Réglages</li>
+	</ol>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="kit-container" onclick="location.href='{{ path('list_operateurs') }}'">
+				<div class="kit-label">
+					Gestion des utilisateurs
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-user-structure"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="kit-container" onclick="location.href='{{ path('list_parametres') }}'">
+				<div class="kit-label">
+					Paramètrage
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-settings"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="kit-container" onclick="location.href='{{ path('reglages') }}'">
+				<div class="kit-label">
+					Régimes d'affiliation
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-hospital"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="kit-container" onclick="location.href='{{ path('reglages') }}'">
+				<div class="kit-label">
+					Types d'organisme
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-government"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}

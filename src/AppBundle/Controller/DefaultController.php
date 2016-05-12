@@ -137,6 +137,17 @@ class DefaultController extends Controller
 
     }
 
+
+    /**
+     * @Route("/admin/reglages", name="reglages")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function reglagesAction(Request $request)
+    {
+
+        return $this->render('admin/reglages.html.twig');
+    }
+
     /**
      * @Route("/insert-operateur", name="insert_operateur")
      * @Method("GET")

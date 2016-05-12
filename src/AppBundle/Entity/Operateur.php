@@ -160,6 +160,32 @@ class Operateur implements UserInterface
     }
 
     /**
+     * Get role label
+     *
+     * @return string
+     */
+    public function getRoleLabel()
+    {
+        switch ($this->role) {
+            case 'ADMIN':
+                return 'Administrateur';
+                break;
+            case 'JURIST':
+                return 'Juriste';
+                break;
+            case 'USER':
+                return 'Utilisateur';
+                break;
+            case 'DELETED':
+                return 'Supprimé';
+                break;
+            default:
+                return '/!\ Aucun';
+                break;
+        }
+    }
+
+    /**
      * Set login
      *
      * @param string $login
@@ -214,7 +240,16 @@ class Operateur implements UserInterface
         $roles = ['ROLE_USER'];
 
         if($this->getRole()=="ADMIN"){
-            $roles[] = ['ROLE_ADMIN'];    
+            $roles[] = 'ROLE_JURIST';    
+            $roles[] = 'ROLE_ADMIN';    
+        }
+
+        if($this->getRole()=="JURIST"){
+            $roles[] = 'ROLE_JURIST';    
+        }
+
+        if($this->getRole()=="DELETED"){
+            $roles = [];    
         }
 
         return $roles;

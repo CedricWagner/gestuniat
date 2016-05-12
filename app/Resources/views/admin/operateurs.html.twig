@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Gestion des utilisateurs{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'admin/reglages.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Gestion des utilisateurs</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('dashboard') }}">Accueil</a></li>
+	  <li><a href="{{ path('reglages') }}">Réglages</a></li>
+	  <li class="active">Gestion des utilisateurs</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Nom</th>
+				<th>Prénom</th>
+				<th>Login</th>
+				<th>Rôle</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for operateur in operateurs %}
+				<tr {{ operateur.role == 'DELETED' ? 'class="warning"':'' }}>
+					<td style="position:relative;">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'operateur','object':operateur,'deletePath':path('delete_operateur',{'idOperateur':operateur.id})} %}
+						{% include 'modals/default.html.twig' with {'form':operateurForms[operateur.id],'entity':'operateur','object':operateur,'title':'Edition du operateur'} %}
+					</td>
+					<td>{{ operateur.nom }}</td>
+					<td>{{ operateur.prenom }}</td>
+					<td>{{ operateur.login }}</td>
+					<td>{{ operateur.roleLabel }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-operateur-0">Saisir un nouvel operateur</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newOperateurForm,'entity':'operateur','object':false,'title':'Ajouter un nouvel operateur'} %}
+{% endblock %}

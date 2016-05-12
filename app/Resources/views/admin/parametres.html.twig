@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Paramètres{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'admin/reglages.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Paramètres</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('dashboard') }}">Accueil</a></li>
+	  <li><a href="{{ path('reglages') }}">Réglages</a></li>
+	  <li class="active">Paramètres</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Nom</th>
+				<th>Valeur</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for parametre in parametres %}
+				<tr>
+					<td style="position:relative;">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'parametre','object':parametre,'deletePath':path('delete_parametre',{'idParametre':parametre.id})} %}
+						{% include 'modals/default.html.twig' with {'form':parametreForms[parametre.id],'entity':'parametre','object':parametre,'title':'Edition du parametre'} %}
+					</td>
+					<td>{{ parametre.label }}</td>
+					<td>{{ parametre.value }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

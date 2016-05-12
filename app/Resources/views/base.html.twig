@@ -94,9 +94,11 @@
                                         <a class="header-button button-exit" href="{{ path('logout') }}">
                                             <span class="glyphicons glyphicons-power" aria-hidden="true"></span><span class="button-label">Quitter</span>
                                         </a>
-                                        <a class="header-button button-option" href="{# path('reglages') #}">
-                                            <span class="glyphicons glyphicons-cogwheel" aria-hidden="true"></span><span class="button-label">Réglages</span>
-                                        </a>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <a class="header-button button-option" href="{{ path('reglages') }}">
+                                                <span class="glyphicons glyphicons-cogwheel" aria-hidden="true"></span><span class="button-label">Réglages</span>
+                                            </a>
+                                        {% endif %}
                                         <a class="header-button button-alert" href="#" data-toggle="modal" data-target="#lateAlertes">
                                             <span class="glyphicons glyphicons-warning-sign" aria-hidden="true"></span><span class="badge nb-alertes">{{ app.session.get('nbAlertes') }}</span><span class="button-label">Alertes</span>
                                         </a>

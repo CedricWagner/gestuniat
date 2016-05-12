@@ -38,7 +38,7 @@
 			</div>
 		</div>
 		<div class="col-md-3">
-			<div class="kit-container">
+			<div class="kit-container" onclick="location.href='{{path('generate_lettre_section',{'idContact':contact.id})}}'">
 				<div class="kit-label">
 					Lettre section
 				</div>
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 		<div class="col-md-3">
-			<div class="kit-container">
+			<div class="kit-container" onclick="location.href='{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}'">
 				<div class="kit-label">
 					Lettre d'accompagnement
 				</div>
