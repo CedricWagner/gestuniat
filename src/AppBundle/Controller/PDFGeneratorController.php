@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Contact;
 use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
+use AppBundle\Utils\FPDF\templates\CarteIDFonction as PDF_CarteIDFonction;
 
 
 class PDFGeneratorController extends Controller
@@ -174,6 +175,67 @@ class PDFGeneratorController extends Controller
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+    }
+
+    /**
+     * @Route("pdf/contact/{idContact}/generer/carte-id-fonction", name="generate_carte_id_fonction")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function generateCarteIDFonctionAction($idContact)
+    {
+
+      $date = New \DateTime();
+
+      $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($idContact);
+
+      $fonction = 'Aucune';
+      if($contact->getFonctionSection()){
+        $fonction = $contact->getFonctionSection()->getLabel();
+      }else{
+        if ($contact->getStatutJuridique()) {
+          $fonction = $contact->getStatutJuridique()->getLabel();
+        }
+      }
+
+      $pdf = new PDF_CarteIDFonction();
+      $pdf->AddPage();
+      $pdf->Title('UNIAT - CARTE D\'IDENTITÉ DE FONCTION');
+      
+      //col 1
+      $pdf->SetLeftMargin(15);
+      $svgY = $pdf->GetY();
+      $pdf->AddPrimaryLine('SECTION LOCALE DE : ',$contact->getSection()->getNom());
+      $pdf->AddPrimaryLine('FONCTION : ',$fonction);
+      $pdf->PhotoHolder();
+
+      //col 2
+      $pdf->SetY($svgY+3);
+      $pdf->SetLeftMargin(110);
+      $pdf->AddDefaultLine('Nom : ',$contact->getNom());
+      $pdf->AddDefaultLine('Prénom : ',$contact->getPrenom());
+      $pdf->AddDefaultLine('Né(e) le : ',$contact->getDateNaissance()->format('d/m/Y'));
+      $pdf->AddDefaultLine('Adresse : ',$contact->getAdresse());
+      if($contact->getAdresseComp()&&$contact->getAdresseComp()!=''){
+        $pdf->AddDefaultLine('',$contact->getAdresseComp());
+      }
+      $pdf->AddDefaultLine('',$contact->getCp().' - '.$contact->getCommune());
+      $pdf->AddDefaultLine('Strasbourg, le : ',$date->format('d/m/Y'));
+      $pdf->AddDefaultLine('Pour le Groupement Alsace,','');
+      $pdf->Signature('','Le président : ');
+
+      $pdf->Separator();
 
       $response = new Response();
       $response->setContent($pdf->Output());

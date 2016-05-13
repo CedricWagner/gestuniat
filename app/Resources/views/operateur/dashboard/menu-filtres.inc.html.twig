@@ -3,7 +3,7 @@
 	{# {{ dump(filtre) }} #}
 		<ul>
 			{% for _filtre in filtre  %}
-				<li><a href="{{path('display_filter',{'idFiltre':_filtre.id})}}">{{_filtre.label}}</a></li>
+				<li><a href="{{path('display_filter',{'idFiltre':_filtre.id})}}">{{_filtre.label}}</a><a href="{{path('delete_filter',{'idFiltre':_filtre.id})}}" class="pull-right" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-remove-circle icon-delete"></span></a></li>
 			{% endfor %}
 		</ul>
 	</li>

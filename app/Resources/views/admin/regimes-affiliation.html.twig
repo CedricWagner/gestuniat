@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Régimes d'affiliation{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'admin/reglages.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Régimes d'affiliation</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('dashboard') }}">Accueil</a></li>
+	  <li><a href="{{ path('reglages') }}">Réglages</a></li>
+	  <li class="active">Régimes d'affiliation</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Nom</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for regimeAffiliation in regimeAffiliations %}
+				<tr>
+					<td style="position:relative;">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'regimeAffiliation','object':regimeAffiliation,'deletePath':path('delete_regimeAffiliation',{'idRegimeAffiliation':regimeAffiliation.id})} %}
+						{% include 'modals/default.html.twig' with {'form':regimeAffiliationForms[regimeAffiliation.id],'entity':'regimeAffiliation','object':regimeAffiliation,'title':'Edition du regimeAffiliation'} %}
+					</td>
+					<td>{{ regimeAffiliation.label }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-regimeAffiliation-0">Saisir un nouveau régime d'affiliation</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newRegimeAffiliationForm,'entity':'regimeAffiliation','object':false,'title':'Saisir un nouveau régime d\'affiliation'} %}
+{% endblock %}

@@ -28,12 +28,12 @@
 			</div>
 		</div>
 		<div class="col-md-3">
-			<div class="kit-container" onclick="location.href='{{path('generate_lettre_remerciement',{'idContact':contact.id})}}'">
+			<div class="kit-container" onclick="location.href='{{path('generate_carte_id_fonction',{'idContact':contact.id})}}'">
 				<div class="kit-label">
-					Lettre de remerciement
+					Carte d'identité de fonction
 				</div>
 				<div class="kit-icon">
-					<span class="glyphicons glyphicons-message-full"></span>
+					<span class="glyphicons glyphicons-nameplate"></span>
 				</div>
 			</div>
 		</div>
@@ -51,6 +51,18 @@
 			<div class="kit-container" onclick="location.href='{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}'">
 				<div class="kit-label">
 					Lettre d'accompagnement
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-message-full"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="kit-container" onclick="location.href='{{path('generate_lettre_remerciement',{'idContact':contact.id})}}'">
+				<div class="kit-label">
+					Lettre de remerciement
 				</div>
 				<div class="kit-icon">
 					<span class="glyphicons glyphicons-message-full"></span>

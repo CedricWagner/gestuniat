@@ -39,7 +39,7 @@ class TypeOrganismeController extends Controller
 				'action'=> $this->generateUrl('save_typeOrganisme'),
 			));
 
-	    return $this->render('operateur/contacts/typeOrganismes.html.twig',
+	    return $this->render('admin/types-organisme.html.twig',
 	    	[
 	    		'typeOrganismes' => $typeOrganismes,
 	    		'typeOrganismeForms' => $typeOrganismeForms,

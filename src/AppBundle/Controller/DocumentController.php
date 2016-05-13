@@ -346,4 +346,21 @@ class DocumentController extends Controller
 		return $response;	
 	}
 
+	/**
+	* @Route("/download/last/{type}/{fileName}", name="download_last_export")
+	* @Security("has_role('ROLE_USER')")
+	*/
+	public function downloadLastExportAction($fileName,$type)
+	{
+		$response = new Response();
+		$response->setContent(file_get_contents('exports/last-'.$this->getUser()->getId().'.'.$type));
+		$response->headers->set(
+		   'Content-Type',
+		   'application/force-download'
+		);
+		$response->headers->set('Content-disposition', 'filename='.$fileName.'.'.$type);
+
+		return $response;	
+	}
+
 }

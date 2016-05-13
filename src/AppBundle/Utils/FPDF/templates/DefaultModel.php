@@ -176,6 +176,7 @@ class DefaultModel extends FPDF {
         $this->Ln();
         $this->Rect($this->GetX(),$this->GetY(),55,25);
         $this->Cell(60,10,utf8_decode('  '.$label2));
+        $this->SetY($this->GetY()+40);
     }
 
     function AddCheckBox($checked=false){

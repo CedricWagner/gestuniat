@@ -49,6 +49,26 @@ class FilterController extends Controller
     }
 
     /**
+     * @Route("/filter/supprimer/{idFiltre}", name="delete_filter")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function deleteFilterAction($idFiltre)
+    {
+
+        $filter = $this->getDoctrine()
+            ->getRepository('AppBundle:FiltrePerso')
+            ->find($idFiltre);
+
+        $context = $filter->getContexte();
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->remove($filter);
+        $em->flush();
+
+        return $this->redirectToRoute('list_'.$context.'s');
+    }
+
+    /**
      * @Route("/filter/render", name="render_filter")
      * @Security("has_role('ROLE_USER')")
      */

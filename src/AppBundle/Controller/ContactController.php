@@ -462,6 +462,35 @@ class ContactController extends Controller
           $pdf->Output('F','pdf/last-'.$this->getUser()->getId().'.pdf');
           $path = $this->generateUrl('download_last_pdf',['fileName'=>'export-etiquettes']);
           break;
+        case 'EXPORT':
+          $selection = $request->request->get('selection');
+          $csv = $this->get('app.csvgenerator');
+          $csv->setName('export_liste-contacts');
+          $csv->addLine(array('Nom','Prénom','Num','Statut','Adresse','CP','Commune','Section','Fonction (section)','Fonction (groupement)','Date d\'entrée'));
+
+          foreach ($selection as $id) {
+            $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($id);
+            $fields = array(
+              $contact->getNom(),
+              $contact->getPrenom(),
+              $contact->getNumAdh(),
+              $contact->getStatutJuridique()->getLabel(),
+              $contact->getAdresse(),
+              $contact->getCp(),
+              $contact->getCommune(),
+              $contact->getSection()?$contact->getSection()->getNom():'',
+              $contact->getFonctionSection()?$contact->getFonctionSection()->getLabel():'',
+              $contact->getFonctionGroupement()?$contact->getFonctionGroupement()->getLabel():'',
+              $contact->getDateEntree()?$contact->getDateEntree()->format('d/m/Y'):'',
+            );
+            $csv->addLine($fields);
+          }
+          $csv->generateContent('exports/last-'.$this->getUser()->getId().'.csv');
+          
+          $path = $this->generateUrl('download_last_export',['fileName'=>'export_liste-contacts','type'=>'csv']);
+          break;
         default:
           
           break;

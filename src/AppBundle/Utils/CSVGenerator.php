@@ -42,12 +42,17 @@ class CSVGenerator
         );
     }
 
-    public function generateContent(){
+    public function generateContent($file=false){
 
-    	$handle = fopen('php://memory', 'r+');
-    	foreach ($this->lines as $line) {
-    		fputcsv($handle, $line);
-    	}
+        if(!$file){
+            $handle = fopen('php://memory', 'r+');
+        }else{
+            $handle = fopen($file, 'w+');
+        }
+
+        foreach ($this->lines as $line) {
+            fputcsv($handle, $line);
+        }
 
     	rewind($handle);
         $content = stream_get_contents($handle);
