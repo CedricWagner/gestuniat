@@ -154,7 +154,7 @@ class PDFGeneratorController extends Controller
     }
 
     /**
-     * @Route("pdf/contact/{idContact}/generer/lettre-section", name="generate_lettre_accompagnement")
+     * @Route("pdf/contact/{idContact}/generer/lettre-accompagnement", name="generate_lettre_accompagnement")
      * @Security("has_role('ROLE_USER')")
      */
     public function generateLettreAccompagnementAction($idContact)
@@ -236,6 +236,9 @@ class PDFGeneratorController extends Controller
       $pdf->Signature('','Le président : ');
 
       $pdf->Separator();
+      
+      $pdf->SetLeftMargin(15);
+      $pdf->Bottom();
 
       $response = new Response();
       $response->setContent($pdf->Output());

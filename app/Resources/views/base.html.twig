@@ -67,7 +67,8 @@
                             </ul>
                             <div class="spacer"></div>
                             <ul class="menu">
-                                <li><a href=""><span class="glyphicons glyphicons-life-preserver"></span><span class="menu-label">Support</span></a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#modal-support" ><span class="glyphicons glyphicons-life-preserver"></span><span class="menu-label">Support</span></a>
+                                </li>
                             </ul>
                         </div>
                     {% endblock %}    
@@ -82,7 +83,7 @@
                                     <div class="col-md-6">
                                         <div class="autocomp-container" id="autocomp-search-contact">
                                             <div class="input-group" id="global-search-container">
-                                                <input type="text" class="form-control autocomp-value" id="global-search-zone" placeholder="Rechercher une personne, une section ou numéro" onkeyup='ajaxAutocompSearchContact("#autocomp-search-contact")' onchange='ajaxAutocompSearchContact("#autocomp-search-contact")' />
+                                                <input type="text" class="form-control autocomp-value" id="global-search-zone" placeholder="Rechercher une personne, une section ou numéro" onkeyup='ajaxAutocompSearchContact("#autocomp-search-contact")'  />
                                                 <span class="input-group-addon"><span class="glyphicons glyphicons-search"></span></span>
                                             </div>
                                             <div class="autocomp-result">
@@ -160,5 +161,8 @@
         {% block additionnal_javascripts %}
             
         {% endblock %}
+        {{ render(controller(
+            'AppBundle:Support:displaySupportForm'
+        )) }}
     </body>
 </html>

@@ -154,7 +154,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 			->select('contact')
 			->join('AppBundle:FonctionSection','fs','WITH','contact.fonctionSection = fs')
 			->where('contact.section = :p_section')
-			->where('contact.isActif = true')
+			->andwhere('contact.isActif = true')
 			->setParameters(array('p_section'=>$section))
 			->getQuery()
     		->execute();

@@ -438,7 +438,7 @@ class SectionController extends Controller
     /**
      * @Security("has_role('ROLE_USER')")
      */
-    public function displayFonctionsAdherentsAction($section)
+    public function displayFonctionsAdherentsSectionAction($section)
     {
         $contacts = $this->getDoctrine()
             ->getRepository('AppBundle:Contact')

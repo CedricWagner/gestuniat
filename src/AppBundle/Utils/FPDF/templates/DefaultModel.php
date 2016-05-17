@@ -86,6 +86,8 @@ class DefaultModel extends FPDF {
 
     function Title($title){
         $this->SetFont('Helvetica','B',12);
+        $this->SetFontDefault(51,51,51);
+        $this->SetDrawColor(51,51,51);
         $this->Line(12,$this->GetY(),$this->GetPageWidth()-12,$this->GetY());
         $this->Cell(0,10,utf8_decode($title),0,2,'C');
         $this->Line(12,$this->GetY(),$this->GetPageWidth()-12,$this->GetY());
@@ -181,6 +183,14 @@ class DefaultModel extends FPDF {
 
     function AddCheckBox($checked=false){
         $this->Rect($this->GetX()+1,$this->GetY()+3,3,3);
+    }
+
+    function SetFontUniatBlue(){
+        $this->SetTextColor(56,73,145);
+    }
+
+    function SetFontDefault(){
+        $this->SetTextColor(51,51,51);
     }
 
 

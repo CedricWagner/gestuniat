@@ -5,12 +5,19 @@ function toggleAlertes(classes){
 	}
 }
 
+$ajaxs = 0;
+
 function ajax_start(){
 	$('body').addClass('loading');
+	$ajaxs++;
 }
 
 function ajax_stop(){
-	$('body').removeClass('loading');
+	$ajaxs--;
+	console.log($ajaxs);
+	if($ajaxs == 0){
+		$('body').removeClass('loading');
+	}
 }
 
 function ajaxCheckAlerte(target,idAlerte,action){

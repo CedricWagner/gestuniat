@@ -26,9 +26,9 @@
 	<p class="underlined"><span class="glyphicons glyphicons-newspaper"></span>&nbsp;&nbsp;Bulletin municipal&nbsp;:&nbsp;{{ section.dateRemiseBulletin.format('d/m/Y') }}</p>
 	{% endif %}
 	<div class="row">
-		<div class="col-md-6">
-			<p><a class="btn btn-default" href="{{ path('full_section',{'idSection':section.id }) }}"> Profil complet >> </a></p>
-			<p><a class="btn btn-danger" onclick="if(confirm('Valider la suppression du section (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_section',{'idSection':section.id }) }}"> Supprimer </a></p>
+		<div class="col-md-12">
+			<p><a class="btn btn-default" href="{{ path('full_section',{'idSection':section.id }) }}"> Profil complet >> </a>
+			<a class="btn btn-danger" onclick="if(confirm('Valider la suppression du section (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_section',{'idSection':section.id }) }}"> Supprimer </a></p>
 		</div>
 	</div>
 </div>
@@ -48,10 +48,9 @@
 </div>
 <div class="section">
 	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-fonctions-adherents"><span class="glyphicons glyphicons-more-windows"></span>&nbsp;Fonctions des adhérents</a></p>
-	{{ render(controller(
-        'AppBundle:Section:displayFonctionsAdherents',
-        { 'section': section }
-    )) }}
+		{{ render(controller('AppBundle:Section:displayFonctionsAdherentsSection',  
+			{ 'section': section }
+		)) }}
 	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-destintaires-rentier"><span class="glyphicons glyphicons-more-windows"></span>&nbsp;Destinataires Rentier</a></p>
 	{{ render(controller(
         'AppBundle:Section:displayDestinataireRentiers',
