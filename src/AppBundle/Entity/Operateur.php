@@ -176,6 +176,9 @@ class Operateur implements UserInterface
             case 'USER':
                 return 'Utilisateur';
                 break;
+            case 'SPECTATOR':
+                return 'Spectateur';
+                break;
             case 'DELETED':
                 return 'Supprimé';
                 break;
@@ -237,15 +240,21 @@ class Operateur implements UserInterface
     public function getRoles()
     {
 
-        $roles = ['ROLE_USER'];
+        $roles = ['ROLE_SPECTATOR'];
 
         if($this->getRole()=="ADMIN"){
+            $roles[] = 'ROLE_USER';  
             $roles[] = 'ROLE_JURIST';    
             $roles[] = 'ROLE_ADMIN';    
         }
 
         if($this->getRole()=="JURIST"){
+            $roles[] = 'ROLE_USER';    
             $roles[] = 'ROLE_JURIST';    
+        }
+
+        if($this->getRole()=="USER"){
+            $roles[] = 'ROLE_USER';    
         }
 
         if($this->getRole()=="DELETED"){

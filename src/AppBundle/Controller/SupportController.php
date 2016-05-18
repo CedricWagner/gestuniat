@@ -47,7 +47,7 @@ class SupportController extends Controller
 			$support->setDate(new \DateTime());
 			
 			$message = \Swift_Message::newInstance()
-		        ->setSubject('Test Email')
+		        ->setSubject('GESTUNIAT - Demande de support')
 		        ->setFrom('support@gestuniat.fr')
 		        ->setTo('dev@adn-studio.fr')
 		        ->setBody(
@@ -63,6 +63,8 @@ class SupportController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($support);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Demande envoyée !');
 		}
 
 

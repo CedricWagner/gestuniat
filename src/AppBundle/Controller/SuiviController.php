@@ -59,6 +59,8 @@ class SuiviController extends Controller
       $em = $this->get('doctrine.orm.entity_manager');
       $em->persist($suivi);
       $em->flush();
+
+      $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
     }
 
     return $this->redirect($request->headers->get('referer'));
@@ -98,6 +100,8 @@ class SuiviController extends Controller
       $em = $this->get('doctrine.orm.entity_manager');
       $em->persist($suivi);
       $em->flush();
+
+      $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
     }
 
     return $this->redirect($request->headers->get('referer'));
@@ -118,6 +122,8 @@ class SuiviController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->remove($suivi);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
     }
 
      return $this->redirect($request->headers->get('referer'));

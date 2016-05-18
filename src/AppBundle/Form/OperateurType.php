@@ -30,6 +30,7 @@ class OperateurType extends AbstractType
             ->add('nom',TextType::class,array('label' => 'Nom'))
             ->add('prenom',TextType::class,array('label' => 'Prénom'))
             ->add('role',ChoiceType::class,array('label' => 'Rôle','choices'=>array(
+                    'Spectateur'=>'SPECTATOR',
                     'Utilisateur'=>'USER',
                     'Juriste'=>'JURIST',
                     'Administrateur'=>'ADMIN',

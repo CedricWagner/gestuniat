@@ -21,7 +21,7 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/contact/{idContact}/documents", name="list_documents")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listDocumentsAction($idContact)
 	{
@@ -58,7 +58,7 @@ class DocumentController extends Controller
 
 	/**
      * @Route("/dossier/liste/{idFilter}/{page}/{nb}", name="list_dossiers", defaults={"idFilter" = 0,"page" = 1,"nb" = 0})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function listDossiersAction($idFilter,$page,$nb)
     {
@@ -118,7 +118,7 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/contact/{idContact}/dossier/{idDossier}", name="view_dossier")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function viewDossierAction($idContact,$idDossier)
 	{
@@ -202,6 +202,8 @@ class DocumentController extends Controller
 			$em->persist($document);
 			$em->flush();
 
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+
 		}
 
 		return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));
@@ -238,6 +240,12 @@ class DocumentController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($dossier);
 			$em->flush();
+
+          	$history = $this->get('app.history');
+          	$history->init($this->getUser(),['id'=>$dossier->getId(),'name'=>'Dossier'],$request->query->get('idDossier')?'UPDATE':'INSERT')
+                  	->log(true); 
+
+          	$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));
@@ -246,7 +254,7 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/document/download/{idDocument}", name="download_document")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function downloadDocumentAction($idDocument)
 	{
@@ -268,7 +276,7 @@ class DocumentController extends Controller
 
 	    /**
      * @Route("/document/show-edit", name="show_edit_document")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function showEditDocumentAction(Request $request)
     {
@@ -305,6 +313,8 @@ class DocumentController extends Controller
 		$em->remove($document);
 		$em->flush();
 
+      	$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
+
 	    return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));
 	}
 
@@ -324,6 +334,12 @@ class DocumentController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($dossier);
 		$em->flush();
+
+      	$history = $this->get('app.history');
+      	$history->init($this->getUser(),['id'=>$idDossier,'name'=>'Dossier'],'DELETE')
+              	->log(true);
+
+      	$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));
 	}

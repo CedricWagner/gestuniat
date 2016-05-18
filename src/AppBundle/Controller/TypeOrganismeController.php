@@ -69,6 +69,8 @@ class TypeOrganismeController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($typeOrganisme);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_typeOrganismes');
@@ -89,6 +91,8 @@ class TypeOrganismeController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($typeOrganisme);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_typeOrganismes');
 	}

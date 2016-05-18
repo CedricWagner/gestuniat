@@ -2,3 +2,4 @@ imports:
     - { resource: services/operateur.yml }
     - { resource: services/filter.yml }
     - { resource: services/csvgenerator.yml }
+    - { resource: services/history.yml }

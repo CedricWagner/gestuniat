@@ -140,6 +140,8 @@ class PrevoyanceController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($agrr);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 	    }
 
 	    return $this->redirectToRoute('list_contrats',array('idContact'=>$contact->getId()));
@@ -161,6 +163,8 @@ class PrevoyanceController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($agrr);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_contrats',array('idContact'=>$contact->getId()));
 	}
@@ -231,6 +235,8 @@ class PrevoyanceController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($obseque);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 	    }
 
 	    return $this->redirectToRoute('list_contrats',array('idContact'=>$contact->getId()));
@@ -252,6 +258,8 @@ class PrevoyanceController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($obseque);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_contrats',array('idContact'=>$contact->getId()));
 	}

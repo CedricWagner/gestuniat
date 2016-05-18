@@ -79,6 +79,8 @@ class VignetteController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($vignette);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_vignettes',array('idContact'=>$contact->getId()));
@@ -101,6 +103,8 @@ class VignetteController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($vignette);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_vignettes',array('idContact'=>$contact->getId()));
 	}

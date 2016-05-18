@@ -1,0 +1,4 @@
+services:
+  app.history:
+    class: "AppBundle\\Utils\\HistoryManager"
+    arguments: ['@doctrine.orm.entity_manager']

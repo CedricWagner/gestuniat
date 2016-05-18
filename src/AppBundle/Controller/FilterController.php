@@ -18,7 +18,7 @@ class FilterController extends Controller
 {
     /**
      * @Route("/filter/save", name="save_filter")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function saveFilterAction(Request $request)
     {
@@ -36,7 +36,7 @@ class FilterController extends Controller
 
     /**
      * @Route("/filter/voir/{idFiltre}", name="display_filter")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function displayFilterAction($idFiltre)
     {
@@ -50,7 +50,7 @@ class FilterController extends Controller
 
     /**
      * @Route("/filter/supprimer/{idFiltre}", name="delete_filter")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function deleteFilterAction($idFiltre)
     {
@@ -65,12 +65,14 @@ class FilterController extends Controller
         $em->remove($filter);
         $em->flush();
 
+        $this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
+
         return $this->redirectToRoute('list_'.$context.'s');
     }
 
     /**
      * @Route("/filter/render", name="render_filter")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function renderFilterAction(Request $request){
 

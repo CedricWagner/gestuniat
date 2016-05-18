@@ -138,6 +138,8 @@ class ContactController extends Controller
         $em->persist($suivi);
         $em->flush();
 
+        $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+
         return  $this->redirectToRoute('view_contact', array('idContact' => $contact->getId()));
       }
 
@@ -239,7 +241,7 @@ class ContactController extends Controller
 
     /**
      * @Route("/contact/{idContact}/profil-complet", name="full_contact")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function fullContactAction(Request $request, $idContact)
     {
@@ -251,10 +253,20 @@ class ContactController extends Controller
 
       $contactForm->handleRequest($request);
 
-      if ($contactForm->isSubmitted() && $contactForm->isValid()) {
-        $em = $this->get('doctrine.orm.entity_manager');
-        $em->persist($contact);
-        $em->flush();      
+      if($this->get('security.authorization_checker')->isGranted('ROLE_USER')){
+        if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+          $em = $this->get('doctrine.orm.entity_manager');
+          $em->persist($contact);
+          $em->flush(); 
+
+          $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');    
+
+          $history = $this->get('app.history');
+          $history->init($this->getUser(),['id'=>$idContact,'name'=>'Contact'],'UPDATE')
+                  ->log(true); 
+        }
+      }else{
+        // Security exception
       }
 
       return $this->render('operateur/contacts/full-contact.html.twig', [
@@ -266,7 +278,7 @@ class ContactController extends Controller
 
     /**
      * @Route("/search/contact", name="contact_search")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function ajaxContactSearchAction(Request $request)
     {
@@ -345,6 +357,8 @@ class ContactController extends Controller
         $em->persist($conjoint);
         $em->flush(); 
 
+        $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+
         $contact->setMembreConjoint($conjoint);
 
         $em = $this->get('doctrine.orm.entity_manager');
@@ -363,6 +377,8 @@ class ContactController extends Controller
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($contact);
         $em->flush(); 
+
+        $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($conjoint);
@@ -383,6 +399,8 @@ class ContactController extends Controller
           $em->persist($contact);
           $em->flush(); 
 
+          $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+
           $em = $this->get('doctrine.orm.entity_manager');
           $em->persist($conjoint);
           $em->flush(); 
@@ -398,7 +416,7 @@ class ContactController extends Controller
 
     /**
      * @Route("/contact/{idContact}/kit-adhesion", name="kit_adh_contact")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function kitAdhContactAction($idContact)
     {
@@ -428,6 +446,12 @@ class ContactController extends Controller
       $em = $this->get('doctrine.orm.entity_manager');
       $em->persist($contact);
       $em->flush();
+
+      $this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
+
+      $history = $this->get('app.history');
+      $history->init($this->getUser(),['id'=>$idContact,'name'=>'Contact'],'DELETE')
+              ->log(true); 
 
       return $this->redirectToRoute('list_contacts');
     }
@@ -524,6 +548,13 @@ class ContactController extends Controller
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($contact);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+
+        $history = $this->get('app.history');
+        $history->init($this->getUser(),['id'=>$idContact,'name'=>'Contact'],'INSERT')
+                ->log(true); 
+
         return $this->redirectToRoute('view_contact',array('idContact'=>$contact->getId()));
       }
 

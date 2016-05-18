@@ -17,7 +17,7 @@ class DocumentSectionController extends Controller
 
 	/**
 	* @Route("/section/{idSection}/documents", name="list_documentSections")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listDocumentsAction($idSection)
 	{
@@ -74,6 +74,8 @@ class DocumentSectionController extends Controller
 			$em->persist($document);
 			$em->flush();
 
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+
 		}
 
 		return $this->redirectToRoute('list_documentSections',array('idSection'=>$section->getId()));
@@ -81,7 +83,7 @@ class DocumentSectionController extends Controller
 
 	/**
 	* @Route("/section/document/download/{idDocumentSection}", name="download_documentSection")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function downloadDocumentAction($idDocumentSection)
 	{
@@ -103,7 +105,7 @@ class DocumentSectionController extends Controller
 
 	/**
      * @Route("/section/document/show-edit", name="show_edit_documentSection")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function showEditDocumentAction(Request $request)
     {
@@ -140,27 +142,10 @@ class DocumentSectionController extends Controller
 		$em->remove($document);
 		$em->flush();
 
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
+
 	    return $this->redirectToRoute('list_documentSections',array('idSection'=>$section->getId()));
 	}
 
-	/**
-	* @Route("/dossier/delete/{idDossier}", name="delete_dossier")
-	* @Security("has_role('ROLE_USER')")
-	*/
-	public function deleteDossierAction($idDossier)
-	{
-
-	    $dossier = $this->getDoctrine()
-	      ->getRepository('AppBundle:Dossier')
-	      ->find($idDossier);
-		
-		$section = $dossier->getSection();
-
-		$em = $this->get('doctrine.orm.entity_manager');
-		$em->remove($dossier);
-		$em->flush();
-
-	    return $this->redirectToRoute('list_documents',array('idSection'=>$section->getId()));
-	}
 
 }

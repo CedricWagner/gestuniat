@@ -17,7 +17,7 @@ class DonController extends Controller
 
 	/**
 	* @Route("/contact/{idContact}/dons", name="list_dons")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listDonsAction($idContact)
 	{
@@ -79,6 +79,8 @@ class DonController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($don);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_dons',array('idContact'=>$contact->getId()));
@@ -101,6 +103,8 @@ class DonController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($don);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_dons',array('idContact'=>$contact->getId()));
 	}

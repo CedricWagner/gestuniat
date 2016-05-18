@@ -46,16 +46,17 @@ class DefaultController extends Controller
 
     /**
      * @Route("/logout", name="logout")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function logoutAction()
     {
 
     }
 
+
     /**
      * @Route("/dashboard", name="dashboard")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function dashboardAction(Request $request)
     {
@@ -76,6 +77,8 @@ class DefaultController extends Controller
             $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($alerte);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
             return  $this->redirectToRoute('dashboard');
 
@@ -227,6 +230,8 @@ class DefaultController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($alerte);
                 $em->flush();
+
+                $this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
             }
         }
 
@@ -237,7 +242,7 @@ class DefaultController extends Controller
     /**
      * @Route("/show-edit-alerte", name="show_edit_alerte")
      * @Method("POST")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function showEditAlerteAction(Request $request)
     {
@@ -282,8 +287,9 @@ class DefaultController extends Controller
             $em->persist($alerte);
             $em->flush();
 
-            $this->updateAlertesInSession();
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
+            $this->updateAlertesInSession();
 
         }
         
@@ -328,5 +334,4 @@ class DefaultController extends Controller
         $session->set('lateAlertes', $lateAlertes);
 
     }
-
 }

@@ -23,7 +23,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 					<h3>Suivi contact</h3>
 				</div>
 				<div class="section-main-content">
-					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Rédiger un nouveau commentaire</button>
+					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Ajouter un suivi</button>
 					{% include 'modals/ajouter-suivi-default.html.twig' %}
 					<small class="label-print-all"><a href="#">Imprimer la sélection</a></small>
 				</div>
@@ -33,7 +33,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 					{% endfor %}
 				</div>
 				<div class="section-main-content">
-					<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les commentaires >></button>
+					<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
 					{% include 'modals/liste-suivis.html.twig' %}
 				</div>
 			</div>

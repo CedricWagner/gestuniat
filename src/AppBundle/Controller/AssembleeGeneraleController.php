@@ -17,7 +17,7 @@ class AssembleeGeneraleController extends Controller
 
 	/**
 	* @Route("/section/{idSection}/assemblees-generales", name="list_assembleeGenerales")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listAssembleeGeneralesAction($idSection)
 	{
@@ -80,6 +80,8 @@ class AssembleeGeneraleController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($assembleeGenerale);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_assembleeGenerales',array('idSection'=>$section->getId()));
@@ -102,6 +104,8 @@ class AssembleeGeneraleController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($assembleeGenerale);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_assembleeGenerales',array('idSection'=>$section->getId()));
 	}

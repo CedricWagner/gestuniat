@@ -17,7 +17,7 @@ class OrganismeController extends Controller
 
 	 /**
      * @Route("/organisme/liste/{idFilter}/{page}/{nb}", name="list_organismes", defaults={"idFilter" = 0,"page" = 1,"nb" = 0})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function listOrganismesAction($idFilter,$page,$nb)
     {
@@ -82,7 +82,7 @@ class OrganismeController extends Controller
 
     /**
      * @Route("/organisme/show-edit", name="show_edit_organisme")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function showEditOrganismeAction(Request $request)
     {
@@ -126,6 +126,8 @@ class OrganismeController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($organisme);
 			$em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_organismes');
@@ -148,6 +150,8 @@ class OrganismeController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($organisme);
 		$em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_organismes',array('idContact'=>$contact->getId()));
 	}

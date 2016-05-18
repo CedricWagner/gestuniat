@@ -224,8 +224,14 @@ class SectionController extends Controller
         if ($sectionForm->isSubmitted() && $sectionForm->isValid()) {
             $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($section);
-            $em->flush();      
-          }
+            $em->flush(); 
+
+            $history = $this->get('app.history');
+            $history->init($this->getUser(),['id'=>$idSection,'name'=>'Section'],'UPDATE')
+                    ->log(true);  
+
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');    
+        }
 
         return $this->render('operateur/sections/full-section.html.twig', [
             'section' => $section,
@@ -275,6 +281,12 @@ class SectionController extends Controller
             $em->persist($section);
             $em->flush();
 
+            $history = $this->get('app.history');
+            $history->init($this->getUser(),['id'=>$section->getId(),'name'=>'Section'],'INSERT')
+                ->log(true); 
+
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+
             return $this->redirectToRoute('view_section',array('idSection'=>$section->getId()));  
         }
 
@@ -297,9 +309,19 @@ class SectionController extends Controller
             ->getRepository('AppBundle:Section')
             ->find($idSection);
 
+        $section->setIsActive(false);
+
         $em = $this->get('doctrine.orm.entity_manager');
-        $em->remove($section);
+        $em->persist($section);
         $em->flush();
+
+        $history = $this->get('app.history');
+        $history->init($this->getUser(),['id'=>$idSection,'name'=>'Section'],'DELETE')
+                ->log(true); 
+
+        $this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
+
+        return $this->redirectToRoute('list_sections');
     }
 
     /**
@@ -324,6 +346,8 @@ class SectionController extends Controller
             $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($section);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
         }        
 
@@ -359,6 +383,8 @@ class SectionController extends Controller
             $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($patrimoine);
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
         }
 
         return $this->redirectToRoute('view_section',array('idSection'=>$section->getId()));
@@ -391,8 +417,10 @@ class SectionController extends Controller
                 $em = $this->get('doctrine.orm.entity_manager');
                 $em->persist($contact);
                 $em->flush();
+
                 
             }
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement(s) effectué(s) !');
         }
 
         //add if new
@@ -408,6 +436,8 @@ class SectionController extends Controller
             $em = $this->get('doctrine.orm.entity_manager');
                 $em->persist($contact);
                 $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
         }
 
         //delete
@@ -426,8 +456,10 @@ class SectionController extends Controller
                 $em = $this->get('doctrine.orm.entity_manager');
                 $em->persist($contact);
                 $em->flush();
+
                 
             }
+            $this->get('session')->getFlashBag()->add('success', 'Suppression(s) effectuée(s) !');
         }
 
 

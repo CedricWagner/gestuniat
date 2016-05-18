@@ -78,6 +78,8 @@ class RemiseTimbreController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($remiseTimbre);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_remiseTimbres',array('idSection'=>$section->getId()));
@@ -100,6 +102,8 @@ class RemiseTimbreController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($remiseTimbre);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_remiseTimbres',array('idSection'=>$section->getId()));
 	}

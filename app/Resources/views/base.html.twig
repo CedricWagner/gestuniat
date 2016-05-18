@@ -73,6 +73,9 @@
                         </div>
                     {% endblock %}    
                 </div>
+                {{ render(controller(
+                    'AppBundle:Support:displaySupportForm'
+                )) }}
             {% endblock %}
             {% block main_content_container %}
                 <div id="main-content">
@@ -144,6 +147,14 @@
                         </div>
                         <div class="container-border">
                             <div class="container fullwidth">
+                                {% for label, flashes in app.session.flashbag.all %}
+                                    {% for flash in flashes %}
+                                        <div class="alert alert-{{ label }} alert-dismissible" role="alert">
+                                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                          {{ flash }}
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
                                 {% block content %}
                                     <h1>Page inexistante...</h1>
                                 {% endblock %}
@@ -161,8 +172,6 @@
         {% block additionnal_javascripts %}
             
         {% endblock %}
-        {{ render(controller(
-            'AppBundle:Support:displaySupportForm'
-        )) }}
+
     </body>
 </html>

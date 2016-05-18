@@ -82,6 +82,8 @@ class PermanenceController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($permanence);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_permanences',array('idSection'=>$section->getId()));
@@ -104,6 +106,8 @@ class PermanenceController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($permanence);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_permanences',array('idSection'=>$section->getId()));
 	}

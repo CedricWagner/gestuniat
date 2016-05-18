@@ -78,6 +78,8 @@ class ProcurationController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($procuration);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_procurations',array('idContact'=>$contact->getId()));
@@ -100,6 +102,8 @@ class ProcurationController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($procuration);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_procurations',array('idContact'=>$contact->getId()));
 	}

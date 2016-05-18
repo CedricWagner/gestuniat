@@ -17,7 +17,7 @@ class DiplomeController extends Controller
 
 	/**
 	* @Route("/contact/{idContact}/diplomes", name="list_diplomes")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listDiplomesAction($idContact)
 	{
@@ -78,6 +78,8 @@ class DiplomeController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($contactDiplome);
 			$em->flush();
+
+			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 
 		return $this->redirectToRoute('list_diplomes',array('idContact'=>$contact->getId()));
@@ -100,6 +102,8 @@ class DiplomeController extends Controller
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($cd);
 		$em->flush();
+
+		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
 
 	    return $this->redirectToRoute('list_diplomes',array('idContact'=>$contact->getId()));
 	}
