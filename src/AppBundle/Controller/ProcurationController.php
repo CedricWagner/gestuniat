@@ -81,6 +81,9 @@ class ProcurationController extends Controller
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
+		if ($procurationForm->isSubmitted() && !$procurationForm->isValid()) {
+			$this->get('app.tools')->handleFormErrors($procurationForm);
+		}
 
 		return $this->redirectToRoute('list_procurations',array('idContact'=>$contact->getId()));
 	}

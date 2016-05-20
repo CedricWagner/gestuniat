@@ -82,7 +82,7 @@ class PouvoirController extends Controller
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 		if ($pouvoirForm->isSubmitted() && !$pouvoirForm->isValid()) {
-			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+			$this->get('app.tools')->handleFormErrors($pouvoirForm);
 		}
 
 		return $this->redirectToRoute('list_pouvoirs',array('idContact'=>$contact->getId()));

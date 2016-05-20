@@ -89,7 +89,7 @@ class OperateurController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
         }
         if ($operateurForm->isSubmitted() && !$operateurForm->isValid()) {
-            $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+            $this->get('app.tools')->handleFormErrors($operateurForm);
         }
 
         return $this->redirectToRoute('list_operateurs');

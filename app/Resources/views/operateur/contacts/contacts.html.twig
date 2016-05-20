@@ -152,7 +152,8 @@
 		$(function(){
 			$('.contact-line td:not(.cb-container)').click(function(){
 				location.href = '/contact/'+$(this).parents('.contact-line').data('id');
-			})
+			});
+			$("[data-toggle='tooltip']").tooltip();
 		});
 	</script>
 

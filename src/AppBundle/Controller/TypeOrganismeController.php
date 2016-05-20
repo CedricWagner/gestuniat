@@ -73,7 +73,7 @@ class TypeOrganismeController extends Controller
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 		if ($typeOrganismeForm->isSubmitted() && !$typeOrganismeForm->isValid()) {
-			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+			$this->get('app.tools')->handleFormErrors($typeOrganismeForm);
 		}
 
 		return $this->redirectToRoute('list_typeOrganismes');

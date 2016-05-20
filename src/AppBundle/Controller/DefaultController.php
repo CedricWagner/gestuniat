@@ -293,7 +293,7 @@ class DefaultController extends Controller
 
         }
         if ($alerteForm->isSubmitted() && !$alerteForm->isValid()) {
-            $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+            $this->get('app.tools')->handleFormErrors($alerteForm);
         }
         
         return  $this->redirectToRoute('dashboard');

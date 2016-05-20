@@ -206,7 +206,7 @@ class DocumentController extends Controller
 
 		}
 		if ($documentForm->isSubmitted() && !$documentForm->isValid()) {
-			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+			$this->get('app.tools')->handleFormErrors($documentForm);
 		}
 
 		return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));

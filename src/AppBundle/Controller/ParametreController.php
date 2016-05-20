@@ -72,6 +72,9 @@ class ParametreController extends Controller
 
             $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
         }
+        if ($parametreForm->isSubmitted() && !$parametreForm->isValid()) {
+            $this->get('app.tools')->handleFormErrors($parametreForm);
+        }
 
         return $this->redirectToRoute('list_parametres');
     }

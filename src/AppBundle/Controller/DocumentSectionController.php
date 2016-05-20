@@ -78,7 +78,7 @@ class DocumentSectionController extends Controller
 
 		}
 		if ($documentSectionForm->isSubmitted() && !$documentSectionForm->isValid()) {
-			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+			$this->get('app.tools')->handleFormErrors($documentSectionForm);
 		}
 
 		return $this->redirectToRoute('list_documentSections',array('idSection'=>$section->getId()));

@@ -52,7 +52,11 @@
 					<td>{{ contact.prenom }}</td>
 					<td>{{ contact.nom }}</td>
 					<td>{{ contact.numAdh }}</td>
-					<td><span class="label label-default statut-{{ contact.statutJuridique.id }}">{{ contact.statutJuridique.label }}</span></td>
+					<td><span class="label label-default statut-{{ contact.statutJuridique.id }}">{{ contact.statutJuridique.label }}</span>
+						{% if contact.membreConjoint and contact.statutJuridique.label == 'Non-membre' %}
+							<a href="{{ path('view_contact',{idContact:contact.membreConjoint.id}) }}" data-toggle="tooltip" data-placement="top" title="{{ contact.membreConjoint.nom }} {{ contact.membreConjoint.prenom }}"><span class="glyphicons glyphicons-marriage"></span></a>
+						{% endif %}
+					</td>
 					<td>{{ contact.adresse }}</td>
 					<td>{{ contact.commune }}</td>
 					<td>{{ contact.section ? contact.section.nom : 'Aucune' }}</td>
@@ -68,7 +72,8 @@
 	$(function(){
 		$('.contact-line td:not(.cb-container)').click(function(){
 			location.href = '/contact/'+$(this).parents('.contact-line').data('id');
-		})
+		});
+		$("[data-toggle='tooltip']").tooltip();
 	});
 
 

@@ -113,7 +113,7 @@ class SectionController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
         }
         if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
-          $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+          $this->get('app.tools')->handleFormErrors($suiviForm);
         }
 
 		$lstSuivis = $this->getDoctrine()
@@ -236,7 +236,7 @@ class SectionController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');    
         }
         if ($sectionForm->isSubmitted() && !$sectionForm->isValid()) {
-          $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+          $this->get('app.tools')->handleFormErrors($sectionForm);
         }
 
         return $this->render('operateur/sections/full-section.html.twig', [
@@ -296,7 +296,7 @@ class SectionController extends Controller
             return $this->redirectToRoute('view_section',array('idSection'=>$section->getId()));  
         }
         if ($sectionForm->isSubmitted() && !$sectionForm->isValid()) {
-          $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+          $this->get('app.tools')->handleFormErrors($sectionForm);
         }
 
         return $this->render('operateur/sections/full-section.html.twig', [
@@ -394,6 +394,9 @@ class SectionController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+        }
+        if ($patrimoineForm->isSubmitted() && !$patrimoineForm->isValid()) {
+          $this->get('app.tools')->handleFormErrors($patrimoineForm);
         }
 
         return $this->redirectToRoute('view_section',array('idSection'=>$section->getId()));

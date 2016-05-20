@@ -143,7 +143,7 @@ class ContactController extends Controller
         return  $this->redirectToRoute('view_contact', array('idContact' => $contact->getId()));
       }
       if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
-        $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire : ');
+        $this->get('app.tools')->handleFormErrors($suiviForm);
       }
 
       $lstSuivisContact = $this->getDoctrine()
@@ -273,7 +273,7 @@ class ContactController extends Controller
           $this->get('app.tools')->handleFormErrors($contactForm);
         }
       }else{
-        // Security exception
+        $this->get('session')->getFlashBag()->add('danger', 'Vous ne possédez pas les droits nécessaires pour cette action');    
       }
 
       return $this->render('operateur/contacts/full-contact.html.twig', [
@@ -565,7 +565,7 @@ class ContactController extends Controller
         return $this->redirectToRoute('view_contact',array('idContact'=>$contact->getId()));
       }
       if ($contactForm->isSubmitted() && !$contactForm->isValid()) {
-        $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+        $this->get('app.tools')->handleFormErrors($contactForm);
       }
 
       return $this->render('operateur/contacts/full-contact.html.twig', [

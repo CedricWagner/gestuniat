@@ -148,7 +148,7 @@ class PrevoyanceController extends Controller
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 	    }
 		if ($agrrForm->isSubmitted() && !$agrrForm->isValid()) {
-			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+			$this->get('app.tools')->handleFormErrors($agrrForm);
 		}
 
 	    return $this->redirectToRoute('list_contrats',array('idContact'=>$contact->getId()));
@@ -245,6 +245,9 @@ class PrevoyanceController extends Controller
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 	    }
+		if ($obsequeForm->isSubmitted() && !$obsequeForm->isValid()) {
+			$this->get('app.tools')->handleFormErrors($obsequeForm);
+		}
 
 	    return $this->redirectToRoute('list_contrats',array('idContact'=>$contact->getId()));
   	}

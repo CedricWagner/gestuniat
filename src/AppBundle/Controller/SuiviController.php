@@ -63,7 +63,7 @@ class SuiviController extends Controller
       $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
     }
     if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
-      $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+      $this->get('app.tools')->handleFormErrors($suiviForm);
     }
 
     return $this->redirect($request->headers->get('referer'));
@@ -97,7 +97,6 @@ class SuiviController extends Controller
 
     if ($suiviForm->isSubmitted() && $suiviForm->isValid()) {
 
-
       $suivi->setDateEdition($datetime);
 
       $em = $this->get('doctrine.orm.entity_manager');
@@ -107,7 +106,7 @@ class SuiviController extends Controller
       $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
     }
     if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
-      $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+      $this->get('app.tools')->handleFormErrors($suiviForm);
     }
 
     return $this->redirect($request->headers->get('referer'));
