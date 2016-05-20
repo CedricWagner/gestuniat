@@ -1,0 +1,5 @@
+services:
+  app.tools:
+    class: "AppBundle\\Utils\\Tools"
+    calls:
+        - [setContainer, ["@service_container"]]

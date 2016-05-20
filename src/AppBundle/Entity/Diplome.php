@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Diplome
@@ -24,6 +25,7 @@ class Diplome
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="label", type="string", length=30, unique=true)
      */
     private $label;

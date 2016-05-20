@@ -81,6 +81,9 @@ class RemiseTimbreController extends Controller
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
+		if ($remiseTimbreForm->isSubmitted() && !$remiseTimbreForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 		return $this->redirectToRoute('list_remiseTimbres',array('idSection'=>$section->getId()));
 	}

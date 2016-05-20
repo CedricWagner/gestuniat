@@ -85,6 +85,9 @@ class PermanenceController extends Controller
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
+		if ($permanenceForm->isSubmitted() && !$permanenceForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 		return $this->redirectToRoute('list_permanences',array('idSection'=>$section->getId()));
 	}

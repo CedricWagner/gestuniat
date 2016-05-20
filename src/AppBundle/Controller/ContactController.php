@@ -142,6 +142,9 @@ class ContactController extends Controller
 
         return  $this->redirectToRoute('view_contact', array('idContact' => $contact->getId()));
       }
+      if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
+        $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire : ');
+      }
 
       $lstSuivisContact = $this->getDoctrine()
         ->getRepository('AppBundle:Suivi')
@@ -250,6 +253,7 @@ class ContactController extends Controller
               ->find($idContact);
 
       $contactForm = $this->createForm(ContactFullEditionType::class, $contact);
+          
 
       $contactForm->handleRequest($request);
 
@@ -264,6 +268,9 @@ class ContactController extends Controller
           $history = $this->get('app.history');
           $history->init($this->getUser(),['id'=>$idContact,'name'=>'Contact'],'UPDATE')
                   ->log(true); 
+        }
+        if ($contactForm->isSubmitted() && !$contactForm->isValid()) {
+          $this->get('app.tools')->handleFormErrors($contactForm);
         }
       }else{
         // Security exception
@@ -556,6 +563,9 @@ class ContactController extends Controller
                 ->log(true); 
 
         return $this->redirectToRoute('view_contact',array('idContact'=>$contact->getId()));
+      }
+      if ($contactForm->isSubmitted() && !$contactForm->isValid()) {
+        $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
       }
 
       return $this->render('operateur/contacts/full-contact.html.twig', [

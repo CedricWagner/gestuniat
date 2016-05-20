@@ -82,6 +82,9 @@ class VignetteController extends Controller
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
+		if ($vignetteForm->isSubmitted() && !$vignetteForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 		return $this->redirectToRoute('list_vignettes',array('idContact'=>$contact->getId()));
 	}

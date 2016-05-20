@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Support
@@ -24,6 +25,7 @@ class Support
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="objet", type="string", length=255)
      */
     private $objet;
@@ -38,6 +40,7 @@ class Support
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="description", type="text")
      */
     private $description;

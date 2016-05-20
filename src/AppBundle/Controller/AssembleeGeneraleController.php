@@ -83,6 +83,9 @@ class AssembleeGeneraleController extends Controller
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
+		if ($assembleeGeneraleForm->isSubmitted() && !$assembleeGeneraleForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 		return $this->redirectToRoute('list_assembleeGenerales',array('idSection'=>$section->getId()));
 	}

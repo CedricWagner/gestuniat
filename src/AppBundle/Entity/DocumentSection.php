@@ -26,6 +26,7 @@ class DocumentSection
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="label", type="string", length=200)
      */
     private $label;

@@ -62,6 +62,9 @@ class SuiviController extends Controller
 
       $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
     }
+    if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
+      $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+    }
 
     return $this->redirect($request->headers->get('referer'));
   }
@@ -102,6 +105,9 @@ class SuiviController extends Controller
       $em->flush();
 
       $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+    }
+    if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
+      $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
     }
 
     return $this->redirect($request->headers->get('referer'));

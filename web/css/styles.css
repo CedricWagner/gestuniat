@@ -360,12 +360,29 @@ form input, form textarea, form select{
     width: 100%;
 }
 
-.full-contact-form .form-group{
+.inline-form .form-group{
     width: 33%;
     min-height: 90px;
     padding-top: 15px;
     float: left;
+    position: relative;
 }
+
+.inline-form .form-group > div > ul{
+    position: absolute;
+    bottom: -20px;
+    left: -40px;
+    color: #c9302c;
+    list-style-type: none; 
+}
+
+.modal-form > div > ul{
+    clear:both;
+    color: #c9302c;
+    list-style-type: none; 
+    padding-left: 0px;
+}
+
 
 .autocomp-value{
     float: none;

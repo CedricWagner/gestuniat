@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Patrimoine
@@ -24,6 +25,7 @@ class Patrimoine
     /**
      * @var int
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="annee", type="integer")
      */
     private $annee;
@@ -31,6 +33,7 @@ class Patrimoine
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="valeur", type="decimal", precision=10, scale=2)
      */
     private $valeur;
@@ -38,6 +41,7 @@ class Patrimoine
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="interets", type="decimal", precision=10, scale=2)
      */
     private $interets;

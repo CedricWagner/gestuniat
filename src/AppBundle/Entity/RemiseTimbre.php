@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,6 +25,7 @@ class RemiseTimbre
     /**
      * @var \DateTime
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="dateRemise", type="date")
      */
     private $dateRemise;
@@ -31,6 +33,7 @@ class RemiseTimbre
     /**
      * @var int
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="nbEmis", type="integer")
      */
     private $nbEmis;
@@ -38,6 +41,7 @@ class RemiseTimbre
     /**
      * @var int
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="nbRemis", type="integer")
      */
     private $nbRemis;
@@ -45,6 +49,7 @@ class RemiseTimbre
     /**
      * @var int
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="nbPayes", type="integer")
      */
     private $nbPayes;
@@ -59,6 +64,7 @@ class RemiseTimbre
     /**
      * @var int
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="annee", type="integer")
      */
     private $annee;

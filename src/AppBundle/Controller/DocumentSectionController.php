@@ -77,6 +77,9 @@ class DocumentSectionController extends Controller
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
 		}
+		if ($documentSectionForm->isSubmitted() && !$documentSectionForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 		return $this->redirectToRoute('list_documentSections',array('idSection'=>$section->getId()));
 	}

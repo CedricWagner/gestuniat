@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Dossier
@@ -24,6 +25,7 @@ class Dossier
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
@@ -31,6 +33,7 @@ class Dossier
     /**
      * @var \DateTime
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="dateOuverture", type="date")
      */
     private $dateOuverture;

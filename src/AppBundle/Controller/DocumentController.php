@@ -205,6 +205,9 @@ class DocumentController extends Controller
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
 		}
+		if ($documentForm->isSubmitted() && !$documentForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 		return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));
 	}
@@ -246,6 +249,9 @@ class DocumentController extends Controller
                   	->log(true); 
 
           	$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+		}
+		if ($dossierForm->isSubmitted() && !$dossierForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
 		}
 
 		return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));

@@ -66,6 +66,9 @@ class SupportController extends Controller
 
 			$this->get('session')->getFlashBag()->add('success', 'Demande envoyée !');
 		}
+		if ($supportForm->isSubmitted() && !$supportForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 
 		return $this->redirect($request->headers->get('referer'));

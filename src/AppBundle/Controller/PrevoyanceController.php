@@ -127,22 +127,29 @@ class PrevoyanceController extends Controller
 	    if ($agrrForm->isSubmitted() && $agrrForm->isValid()) {
 
 	    	if ($agrr->getCible()=='CONJOINT') {
+	    		$error = false;
 	    		if ($agrr->getContact()->getMembreConjoint()) {
 	    			$mConjoint = $agrr->getContact()->getMembreConjoint();
 	    			$agrr->setContact($mConjoint);
 	    			$agrr->setCible('CONTACT');
 	    		}else{
-	    			// throw exception
+					$error = true;
 	    		}
 	    	}
 
-
-			$em = $this->get('doctrine.orm.entity_manager');
-			$em->persist($agrr);
-			$em->flush();
+	    	if(!$error){
+				$this->get('session')->getFlashBag()->add('danger', 'Impossible de lier le contrat au conjoint : aucun conjoint n\'a été défini');
+	    	}else{	
+				$em = $this->get('doctrine.orm.entity_manager');
+				$em->persist($agrr);
+				$em->flush();
+	    	}
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 	    }
+		if ($agrrForm->isSubmitted() && !$agrrForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 	    return $this->redirectToRoute('list_contrats',array('idContact'=>$contact->getId()));
 	}

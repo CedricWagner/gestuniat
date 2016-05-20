@@ -110,8 +110,11 @@ class SectionController extends Controller
 			$em->persist($suivi);
 			$em->flush();
 
-			return  $this->redirectToRoute('view_section', array('idSection' => $section->getId()));
-		}
+            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+        }
+        if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
+          $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+        }
 
 		$lstSuivis = $this->getDoctrine()
 			->getRepository('AppBundle:Suivi')
@@ -232,6 +235,9 @@ class SectionController extends Controller
 
             $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');    
         }
+        if ($sectionForm->isSubmitted() && !$sectionForm->isValid()) {
+          $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+        }
 
         return $this->render('operateur/sections/full-section.html.twig', [
             'section' => $section,
@@ -288,6 +294,9 @@ class SectionController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
             return $this->redirectToRoute('view_section',array('idSection'=>$section->getId()));  
+        }
+        if ($sectionForm->isSubmitted() && !$sectionForm->isValid()) {
+          $this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
         }
 
         return $this->render('operateur/sections/full-section.html.twig', [

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ContratPrevoyance
@@ -38,6 +39,7 @@ class ContratPrevoyance
     /**
      * @var int
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="numContrat", type="integer")
      */
     private $numContrat;

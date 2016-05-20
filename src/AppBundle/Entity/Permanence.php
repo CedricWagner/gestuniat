@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Permanence
@@ -31,6 +32,7 @@ class Permanence
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="label", type="string", length=255)
      */
     private $label;
@@ -45,6 +47,7 @@ class Permanence
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="lieu", type="string", length=255)
      */
     private $lieu;

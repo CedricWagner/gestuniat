@@ -82,6 +82,9 @@ class DonController extends Controller
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
+		if ($donForm->isSubmitted() && !$donForm->isValid()) {
+			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+		}
 
 		return $this->redirectToRoute('list_dons',array('idContact'=>$contact->getId()));
 	}
