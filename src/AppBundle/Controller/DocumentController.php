@@ -11,7 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\DocumentType;
 use AppBundle\Entity\Document;
 use AppBundle\Form\DossierType;
+use AppBundle\Form\DossierFullType;
 use AppBundle\Entity\Dossier;
+use AppBundle\Form\VignetteType;
+use AppBundle\Entity\Vignette;
 use AppBundle\Entity\Suivi;
 use AppBundle\Form\SuiviDefaultType;
 
@@ -134,6 +137,10 @@ class DocumentController extends Controller
 	  					->getRepository('AppBundle:Document')
 	  					->findBy(array('contact'=>$contact,'dossier'=>$dossier));
 
+	  	$vignettes = $this->getDoctrine()
+	  					->getRepository('AppBundle:Vignette')
+	  					->findBy(array('dossier'=>$dossier,));
+
 	  	$suivis = $this->getDoctrine()
 	  					->getRepository('AppBundle:Suivi')
 	  					->findBy(array('dossier'=>$dossier,'isOk'=>false));
@@ -152,6 +159,26 @@ class DocumentController extends Controller
 				'action'=> $this->generateUrl('save_dossier').'?idContact='.$contact->getId(),
 			));
 
+	  	$dossierForm = $this->createForm(DossierFullType::class, $dossier ,array(
+				'action'=> $this->generateUrl('save_dossier_full').'?idContact='.$contact->getId().'&idDossier='.$dossier->getId(),
+			));
+
+	  	$newVignette = new Vignette();
+	  	$newVignette->setContact($contact);
+	  	$newVignette->setDossier($dossier);
+	  	$newVignetteForm = $this->createForm(VignetteType::class, $newVignette ,array(
+				'action'=> $this->generateUrl('save_vignette').'?idContact='.$contact->getId().'&idDossier='.$dossier->getId(),
+			));
+
+	  	$vignetteForms = array();
+
+	  	foreach ($vignettes as $vignette) {
+	  		$vignetteForm = $this->createForm(VignetteType::class, $vignette,array(
+	  				'action'=> $this->generateUrl('save_vignette').'?idContact='.$contact->getId().'&idVignette='.$vignette->getId(),
+	  			));
+	  		$vignetteForms[$vignette->getId()] = $vignetteForm->createView();
+	  	}
+
 		$lstAllSuivis = $this->getDoctrine()
 		    ->getRepository('AppBundle:Suivi')
 		    ->findBy(array('dossier'=>$dossier),array('dateCreation'=>'DESC'));
@@ -161,12 +188,16 @@ class DocumentController extends Controller
 	    		'contact' => $contact,
 	    		'documents' => $documents,
 	    		'dossiers' => $dossiers,
+	    		'vignettes' => $vignettes,
 	    		'dossier' => $dossier,
 	    		'lstSuivis' => $suivis,
 	    		'lstAllSuivis' => $lstAllSuivis,
 	    		'suiviForm' => $suiviForm->createView(),
+	    		'dossierForm' => $dossierForm->createView(),
 	    		'newDocumentForm' => $newDocumentForm->createView(),
 	    		'newDossierForm' => $newDossierForm->createView(),
+	    		'newVignetteForm' => $newVignetteForm->createView(),
+	    		'vignetteForms' => $vignetteForms,
 	    	]);
 	}
 
@@ -185,6 +216,7 @@ class DocumentController extends Controller
 			$document = $this->getDoctrine()
 				->getRepository('AppBundle:Document')
 				->find($request->query->get('idDocument'));
+			$document->setOperateur($this->getUser());
 		}else{
 			$document = new Document();
 			$document->setOperateur($this->getUser());
@@ -229,6 +261,7 @@ class DocumentController extends Controller
 			$dossier = $this->getDoctrine()
 				->getRepository('AppBundle:Dossier')
 				->find($request->query->get('idDossier'));
+			$dossier->setOperateur($this->getUser());
 		}else{
 			$dossier = new Dossier();
 			$dossier->setDateCreation($datetime);
@@ -251,10 +284,76 @@ class DocumentController extends Controller
           	$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}
 		if ($dossierForm->isSubmitted() && !$dossierForm->isValid()) {
-			$this->get('session')->getFlashBag()->add('danger', 'Erreur lors de la validation du formulaire');
+			$this->get('app.tools')->handleFormErrors($dossierForm);
 		}
 
-		return $this->redirectToRoute('list_documents',array('idContact'=>$contact->getId()));
+	    return $this->redirect($request->headers->get('referer'));
+	}
+
+	/**
+	* @Route("/dossier/save/full", name="save_dossier_full")
+	* @Security("has_role('ROLE_USER')")
+	*/
+	public function saveDossierFullAction(Request $request)
+	{
+
+		$datetime = new \DateTime();
+
+		$contact = $this->getDoctrine()
+				->getRepository('AppBundle:Contact')
+				->find($request->query->get('idContact'));
+
+		if($request->query->get('idDossier')){
+			$dossier = $this->getDoctrine()
+				->getRepository('AppBundle:Dossier')
+				->find($request->query->get('idDossier'));
+			$dossier->setOperateur($this->getUser());
+			$lastDateFermeture = $dossier->getDateFermeture();
+		}else{
+			$dossier = new Dossier();
+			$dossier->setDateCreation($datetime);
+			$dossier->setOperateur($this->getUser());
+			$dossier->setContact($contact);
+		}
+
+		$dossierForm = $this->createForm(DossierFullType::class, $dossier);
+		$dossierForm->handleRequest($request);
+
+		if ($dossierForm->isSubmitted() && $dossierForm->isValid()) {
+			$em = $this->get('doctrine.orm.entity_manager');
+			$em->persist($dossier);
+			$em->flush();
+
+			dump($lastDateFermeture);
+			dump($dossier->getDateFermeture());
+
+
+          	$history = $this->get('app.history');
+          	$history->init($this->getUser(),['id'=>$dossier->getId(),'name'=>'Dossier'],$request->query->get('idDossier')?'UPDATE':'INSERT')
+                  	->log(true); 
+
+			//just closed
+			if($lastDateFermeture == null && $dossier->getDateFermeture() != null){
+				$suivi = new Suivi();
+				$suivi
+					->setOperateur($this->getUser())
+					->setDateCreation($datetime)
+					->setTexte('Cloture du dossier')
+					->setIsOk(true)
+					->setContact($contact)
+					->setDossier($dossier)
+					;
+				$em->persist($suivi);
+				$em->flush();
+			}
+
+          	$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+		}
+		if ($dossierForm->isSubmitted() && !$dossierForm->isValid()) {
+			$this->get('app.tools')->handleFormErrors($dossierForm);
+		}
+
+	    return $this->redirect($request->headers->get('referer'));
 	}
 
 

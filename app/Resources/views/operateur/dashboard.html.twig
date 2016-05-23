@@ -12,7 +12,8 @@ Gestuniat - Votre Dashboard
 	{% include 'modals/ajouter-alerte.html.twig' %}
 	<button class="btn btn-default borderless" data-toggle="modal" data-target="#historique" type="submit">Historique</button>
 	{% include 'modals/historique.html.twig' %}
-	<button class="btn btn-default borderless" type="submit">Liste des termes</button>
+	<button class="btn btn-default borderless" data-toggle="modal" data-target="#terms">Liste des termes</button>
+	{% include 'modals/termes.html.twig' %}
 	<select onchange="eval(this.value)" class="select-default">
 		<option value="toggleAlertes(['.alerte','.terme','.suivi'])">Termes et alertes</option>
 		<option value="toggleAlertes(['.suivi'])">Termes uniquement</option>

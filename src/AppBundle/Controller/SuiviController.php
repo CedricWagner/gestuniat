@@ -114,7 +114,7 @@ class SuiviController extends Controller
 
   /**
    * @Route("/suivi/delete/{idSuivi}", name="delete_suivi")
-   * @Security("has_role('ROLE_USER')")
+   * @Security("has_role('ROLE_ADMIN')")
    */
   public function deleteSuiviAction(Request $request, $idSuivi)
   {

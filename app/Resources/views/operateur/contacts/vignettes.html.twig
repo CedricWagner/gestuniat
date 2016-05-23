@@ -24,6 +24,7 @@
 				<th>Date de la demande</th>
 				<th>Date de versement</th>
 				<th>Moyen de paiement</th>
+				<th>Dossier</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,6 +38,7 @@
 					<td>{{ vignette.dateDemande ? vignette.dateDemande.format('d/m/Y') : '' }}</td>
 					<td>{{ vignette.datePaiement ? vignette.datePaiement.format('d/m/Y') : '' }}</td>
 					<td>{{ vignette.moyenPaiement ? vignette.moyenPaiement.label : '' }}</td>
+					<td>{{ vignette.dossier ? ('<a href="'~path('view_dossier',{idDossier:vignette.dossier.id,idContact:vignette.contact.id})~'">'~vignette.dossier.nom~'</a>')|raw : '-' }}</td>
 				</tr>
 			{% endfor %}
 		</tbody>

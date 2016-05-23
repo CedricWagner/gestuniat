@@ -106,23 +106,35 @@ class DefaultController extends Controller
             ksort($lstTerms);
 
             $dateYesterday = new \DateTime(date('Y-m-d').' -1 day');
+            $dateToday = new \DateTime();
             $dateTomorrow = new \DateTime(date('Y-m-d').' +1 day');
+            $dateNextWeek = new \DateTime(date('Y-m-d').' +7 day');
 
             $lstAlertes = ['late'=>array(),'now'=>array(),'incoming'=>array()];
             $lstHistory = array();
+            $lstFuturTerms = array();
 
             foreach ($lstTerms as $key => $term) {
                 if ($term->getDateEcheance()->format('Y-m-d') <= $dateYesterday->format('Y-m-d')) {
                     if(!$term->getIsOk()){
                         $lstAlertes['late'][] = $term;
                     }
-                }elseif ($term->getDateEcheance()->format('Y-m-d') >= $dateTomorrow->format('Y-m-d')) {
-                    $lstAlertes['incoming'][] = $term;
-                }else{
+                }elseif ($term->getDateEcheance()->format('Y-m-d') >= $dateTomorrow->format('Y-m-d') && $term->getDateEcheance()->format('Y-m-d') <= $dateNextWeek->format('Y-m-d')) {
+                    if(!$term->getIsOk()){
+                        $lstAlertes['incoming'][] = $term;
+                    }
+                }elseif($term->getDateEcheance()->format('Y-m-d') == $dateToday->format('Y-m-d') ){
                     if(!$term->getIsOk()){
                         $lstAlertes['now'][] = $term;
                     }
                 }
+
+                if($term->getDateEcheance()->format('Y-m-d') > $dateNextWeek->format('Y-m-d') ){
+                    if(!$term->getIsOk()){
+                        $lstFuturTerms[] = $term;
+                    }
+                }
+
                 if($term->getIsOk()){
                     $lstHistory[] = $term;
                 }
@@ -135,6 +147,7 @@ class DefaultController extends Controller
                 'alerteForm' => $alerteForm->createView(),
                 'lstAlertes' => $lstAlertes,
                 'lstHistory' => $lstHistory,
+                'lstFuturTerms' => $lstFuturTerms,
             ]);
         }
 

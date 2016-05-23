@@ -14,9 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use AppBundle\Repository\DossierRepository;
 
-class VignetteType extends AbstractType
+class DossierFullType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -27,26 +26,12 @@ class VignetteType extends AbstractType
 
         $currentYear = new \DateTime(date('Y'));
 
-        $entity = $options['data'];
-
-        $idContact = $entity->getContact()->getId();
-
         $builder
-            ->add('dateDemande',DateType::class,array('label' => 'Date de la demande','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('nom',TextType::class,array('label' => 'Nom du dossier'))
+            ->add('dateOuverture',DateType::class,array('label' => 'Date d\'ouverture','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('dossier',EntityType::class,array(
-                'label' => 'Dossier',
-                'class'=>'AppBundle:Dossier',
-                'placeholder'=>'Aucun',
-                'choice_label'=>'nom',
-                'query_builder' => function (DossierRepository $er) use ($idContact){
-                    return $er->getByContactQuery($idContact);
-                },
-                ))
-            ->add('montant',NumberType::class,array('label' => 'Montant demandé'))
-            ->add('moyenPaiement',EntityType::class,array('label' => 'Moyen de paiement','class'=>'AppBundle:MoyenPaiement','placeholder'=>'Indéfini','choice_label'=>'label'))
-            ->add('datePaiement',DateType::class,array('label' => 'Date du paiement','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateFermeture',DateType::class,array('label' => 'Date de fermeture','years'=>range($currentYear->format('Y')-10,$currentYear->format('Y')+20),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
         ;
@@ -58,7 +43,7 @@ class VignetteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Vignette'
+            'data_class' => 'AppBundle\Entity\Dossier'
         ));
     }
 }

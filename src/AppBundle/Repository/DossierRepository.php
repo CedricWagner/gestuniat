@@ -71,4 +71,14 @@ class DossierRepository extends \Doctrine\ORM\EntityRepository
         
         return $pag;
 	}
+
+    public function getByContactQuery($id)
+    {
+     
+        $qb = $this->createQueryBuilder('dossier');
+        $qb->where('dossier.contact = :p_contact_id')
+              ->setParameter('p_contact_id', $id);
+              
+        return $qb;
+    }
 }

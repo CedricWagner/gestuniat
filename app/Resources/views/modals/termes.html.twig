@@ -1,0 +1,24 @@
+<!-- Modal -->
+<div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="terms-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="terms-label">Liste des termes</h4>
+      </div>
+      <div class="modal-body">
+     	{% for term in lstFuturTerms %}
+        {% if term.type == 'alerte' %}
+          {% include 'operateur/dashboard/alerte-item.inc.html.twig' with {'alerte': term} %}
+        {% endif %}
+        {% if term.type == 'suivi' %}
+          {% include 'operateur/dashboard/suivi-item.inc.html.twig' with {'suivi': term} %}
+        {% endif %}
+     	{% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -38,7 +38,9 @@ class VignetteController extends Controller
 	  		$vignetteForms[$vignette->getId()] = $vignetteForm->createView();
 	  	}
 
-	  	$newVignetteForm = $this->createForm(VignetteType::class, new Vignette() ,array(
+	  	$newVignette = new Vignette();
+	  	$newVignette->setContact($contact);
+	  	$newVignetteForm = $this->createForm(VignetteType::class, $newVignette ,array(
 				'action'=> $this->generateUrl('save_vignette').'?idContact='.$contact->getId(),
 			));
 
@@ -86,7 +88,7 @@ class VignetteController extends Controller
 			$this->get('app.tools')->handleFormErrors($vignetteForm);
 		}
 
-		return $this->redirectToRoute('list_vignettes',array('idContact'=>$contact->getId()));
+    	return $this->redirect($request->headers->get('referer'));
 	}
 
 

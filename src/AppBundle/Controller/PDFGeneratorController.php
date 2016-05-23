@@ -42,14 +42,14 @@ class PDFGeneratorController extends Controller
         "Nom / Prénom"=>$contact->getNom().' '.$contact->getPrenom(),
         "Nom J. Fille"=>$contact->getNomJeuneFille(),
         "Né(e) le"=>$contact->getDateNaissance()?$contact->getDateNaissance()->format('d/m/Y'):'',
-        "Profession"=>''
+        ""=>''
       ),'MEMBRE');
       if($contact->getMembreConjoint()){
         $pdf->GreyJoyBlock(array(
           "Nom / Prénom"=>$contact->getMembreConjoint()->getNom().' '.$contact->getMembreConjoint()->getPrenom(),
           "Nom J. Fille"=>$contact->getMembreConjoint()->getNomJeuneFille(),
           "Né(e) le"=>$contact->getMembreConjoint()->getDateNaissance()?$contact->getMembreConjoint()->getDateNaissance()->format('d/m/Y'):'',
-          "Profession"=>''
+          ""=>''
         ),'CONJOINT(E)');
       }
       $pdf->GreyJoyBlock(array(

@@ -212,6 +212,7 @@ class ContactController extends Controller
 
       //    Vignette
       $vignette = new Vignette();
+      $vignette->setContact($contact);
       $vignetteForm = $this->createForm(VignetteType::class, $vignette);
       $vignetteForm->handleRequest($request);
 
@@ -324,6 +325,7 @@ class ContactController extends Controller
       $type = $request->request->get('rbTypeContact');
 
       if($type=='new'){
+        //add a new contact
 
         $conjoint = new Contact();
         $conjoint->setNom($request->request->get('txtNom'));
@@ -373,6 +375,7 @@ class ContactController extends Controller
         $em->flush(); 
 
       }elseif ($type=='existing' && $request->request->get('idMembreConjoint')){
+        //replace conjoint
 
         $conjoint = $this->getDoctrine()
           ->getRepository('AppBundle:Contact')
@@ -392,6 +395,7 @@ class ContactController extends Controller
         $em->flush(); 
 
       }else{
+        //remove conjoint
 
         if ($contact->getMembreConjoint()) {
 
@@ -552,6 +556,29 @@ class ContactController extends Controller
       $contactForm->handleRequest($request);
 
       if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+        
+        //check for doubloons        
+        $doubloon = $this->getDoctrine()
+          ->getRepository('AppBundle:Contact')
+          ->findBy(array(
+            'nom'=>$contact->getNom(),
+            'prenom'=>$contact->getPrenom(),
+            'telFixe'=>$contact->getTelFixe(),
+            'adresse'=>$contact->getAdresse(),
+          ));
+
+        if (sizeof($doubloon)) {
+          $doubloon = $doubloon[0];
+
+          $this->get('session')->getFlashbag()->add('danger','Ajout impossible : ce contact existe déjà. <a href="'.$this->generateUrl('view_contact',['idContact'=>$doubloon->getId()]).'">Accéder à sa fiche</a>');
+
+          return $this->render('operateur/contacts/full-contact.html.twig', [
+            'contact' => $contact,
+            'isInsert' => true,
+            'contactForm' => $contactForm->createView(),
+          ]);
+        }
+
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($contact);
         $em->flush();

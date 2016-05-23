@@ -14,7 +14,8 @@ Gestuniat - Dossier {{ dossier.nom }}
 {% endblock %}
 
 {% block content %}
-	<h2>Détails du dossier "{{dossier.nom}}"</h2>
+	<h2>Détails du dossier "{{dossier.nom}}"&nbsp;&nbsp;<a href="#" data-toggle="modal" data-target="#edit-dossier-{{dossier.id}}"><span class="glyphicons glyphicons-edit"></span></a></h2>
+	{% include 'modals/default.html.twig' with {'form':dossierForm,'entity':'dossier','object':dossier,'title':'Edition du dossier'} %}
 	<ol class="breadcrumb">
 	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">{{ contact.prenom }} {{ contact.nom }}</a></li>
 	  <li><a href="{{ path('list_documents',{'idContact':contact.id }) }}">Explorateur de documents</a></li>
@@ -43,7 +44,38 @@ Gestuniat - Dossier {{ dossier.nom }}
 			</div>
 		</div>
 		<div class="col-md-8 col-sm-12">
+			<h4>Documents</h4>
 			{% include 'operateur/contacts/listing-documents.inc.html.twig' %}
+			<br />
+			<h4>Vignettes contributives</h4>
+			<table class="table table-striped table-hover selectable">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Montant</th>
+						<th>Date de la demande</th>
+						<th>Date de versement</th>
+						<th>Moyen de paiement</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for vignette in vignettes %}
+						<tr>
+							<td style="position:relative">
+								{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'vignette','object':vignette,'deletePath':path('delete_vignette',{'idVignette':vignette.id})} %}
+								{% include 'modals/default.html.twig' with {'form':vignetteForms[vignette.id],'entity':'vignette','object':vignette,'title':'Edition de la vignette'} %}
+							</td>
+							<td>{{ vignette.montant }} €</td>
+							<td>{{ vignette.dateDemande ? vignette.dateDemande.format('d/m/Y') : '' }}</td>
+							<td>{{ vignette.datePaiement ? vignette.datePaiement.format('d/m/Y') : '' }}</td>
+							<td>{{ vignette.moyenPaiement ? vignette.moyenPaiement.label : '' }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<button class="btn btn-primary" data-toggle="modal" data-target="#add-vignette-0">Saisir une nouvelle vignette</button>
+			<br />
+			{% include 'modals/default.html.twig' with {'form':newVignetteForm,'entity':'vignette','object':false,'title':'Ajouter une nouvelle vignette'} %}
 		</div>
 	</div>
 {% endblock %}
