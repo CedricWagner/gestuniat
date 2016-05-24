@@ -391,12 +391,48 @@ function doContactListingAction(value){
 		selection.push($(this).data('id'));
 	});
 
-	console.log(selection);
-
 	ajax_start();
 	$.ajax({
 	  method: "POST",
 	  url: '/contact/listing/action',
+	  data: { action:value, selection:selection }
+	})
+	.done(function(response) {
+		ajax_stop();
+		location.href = response;
+	});
+}
+
+function doSectionListingAction(value){
+
+	var selection = new Array();	
+	$('#list-section .cb-select-line:checked').parents('.section-line').each(function(){
+		selection.push($(this).data('id'));
+	});
+
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: '/section/listing/action',
+	  data: { action:value, selection:selection }
+	})
+	.done(function(response) {
+		ajax_stop();
+		location.href = response;
+	});
+}
+
+function doOrganismeListingAction(value){
+
+	var selection = new Array();	
+	$('#list-organisme .cb-select-line:checked').parents('.organisme-line').each(function(){
+		selection.push($(this).data('id'));
+	});
+
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: '/organisme/listing/action',
 	  data: { action:value, selection:selection }
 	})
 	.done(function(response) {

@@ -18,7 +18,7 @@
 	</ol>
 	<div class="row">
 		<div class="col-md-3">
-			<div class="kit-container" onclick="location.href='{{path('generate_bulletin_adhesion',{'idContact':contact.id})}}'">
+			<div class="kit-container" onclick="window.open('{{path('generate_bulletin_adhesion',{'idContact':contact.id})}}')">
 				<div class="kit-label">
 					Bulletin d'adhésion
 				</div>
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div class="col-md-3">
-			<div class="kit-container" onclick="location.href='{{path('generate_carte_id_fonction',{'idContact':contact.id})}}'">
+			<div class="kit-container" onclick="window.open('{{path('generate_carte_id_fonction',{'idContact':contact.id})}}')">
 				<div class="kit-label">
 					Carte d'identité de fonction
 				</div>
@@ -37,8 +37,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
-			<div class="kit-container" onclick="location.href='{{path('generate_lettre_section',{'idContact':contact.id})}}'">
+		<div class="col-md-3 dropdown">
+			<div class="kit-container"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 				<div class="kit-label">
 					Lettre section
 				</div>
@@ -46,9 +46,14 @@
 					<span class="glyphicons glyphicons-message-full"></span>
 				</div>
 			</div>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Président'})}}">À destination du Président</a></li>
+				<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Secrétaire'})}}">À destination du Secrétaire</a></li>
+				<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Trésorier'})}}">À destination du Trésorier</a></li>
+			</ul>
 		</div>
 		<div class="col-md-3">
-			<div class="kit-container" onclick="location.href='{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}'">
+			<div class="kit-container" onclick="window.open('{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}')">
 				<div class="kit-label">
 					Lettre d'accompagnement
 				</div>
@@ -60,7 +65,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-3">
-			<div class="kit-container" onclick="location.href='{{path('generate_lettre_remerciement',{'idContact':contact.id})}}'">
+			<div class="kit-container" onclick="window.open='{{path('generate_lettre_remerciement',{'idContact':contact.id})}}'">
 				<div class="kit-label">
 					Lettre de remerciement
 				</div>

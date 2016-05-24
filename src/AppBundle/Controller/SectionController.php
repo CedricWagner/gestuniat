@@ -308,6 +308,52 @@ class SectionController extends Controller
 
     }
 
+     /**
+     * @Route("/section/listing/action", name="section_action_listing")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function sectionListingAction(Request $request)
+    {
+
+      $action = $request->request->get('action');
+      switch ($action) {
+        case 'DELETE_ITEMS':
+          $selection = $request->request->get('selection');
+          foreach ($selection as $id) {
+            $this->deleteSectionAction($id);
+          }
+          $path = $this->generateUrl('list_sections');
+          break;
+        case 'EXPORT':
+          $selection = $request->request->get('selection');
+          $csv = $this->get('app.csvgenerator');
+          $csv->setName('export_liste-sections');
+          $csv->addLine(array('Nom','Num','Délégué','Statut'));
+
+          foreach ($selection as $id) {
+            $section = $this->getDoctrine()
+              ->getRepository('AppBundle:Section')
+              ->find($id);
+            $fields = array(
+              $section->getNom(),
+              $section->getId(),
+              ($section->getDelegue()?$section->getDelegue()->getNom().' '.$section->getDelegue()->getPrenom():''),
+              ($section->getIsActive()?'Actif':'Fermé'),
+            );
+            $csv->addLine($fields);
+          }
+          $csv->generateContent('exports/last-'.$this->getUser()->getId().'.csv');
+          
+          $path = $this->generateUrl('download_last_export',['fileName'=>'export_liste-sections','type'=>'csv']);
+          break;
+        default:
+          
+          break;
+      }
+
+      return new Response($path);
+    }
+
     /**
      * @Route("/section/{idSection}/suppression", name="delete_section")
      * @Security("has_role('ROLE_USER')")

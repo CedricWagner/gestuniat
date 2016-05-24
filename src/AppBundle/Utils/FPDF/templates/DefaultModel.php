@@ -45,7 +45,7 @@ class DefaultModel extends FPDF {
     function RightText($txt){
         $this->Ln(10);
         $this->SetFont('Helvetica','',9);
-        $this->MultiCell('',5,$txt,null,'R');
+        $this->MultiCell('',5,utf8_decode($txt),null,'R');
         $this->Ln(10);
     }
 

@@ -35,6 +35,18 @@
 {% block content %}
 	<h1>Liste des organismes <button class="btn btn-primary" data-toggle="modal" data-target="#add-organisme-0">Ajouter un organisme</button></h1>
 	{% include 'modals/default.html.twig' with {'form':newOrganismeForm,'entity':'organisme','object':false,'title':'Ajouter un nouvel organisme'} %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="actions-container">
+				<span>Effectuer une action sur la sélection &nbsp;&nbsp;&nbsp;</span>
+				<select name="selAction" id="selAction" class="padded">
+					<option value="DELETE_ITEMS">Supprimer les éléments</option>
+					<option value="EXPORT">Exporter la liste</option>
+				</select>
+				<button class="btn btn-primary" onclick="doOrganismeListingAction($('#selAction').val())">Valider</button>
+			</div>
+		</div>
+	</div>
 	<div id="list-organisme">
 		{% include 'operateur/organismes/listing-organismes.inc.html.twig' %}
 	</div>

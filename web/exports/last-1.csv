@@ -1,3 +1,2 @@
-Nom,Prénom,Num,Statut,Adresse,CP,Commune,Section,"Fonction (section)","Fonction (groupement)","Date d'entrée"
-Rigby,Eléonore,2,Adhérent,test,67000,Scarborough,Divers,,,02/07/2012
-Wagner,Cédric,1,Adhérent,"10 rue de la Charmille",67200,Strasbourg,Divers,Président,Président,05/03/2012
+Nom,Titulaire,Fonction,Adresse,"Adresse complémentaire","Code postal",Ville
+"Night Watch","JS S","Lord Commander","The wall",,,

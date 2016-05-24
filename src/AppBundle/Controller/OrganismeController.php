@@ -137,6 +137,56 @@ class OrganismeController extends Controller
 	}
 
 
+    /**
+     * @Route("/organisme/listing/action", name="organisme_action_listing")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function organismeListingAction(Request $request)
+    {
+
+      $action = $request->request->get('action');
+      switch ($action) {
+        case 'DELETE_ITEMS':
+          $selection = $request->request->get('selection');
+          foreach ($selection as $id) {
+            $this->deleteOrganismeAction($id);
+          }
+          $path = $this->generateUrl('list_organismes');
+          break;
+        case 'EXPORT':
+          $selection = $request->request->get('selection');
+          $csv = $this->get('app.csvgenerator');
+          $csv->setName('export_liste-organismes');
+          $csv->addLine(array('Nom','Titulaire','Fonction','Adresse','Adresse complémentaire','Code postal','Ville'));
+
+          foreach ($selection as $id) {
+            $organisme = $this->getDoctrine()
+              ->getRepository('AppBundle:Organisme')
+              ->find($id);
+            $fields = array(
+              $organisme->getNom(),
+              $organisme->getNomTitulaire(),
+              $organisme->getFonctionTitulaire(),
+              $organisme->getAdresse(),
+              $organisme->getAdresseComp(),
+              $organisme->getCp(),
+              $organisme->getVille(),
+            );
+            $csv->addLine($fields);
+          }
+          $csv->generateContent('exports/last-'.$this->getUser()->getId().'.csv');
+          
+          $path = $this->generateUrl('download_last_export',['fileName'=>'export_liste-organismes','type'=>'csv']);
+          break;
+        default:
+          
+          break;
+      }
+
+      return new Response($path);
+    }
+
+
 	/**
 	* @Route("/organisme/delete/{idOrganisme}", name="delete_organisme")
 	* @Security("has_role('ROLE_USER')")

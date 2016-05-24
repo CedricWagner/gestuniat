@@ -120,10 +120,10 @@ class PDFGeneratorController extends Controller
     }
 
     /**
-     * @Route("pdf/contact/{idContact}/generer/lettre-section", name="generate_lettre_section")
+     * @Route("pdf/contact/{idContact}/generer/lettre-section/{target}", name="generate_lettre_section", requirements={"target":"Président|Secrétaire|Trésorier"})
      * @Security("has_role('ROLE_USER')")
      */
-    public function generateLettreSectionAction($idContact)
+    public function generateLettreSectionAction($idContact,$target)
     {
 
       $date = New \DateTime();
@@ -135,7 +135,7 @@ class PDFGeneratorController extends Controller
       $pdf = new PDF_DefaultModel();
       $pdf->AddPage();
       $pdf->Title('LETTRE SECTION');
-      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->RightText("À l'attention du ".$target." de la section\nStrasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
       $pdf->AddParagraphe('Cher Membre,');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
