@@ -79,6 +79,8 @@ class FilterController extends Controller
         $session = $this->get('session');
         $context = $request->request->get('context');
         $fields = $request->request->get('fields');
+        $orderby = $request->request->get('orderby');
+        $order = $request->request->get('order');
         $nb = $request->request->get('nb');
         if($nb==null){
             if($session->get('pagination-nb')){
@@ -108,13 +110,13 @@ class FilterController extends Controller
             //Get contacts by filter values
             $items = $this->getDoctrine()
               ->getRepository('AppBundle:Contact')
-              ->findByFilter($filtreValeurs,$page,$nb);
+              ->findByFilter($filtreValeurs,$page,$nb,$orderby,$order);
         }
         if($context=='section'){
             //Get contacts by filter values
             $items = $this->getDoctrine()
               ->getRepository('AppBundle:Section')
-              ->findByFilter($filtreValeurs,$page,$nb);
+              ->findByFilter($filtreValeurs,$page,$nb,$orderby,$order);
         }
         if($context=='organisme'){
             //Get contacts by filter values
@@ -126,7 +128,7 @@ class FilterController extends Controller
             //Get contacts by filter values
             $items = $this->getDoctrine()
               ->getRepository('AppBundle:Dossier')
-              ->findByFilter($filtreValeurs,$page,$nb);
+              ->findByFilter($filtreValeurs,$page,$nb,$orderby,$order);
         }
 
         return new Response(json_encode(array(
@@ -134,7 +136,7 @@ class FilterController extends Controller
             'path'=>'/'.$context.'/liste/'.$filtrePerso->getId().'/'.$page,
             'html'=>$this->render('operateur/'.$context.'s/listing-'.$context.'s.inc.html.twig', array(
                 'items' => $items,
-                'pagination' => array('count'=>count($items),'nb'=>$nb,'page'=>$page),
+                'pagination' => array('count'=>count($items),'nb'=>$nb,'page'=>$page,'orderby'=>$orderby,'order'=>$order),
             ))->getContent()
         )));
     }

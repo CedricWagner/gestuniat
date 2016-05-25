@@ -23,10 +23,10 @@ class SectionController extends Controller
 {
 
     /**
-     * @Route("/section/liste/{idFilter}/{page}/{nb}", name="list_sections", defaults={"idFilter" = 0,"page" = 1,"nb" = 0})
+     * @Route("/section/liste/{idFilter}/{page}/{nb}", name="list_sections", defaults={"idFilter" = 0,"page" = 1,"nb" = 0, "orderby"= "numAdh","order"= "ASC"})
      * @Security("has_role('ROLE_USER')")
      */
-    public function listSectionsAction($idFilter,$page,$nb)
+    public function listSectionsAction($idFilter,$page,$nb,$orderby,$order)
     {
     	$currentFilter = null;
 
@@ -71,7 +71,7 @@ class SectionController extends Controller
             'filtresPerso' => $filtresPerso,
             'currentFilter' => $currentFilter,
             'items' => $sections,
-            'pagination' => array('count'=>count($sections),'nb'=>$nb,'page'=>$page),
+            'pagination' => array('count'=>count($sections),'nb'=>$nb,'page'=>$page,'orderby'=>$orderby,'order'=>$order),
         ]);
 
     }

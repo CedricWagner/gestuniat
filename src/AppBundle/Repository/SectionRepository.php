@@ -25,7 +25,7 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
         return $pag;
 	}
 
-	public function findByFilter($filterValues,$page=1,$nb=20){
+	public function findByFilter($filterValues,$page=1,$nb=20,$orderby='nom',$order='ASC'){
 		
 		$params = array();
 		
@@ -101,6 +101,7 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
 			}
 		}
 		$qb ->setParameters($params)
+            ->orderby('section.'.$orderby,$order)
             ->setFirstResult(($nb*$page)-$nb)
             ->setMaxResults($nb);
 

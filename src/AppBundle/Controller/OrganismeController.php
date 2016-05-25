@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\OrganismeType;
 use AppBundle\Entity\Organisme;
+use AppBundle\Utils\FPDF\templates\Etiquette as PDF_Etiquette;
 
 
 class OrganismeController extends Controller
@@ -152,6 +153,20 @@ class OrganismeController extends Controller
             $this->deleteOrganismeAction($id);
           }
           $path = $this->generateUrl('list_organismes');
+          break;
+        case 'ETIQUETTES':
+          $selection = $request->request->get('selection');
+          $pdf = new PDF_Etiquette('L7163');
+          $pdf->AddPage();
+          foreach ($selection as $id) {
+            $organisme = $this->getDoctrine()
+              ->getRepository('AppBundle:Organisme')
+              ->find($id);
+            $text = sprintf("%s\n%s\n%s\n%s %s, %s", $organisme->getNomTitulaire(), $organisme->getAdresse(), $organisme->getAdresseComp(), $organisme->getCp(), $organisme->getVille(), $organisme->getPays());
+            $pdf->Add_Label(utf8_decode($text));
+          }
+          $pdf->Output('F','pdf/last-'.$this->getUser()->getId().'.pdf');
+          $path = $this->generateUrl('download_last_pdf',['fileName'=>'export-etiquettes']);
           break;
         case 'EXPORT':
           $selection = $request->request->get('selection');

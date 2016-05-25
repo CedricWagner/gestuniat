@@ -28,10 +28,10 @@ use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
 class ContactController extends Controller
 {
     /**
-     * @Route("/contact/liste/{idFilter}/{page}/{nb}", name="list_contacts", defaults={"idFilter" = 0,"page" = 1,"nb" = 0})
+     * @Route("/contact/liste/{idFilter}/{page}/{nb}/{orderby}-{order}", name="list_contacts", defaults={"idFilter" = 0,"page" = 1,"nb" = 0, "orderby"= "numAdh","order"= "ASC"})
      * @Security("has_role('ROLE_USER')")
      */
-    public function listContactsAction($idFilter,$page,$nb)
+    public function listContactsAction($idFilter,$page,$nb,$orderby,$order)
     {
 
         $currentFilter = null;
@@ -102,7 +102,7 @@ class ContactController extends Controller
             'currentFilter' => $currentFilter,
             'items' => $contacts,
             'sections' => $sections,
-            'pagination' => array('count'=>count($contacts),'nb'=>$nb,'page'=>$page),
+            'pagination' => array('count'=>count($contacts),'nb'=>$nb,'page'=>$page,'orderby'=>$orderby,'order'=>$order),
         ]);
     }
 

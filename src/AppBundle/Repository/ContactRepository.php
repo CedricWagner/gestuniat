@@ -28,7 +28,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
         return $pag;
 	}
 	
-	public function findByFilter($filterValues,$page=1,$nb=20){
+	public function findByFilter($filterValues,$page=1,$nb=20,$orderby="numAdh",$order="ASC"){
 		
 		$params = array();
 		
@@ -113,6 +113,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 			}
 		}
 		$qb ->setParameters($params)
+            ->orderby('contact.'.$orderby,$order)
             ->setFirstResult(($nb*$page)-$nb)
             ->setMaxResults($nb);
 

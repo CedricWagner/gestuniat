@@ -199,10 +199,24 @@ function ajaxSaveFilter(formFilter,ajaxUrl){
 }
 
 
-function ajaxApplyFilter(formFilter,ajaxUrl,page){
+function ajaxApplyFilter(formFilter,ajaxUrl,page,orderby){
 	
 	if (page==null) {
 		page = 1;
+	}
+
+	var order = 'ASC';
+
+	if(orderby){
+		if(orderby==$('.sortable.sorted').data('attr')){
+			if($('.sortable.sorted').hasClass('ASC')){
+				order='DESC';
+			}else{
+				order='ASC';
+			}
+		}
+	}else{
+		orderby = $('.sortable.sorted').data('attr');
 	}
 
 	var fields = new Array();
@@ -233,7 +247,7 @@ function ajaxApplyFilter(formFilter,ajaxUrl,page){
 	$.ajax({
 	  method: "POST",
 	  url: '/filter/render',
-	  data: { context: $(formFilter).data('context'), fields:fields, nb:$('#sel-nb-per-page').val(), page:page }
+	  data: { context: $(formFilter).data('context'), fields:fields, nb:$('#sel-nb-per-page').val(), page:page, orderby:orderby, order:order }
 	})
 	.done(function(response) {
 		response = JSON.parse(response);

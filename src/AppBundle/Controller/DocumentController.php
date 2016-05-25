@@ -60,10 +60,10 @@ class DocumentController extends Controller
 	}
 
 	/**
-     * @Route("/dossier/liste/{idFilter}/{page}/{nb}", name="list_dossiers", defaults={"idFilter" = 0,"page" = 1,"nb" = 0})
+     * @Route("/dossier/liste/{idFilter}/{page}/{nb}", name="list_dossiers", defaults={"idFilter" = 0,"page" = 1,"nb" = 0,"orderby" = "nom","order" = "ASC"})
      * @Security("has_role('ROLE_SPECTATOR')")
      */
-    public function listDossiersAction($idFilter,$page,$nb)
+    public function listDossiersAction($idFilter,$page,$nb,$orderby,$order)
     {
 
         $currentFilter = null;
@@ -114,7 +114,7 @@ class DocumentController extends Controller
             'currentFilter' => $currentFilter,
             'items' => $dossiers,
             'sections' => $sections,
-            'pagination' => array('count'=>count($dossiers),'nb'=>$nb,'page'=>$page),
+            'pagination' => array('count'=>count($dossiers),'nb'=>$nb,'page'=>$page,'orderby'=>$orderby,'order'=>$order),
         ]);
     }
 

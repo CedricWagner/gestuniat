@@ -33,12 +33,21 @@
 <div class="">
 	<table class="table table-striped table-hover selectable">
 		<thead>
+			{% set attrs = {
+				'nom':{'label':'Nom','sort':true},
+				'contact':{'label':'Contact','sort':true},
+				'section':{'label':'Section du contact','sort':false},
+				'dateOuverture':{'label':'Date d\'ouverture','sort':true},
+				'dateFermeture':{'label':'Date de fermeture','sort':true},
+			} %}
 			<tr>
-				<th>Nom</th>
-				<th>Contact</th>
-				<th>Section du contact</th>
-				<th>Date de d'ouverture</th>
-				<th>Date de fermeture</th>
+				{% for key,attr in attrs %}
+					{% if attr.sort == true %}
+						<th><span class="sortable clickable {{ pagination.orderby == key ? 'sorted '~pagination.order : '' }}" href="#" onclick="ajaxApplyFilter('#filter-dossier','/filter/render',1,'{{key}}')" data-attr="{{key}}">{{attr.label}}</span></th>
+					{% else %}
+						<th><span data-attr="{{key}}">{{attr.label}}</span></th>
+					{% endif %}
+				{% endfor %}
 			</tr>
 		</thead>
 		<tbody>
