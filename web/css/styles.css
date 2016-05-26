@@ -240,7 +240,63 @@ body.has-filter .container-border, body.has-left-column .container-border{
     padding-right: 15px;
 }
 
+/* AUTHENTIFICATION */
+
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+.authentification {
+    animation-name: fadein;
+    animation-duration: 2s;
+}
+
+@keyframes popfromtop {
+    from {position:relative;top: -80px;}
+    to {position:relative;top: 0px;}
+/*    from {width:0px;}
+    to {width: 130px;}*/
+}
+.authentification .logo {
+    animation-name: popfromtop;
+    animation-duration: 0.5s;
+    width: 130px;
+}
+
+.authentification .head{
+    background-color: #354052;
+    text-align:center;
+    border-bottom: solid 10px #32637c;
+    margin-bottom: 60px;
+}
+
+.authentification h1{
+    text-align: center;
+}
+
+.authentification .logo{
+    padding: 20px
+}
+
+.auth-form-container{
+    border: solid thin #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 0 auto;
+    width: 400px;
+    max-width: 100%;
+    animation-name: popfromtop;
+    animation-duration: 1s;
+}
+
+.auth-form-container input{
+    min-width: initial !important;
+}
+
 /* CONTENT */
+
+
 
 h1{
     font-size: 30px;
@@ -638,6 +694,10 @@ table.table .sortable.sorted.DESC::after{
 }
 
 /* CONTACT */
+.label.label-success{
+    background-color: #468847;
+}
+
 .label.statut-2{
     background-color: #468847;
 }

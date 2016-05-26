@@ -52,7 +52,7 @@ class Cotisation
     private $dateCreation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Contact")
+     * @ORM\ManyToOne(targetEntity="Contact", inversedBy="cotisations")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
      */
     protected $contact;

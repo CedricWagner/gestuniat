@@ -17,10 +17,10 @@ class OrganismeController extends Controller
 {
 
 	 /**
-     * @Route("/organisme/liste/{idFilter}/{page}/{nb}", name="list_organismes", defaults={"idFilter" = 0,"page" = 1,"nb" = 0})
+     * @Route("/organisme/liste/{idFilter}/{page}/{nb}", name="list_organismes", defaults={"idFilter" = 0,"page" = 1,"nb" = 0,"orderby" = "nom","order" = "ASC"})
      * @Security("has_role('ROLE_SPECTATOR')")
      */
-    public function listOrganismesAction($idFilter,$page,$nb)
+    public function listOrganismesAction($idFilter,$page,$nb,$orderby,$order)
     {
     	$currentFilter = null;
 
@@ -76,7 +76,7 @@ class OrganismeController extends Controller
             'types' => $types,
             'newOrganismeForm' => $newOrganismeForm->createView(),
             'items' => $organismes,
-            'pagination' => array('count'=>count($organismes),'nb'=>$nb,'page'=>$page),
+            'pagination' => array('count'=>count($organismes),'nb'=>$nb,'page'=>$page,'orderby'=>$orderby,'order'=>$order),
         ]);
 
     }

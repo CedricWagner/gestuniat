@@ -33,13 +33,23 @@
 <div class="">
 	<table class="table table-striped table-hover selectable">
 		<thead>
+			{% set attrs = {
+				'nom':{'label':'Nom','sort':true},
+				'nomTitulaire':{'label':'Nom du titulaire','sort':true},
+				'fonctionTitulaire':{'label':'Fonction','sort':true},
+				'cp':{'label':'Ville','sort':true},
+				'typeOrganisme':{'label':'Type d\'organisme','sort':false},
+			} %}
 			<tr>
 				<th><input class="cb-select cb-select-all" type="checkbox" /></th>
 				<th></th>
-				<th>Nom</th>
-				<th>Titulaire</th>
-				<th>Fonction</th>
-				<th>Type d'organisme</th>
+				{% for key,attr in attrs %}
+					{% if attr.sort == true %}
+						<th><span class="sortable clickable {{ pagination.orderby == key ? 'sorted '~pagination.order : '' }}" href="#" onclick="ajaxApplyFilter('#filter-organisme','/filter/render',1,'{{key}}')" data-attr="{{key}}">{{attr.label}}</span></th>
+					{% else %}
+						<th><span data-attr="{{key}}">{{attr.label}}</span></th>
+					{% endif %}
+				{% endfor %}
 			</tr>
 		</thead>
 		<tbody>
@@ -56,6 +66,7 @@
 					<td>{{ organisme.nom }}</td>
 					<td>{{ organisme.nomTitulaire }}</td>
 					<td>{{ organisme.fonctionTitulaire }}</td>
+					<td>{{ organisme.cp }} {{ organisme.ville }}</td>
 					<td>{{ organisme.typeOrganisme ? organisme.typeOrganisme.label : '' }}</td>
 				</tr>
 			{% endfor %}

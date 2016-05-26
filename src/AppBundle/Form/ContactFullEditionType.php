@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ContactFullEditionType extends AbstractType
@@ -48,6 +49,10 @@ class ContactFullEditionType extends AbstractType
             ->add('mentionDeces',TextType::class,array('label' => 'Mention décès'))
             ->add('dateAdhesion',DateType::class,array('label' => 'Date d\'adhésion','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
+                )))
+            ->add('typeAdhesion',ChoiceType::class,array('label'=>'Type d\'adhésion','choices'=>array(
+                    'Annuel'=>'ANNUEL',
+                    'Semestriel'=>'SEMESTRIEL',
                 )))
             ->add('statutJuridique',EntityType::class,array('label' => 'Type de profil','class'=>'AppBundle:StatutJuridique','choice_label'=>'label'))
             ->add('statutMatrimonial',EntityType::class,array('label' => 'Statut matrimonial','class'=>'AppBundle:StatutMatrimonial','choice_label'=>'label','placeholder' => 'Inconnu'))

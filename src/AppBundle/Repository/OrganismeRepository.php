@@ -26,7 +26,7 @@ class OrganismeRepository extends \Doctrine\ORM\EntityRepository
         return $pag;
 	}
 
-	public function findByFilter($filterValues,$page=1,$nb=20){
+	public function findByFilter($filterValues,$page=1,$nb=20,$orderby='nom',$order='asc'){
 		
 		$params = array();
 		
@@ -46,6 +46,7 @@ class OrganismeRepository extends \Doctrine\ORM\EntityRepository
 			}
 		}
 		$qb ->setParameters($params)
+            ->orderby('organisme.'.$orderby,$order)
             ->setFirstResult(($nb*$page)-$nb)
             ->setMaxResults($nb*$page);
 

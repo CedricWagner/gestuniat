@@ -1,0 +1,32 @@
+<div class="modal fade" id="choix-generation-docs-{{id}}" tabindex="-1" role="dialog" aria-labelledby="choix-generation-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="choix-generation-label">Génération des pièces à fournir</h4>
+      </div>
+      <div class="modal-body">
+        <form target="" id="choice-gen-{{id}}" action="{{path('generate_pieces',{'idContact':contact.id})}}" method="post">
+          <div class="row">
+              {% for key,line in item.values %}
+                <div class="col-md-6">
+                  <div class="form-group clearfix">
+                      <label for="cb-doc-{{id}}-{{key}}">{{line}}</label><input id="cb-doc-{{id}}-{{key}}" type="checkbox" name="cbDocs[]" value="{{line}}" />
+                  </div>
+                </div>
+              {% endfor %}
+            <div class="col-md-12">
+              <div class="form-group clearfix">
+                <label for="txt-add">Texte additionnel</label><textarea id="txt-add" type="checkbox" name="cbDocs[]" ></textarea>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-primary" onclick="$('form#choice-gen-{{id}}').submit()">Enregistrer</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Pièces à fournir pour  {{ contact.prenom }} {{ contact.nom }}{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'operateur/contacts/infos-gen.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Pièces à fournir</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">{{ contact.prenom }} {{ contact.nom }}</a></li>
+	  <li class="active">Pièces à fournir</li>
+	</ol>
+	<div class="row">
+		{% for key,item in items %}
+			<div class="col-md-3">
+				{% include 'modals/choix-generation-docs.html.twig' with {'item':item,'id':key} %}
+				<div class="kit-container" data-toggle="modal" data-source="{{key}}" data-target="#choix-generation-docs-{{key}}">
+					<div class="kit-label">
+						{{item.title}}
+					</div>
+					<div class="kit-icon">
+						<span class="glyphicons glyphicons-message-full"></span>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	
+{% endblock %}

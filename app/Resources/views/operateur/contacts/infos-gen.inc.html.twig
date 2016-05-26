@@ -12,7 +12,15 @@
 	</p>
 </div>
 <div class="section">
-	<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Cotisation</p>
+	{% set isPayed = false %}
+	{% for cotisation in contact.cotisations %}
+		{% if cotisation.datePaiement is not null and cotisation.datePaiement.format('Y') == "now"|date('Y') %}
+			{% set isPayed = true %}
+		{% endif %}
+	{% endfor %}
+	{% if isPayed %}
+		<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Cotisation <span class="label label-success">Réglée</span></p>
+	{% endif %}
 	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Profil créé le <a href="#">{{ contact.dateEntree ? contact.dateEntree.format('d M Y') :'' }}</a></p>
 	{% if contact.mail %}
 	<p class="underlined"><span class="glyphicons glyphicons-envelope"></span>&nbsp;&nbsp;<a href="mailto:{{ contact.mail }}">{{ contact.mail }}</a></p>
@@ -51,7 +59,7 @@
 	<p><a class="btn btn-default btn-block" href="{{ path('list_procurations',{'idContact':contact.id}) }}">Procuration</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_pouvoirs',{'idContact':contact.id}) }}">Pouvoirs</a></p>
 	<p><a class="btn btn-default btn-block" href="{{ path('list_diplomes',{'idContact':contact.id}) }}">Diplômes</a></p>
-	<p><a class="btn btn-default btn-block">Pièces à fournir</a></p>
+	<p><a class="btn btn-default btn-block" href="{{ path('pieces_a_fournir_contact',{'idContact':contact.id}) }}">Pièces à fournir</a></p>
 </div>
 
 {% include 'modals/editer-membre-conjoint.html.twig' %}

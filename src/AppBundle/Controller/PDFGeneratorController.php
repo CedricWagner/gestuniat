@@ -23,6 +23,8 @@ class PDFGeneratorController extends Controller
     public function generateBulletinAdhAction($idContact)
     {
 
+      $datetime = new \DateTime();
+
       $contact = $this->getDoctrine()
               ->getRepository('AppBundle:Contact')
               ->find($idContact);
@@ -61,7 +63,20 @@ class PDFGeneratorController extends Controller
         "E-mail"=>$contact->getMail()
       ));
       $svgY = $pdf->GetY();
-      $pdf->CotisationBlock();
+
+      $repository = $this->getDoctrine()->getRepository('AppBundle:Parametre');
+      $paramDroitEntree = $repository->findOneBy(array('code'=>'DROIT_ENTREE'));
+      $paramAnnuel = $repository->findOneBy(array('code'=>'COTISATION_MONTANT_ANNUEL'));
+      $paramSemestriel = $repository->findOneBy(array('code'=>'COTISATION_MONTANT_SEMESTRIEL'));
+      $paramDossier = $repository->findOneBy(array('code'=>'FRAIS_DOSSIER'));
+
+      $pdf->CotisationBlock(array(
+        'annee'=>$datetime->format('Y'),
+        'droit_entree'=>$paramDroitEntree->getValue(),
+        'cotisation_annuelle'=>$paramAnnuel->getValue(),
+        'cotisation_semestrielle'=>$paramSemestriel->getValue(),
+        'ouverture_dossier'=>$paramDossier->getValue(),
+        ));
       $pdf->SetLeftMargin(80);
       $pdf->SetY($svgY);
       $pdf->SpecialCases("N° Sécurité Sociale : \nou autre régime");

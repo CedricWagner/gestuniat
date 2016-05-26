@@ -122,7 +122,7 @@ class FilterController extends Controller
             //Get contacts by filter values
             $items = $this->getDoctrine()
               ->getRepository('AppBundle:Organisme')
-              ->findByFilter($filtreValeurs,$page,$nb);
+              ->findByFilter($filtreValeurs,$page,$nb,$orderby,$order);
         }
         if($context=='dossier'){
             //Get contacts by filter values

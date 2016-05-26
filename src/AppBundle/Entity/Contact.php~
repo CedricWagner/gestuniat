@@ -251,7 +251,7 @@ class Contact
     /**
      * @var string
      *
-     * @ORM\Column(name="typeAdhesion", type="string", length=20, nullable=true)
+     * @ORM\Column(name="typeAdhesion", type="string", length=20)
      */
     private $typeAdhesion;
 
@@ -1438,29 +1438,5 @@ class Contact
     public function getCotisations()
     {
         return $this->cotisations;
-    }
-
-    /**
-     * Set typeAdhesion
-     *
-     * @param string $typeAdhesion
-     *
-     * @return Contact
-     */
-    public function setTypeAdhesion($typeAdhesion)
-    {
-        $this->typeAdhesion = $typeAdhesion;
-
-        return $this;
-    }
-
-    /**
-     * Get typeAdhesion
-     *
-     * @return string
-     */
-    public function getTypeAdhesion()
-    {
-        return $this->typeAdhesion;
     }
 }

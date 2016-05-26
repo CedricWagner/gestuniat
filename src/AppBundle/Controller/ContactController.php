@@ -435,9 +435,74 @@ class ContactController extends Controller
         ->getRepository('AppBundle:Contact')
         ->find($idContact);
 
+
         return $this->render('operateur/contacts/kit-adhesion.html.twig',array(
-            'contact' => $contact
+            'contact' => $contact,
           ));
+    }
+
+    /**
+     * @Route("/contact/{idContact}/pieces-a-fournir", name="pieces_a_fournir_contact")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function piecesAFournirAction($idContact)
+    {
+       $contact = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->find($idContact);
+
+        $items = array(
+            1 => array( 'title'=>"Adhésion à la mutuelle",
+                        'values'=>array(
+                                          "Formulaire complété",
+                                          "Copie de l'attestation vitale de chacun des sousscripteurs",
+                                          "Relevé d'identité bancaire",
+                                          "Certificat de radiation de la précédente mutuelle",
+                                          "Carte vitale",
+                          )),
+            2 => array( 'title'=>"ATS",
+                        'values'=>array(
+                                          "Copie avis de non-imposition 2___",
+                                          "Copie carte d'identité",
+                          )),
+          );
+
+        return $this->render('operateur/contacts/pieces-a-fournir.html.twig',array(
+            'contact' => $contact,
+            'items' => $items
+        ));
+    }
+
+    /**
+     * @Route("/contact/{idContact}/generate-pieces", name="generate_pieces")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generatePiecesAction($idContact)
+    {
+       $contact = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->find($idContact);
+
+        $items = array(
+            1 => array( 'title'=>"Adhésion à la mutuelle",
+                        'values'=>array(
+                                          "Formulaire complété",
+                                          "Copie de l'attestation vitale de chacun des sousscripteurs",
+                                          "Relevé d'identité bancaire",
+                                          "Certificat de radiation de la précédente mutuelle",
+                                          "Carte vitale",
+                          )),
+            2 => array( 'title'=>"ATS",
+                        'values'=>array(
+                                          "Copie avis de non-imposition 2___",
+                                          "Copie carte d'identité",
+                          )),
+          );
+
+        return $this->render('operateur/contacts/pieces-a-fournir.html.twig',array(
+            'contact' => $contact,
+            'items' => $items
+        ));
     }
 
 
