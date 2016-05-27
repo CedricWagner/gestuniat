@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\ContratAgrrType;
 use AppBundle\Entity\ContratPrevoyance;
+use AppBundle\Entity\Dossier;
 use AppBundle\Form\ContratObsequeType;
 use AppBundle\Entity\ContratPrevObs;
 
@@ -126,8 +127,8 @@ class PrevoyanceController extends Controller
 
 	    if ($agrrForm->isSubmitted() && $agrrForm->isValid()) {
 
+    		$error = false;
 	    	if ($agrr->getCible()=='CONJOINT') {
-	    		$error = false;
 	    		if ($agrr->getContact()->getMembreConjoint()) {
 	    			$mConjoint = $agrr->getContact()->getMembreConjoint();
 	    			$agrr->setContact($mConjoint);
@@ -137,15 +138,30 @@ class PrevoyanceController extends Controller
 	    		}
 	    	}
 
-	    	if(!$error){
+	    	if(!$agrr->getId()){
+	    		$dossier = new Dossier();
+	    		$dossier->setNom('Prévoyance AGRR N°'.$agrr->getNumContrat())
+	    				->setDateOuverture(new \DateTime())
+	    				->setDateCreation(new \DateTime())
+	    				->setOperateur($this->getUser())
+	    				->setContact($contact);
+
+				$em = $this->get('doctrine.orm.entity_manager');
+				$em->persist($dossier);
+				$em->flush();
+			
+				$this->get('session')->getFlashBag()->add('info', 'Un dossier dédié à cette prévoyance a été créé');
+	    	}
+
+	    	if($error){
 				$this->get('session')->getFlashBag()->add('danger', 'Impossible de lier le contrat au conjoint : aucun conjoint n\'a été défini');
 	    	}else{	
 				$em = $this->get('doctrine.orm.entity_manager');
 				$em->persist($agrr);
 				$em->flush();
+				$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 	    	}
 
-			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 	    }
 		if ($agrrForm->isSubmitted() && !$agrrForm->isValid()) {
 			$this->get('app.tools')->handleFormErrors($agrrForm);
@@ -238,6 +254,20 @@ class PrevoyanceController extends Controller
 	    		}
 	    	}
 
+	    	if(!$obseque->getId()){
+	    		$dossier = new Dossier();
+	    		$dossier->setNom('Prévoyance obsèque N°'.$obseque->getNumContrat())
+	    				->setDateOuverture(new \DateTime())
+	    				->setDateCreation(new \DateTime())
+	    				->setOperateur($this->getUser())
+	    				->setContact($contact);
+
+				$em = $this->get('doctrine.orm.entity_manager');
+				$em->persist($dossier);
+				$em->flush();
+			
+				$this->get('session')->getFlashBag()->add('info', 'Un dossier dédié à cette prévoyance a été créé');
+	    	}
 
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($obseque);

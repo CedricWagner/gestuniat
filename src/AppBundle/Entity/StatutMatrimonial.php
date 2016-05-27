@@ -62,5 +62,9 @@ class StatutMatrimonial
     {
         return $this->label;
     }
+
+    public static function getIdVeuf(){
+        return 5;
+    }
 }
 

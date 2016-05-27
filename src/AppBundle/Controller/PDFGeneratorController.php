@@ -266,4 +266,99 @@ class PDFGeneratorController extends Controller
       return $response; 
     }
 
+    /**
+     * @Route("/contact/{idContact}/generate-pieces", name="generate_pieces")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generatePiecesAction($idContact, Request $request)
+    {
+        $contact = $this->getDoctrine()
+          ->getRepository('AppBundle:Contact')
+          ->find($idContact);
+
+        $pieces = $request->request->get('cbDocs');
+        $title = $request->request->get('txtTitle');
+        $txtAdd = $request->request->get('txtAdd');
+
+        $pdf = new PDF_DefaultModel();
+        $pdf->AddPage();
+        $pdf->Title('Fiche : '.$title);
+        $pdf->setFontDefault();
+        $pdf->SetFont('','',10);
+        
+        $pdf->AddParagraphe('Mme / M : <b>'.$contact->getNom().' '.$contact->getPrenom().'</b><br />Section : <b>'.($contact->getSection()?$contact->getSection()->getNom():'').'</b>');
+        
+        $pdf->Ln(10);
+        $pdf->SetFont('','B');
+        $pdf->AddParagraphe($request->request->get('txtFullTitle'));
+        $pdf->Ln(10);
+
+        $pdf->Listing('Pièces à fournir',$pieces);
+        
+        if($txtAdd!=''){
+          $pdf->SetFont('','',10);
+          $pdf->AddParagraphe('<b>Informations complémentaires</b> : <br />'.$txtAdd);
+        }
+
+        $pdf->SetY($pdf->GetPageHeight()-65);
+        $pdf->SetLeftMargin(120);
+        $pdf->Signature('Date :','Le délégué :');
+
+        $response = new Response();
+        $response->setContent($pdf->Output());
+
+        $response->headers->set(
+           'Content-Type',
+           'application/pdf'
+        );
+
+        return $response; 
+    }
+
+    /**
+     * @Route("/contact/{idContact}/generate-divers-rens", name="generate_divers_rens")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generateDiversRensAction($idContact, Request $request)
+    {
+        $contact = $this->getDoctrine()
+          ->getRepository('AppBundle:Contact')
+          ->find($idContact);
+
+        $title = 'Divers Renseignements';
+        $txtObjet = $request->request->get('txtObjet');
+        $txtPieces = $request->request->get('txtPieces');
+        $txtRenseignements = $request->request->get('txtRenseignements');
+        $txtFormalites = $request->request->get('txtFormalites');
+
+
+        $pdf = new PDF_DefaultModel();
+        $pdf->AddPage();
+        $pdf->Title('Fiche : '.$title);
+        $pdf->setFontDefault();
+        $pdf->SetFont('','',10);
+        
+        $pdf->AddParagraphe('Mme / M : <b>'.$contact->getNom().' '.$contact->getPrenom().'</b><br />Section : <b>'.($contact->getSection()?$contact->getSection()->getNom():'').'</b>');
+        
+        $pdf->AddParagraphe('<b>Objet</b><br />'.$txtObjet);
+        $pdf->AddParagraphe('<b>Pièces à fournir</b><br />'.$txtPieces);
+        $pdf->AddParagraphe('<b>Renseignements à donner</b><br />'.$txtRenseignements);
+        $pdf->AddParagraphe('<b>Formalités à accomplir</b><br />'.$txtFormalites);
+
+
+        $pdf->SetY($pdf->GetPageHeight()-65);
+        $pdf->SetLeftMargin(120);
+        $pdf->Signature('Date :','Le délégué :');
+
+        $response = new Response();
+        $response->setContent($pdf->Output());
+
+        $response->headers->set(
+           'Content-Type',
+           'application/pdf'
+        );
+
+        return $response; 
+    }
+
 }

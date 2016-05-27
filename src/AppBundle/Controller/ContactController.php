@@ -16,6 +16,8 @@ use AppBundle\Entity\Don;
 use AppBundle\Entity\Vignette;
 use AppBundle\Entity\Dossier;
 use AppBundle\Entity\Document;
+use AppBundle\Entity\StatutJuridique;
+use AppBundle\Entity\StatutMatrimonial;
 use AppBundle\Form\DonType;
 use AppBundle\Form\VignetteType;
 use AppBundle\Form\DossierType;
@@ -252,14 +254,34 @@ class ContactController extends Controller
       $contact = $this->getDoctrine()
               ->getRepository('AppBundle:Contact')
               ->find($idContact);
+      $prevDateDeces = $contact->getDateDeces();
 
       $contactForm = $this->createForm(ContactFullEditionType::class, $contact);
-          
+         
 
       $contactForm->handleRequest($request);
 
       if($this->get('security.authorization_checker')->isGranted('ROLE_USER')){
         if ($contactForm->isSubmitted() && $contactForm->isValid()) {
+          
+          // case décès
+          if($prevDateDeces == null && $contact->getDateDeces() != null){
+            if($contact->getMembreConjoint()){
+
+              $conjoint = $contact->getMembreConjoint();
+              if($conjoint->getStatutJuridique()->getId()!=StatutJuridique::getIdStatutAdherent()){
+                $conjoint->setStatutJuridique($this->getDoctrine()->getRepository('AppBundle:StatutJuridique')->find(StatutJuridique::getIdPoursuiteAdh()));
+              }
+              $conjoint->setStatutMatrimonial($this->getDoctrine()->getRepository('AppBundle:StatutMatrimonial')->find(StatutMatrimonial::getIdVeuf()));
+
+
+              $em = $this->get('doctrine.orm.entity_manager');
+              $em->persist($conjoint);
+              $em->flush(); 
+            }
+            $contact->setStatutJuridique($this->getDoctrine()->getRepository('AppBundle:StatutJuridique')->find(StatutJuridique::getIdDeces()));
+          }
+
           $em = $this->get('doctrine.orm.entity_manager');
           $em->persist($contact);
           $em->flush(); 
@@ -269,6 +291,7 @@ class ContactController extends Controller
           $history = $this->get('app.history');
           $history->init($this->getUser(),['id'=>$idContact,'name'=>'Contact'],'UPDATE')
                   ->log(true); 
+
         }
         if ($contactForm->isSubmitted() && !$contactForm->isValid()) {
           $this->get('app.tools')->handleFormErrors($contactForm);
@@ -366,6 +389,24 @@ class ContactController extends Controller
         $em->persist($conjoint);
         $em->flush(); 
 
+        $suivi = new Suivi();
+        $suivi->setOperateur($this->getUser())
+              ->setTexte('Ajout d\'un membre conjoint (création)')
+              ->setDateCreation($today)
+              ->setIsOk(true)
+              ->setContact($contact);
+        $em->persist($suivi);
+        $em->flush();
+
+        $suivi = new Suivi();
+        $suivi->setOperateur($this->getUser())
+              ->setTexte('Création')
+              ->setDateCreation($today)
+              ->setIsOk(true)
+              ->setContact($conjoint);
+        $em->persist($suivi);
+        $em->flush();
+
         $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
         $contact->setMembreConjoint($conjoint);
@@ -386,7 +427,16 @@ class ContactController extends Controller
 
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($contact);
-        $em->flush(); 
+        $em->flush();
+
+        $suivi = new Suivi();
+        $suivi->setOperateur($this->getUser())
+              ->setTexte('Ajout d\'un membre conjoint (contact existant)')
+              ->setDateCreation(new \DateTime())
+              ->setIsOk(true)
+              ->setContact($contact);
+        $em->persist($suivi);
+        $em->flush();
 
         $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
@@ -410,11 +460,21 @@ class ContactController extends Controller
           $em->persist($contact);
           $em->flush(); 
 
+
           $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
           $em = $this->get('doctrine.orm.entity_manager');
           $em->persist($conjoint);
           $em->flush(); 
+          
+          $suivi = new Suivi();
+          $suivi->setOperateur($this->getUser())
+                ->setTexte('Suppression du membre conjoint')
+                ->setDateCreation(new \DateTime())
+                ->setIsOk(true)
+                ->setContact($contact);
+          $em->persist($suivi);
+          $em->flush();
 
         }
 
@@ -453,6 +513,7 @@ class ContactController extends Controller
 
         $items = array(
             1 => array( 'title'=>"Adhésion à la mutuelle",
+                        'fullTitle'=>"Objet : Adhésion à la mutuelle <br />        - Frais médicaux<br />        - Options",
                         'values'=>array(
                                           "Formulaire complété",
                                           "Copie de l'attestation vitale de chacun des sousscripteurs",
@@ -461,6 +522,7 @@ class ContactController extends Controller
                                           "Carte vitale",
                           )),
             2 => array( 'title'=>"ATS",
+                        'fullTitle'=>"Objet : ATS",
                         'values'=>array(
                                           "Copie avis de non-imposition 2___",
                                           "Copie carte d'identité",
@@ -472,39 +534,6 @@ class ContactController extends Controller
             'items' => $items
         ));
     }
-
-    /**
-     * @Route("/contact/{idContact}/generate-pieces", name="generate_pieces")
-     * @Security("has_role('ROLE_SPECTATOR')")
-     */
-    public function generatePiecesAction($idContact)
-    {
-       $contact = $this->getDoctrine()
-        ->getRepository('AppBundle:Contact')
-        ->find($idContact);
-
-        $items = array(
-            1 => array( 'title'=>"Adhésion à la mutuelle",
-                        'values'=>array(
-                                          "Formulaire complété",
-                                          "Copie de l'attestation vitale de chacun des sousscripteurs",
-                                          "Relevé d'identité bancaire",
-                                          "Certificat de radiation de la précédente mutuelle",
-                                          "Carte vitale",
-                          )),
-            2 => array( 'title'=>"ATS",
-                        'values'=>array(
-                                          "Copie avis de non-imposition 2___",
-                                          "Copie carte d'identité",
-                          )),
-          );
-
-        return $this->render('operateur/contacts/pieces-a-fournir.html.twig',array(
-            'contact' => $contact,
-            'items' => $items
-        ));
-    }
-
 
     /**
      * @Route("/contact/{idContact}/suppression", name="delete_contact")

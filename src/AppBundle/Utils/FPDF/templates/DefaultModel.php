@@ -193,6 +193,20 @@ class DefaultModel extends FPDF {
         $this->SetTextColor(51,51,51);
     }
 
+    function Listing($title,$fields){
+        $this->Ln(2);
+        $this->SetFont('','B',10);
+        $this->Cell(60,10,utf8_decode($title));
+        $this->Ln(10);
+        $this->SetFont('','',9);
+        foreach ($fields as $field) {
+            $this->AddCheckBox();
+            $this->SetX($this->GetX()+5);
+            $this->Cell(60,10,utf8_decode($field));
+            $this->Ln(10);
+        }
+    }
+
 
     protected $B = 0;
     protected $I = 0;

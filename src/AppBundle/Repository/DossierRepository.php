@@ -39,7 +39,7 @@ class DossierRepository extends \Doctrine\ORM\EntityRepository
 			if($fv->getValeur()!=''&&$fv->getValeur()!='0'){
 				switch ($fv->getChamp()->getLabel()) {
 					case 'dateOuverture':
-							$qb->andwhere('dossier.dateOuverture > :p_date_ouverture');
+							$qb->andwhere('dossier.dateOuverture >= :p_date_ouverture');
 							$params['p_date_ouverture'] = $fv->getValeur();
 						break;
 					case 'selStatut':

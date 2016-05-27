@@ -66,5 +66,13 @@ class StatutJuridique
     public static function getIdStatutAdherent(){
         return 2;
     }
+
+    public static function getIdPoursuiteAdh(){
+        return 4;
+    }
+
+    public static function getIdDeces(){
+        return 5;
+    }
 }
 

@@ -55,7 +55,7 @@
 				<tr class="clickable dossier-line" data-id="{{ dossier.id }}" data-path="{{path('view_dossier',{'idDossier':dossier.id,'idContact':dossier.contact.id})}}">
 					<td>{{ dossier.nom }}</td>
 					<td>{{ dossier.contact.prenom }} {{ dossier.contact.nom }}</td>
-					<td>{{ dossier.contact.section.nom }}</td>
+					<td>{{ dossier.contact.section ? dossier.contact.section.nom : '' }}</td>
 					<td>{{ dossier.dateOuverture ? dossier.dateOuverture.format('d/m/Y') : '' }}</td>
 					<td>{{ dossier.dateFermeture ? dossier.dateFermeture.format('d/m/Y') : '' }}</td>
 				</tr>
