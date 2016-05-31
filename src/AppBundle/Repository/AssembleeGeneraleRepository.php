@@ -10,4 +10,19 @@ namespace AppBundle\Repository;
  */
 class AssembleeGeneraleRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function findNextBySection($section){
+		$qb = $this->createQueryBuilder('ag');
+		$result = $qb
+			->select('ag')
+			->where('ag.section = :p_section')
+			->andwhere('ag.date > :p_date')
+			->orderby('ag.date','ASC')
+			->setParameters(array('p_section'=>$section,'p_date'=> new \DateTime()))
+            ->setMaxResults(1)
+			->getQuery()
+    		->execute();
+
+        return sizeof($result)?$result[0]:null;
+	}
 }

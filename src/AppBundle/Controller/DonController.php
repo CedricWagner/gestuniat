@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\DonType;
 use AppBundle\Entity\Don;
+use AppBundle\Entity\Suivi;
 
 
 class DonController extends Controller
@@ -36,6 +37,10 @@ class DonController extends Controller
 	  				'action'=> $this->generateUrl('save_don').'?idContact='.$contact->getId().'&idDon='.$don->getId(),
 	  			));
 	  		$donForms[$don->getId()] = $donForm->createView();
+	  		
+	  		$tools = $this->get('app.tools');
+	  		dump($tools->asLetters($don->getMontant(),true));
+
 	  	}
 
 	  	$newDonForm = $this->createForm(DonType::class, new Don() ,array(
@@ -66,10 +71,12 @@ class DonController extends Controller
 			$don = $this->getDoctrine()
 				->getRepository('AppBundle:Don')
 				->find($request->query->get('idDon'));
+			$add = false;
 		}else{
 			$don = new Don();
 			$don->setContact($contact);
 			$don->setOperateur($this->getUser());
+			$add = true;
 		}
 
 		$donForm = $this->createForm(DonType::class, $don);
@@ -79,6 +86,19 @@ class DonController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($don);
 			$em->flush();
+
+			if($add){
+				$suivi = new Suivi();
+				$suivi->setContact($contact)
+					->setOperateur($this->getUser())
+					->setDateCreation(new \DateTime())
+					->setIsOk(true)
+					->setTexte('Ajout d\'un nouveau don');
+			
+				$em->persist($suivi);
+				$em->flush();
+
+			}
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}

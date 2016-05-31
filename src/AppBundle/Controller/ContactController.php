@@ -258,7 +258,6 @@ class ContactController extends Controller
 
       $contactForm = $this->createForm(ContactFullEditionType::class, $contact);
          
-
       $contactForm->handleRequest($request);
 
       if($this->get('security.authorization_checker')->isGranted('ROLE_USER')){
@@ -282,6 +281,17 @@ class ContactController extends Controller
             $contact->setStatutJuridique($this->getDoctrine()->getRepository('AppBundle:StatutJuridique')->find(StatutJuridique::getIdDeces()));
           }
 
+          // case CA exists
+          if($contact->getIsCA()&&$contact->getSection()){
+            $membreCA = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->findOneBy(array('section'=>$contact->getSection(),'isCA'=>true));
+            if($membreCA&&$membreCA->getId()!=$contact->getId()){
+              $contact->setIsCA(false);
+              $this->get('session')->getFlashBag()->add('danger', 'Erreur : Il y a déjà un membre CA de défini pour cette section. <a href="'.$this->generateUrl('view_contact',['idContact'=>$membreCA->getId()]).'">Accéder à son profil</a>');  
+            }
+          }
+
           $em = $this->get('doctrine.orm.entity_manager');
           $em->persist($contact);
           $em->flush(); 
@@ -289,7 +299,7 @@ class ContactController extends Controller
           $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');    
 
           $history = $this->get('app.history');
-          $history->init($this->getUser(),['id'=>$idContact,'name'=>'Contact'],'UPDATE')
+          $history->init($this->getUser(),['id'=>$contact->getId(),'name'=>'Contact'],'UPDATE')
                   ->log(true); 
 
         }
@@ -664,7 +674,7 @@ class ContactController extends Controller
         if (sizeof($doubloon)) {
           $doubloon = $doubloon[0];
 
-          $this->get('session')->getFlashbag()->add('danger','Ajout impossible : ce contact existe déjà. <a href="'.$this->generateUrl('view_contact',['idContact'=>$doubloon->getId()]).'">Accéder à sa fiche</a>');
+          $this->get('session')->getFlashbag()->add('danger','Ajout impossible : ce contact existe déjà. (nom, prénom, téléphone et adresse similaires) <a href="'.$this->generateUrl('view_contact',['idContact'=>$doubloon->getId()]).'">Accéder à sa fiche</a>');
 
           return $this->render('operateur/contacts/full-contact.html.twig', [
             'contact' => $contact,

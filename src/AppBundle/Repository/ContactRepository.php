@@ -74,6 +74,10 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 						$qb->andwhere('contact.fonctionRepresentation LIKE :p_fonction_representation');
 						$params['p_fonction_representation'] = $fv->getValeur();
 						break;
+					case 'cbCA':
+						if($fv->getValeur()==1)
+						$qb->andwhere('contact.isCA = true');
+						break;
 					case 'selPaiement':
 						if($fv->getValeur() == 'V_PAYEE'){
 							$qb->join('AppBundle:Vignette', 'vign', 'WITH', 'vign.contact = contact');

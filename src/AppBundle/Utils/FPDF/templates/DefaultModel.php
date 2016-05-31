@@ -95,7 +95,10 @@ class DefaultModel extends FPDF {
         $this->SetX(0);
     }
 
-    function AddParagraphe($p){
+    function AddParagraphe($p,$forceTypo=false){
+        if($forceTypo){
+            $this->SetFont('helvetica','',10);
+        }
         $this->Ln();
         $this->WriteHTML(utf8_decode($p));
         $this->Ln();
@@ -179,6 +182,15 @@ class DefaultModel extends FPDF {
         $this->Rect($this->GetX(),$this->GetY(),55,25);
         $this->Cell(60,10,utf8_decode('  '.$label2));
         $this->SetY($this->GetY()+40);
+    }
+
+    function LigneDecoupe($label=''){
+        $this->Ln(5);
+        $this->setDash(3,3);
+        $this->Cell(0,5,$label,0,1,'R');
+        $this->Line(12,$this->GetY(),$this->GetPageWidth()-12,$this->GetY());
+        $this->setDash();
+        $this->Ln(5);
     }
 
     function AddCheckBox($checked=false){
@@ -291,6 +303,15 @@ class DefaultModel extends FPDF {
         $this->Write(5,$txt,$URL);
         $this->SetStyle('U',false);
         $this->SetTextColor(0);
+    }
+
+    function SetDash($black=null, $white=null)
+    {
+        if($black!==null)
+            $s=sprintf('[%.3F %.3F] 0 d',$black*$this->k,$white*$this->k);
+        else
+            $s='[] 0 d';
+        $this->_out($s);
     }
 
 }

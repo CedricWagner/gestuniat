@@ -118,7 +118,7 @@ class PDFGeneratorController extends Controller
       $pdf->Title('LETTRE DE REMERCIEMENT');
       $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
-      $pdf->AddParagraphe('Cher Membre,');
+      $pdf->AddParagraphe('Cher(e) Membre,');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
@@ -152,10 +152,80 @@ class PDFGeneratorController extends Controller
       $pdf->Title('LETTRE SECTION');
       $pdf->RightText("À l'attention du ".$target." de la section\nStrasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
-      $pdf->AddParagraphe('Cher Membre,');
+      $pdf->AddParagraphe('Cher(e) Membre,');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+    }
+
+    /**
+     * @Route("pdf/contact/{idContact}/generer/invitation-ag/{target}", name="generate_invitation_ag", requirements={"target":"Président|Vice-Président|Secrétaire|Trésorier"})
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function generateInvitationAGAction($idContact,$target)
+    {
+
+      $date = New \DateTime();
+
+      $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($idContact);
+
+      $pdf = new PDF_DefaultModel();
+      $pdf->AddPage();
+      $pdf->RightText(
+        ($contact->getCivilite()?$contact->getCivilite()->getLabel():"Madame/Monsieur")." ".$contact->getNom()." ".$contact->getPrenom().
+        "\n".$contact->getAdresse().
+        ($contact->getAdresseComp()?"\n".$contact->getAdresseComp():'').
+        "\n".$contact->getCp()." ".$contact->getCommune());
+      $pdf->SetLeftMargin(40);
+      $pdf->SetFontDefault();
+      $pdf->AddParagraphe('Cher(e) Membre,',true);
+      $pdf->AddParagraphe('Nous tenons à vous remercier pour votre fidélité à notre section locale et à la grande famille de l\'UNIAT-ALSACE. C\'est pourquoi le Comité de votre section a décidé de vous décerner le diplôme et l\'insigne d\'honneur de l\'UNIAT. Nous serons particulièrement heureux de pouvoir vous les remettre lors de l\'assemblée générale, qui se tiendra le :');
+      $nextAg = $this->getDoctrine()
+        ->getRepository('AppBundle:AssembleeGenerale')
+        ->findNextBySection($contact->getSection());
+      
+      $pdf->Ln(5);
+      if($nextAg){
+        $pdf->Title($nextAg->getDate()->format('d/m/Y').' à '.$nextAg->getLieu());
+      }else{
+        $pdf->Title('');
+      }
+
+      $pdf->AddParagraphe('Nous espérons que vous pourrez être parmi nous à cette occasion et vous remercions de nous retourner le talon ci-dessous.',true);
+      $pdf->AddParagraphe('Recevez, Chere(e) Membre, nos cordiales salutations.',true);
+
+      $pdf->Signature('','Le '.$target.' : ');
+
+      $pdf->LigneDecoupe('TALON - REPONSE');
+      $pdf->Ln(5);
+
+      $pdf->AddComponent('UNIAT',strtoupper($contact->getSection()->getNom()),'text','1/2');
+      $pdf->AddComponent('Assemblée du :',$nextAg?$nextAg->getDate()->format('d/m/Y'):'','text','1/2');
+      $pdf->Ln();
+      $pdf->SetLeftMargin(40);
+      $pdf->AddComponent('Nom, prénom',$contact->getNom().' '.$contact->getPrenom(),'text','1/2');
+      $pdf->Ln();
+      $pdf->SetLeftMargin(40);
+      $pdf->AddComponent('J\'assisterai à l\'assemblée générale','','cb','1');
+      $pdf->Ln();
+      $pdf->SetLeftMargin(40);
+      $pdf->AddComponent('Je n\'assisterai pas à l\'assemblée générale','','cb','1');
+
+      $pdf->SetY($pdf->GetY()-23);
+      $pdf->SetLeftMargin($pdf->GetPageWidth()-75);
+      $pdf->Signature('Date : ','Signature : ');
 
       $response = new Response();
       $response->setContent($pdf->Output());
@@ -186,7 +256,7 @@ class PDFGeneratorController extends Controller
       $pdf->Title('LETTRE D\'ACCOMPAGNEMENT');
       $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
-      $pdf->AddParagraphe('Cher Membre,');
+      $pdf->AddParagraphe('Cher(e) Membre,');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');

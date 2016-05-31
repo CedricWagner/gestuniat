@@ -59,6 +59,12 @@
 			{% endfor %}
 		</select>
 		<input class="form-control" name="txtRepresentation" type="text" value="{{ currentFilter ? currentFilter.getFiltreValeur('txtRepresentation') : '' }}" placeholder="Fonction de représentation" />
+		<div class="checkbox">
+			<label>
+			    <input type="checkbox" name="cbCA" {{ currentFilter and currentFilter.getFiltreValeur('cbCA') == '1' ? 'checked="checked"' : '' }} value="1">
+			    	Membre du CA
+			  </label>
+		</div>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionLocalisation" aria-controls="sectionLocalisation">Localisation<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionLocalisation">

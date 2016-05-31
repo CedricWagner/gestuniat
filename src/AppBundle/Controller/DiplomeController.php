@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\ContactDiplomeType;
 use AppBundle\Entity\ContactDiplome;
+use AppBundle\Entity\Suivi;
 
 
 class DiplomeController extends Controller
@@ -38,7 +39,20 @@ class DiplomeController extends Controller
 	  		$cdForms[$cd->getId()] = $contactDiplomeForm->createView();
 	  	}
 
-	  	$newContactDiplomeForm = $this->createForm(ContactDiplomeType::class, new ContactDiplome() ,array(
+	  	$newContactDiplome = new ContactDiplome();
+	  	$newContactDiplome->setDateObtention(new \DateTime());
+
+	  	if($contact->getSection()){
+		  	$nextAg = $this->getDoctrine()
+		  		->getRepository('AppBundle:AssembleeGenerale')
+		  		->findNextBySection($contact->getSection());
+	  	}
+
+	  	if($nextAg){
+	  		$newContactDiplome->setDateObtention($nextAg->getDate());
+	  	}
+
+	  	$newContactDiplomeForm = $this->createForm(ContactDiplomeType::class, $newContactDiplome ,array(
 				'action'=> $this->generateUrl('save_contact_diplome').'?idContact='.$contact->getId(),
 			));
 
@@ -77,6 +91,16 @@ class DiplomeController extends Controller
 		if ($contactDiplomeForm->isSubmitted() && $contactDiplomeForm->isValid()) {
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($contactDiplome);
+			$em->flush();
+
+			$suivi = new Suivi();
+			$suivi->setContact($contact)
+				->setOperateur($this->getUser())
+				->setIsOk(true)
+				->setDateCreation(new \DateTime())
+				->setTexte('Ajout d\'un diplome');
+
+			$em->persist($suivi);
 			$em->flush();
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');

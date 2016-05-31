@@ -22,6 +22,7 @@
 				<th></th>
 				<th>Diplome</th>
 				<th>Date obtention</th>
+				<th>Invitation à l'AG</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,6 +38,17 @@
 					</td>
 					<td>{{ cd.diplome.label }}</td>
 					<td>{{ cd.dateObtention.format('d/m/Y') }}</td>
+					<td>
+						<div class="btn-group">
+							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Générer <span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Trésorier'}) }}" target="_blank">Pour le trésorier</a></li>
+								<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Secrétaire'}) }}" target="_blank">Pour le secrétaire</a></li>
+								<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Président'}) }}" target="_blank">Pour le président</a></li>
+								<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Vice-Président'}) }}" target="_blank">Pour le vice-président</a></li>
+							</ul>
+						</div>
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
