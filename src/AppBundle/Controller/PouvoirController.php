@@ -66,9 +66,11 @@ class PouvoirController extends Controller
 			$pouvoir = $this->getDoctrine()
 				->getRepository('AppBundle:Pouvoir')
 				->find($request->query->get('idPouvoir'));
+				$add = false;
 		}else{
 			$pouvoir = new Pouvoir();
 			$pouvoir->setContact($contact);
+			$add = true;
 		}
 
 		$pouvoirForm = $this->createForm(PouvoirType::class, $pouvoir);
@@ -78,6 +80,10 @@ class PouvoirController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($pouvoir);
 			$em->flush();
+
+			if($add){
+				$this->get('app.suivi')->create($contact,"Ajout d'un pouvoir");
+			}
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}

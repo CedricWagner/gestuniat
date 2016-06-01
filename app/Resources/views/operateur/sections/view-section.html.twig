@@ -203,6 +203,14 @@ Gestuniat - Section {{ section.nom }}
 								</thead>
 								<tbody>
 									<tr>
+										<td>Effectifs</td>
+										{% for year in displayedYears %}
+											{% if effectifs[year] is defined %}
+												<td>{{ effectifs[year] ? effectifs[year].valeur : '-' }}</td>
+											{% endif %}
+										{% endfor %}
+									</tr>
+									<tr>
 										{% set lastPatrimoine = 0 %}
 										<td>Patrimoine</td>
 										{% for year in displayedYears %}

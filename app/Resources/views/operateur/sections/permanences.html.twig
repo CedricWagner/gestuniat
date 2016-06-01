@@ -23,6 +23,7 @@
 				<th>Type de tournée</th>
 				<th>Description</th>
 				<th>Mise à jour</th>
+				<th>Order de permanance</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -35,6 +36,17 @@
 					<td>{{ permanence.typeTournee ? permanence.typeTournee.label : '' }}</td>
 					<td>{{ permanence.label }}</td>
 					<td>{{ permanence.dateMAJ ? permanence.dateMAJ.format('d/m/Y') : '' }}</td>
+					<td>
+						<div class="btn-group">
+							<button href="" class="btn btn-primary dropdown-toggle" type="button" id="dd-gen-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Générer&nbsp;<span class="caret"></span></button>
+							 <ul class="dropdown-menu" aria-labelledby="dd-gen-order">
+							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Président'}) }}">Président</a></li>
+							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Vice-Président'}) }}">Vice-président</a></li>
+							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Trésorier'}) }}">Trésorier</a></li>
+							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Secrétaire'}) }}">Secrétaire</a></li>
+							  </ul>
+						</div>	
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>

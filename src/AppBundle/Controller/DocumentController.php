@@ -40,7 +40,10 @@ class DocumentController extends Controller
 	  					->getRepository('AppBundle:Dossier')
 	  					->findBy(array('contact'=>$contact));
 
-	  	$newDocumentForm = $this->createForm(DocumentType::class, new Document() ,array(
+	  	$newDocument = new Document();
+	  	$newDocument->setContact($contact);
+
+	  	$newDocumentForm = $this->createForm(DocumentType::class, $newDocument ,array(
 				'action'=> $this->generateUrl('save_document').'?idContact='.$contact->getId(),
 			));
 
@@ -150,7 +153,10 @@ class DocumentController extends Controller
 
 	  	$dossiers = array();
 
-	  	$newDocumentForm = $this->createForm(DocumentType::class, new Document() ,array(
+	  	$newDocument = new Document();
+	  	$newDocument->setContact($contact);
+
+	  	$newDocumentForm = $this->createForm(DocumentType::class, $newDocument ,array(
 				'action'=> $this->generateUrl('save_document').'?idContact='.$contact->getId(),
 			));
 
@@ -320,13 +326,10 @@ class DocumentController extends Controller
 		$dossierForm->handleRequest($request);
 
 		if ($dossierForm->isSubmitted() && $dossierForm->isValid()) {
+
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($dossier);
 			$em->flush();
-
-			dump($lastDateFermeture);
-			dump($dossier->getDateFermeture());
-
 
           	$history = $this->get('app.history');
           	$history->init($this->getUser(),['id'=>$dossier->getId(),'name'=>'Dossier'],$request->query->get('idDossier')?'UPDATE':'INSERT')
@@ -334,17 +337,30 @@ class DocumentController extends Controller
 
 			//just closed
 			if($lastDateFermeture == null && $dossier->getDateFermeture() != null){
-				$suivi = new Suivi();
-				$suivi
-					->setOperateur($this->getUser())
-					->setDateCreation($datetime)
-					->setTexte('Cloture du dossier')
-					->setIsOk(true)
-					->setContact($contact)
-					->setDossier($dossier)
-					;
-				$em->persist($suivi);
-				$em->flush();
+				$vignettes = $this->getDoctrine()
+					->getRepository('AppBundle:Vignette')
+					->findBy(array('dossier'=>$dossier,'datePaiement'=>null));
+
+				if(sizeof($vignettes)){
+					$dossier->setDateFermeture(null);
+					$em->persist($dossier);
+					$em->flush();
+
+          			$this->get('session')->getFlashBag()->add('danger', 'impossible de fermer le dossier : il reste des vignettes impayées');
+					
+				}else{
+					$suivi = new Suivi();
+					$suivi
+						->setOperateur($this->getUser())
+						->setDateCreation($datetime)
+						->setTexte('Cloture du dossier')
+						->setIsOk(true)
+						->setContact($contact)
+						->setDossier($dossier)
+						;
+					$em->persist($suivi);
+					$em->flush();
+				}
 			}
 
           	$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');

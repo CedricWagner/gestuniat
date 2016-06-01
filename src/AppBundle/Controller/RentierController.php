@@ -272,9 +272,23 @@ class RentierController extends Controller
 		        $em->persist($envoiRentier);
 		        $em->flush();
 
+                $contacts = $this->getDoctrine()
+                    ->getRepository('AppBundle:Contact')
+                    ->findBy(array('isEnvoiIndiv'=>true,'section'=>$section));
+
+                foreach ($contacts as $contact) {
+                    $destIndivEnvoi = new DestIndivEnvoi();
+                    $destIndivEnvoi->setContact($contact);
+                    $destIndivEnvoi->setEnvoiRentier($envoiRentier);
+
+                    $em = $this->get('doctrine.orm.entity_manager');
+                    $em->persist($destIndivEnvoi);
+                    $em->flush();
+                }
+
 		        $contacts = $this->getDoctrine()
 		        	->getRepository('AppBundle:Contact')
-		        	->findBy(array('isEnvoiIndiv'=>true,'section'=>$section));
+		        	->findBy(array('isOffreDecouverte'=>true,'section'=>$section));
 
                 foreach ($contacts as $contact) {
                     $destIndivEnvoi = new DestIndivEnvoi();

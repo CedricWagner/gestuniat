@@ -169,4 +169,34 @@ class SuiviController extends Controller
           return new Response(json_encode(['state'=>'noXHR']));     
      }
   }
+
+  public function create($contact,$text){
+    $suivi = new Suivi();
+    $suivi->setOperateur($this->getUser())
+          ->setContact($contact)
+          ->setIsOk(true)
+          ->setDateCreation(new \DateTime())
+          ->setTexte($text);
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($suivi);
+    $em->flush();
+
+    return true;
+  }
+
+  public function createForSection($section,$text){
+    $suivi = new Suivi();
+    $suivi->setOperateur($this->getUser())
+          ->setSection($section)
+          ->setIsOk(true)
+          ->setDateCreation(new \DateTime())
+          ->setTexte($text);
+    $em = $this->getDoctrine()->getManager();
+    $em->persist($suivi);
+    $em->flush();
+
+    return true;
+  }
+
+
 }

@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Contact;
 use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
 use AppBundle\Utils\FPDF\templates\CarteIDFonction as PDF_CarteIDFonction;
+use AppBundle\Utils\FPDF\templates\Table as PDF_Table;
 
 
 class PDFGeneratorController extends Controller
@@ -153,6 +154,39 @@ class PDFGeneratorController extends Controller
       $pdf->RightText("À l'attention du ".$target." de la section\nStrasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
       $pdf->AddParagraphe('Cher(e) Membre,');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+    }
+
+    /**
+     * @Route("pdf/contact/{idPermanence}/generer/ordre-permanence/{target}", name="generate_ordre_perm", requirements={"target":"Président|Vice-Président|Secrétaire|Trésorier"})
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function generateOrdrePermAction($idPermanence,$target)
+    {
+
+      $date = New \DateTime();
+
+      $perm = $this->getDoctrine()
+              ->getRepository('AppBundle:Permanence')
+              ->find($idPermanence);
+
+      $pdf = new PDF_DefaultModel();
+      $pdf->AddPage();
+      $pdf->Title('ORDRE DE PERMANENCE - '.$perm->getSection()->getNom());
+      $pdf->SetLeftMargin(40);
+      $pdf->AddParagraphe('<b>Date de permanence :</b>');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
       $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
@@ -419,6 +453,87 @@ class PDFGeneratorController extends Controller
         $pdf->SetY($pdf->GetPageHeight()-65);
         $pdf->SetLeftMargin(120);
         $pdf->Signature('Date :','Le délégué :');
+
+        $response = new Response();
+        $response->setContent($pdf->Output());
+
+        $response->headers->set(
+           'Content-Type',
+           'application/pdf'
+        );
+
+        return $response; 
+    }
+
+    /**
+     * @Route("/don/{idDon}/generate-recu-don", name="generate_recu_don")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generateRecuDonAction($idDon)
+    {
+        $don = $this->getDoctrine()
+          ->getRepository('AppBundle:Don')
+          ->find($idDon);
+
+        $pNom = $this->getDoctrine()->getRepository('AppBundle:Parametre')->findOneBy(array('code'=>'NOM'));
+        $pAdresse = $this->getDoctrine()->getRepository('AppBundle:Parametre')->findOneBy(array('code'=>'ADRESSE_SIEGE'));
+        $pDecret = $this->getDoctrine()->getRepository('AppBundle:Parametre')->findOneBy(array('code'=>'DECRET'));
+
+
+
+        $pdf = new PDF_Table();
+        $pdf->AddPage();
+        $pdf->Title(strtoupper('RECU - ASSOCIATION'));
+        $pdf->setFontDefault();
+        $pdf->SetFont('','',10);
+        $pdf->EnteteCerfa('N° 11580*03','ARTICLE 238 bis - 5 CODE GÉNÉRAL DES IMPÔTS');
+        $pdf->TableLine('NOM DE L\'ENTREPRISE :',$pNom->getValue());
+        $pdf->TableLine('ADRESSE DU SIÈGE :',$pAdresse->getValue());
+        $pdf->TableLine('DÉCRET :',$pDecret->getValue());
+        $pdf->TableLine('NOM DU DONATEUR :',$don->getContact()->getPrenom().' '.strtoupper($don->getContact()->getNom()));
+        $pdf->TableLine('ADRESSE DU DONATEUR :',$don->getContact()->getAdresse().' \n'.$don->getContact()->getCp().' '.strtoupper($don->getContact()->getCommune()));
+        $pdf->TableLine("L'association reconnaît avoir reçu à titre \nde don, la somme de :", $don->getMontant().' euros','1/2');
+        $pdf->TableLine("Somme en toutes lettres", strtoupper($this->get('app.tools')->asLetters($don->getMontant(),true)),'1/2');
+        $pdf->specTableLine('Date de paiement : '.$don->getDate()->format('d/m/Y'),'Mode de versement : '.($don->getMoyenPaiement()?$don->getMoyenPaiement()->getLabel():''));
+        $pdf->SetFont('','',8);
+        $pdf->AddParagraphe("<i>Le don n'ouvre droit à déduction que dans la mesure
+où les conditions générales prévues à l'article 238 bis-1
+du Code général des impôts sont remplies.
+C'est-à-dire s'il est effectué « au profit d'oeuvres ou
+d'organismes d'intérêt général, de caractère
+philantropique, éducatif, scientifique, social, familial
+ou culturel ».</i>");
+
+        $response = new Response();
+        $response->setContent($pdf->Output());
+
+        $response->headers->set(
+           'Content-Type',
+           'application/pdf'
+        );
+
+        return $response; 
+    }
+
+    /**
+     * @Route("/don/{idDon}/generate-remerciement-don", name="generate_remerciement_don")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generateRemDonAction($idDon)
+    {
+        $don = $this->getDoctrine()
+          ->getRepository('AppBundle:Don')
+          ->find($idDon);
+
+        $date = new \DateTime();
+
+        $pdf = new PDF_DefaultModel();
+        $pdf->AddPage();
+        $pdf->Title(strtoupper('LETTRE DE REMERCIEMENT'));
+        $pdf->setFontDefault();
+        $pdf->SetFont('','',10);
+        $pdf->RightText("Strasbourg \nle ".$date->format('d/m/Y')." \nSection : ".($don->getContact()->getSection()?$don->getContact()->getSection()->getNom():''));
+        $pdf->AddParagraphe($this->render('docs/lettres/remerciement-don.html.twig',['montant'=>$don->getMontant()])->getContent());
 
         $response = new Response();
         $response->setContent($pdf->Output());

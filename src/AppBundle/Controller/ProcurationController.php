@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\ProcurationType;
 use AppBundle\Entity\Procuration;
+use AppBundle\Entity\Suivi;
 
 
 class ProcurationController extends Controller
@@ -66,9 +67,11 @@ class ProcurationController extends Controller
 			$procuration = $this->getDoctrine()
 				->getRepository('AppBundle:Procuration')
 				->find($request->query->get('idProcuration'));
+			$add = false;
 		}else{
 			$procuration = new Procuration();
 			$procuration->setContact($contact);
+			$add = true;
 		}
 
 		$procurationForm = $this->createForm(ProcurationType::class, $procuration);
@@ -78,6 +81,18 @@ class ProcurationController extends Controller
 			$em = $this->get('doctrine.orm.entity_manager');
 			$em->persist($procuration);
 			$em->flush();
+
+			if($add){
+				// $suivi = new Suivi();
+				// $suivi->setOperateur($this->getUser())
+				// 	->setContact($contact)
+				// 	->setIsOk(true)
+				// 	->setDateCreation(new \DateTime())
+				// 	->setTexte("Ajout d'une procuration");
+				// $em->persist($suivi);
+				// $em->flush();
+				$this->get('app.suivi')->create($contact,"Ajout d'une procuration");
+			}
 
 			$this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 		}

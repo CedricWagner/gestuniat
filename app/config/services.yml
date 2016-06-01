@@ -4,3 +4,4 @@ imports:
     - { resource: services/csvgenerator.yml }
     - { resource: services/history.yml }
     - { resource: services/tools.yml }
+    - { resource: services/suivi.yml }

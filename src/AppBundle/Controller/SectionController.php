@@ -148,6 +148,7 @@ class SectionController extends Controller
 
         $patrimoineForms = array();
         $patrimoines = array();
+        $effectifs = array();
         // only display the 5 last years
         $displayedYears = array(
                 $datetime->format('Y')-5 => $datetime->format('Y')-5,
@@ -174,6 +175,12 @@ class SectionController extends Controller
             $patrimoineForms[$i] = $patrimoineForm->createView();
             $patrimoines[$i] = $_patrimoine;
             $allYears[]=$i;
+
+            $effectif = $this->getDoctrine()
+              ->getRepository('AppBundle:Effectif')
+              ->findOneBy(array('section'=>$section,'annee'=>$i));
+
+            $effectifs[$i] = $effectif;
         }
 
         $currentTimbres = $this->getDoctrine()
@@ -195,18 +202,19 @@ class SectionController extends Controller
             'displayedYears' => $displayedYears,
             'allYears' => $allYears,
             'patrimoines' => $patrimoines,
+            'effectifs' => $effectifs,
             'permanence' => $permanence,
             'assembleeGenerale' => $assembleeGenerale,
             'newPermanenceForm' => $newPermanenceForm->createView(),
             'assembleeGeneraleForm' => $assembleeGeneraleForm->createView(),
             'newAssembleeGeneraleForm' => $newAssembleeGeneraleForm->createView(),
             'permanenceForm' => $permanenceForm->createView(),
-		    'patrimoineForms' => $patrimoineForms,
+		        'patrimoineForms' => $patrimoineForms,
             'suiviForm' => $suiviForm->createView(),
-		    'newPatrimoineForm' => $newPatrimoineForm->createView(),
-		    'lstSuivis' => $lstSuivis,
+		        'newPatrimoineForm' => $newPatrimoineForm->createView(),
+		        'lstSuivis' => $lstSuivis,
             'lstAllSuivis' => $lstAllSuivis,
-		    'etatTimbres' => $etatTimbres,
+		        'etatTimbres' => $etatTimbres,
 		]);
 
     }

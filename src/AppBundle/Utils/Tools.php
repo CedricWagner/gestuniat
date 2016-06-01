@@ -25,7 +25,6 @@ class Tools extends Controller
 
 		foreach ($form->all() as $child) {
 	        if (!$child->isValid()) {
-	        	dump($child);
 	            $errors[$child->getName()] = $this->getErrorMessages($child);
 	        }
 	    }

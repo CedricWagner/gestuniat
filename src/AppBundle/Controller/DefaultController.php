@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Alerte;
+use AppBundle\Entity\Effectif;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use AppBundle\Form\AlerteCreationType;
 
@@ -65,10 +66,10 @@ class DefaultController extends Controller
         $alerte = new Alerte();
         $alerteForm = $this->createForm(AlerteCreationType::class, $alerte);
         $alerteForm->handleRequest($request);
+        $datetime = new \DateTime();
 
         if ($alerteForm->isSubmitted() && $alerteForm->isValid()) {
                 
-            $datetime = new \DateTime();
 
             $alerte->setDateCreation($datetime);
             $alerte->setOperateur($this->getUser());
@@ -140,13 +141,34 @@ class DefaultController extends Controller
                 }
             }
 
-
             $this->updateAlertesInSession();
+
+            // retrieve missing timbres
+            $lateSections = array();
+
+            $echeanceRemise = new \DateTime($datetime->format('Y')."-02-15");
+            if($datetime>$echeanceRemise){
+                $sections = $this->getDoctrine()
+                    ->getRepository('AppBundle:Section')
+                    ->findAll();
+
+                foreach ($sections as $section) {
+                    $remiseTimbre = $this->getDoctrine()
+                        ->getRepository('AppBundle:RemiseTimbre')
+                        ->findOneBy(array('annee'=>$datetime->format('Y')-1,'section'=>$section));
+
+                    if(!$remiseTimbre){
+                        $lateSections[] = $section;
+                    }
+
+                }
+            }
 
             return $this->render('operateur/dashboard.html.twig', [
                 'alerteForm' => $alerteForm->createView(),
                 'lstAlertes' => $lstAlertes,
                 'lstHistory' => $lstHistory,
+                'lateSections' => $lateSections,
                 'lstFuturTerms' => $lstFuturTerms,
             ]);
         }
@@ -349,5 +371,37 @@ class DefaultController extends Controller
         $session->set('nbAlertes', sizeof($lateAlertes));
         $session->set('lateAlertes', $lateAlertes);
 
+    }
+
+    /**
+     * @Route("/routines/effectifs", name="save_effectif")
+     */
+    public function saveEffectifAction(Request $request)
+    {
+
+        $datetime = new \DateTime();
+
+        $sections = $this->getDoctrine()
+            ->getRepository('AppBundle:Section')
+            ->findAll();
+
+        foreach ($sections as $section) {
+            $nbAdhs = $this->getDoctrine()
+                ->getRepository('AppBundle:Contact')
+                ->countContactsBySection($section);
+
+            $effectif = new Effectif();
+            $effectif->setAnnee($datetime->format('Y'));
+            $effectif->setValeur($nbAdhs);
+            $effectif->setSection($section);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($effectif);
+            $em->flush();
+
+            $this->get('app.suivi')->createForSection($section,'Sauvegarde automatique des effectifs effectuée ('.$nbAdhs.' pour l\'année '.$datetime->format('Y').')');
+        }
+
+        return new Response('',Response::HTTP_OK);
     }
 }

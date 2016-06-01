@@ -1,0 +1,5 @@
+services:
+  app.suivi:
+    class: "AppBundle\\Controller\\SuiviController"
+    calls:
+        - [setContainer, ["@service_container"]]

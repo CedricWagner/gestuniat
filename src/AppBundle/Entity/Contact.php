@@ -1463,4 +1463,8 @@ class Contact
     {
         return $this->typeAdhesion;
     }
+
+    public function displayHeader(){
+        
+    }
 }

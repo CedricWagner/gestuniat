@@ -10,6 +10,16 @@
 			Aucune
 		{% endif %}
 	</p>
+	{% if contact.fonctionSection %}
+		<div style="position:relative">
+			Fonction : {{contact.fonctionSection.label}}&nbsp;
+			<a  href="#" class="dropdown-toggle" id="options-fonc-section" data-toggle="dropdown" aria-haspopup="true"><span style="vertical-align:bottom" class="glyphicon glyphicon-option-horizontal"></span></a>
+			<ul class="dropdown-menu" aria-labelledby="options-fonc-section">
+				<li class="contextual-item"><a target="_blank" class="no-padding-top" href="#"><span class="glyphicons glyphicons-notes-2"></span><span class="item-label">Générer une lettre de félicitations (à faire)</span></a></li>
+				<li class="contextual-item"><a target="_blank" class="no-padding-top" href="{{path('generate_carte_id_fonction',{'idContact':contact.id})}}"><span class="glyphicons glyphicons-nameplate"></span><span class="item-label">Générer la carte d'identité de fonction</span></a></li>
+			</ul>
+		</div>
+	{% endif %}	
 </div>
 <div class="section">
 	{% set isPayed = false %}

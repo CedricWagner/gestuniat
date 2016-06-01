@@ -159,11 +159,11 @@ class ContactController extends Controller
       $lstSuivis = array();
 
       foreach ($lstSuivisContact as $suiviContact) {
-        $lstSuivis[$suiviContact->getDateCreation()->format('Y-m-d').'_'.$suivi->getId()] = $suiviContact;
+        $lstSuivis[$suiviContact->getDateCreation()->format('Y-m-d').'_'.$suiviContact->getId()] = $suiviContact;
       }
       
       foreach ($lstSuivisDossier as $suiviDossier) {
-        $lstSuivis[$suiviDossier->getDateCreation()->format('Y-m-d').'_'.$suivi->getId()] = $suiviDossier;
+        $lstSuivis[$suiviDossier->getDateCreation()->format('Y-m-d').'_'.$suiviDossier->getId()] = $suiviDossier;
       }
 
       ksort($lstSuivis);
@@ -179,11 +179,11 @@ class ContactController extends Controller
       $lstAllSuivis = array();
 
       foreach ($lstAllSuivisContact as $suiviContact) {
-        $lstAllSuivis[$suiviContact->getDateCreation()->format('Y-m-d').'_'.$suivi->getId()] = $suiviContact;
+        $lstAllSuivis[$suiviContact->getDateCreation()->format('Y-m-d').'_'.$suiviContact->getId()] = $suiviContact;
       }
       
       foreach ($lstAllSuivisDossier as $suiviDossier) {
-        $lstAllSuivis[$suiviDossier->getDateCreation()->format('Y-m-d').'_'.$suivi->getId()] = $suiviDossier;
+        $lstAllSuivis[$suiviDossier->getDateCreation()->format('Y-m-d').'_'.$suiviDossier->getId()] = $suiviDossier;
       }
 
       ksort($lstAllSuivis);
@@ -221,6 +221,7 @@ class ContactController extends Controller
       // Documents
       //    Doc
       $document = new Document();
+      $document->setContact($contact);
       $documentForm = $this->createForm(DocumentType::class, $document);
       $documentForm->handleRequest($request);
 

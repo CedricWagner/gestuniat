@@ -6,6 +6,13 @@ Gestuniat - Votre Dashboard
 
 
 {% block content %}
+	{% if lateSections|length > 0 %}
+		<div class="alert alert-warning">Certaines sections n'ont pas encore réalisé de décompte pour l'année {{"now"|date('Y') - 1}} : 
+			{% for section in lateSections %}
+				<a href="{{path('view_section',{'idSection':section.id})}}">{{section.nom}}</a>,&nbsp;
+			{% endfor %}
+		</div>
+	{% endif %}
 	<h1>Gestionnaire des termes</h1>
 	<p class="grey-text">Liste des termes des dossiers en cours et notes personnelles</p>
 	<button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#ajouter-alerte"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Ajouter alerte perso.</button>

@@ -24,6 +24,8 @@
 				<th>Date</th>
 				<th>Anonyme</th>
 				<th>Moyen de paiement</th>
+				<th>Reçu</th>
+				<th>Remerciement</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,6 +39,8 @@
 					<td>{{ don.date ? don.date.format('d/m/Y') : '' }}</td>
 					<td>{{ don.isAnonyme ? 'Oui' : 'Non' }}</td>
 					<td>{{ don.moyenPaiement ? don.moyenPaiement.label : '' }}</td>
+					<td><a target="_blank" class="btn btn-primary" href="{{ path('generate_recu_don',{'idDon':don.id}) }}">Générer</a></td>
+					<td><a target="_blank" class="btn btn-primary" href="{{ path('generate_remerciement_don',{'idDon':don.id}) }}">Générer</a></td>
 				</tr>
 			{% endfor %}
 		</tbody>

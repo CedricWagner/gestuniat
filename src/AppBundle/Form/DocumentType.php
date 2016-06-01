@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use AppBundle\Repository\DossierRepository;
 
 class DocumentType extends AbstractType
 {
@@ -27,9 +28,23 @@ class DocumentType extends AbstractType
 
         $currentYear = new \DateTime(date('Y'));
 
+        $entity = $options['data'];
+
+        dump($entity);
+
+        $idContact = $entity->getContact()->getId();
+
         $builder
             ->add('label',TextType::class,array('label' => 'Libellé'))
-            ->add('dossier',EntityType::class,array('label' => 'Dossier parent','class'=>'AppBundle:Dossier','placeholder'=>'Racine','choice_label'=>'nom'))
+            ->add('dossier',EntityType::class,array(
+                'label' => 'Dossier',
+                'class'=>'AppBundle:Dossier',
+                'placeholder'=>'Aucun',
+                'choice_label'=>'nom',
+                'query_builder' => function (DossierRepository $er) use ($idContact){
+                    return $er->getByContactQuery($idContact);
+                },
+                ))
             ->add('file',FileType::class,array('label' => 'Fichier joint'))
         ;
     }
