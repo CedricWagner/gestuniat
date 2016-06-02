@@ -182,14 +182,103 @@ class PDFGeneratorController extends Controller
               ->getRepository('AppBundle:Permanence')
               ->find($idPermanence);
 
+      $fonctionSection = $this->getDoctrine()
+        ->getRepository('AppBundle:FonctionSection')
+        ->findOneBy(array('label'=>$target));
+
+      if(!$fonctionSection){
+        $this->get('session')->getFlashBag()->add('danger', 'Génération impossible : la fonction "'.$target.'"" n\'existe pas');
+        return $this->redirectToRoute('list_permanences',['idSection'=>$perm->getSection()->getId()]);
+      }else{
+        $contact = $this->getDoctrine()
+          ->getRepository('AppBundle:Contact')
+          ->findOneBy(array('section'=>$perm->getSection(),'fonctionSection'=>$fonctionSection));
+
+        if(!$contact){
+          $this->get('session')->getFlashBag()->add('danger', 'Génération impossible : aucun contact n\'occupe la fonction '.$target);
+          return $this->redirectToRoute('list_permanences',['idSection'=>$perm->getSection()->getId()]);
+        }
+      }
+
+
+      //effectifs and patrimoines
+      $effectifs = array();
+      $patrimoines = array();
+      $years = range($date->format('Y')-6, $date->format('Y'));
+      foreach ($years as $year) {
+        $effectif = $this->getDoctrine()
+          ->getRepository('AppBundle:Effectif')
+          ->findOneBy(array('annee'=>$year,'section'=>$perm->getSection()));
+        if($effectif){
+          $effectifs[$year] = $effectif->getValeur();
+        }else{
+          $effectifs[$year] = '-';
+        }
+
+        $patrimoine = $this->getDoctrine()
+          ->getRepository('AppBundle:Patrimoine')
+          ->findOneBy(array('annee'=>$year,'section'=>$perm->getSection()));
+        if($patrimoine){
+          $patrimoines[$year] = $patrimoine->getValeur();
+        }else{
+          $patrimoines[$year] = '-';
+        }
+      }
+
+      //AG
+      $lastAG = $this->getDoctrine()
+        ->getRepository('AppBundle:AssembleeGenerale')
+        ->findOneBy(array('section'=>$perm->getSection()),array('date'=>'DESC'));
+
+      //Dest rentiers
+      $destRentiers = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->findBy(array('section'=>$perm->getSection(),'isRentier'=>true));
+      $txtDests = ''; 
+      foreach ($destRentiers as $dest) {
+        $txtDests .= $dest->getNom().' '.$dest->getPrenom().'      ';
+      }
+      $nbRentiers = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->countContactsBySection($perm->getSection());
+
       $pdf = new PDF_DefaultModel();
       $pdf->AddPage();
       $pdf->Title('ORDRE DE PERMANENCE - '.$perm->getSection()->getNom());
       $pdf->SetLeftMargin(40);
-      $pdf->AddParagraphe('<b>Date de permanence :</b>');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe('<b>Date de permanence :</b>',true);
+      $pdf->AddParagraphe('<b>Chargé de mission :</b>');
+      $pdf->AddParagraphe('Arrivée :                         Départ :                          Insertion presse : ');
+      $pdf->AddParagraphe('Militants présents :');
+      $pdf->AddParagraphe('Personnes présentes :');
+      $pdf->Ln(10);
+      $pdf->AddParagraphe('Dons :');
+      $pdf->AddParagraphe('<b>Contact :</b>');
+      $pdf->InlineMultiCell(20,$contact->getNom().' '.$contact->getPrenom(),true);
+      $pdf->InlineMultiCell(20,$fonctionSection->getLabel());
+      $pdf->InlineMultiCell(40,$contact->getAdresse());
+      $pdf->InlineMultiCell(15,$contact->getCp());
+      $pdf->InlineMultiCell(25,$contact->getCommune());
+      $pdf->InlineMultiCell(25,$contact->getTelFixe()!=''?$contact->getTelFixe():$contact->getTelPort());
+      $pdf->Ln(5);
+      $pdf->SetLeftMargin(40);
+      $pdf->AddParagraphe('<b>Subventions :</b> '.$perm->getSection()->getSubventions());
+      $pdf->AddParagraphe('<b>Effectifs : </b>');
+      $pdf->BorderedCells($effectifs);
+      $pdf->Ln(5);
+      $pdf->AddParagraphe('<b>Patrimoines : </b>');
+      $pdf->BorderedCells($patrimoines);
+      $pdf->Ln(5);
+      $pdf->AddParagraphe('<b>Permanence Siège : </b>');
+      $pdf->InlineMultiCell(50,$perm->getPeriodicite()->getLabel(),true);
+      $pdf->InlineMultiCell(50,$perm->getHoraire());
+      $pdf->InlineMultiCell(50,$perm->getLieu());
+      $pdf->Ln();
+      $pdf->SetLeftMargin(40);
+      $pdf->AddParagraphe('<b>Assemblée générale : </b>'.($lastAG ? $lastAG->getDate()->format('d/m/Y') : ''));
+      $pdf->AddParagraphe('<b>Destinataire(s) Rentier : </b>'.$txtDests);
+      $pdf->AddParagraphe('<b>Nombre de Rentiers : </b>'.$nbRentiers);
+      $pdf->AddParagraphe('<b>Autres informations : </b>');
 
       $response = new Response();
       $response->setContent($pdf->Output());

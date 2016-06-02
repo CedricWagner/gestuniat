@@ -100,7 +100,7 @@ class DefaultModel extends FPDF {
             $this->SetFont('helvetica','',10);
         }
         $this->Ln();
-        $this->WriteHTML(utf8_decode($p));
+        $this->WriteHTML(utf8_decode(str_replace('€',utf8_encode(chr(128)),$p)));
         $this->Ln();
     }
 
@@ -217,6 +217,40 @@ class DefaultModel extends FPDF {
             $this->Cell(60,10,utf8_decode($field));
             $this->Ln(10);
         }
+    }
+
+    private $inlineY;
+
+    function InlineMultiCell($width,$value,$isFirst=false){
+        $padding = 2;
+
+        if($isFirst){
+            $this->inlineY = $this->GetY(); 
+        }else{
+            $this->SetY($this->inlineY);
+        }
+
+        $this->MultiCell($width,5,utf8_decode($value));
+        $this->SetLeftMargin($this->GetX()+$width+$padding);
+
+    }
+
+    function BorderedCells($fields=array()){
+
+        $width = ($this->GetPageWidth()-$this->getX()-12)/sizeof($fields);
+
+        foreach ($fields as $field => $value) {
+            if($value){   
+                $this->Cell($width,5,utf8_decode($field),1,0,'C');
+            }
+        }
+        $this->Ln();
+        foreach ($fields as $field => $value) {
+            if($value){   
+                $this->Cell($width,8,utf8_decode($value),1,0,'C');
+            }
+        }
+
     }
 
 
