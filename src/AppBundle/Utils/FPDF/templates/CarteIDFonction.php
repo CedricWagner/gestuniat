@@ -25,12 +25,6 @@ class CarteIDFonction extends DefaultModel {
         $this->Cell(70,55,'PHOTO',0,0,'C');
     }
 
-    function Separator(){
-        $this->Line(12,$this->GetY(),$this->GetPageWidth()-12,$this->GetY());
-        $this->Ln(2);
-        $this->Line(12,$this->GetY(),$this->GetPageWidth()-12,$this->GetY());
-    }
-
     function Bottom(){
         $this->Ln(7);
         $svgY = $this->GetY();

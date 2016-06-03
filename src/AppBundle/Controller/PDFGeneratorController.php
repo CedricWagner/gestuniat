@@ -12,6 +12,7 @@ use AppBundle\Entity\Contact;
 use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
 use AppBundle\Utils\FPDF\templates\CarteIDFonction as PDF_CarteIDFonction;
 use AppBundle\Utils\FPDF\templates\Table as PDF_Table;
+use AppBundle\Utils\FPDF\templates\OrdreMission as PDF_OrdreMission;
 
 
 class PDFGeneratorController extends Controller
@@ -623,6 +624,190 @@ ou culturel ».</i>");
         $pdf->SetFont('','',10);
         $pdf->RightText("Strasbourg \nle ".$date->format('d/m/Y')." \nSection : ".($don->getContact()->getSection()?$don->getContact()->getSection()->getNom():''));
         $pdf->AddParagraphe($this->render('docs/lettres/remerciement-don.html.twig',['montant'=>$don->getMontant()])->getContent());
+
+        $response = new Response();
+        $response->setContent($pdf->Output());
+
+        $response->headers->set(
+           'Content-Type',
+           'application/pdf'
+        );
+
+        return $response; 
+    }
+
+    /**
+     * @Route("/assemblee-generale/{idAG}/generer-ordre-de-mission", name="generate_ordre_mission")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generateOrdreMissionAction($idAG, Request $request)
+    {
+        $ag = $this->getDoctrine()
+          ->getRepository('AppBundle:AssembleeGenerale')
+          ->find($idAG);
+
+        $date = new \DateTime();
+
+        $dateDip = $request->request->get('txtDate');
+        $txtAutresInfos = $request->request->get('txtAutresInfos');
+
+
+        $diplomes = $this->getDoctrine()
+          ->getRepository('AppBundle:ContactDiplome')
+          ->findLastDiplomes($ag->getSection(),new \DateTime($dateDip));
+
+        $lstDip = array();
+        foreach ($diplomes as $contactDiplome) {
+          $lstDip[$contactDiplome->getDiplome()->getLabel()][] = $contactDiplome; 
+        }
+
+        $txtDip = '';
+        foreach ($lstDip as $key => $lst) {
+          $txtDip.= sizeof($lst).' '.$key.'  ';
+        }
+
+        $currentPat = $this->getDoctrine()
+          ->getRepository('AppBundle:Patrimoine')
+          ->findOneBy(array('section'=>$ag->getSection(),'annee'=>$ag->getDate()->format('Y'))); 
+
+        $prevPat = $this->getDoctrine()
+          ->getRepository('AppBundle:Patrimoine')
+          ->findOneBy(array('section'=>$ag->getSection(),'annee'=>$ag->getDate()->format('Y')-1)); 
+
+        $pdf = new PDF_OrdreMission();
+        $pdf->AddPage();
+        $pdf->Title(strtoupper('ASSEMBLÉE GÉNÉRALE - ORDRE DE MISSION'));
+        $pdf->setFontDefault();
+        $pdf->SetFont('','',10);
+        $pdf->AddParagraphe('Orateur : '.$ag->getOrateur());
+        $pdf->AddParagraphe('Objet : <b>Assemblée générale de la section locale de '.$ag->getSection()->getNom().'</b>');
+        $pdf->AddParagraphe('Jour : '.$ag->getDate()->format('d/m/Y'));
+        $pdf->SetY($pdf->GetY()-10);
+        $pdf->SetLeftMargin(115);
+        $pdf->AddParagraphe('Heure : '.$ag->getHeure());
+        $pdf->SetLeftMargin(40);
+        $pdf->AddParagraphe('Lieu : '.$ag->getLieu());
+
+        $pdf->Ln(10);
+        $pdf->Separator();
+        
+        $svgY = $pdf->GetY();
+        $pdf->AddParagraphe('<b>COMPTE RENDU</b> :');
+        $pdf->AddParagraphe('Réunion annoncée dans la presse ?');
+        $pdf->Ln(3);
+        $pdf->AddParagraphe('Des affiches ont été apposées ?');
+
+        $pdf->SetleftMargin(140);
+        $pdf->SetY($svgY);
+        $pdf->AddParagraphe('<b>NOMBRE DE MEMBRES </b>:');
+        $pdf->AddParagraphe('- exercice '.($ag->getDate()->format('Y')-1).' : ');
+        $pdf->Ln(3);
+        $pdf->AddParagraphe('- exercice '.($ag->getDate()->format('Y')).' : ');
+
+        $pdf->SetleftMargin(40);
+        $pdf->Ln(3);
+        $pdf->AddParagraphe('Nombre de personnes présentes ?');
+        $pdf->Ln(3);
+        $pdf->AddParagraphe('Diplômes : '.$txtDip);
+        $pdf->Ln(3);
+        $pdf->AddParagraphe('Autres informations utiles : '.$txtAutresInfos);
+        $pdf->Ln(20);
+        $pdf->Separator();
+
+        $pdf->SetFontRed();
+        $pdf->AddParagraphe('<b>IMPORTANT : Cet ordre de mission est à renvoyer dans un délai de 8 jours après l\'Assemblée au Secrétariat.</b>');
+        $pdf->SetFontDefault();
+        $pdf->AddParagraphe('Pour le remboursement des frais, merci de remplir la fiche de frais prévu à cet effet et la retourner au secrétariat');
+        $pdf->AddParagraphe('Date :');
+        $pdf->SetleftMargin(142);
+        $pdf->SetY($pdf->GetY()-20);
+        $pdf->Signature('','Signature du délégué :');
+
+        $pdf->SetFont('','',8);
+        $pdf->SetY($pdf->GetY()-20);
+        $pdf->SetleftMargin(12);
+        $pdf->AddParagraphe('<i>Association régionale groupant les Assurés Sociaux, Invalides, Accidentés du travail, Veuves et Retraités, créée en 1924, inscrite au Registre  des Associations, sous VOL. XIX N°12 du Tribunal d’Instance de Strasbourg. Associée à la F.N.A.R. et à la F.N.A.T.H.</i>');
+
+        $pdf->addHeader = false;
+        $pdf->AddPage();
+        $pdf->SetFont('','',10);
+        $pdf->AddParagraphe('<b>RAPPORT D\'ACTIVITÉ </b>:');
+        $pdf->AddParagraphe('Présenté par : ');
+        $pdf->AddParagraphe('Excursions : ');
+        $pdf->AddParagraphe('Observations : ');
+        $pdf->AddParagraphe('<b>RAPPORT FINANCIER</b> :        Présenté par : ');
+        $pdf->AddParagraphe('                                                Pour la période du :                                       au : ');
+        $pdf->SetFontRed();
+        $pdf->AddParagraphe('<b>Cette rubrique doit impérativement être complétée, soit lors de l\'AG soit après entretien avec le Trésorier :</b>');
+        $pdf->SetFontDefault();
+        $pdf->RedSection(array(
+            1 => array(
+                'label'=>'Recettes totales : ',
+                'size'=>50,
+              ),
+            2 => array(
+                'label'=>'Euros, soit : ',
+                'size'=>60,
+              ),
+          ));
+        $pdf->Ln(10);
+        $pdf->SetFont('','',10);
+        $pdf->Cell(50,10,'Cotisation : ');
+        $pdf->Cell(50,10,'Sub. / Dons : ');
+        $pdf->Cell(50,10,'Loisirs : ');
+        $pdf->Cell(50,10,'Divers : ');
+        $pdf->Ln();
+        $pdf->RedSection(array(
+            1 => array(
+                'label'=>'Dépenses totales :',
+                'size'=>50,
+              ),
+            2 => array(
+                'label'=>'Euros, soit : ',
+                'size'=>60,
+              ),
+          ));
+        $pdf->Ln(10);
+        $pdf->SetFont('','',10);
+        $pdf->Cell(50,10,'Cotisation : ');
+        $pdf->Cell(50,10,'Frais visite dom. : ');
+        $pdf->Cell(50,10,'Fonct : ');
+        $pdf->Cell(50,10,'Frais statut : ');
+        $pdf->Ln();
+        $pdf->Cell(50,10,'Loisirs : ');
+        $pdf->Cell(50,10,'Divers : ');
+        $pdf->Ln();
+        $pdf->RedSection(array(
+            1 => array(
+                'label'=>'Résultat :        ',
+                'size'=>50,
+              ),
+            2 => array(
+                'label'=>'Bénéfice : ',
+                'size'=>10,
+              ),
+            3 => array(
+                'label'=>'Déficit : ',
+                'size'=>10,
+              ),
+          ));
+        $pdf->Ln(10);
+        $pdf->SetFont('','B',10);
+        $pdf->Cell(60,10,'Patrimoine au 01/01/'.$ag->getDate()->format('Y').' : '.($currentPat?$currentPat->getValeur().' '.chr(128):''));
+        $pdf->Cell(45,10,utf8_decode('Intérêt épargne : ').($currentPat?$currentPat->getInterets().' '.chr(128):''));
+        $pdf->Cell(60,10,'Patrimoine au  : 01/01/'.($ag->getDate()->format('Y')-1).' : '.($prevPat?$prevPat->getValeur().' '.chr(128):''));
+        $pdf->Ln(5);
+        $pdf->SetFont('','',10);
+        $pdf->AddParagraphe('<b>COMPOSITION DU NOUVAU COMITÉ : </b>');
+        $pdf->AddParagraphe('Président : ');
+        $pdf->AddParagraphe('Vice-Président : ');
+        $pdf->AddParagraphe('Secrétaire : ');
+        $pdf->AddParagraphe('Trésorier : ');
+        $pdf->AddParagraphe('Assesseurs : ');
+        $pdf->AddParagraphe('Encaisseurs : ');
+        $pdf->AddParagraphe('Rév. aux comptes : ');
+        $pdf->AddParagraphe('<b>NOTES SUR LE DÉROULEMENT / APPRÉCIATIONS / SOUHAITS EXPRIMÉS PAR LA SECTION : </b>');
+
 
         $response = new Response();
         $response->setContent($pdf->Output());

@@ -6,35 +6,38 @@ use AppBundle\Utils\FPDF\FPDF;
 
 class DefaultModel extends FPDF {
 
+    public $addHeader = true;
 
     function Header(){
 
-        $date = new \DateTime();
+        if($this->addHeader){
+            $date = new \DateTime();
 
-        $this->Image('img/logo-smaller.png',8,8,25);
-        $this->SetDrawColor(183,46,75);
-        $this->Line(40,12,40,28);
-        $this->SetTextColor(51,51,51);
-        $this->SetFont('Helvetica','B',10);
-        $this->SetLeftMargin(45);
-        $this->MultiCell('80','7',utf8_decode('UNIAT ALSACE'));
-        $this->SetFont('Helvetica','',8);
-        $this->MultiCell('80','3',utf8_decode("28, Rue du Fbg de Saverne\n67000 Strasbourg\ntél. 03 88 15 00 05\nuniat@uniat-alsace.fr"));
-        $this->SetLeftMargin(40);
-        $this->SetY(7);
-        $this->SetFont('Helvetica','B',14);
-        $this->Cell('','10',$date->format('Y'),0,2,'R');
-        $this->SetY(20);
-        $this->SetFont('Helvetica','B',10);
-        $this->SetTextColor(47,71,146);
-        $this->Cell('','5',utf8_decode('ISOLÉ VOUS ÊTES SANS DÉFENSE,'),0,2,'R');
-        $this->Cell('','5',utf8_decode('UNIS, VOUS ÊTES UNE GRANDE FORCE,'),0,2,'R');
-        $this->SetY(40);
-        $this->SetX(12);
+            $this->Image('img/logo-smaller.png',8,8,25);
+            $this->SetDrawColor(183,46,75);
+            $this->Line(40,12,40,28);
+            $this->SetTextColor(51,51,51);
+            $this->SetFont('Helvetica','B',10);
+            $this->SetLeftMargin(45);
+            $this->MultiCell('80','7',utf8_decode('UNIAT ALSACE'));
+            $this->SetFont('Helvetica','',8);
+            $this->MultiCell('80','3',utf8_decode("28, Rue du Fbg de Saverne\n67000 Strasbourg\ntél. 03 88 15 00 05\nuniat@uniat-alsace.fr"));
+            $this->SetLeftMargin(40);
+            $this->SetY(7);
+            $this->SetFont('Helvetica','B',14);
+            $this->Cell('','10',$date->format('Y'),0,2,'R');
+            $this->SetY(20);
+            $this->SetFont('Helvetica','B',10);
+            $this->SetTextColor(47,71,146);
+            $this->Cell('','5',utf8_decode('ISOLÉ VOUS ÊTES SANS DÉFENSE,'),0,2,'R');
+            $this->Cell('','5',utf8_decode('UNIS, VOUS ÊTES UNE GRANDE FORCE,'),0,2,'R');
+            $this->SetY(40);
+            $this->SetX(12);
+        }
     }
 
     function Footer(){
-        $this->SetY($this->GetPageHeight()-15);
+        $this->SetY($this->GetPageHeight()-20);
         $this->SetDrawColor(183,46,75);
         $this->Line(12,$this->GetY(),$this->GetPageWidth()-12,$this->GetY());
         $this->SetTextColor(183,46,75);
@@ -201,6 +204,10 @@ class DefaultModel extends FPDF {
         $this->SetTextColor(56,73,145);
     }
 
+    function SetFontRed(){
+        $this->SetTextColor(195,48,75);
+    }
+
     function SetFontDefault(){
         $this->SetTextColor(51,51,51);
     }
@@ -217,6 +224,12 @@ class DefaultModel extends FPDF {
             $this->Cell(60,10,utf8_decode($field));
             $this->Ln(10);
         }
+    }
+
+    function Separator(){
+        $this->Line(12,$this->GetY(),$this->GetPageWidth()-12,$this->GetY());
+        $this->Ln(2);
+        $this->Line(12,$this->GetY(),$this->GetPageWidth()-12,$this->GetY());
     }
 
     private $inlineY;

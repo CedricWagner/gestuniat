@@ -454,3 +454,24 @@ function doOrganismeListingAction(value){
 		location.href = response;
 	});
 }
+
+function printSuivisAction(container){
+
+	var selection = new Array();
+	$(container+' .suivi input:checked').parents('.suivi').each(function(){
+		selection.push($(this).data('id'));
+	});
+
+	console.log(selection);
+
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: '/print-suivi',
+	  data: { selection:selection }
+	})
+	.done(function(response) {
+		ajax_stop();
+		location.href = response;
+	});
+}

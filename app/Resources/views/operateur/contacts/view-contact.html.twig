@@ -25,9 +25,9 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 				<div class="section-main-content">
 					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Ajouter un suivi</button>
 					{% include 'modals/ajouter-suivi-default.html.twig' %}
-					<small class="label-print-all"><a href="#">Imprimer la sélection</a></small>
+					<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-contact')">Imprimer la sélection</a></small>
 				</div>
-				<div class="section-sub-content">
+				<div class="section-sub-content" id="suivis-contact">
 					{% for suivi in lstSuivis %}
 						{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
 					{% endfor %}

@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\SuiviDefaultType;
 use AppBundle\Entity\Suivi;
+use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
 
 
 class SuiviController extends Controller
@@ -168,6 +169,33 @@ class SuiviController extends Controller
      }else{
           return new Response(json_encode(['state'=>'noXHR']));     
      }
+  }
+  
+  /**
+   * @Route("/print-suivi", name="print_suivi")
+   * @Method("POST")
+   * @Security("has_role('ROLE_SPECTATOR')")
+   */
+  public function printSuiviAction(Request $request)
+  {
+      $selection = $request->request->get('selection');
+      $suivis = array();
+      $pdf = new PDF_DefaultModel();
+
+      $pdf->AddPage();
+
+      foreach ($selection as $id) {
+        $suivi = $this->getDoctrine()
+          ->getRepository('AppBundle:Suivi')
+          ->find($id);
+        $suivis[] = $suivi;
+        $pdf->AddParagraphe($suivi->getTexte(),true);
+      }
+
+      $pdf->Output('F','pdf/last-'.$this->getUser()->getId().'.pdf'); 
+      $path = $this->generateUrl('download_last_pdf',['fileName'=>'export-suivis']);         
+
+      return new Response($path);
   }
 
   public function create($contact,$text){

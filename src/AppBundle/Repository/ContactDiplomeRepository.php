@@ -10,6 +10,18 @@ namespace AppBundle\Repository;
  */
 class ContactDiplomeRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findLastDiplomes($section,$date){
+		
+		$qb = $this->createQueryBuilder('contactDiplome');
+		$result = $qb
+			->select('contactDiplome')
+			->join('AppBundle:Contact','c','WITH','contactDiplome.contact = c')
+			->where('c.section = :p_section')
+			->andwhere('contactDiplome.dateObtention >= :p_date')
+			->setParameters(array('p_section'=>$section,'p_date'=>$date))
+			->getQuery()
+    		->execute();
 
-
+        return $result;
+	}
 }
