@@ -30,14 +30,14 @@ Gestuniat - Dossier {{ dossier.nom }}
 				<div class="section-main-content">
 					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Ajouter un suivi</button>
 					{% include 'modals/ajouter-suivi-default.html.twig' %}
-					<small class="label-print-all"><a href="#">Imprimer la sélection</a></small>
+					<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-dossier')">Imprimer la sélection</a></small>
 				</div>
 				<div class="section-sub-content">
 					{% for suivi in lstSuivis %}
 						{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
 					{% endfor %}
 				</div>
-				<div class="section-main-content">
+				<div class="section-main-content" id="suivis-dossier">
 					<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
 					{% include 'modals/liste-suivis.html.twig' %}
 				</div>

@@ -23,7 +23,7 @@ class SectionController extends Controller
 {
 
     /**
-     * @Route("/section/liste/{idFilter}/{page}/{nb}", name="list_sections", defaults={"idFilter" = 0,"page" = 1,"nb" = 0, "orderby"= "numAdh","order"= "ASC"})
+     * @Route("/section/liste/{idFilter}/{page}/{nb}", name="list_sections", defaults={"idFilter" = 0,"page" = 1,"nb" = 0, "orderby"= "nom","order"= "ASC"})
      * @Security("has_role('ROLE_USER')")
      */
     public function listSectionsAction($idFilter,$page,$nb,$orderby,$order)
@@ -58,13 +58,13 @@ class SectionController extends Controller
                   ->findBy(array('operateur'=>$this->getUser(),'contexte'=>'section'),array('label'=>'ASC'));
 
         if($currentFilter){
-			$sections = $this->getDoctrine()
-			  ->getRepository('AppBundle:Section')
-			  ->findByFilter($filtreValeurs,$page,$nb);
+    			$sections = $this->getDoctrine()
+    			  ->getRepository('AppBundle:Section')
+    			  ->findByFilter($filtreValeurs,$page,$nb);
         }else{
-			$sections = $this->getDoctrine()
-			  ->getRepository('AppBundle:Section')
-			  ->findAllWithPagination($page,$nb);
+    			$sections = $this->getDoctrine()
+    			  ->getRepository('AppBundle:Section')
+    			  ->findAllWithPagination($page,$nb);
         }
 
         return $this->render('operateur/sections/sections.html.twig', [

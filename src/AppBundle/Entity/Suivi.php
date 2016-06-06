@@ -160,6 +160,24 @@ class Suivi
     }
 
     /**
+     * Get titre
+     *
+     * @return string
+     */
+    public function getRawTitre()
+    {
+        if ($this->dossier) {
+            return 'Dossier "'.$this->dossier->getNom().'" de '.$this->dossier->getContact()->getNom().' '.$this->dossier->getContact()->getPrenom();
+        }
+        if ($this->section) {
+            return 'Section "'.$this->section->getNom().'"';
+        }
+        if ($this->contact) {
+            return $this->contact->getPrenom().' '.$this->contact->getNom();
+        }
+    }
+
+    /**
      * Set text
      *
      * @param string $text

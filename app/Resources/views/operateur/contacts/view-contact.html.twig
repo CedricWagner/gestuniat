@@ -14,6 +14,9 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 {% endblock %}
 
 {% block content %}
+	{% if lateVignettes|length > 0 %}
+		<div class="alert alert-warning">{{lateVignettes|length}} vignettes n'ont pas été réglées pour ce contact</div>
+	{% endif %}
 	<h2>Accueil contact</h2>
 	<br />
 	<div class="row">

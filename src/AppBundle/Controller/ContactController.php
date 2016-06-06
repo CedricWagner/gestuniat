@@ -218,6 +218,10 @@ class ContactController extends Controller
       $vignetteForm = $this->createForm(VignetteType::class, $vignette);
       $vignetteForm->handleRequest($request);
 
+      $lateVignettes = $this->getDoctrine()
+        ->getRepository('AppBundle:Vignette')
+        ->findBy(array('datePaiement'=>null,'contact'=>$contact));
+
       // Documents
       //    Doc
       $document = new Document();
@@ -238,6 +242,7 @@ class ContactController extends Controller
             'lstAllSuivis' => $lstAllSuivis,
             'agrrs' => $agrrs,
             'obseques' => $obseques,
+            'lateVignettes' => $lateVignettes,
             'vignetteForm' => $vignetteForm->createView(),
             'dossierForm' => $dossierForm->createView(),
             'documentForm' => $documentForm->createView(),
@@ -256,6 +261,7 @@ class ContactController extends Controller
               ->getRepository('AppBundle:Contact')
               ->find($idContact);
       $prevDateDeces = $contact->getDateDeces();
+      $prevRentier = $contact->getIsRentier();
 
       $contactForm = $this->createForm(ContactFullEditionType::class, $contact);
          
@@ -282,6 +288,7 @@ class ContactController extends Controller
             $contact->setStatutJuridique($this->getDoctrine()->getRepository('AppBundle:StatutJuridique')->find(StatutJuridique::getIdDeces()));
           }
 
+
           // case CA exists
           if($contact->getIsCA()&&$contact->getSection()){
             $membreCA = $this->getDoctrine()
@@ -302,6 +309,15 @@ class ContactController extends Controller
           $history = $this->get('app.history');
           $history->init($this->getUser(),['id'=>$contact->getId(),'name'=>'Contact'],'UPDATE')
                   ->log(true); 
+          
+          // change isRentier
+          if($prevRentier != $contact->getIsRentier()){
+            if($contact->getIsRentier()){
+              $this->get('app.suivi')->create($contact,'Est devenu "Destinataire rentier"');
+            }else{
+              $this->get('app.suivi')->create($contact,'A été retiré des "Desinataires rentier"');
+            }
+          }
 
         }
         if ($contactForm->isSubmitted() && !$contactForm->isValid()) {

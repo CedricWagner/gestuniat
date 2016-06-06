@@ -97,6 +97,11 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
 							$params['p_is_offre_decouverte'] = true;
 						}
 						break;
+					case 'selAnneeDecompte':
+						if(isset($params['p_annee_timbre'])){
+							$params['p_annee_timbre'] = $fv->getValeur();
+						}
+						break;
 				}
 			}
 		}

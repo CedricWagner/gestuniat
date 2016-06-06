@@ -13,6 +13,11 @@ Gestuniat - Votre Dashboard
 			{% endfor %}
 		</div>
 	{% endif %}
+	{% if unpaidVignettes > 0 %}
+		<div class="alert alert-warning">
+			 {{unpaidVignettes}} vignettes sont en attente de règlement.
+		</div>
+	{% endif %}
 	<h1>Gestionnaire des termes</h1>
 	<p class="grey-text">Liste des termes des dossiers en cours et notes personnelles</p>
 	<button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#ajouter-alerte"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Ajouter alerte perso.</button>

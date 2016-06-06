@@ -37,6 +37,12 @@
 				<option {{ currentFilter and currentFilter.getFiltreValeur('selTimbres') == key ? 'selected="selected"' : '' }} value="{{key}}">{{option}}</option>
 			{% endfor %}
 		</select>
+		<label>Pour l'année :</label>
+		<select name="selAnneeDecompte" class="form-control">
+			{% for value in range(2005,"now"|date('Y')) %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selAnneeDecompte') == value ? 'selected="selected"' : '' }} {{ not currentFilter and value == "now"|date('Y') ? 'selected="selected"' : '' }} value="{{value}}">{{value}}</option>
+			{% endfor %}
+		</select>
 	</div>
 
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionTresorerie" aria-controls="sectionTresorerie">Trésorerie<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>

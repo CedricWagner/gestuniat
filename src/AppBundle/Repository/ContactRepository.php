@@ -32,6 +32,8 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 		
 		$params = array();
 		
+		$datetime = new \DateTime();
+
 		$qb = $this->createQueryBuilder('contact');
 		$qb
 			->select('contact')
@@ -87,6 +89,12 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 							$qb->andwhere('vign.datePaiement IS NULL');
 						}elseif($fv->getValeur() == 'DON'){
 							$qb->join('AppBundle:Don', 'don', 'WITH', 'don.contact = contact');
+						}elseif($fv->getValeur() == 'COTISATION'){
+							$qb->join('AppBundle:Cotisation', 'cotis', 'WITH', 'cotis.contact = contact');
+							$qb->andwhere('cotis.datePaiement >= :p_date_debut_annee');
+							$qb->andwhere('cotis.datePaiement <= :p_date_fin_annee');
+							$params['p_date_debut_annee'] = new \DateTime($datetime->format('Y').'-01-01');
+							$params['p_date_fin_annee'] = new \DateTime($datetime->format('Y').'-12-31');
 						}
 						break;
 					case 'selDiplome':

@@ -189,7 +189,19 @@ class SuiviController extends Controller
           ->getRepository('AppBundle:Suivi')
           ->find($id);
         $suivis[] = $suivi;
-        $pdf->AddParagraphe($suivi->getTexte(),true);
+        $pdf->AddParagraphe('<b>'.$suivi->getRawTitre().'</b>',true);
+        $pdf->AddParagraphe('Créé le <b>'.$suivi->getDateCreation()->format('d/m/Y').'</b> par <b>'.$suivi->getOperateur()->getNom().' '.$suivi->getOperateur()->getPrenom().'</b>');
+        $pdf->AddParagraphe('"'.$suivi->getTexte().'"',true);
+        if($suivi->getDateEcheance()){
+          $pdf->AddParagraphe('Date d\'échéance : <b>'.$suivi->getDateEcheance()->format('d/m/Y').'</b>');
+        }
+        if($suivi->getIsOk()){
+          $pdf->AddParagraphe('Statut : <u>terminé</u>');
+        }else{
+          $pdf->AddParagraphe('Statut : <u>en cours</u>');
+        }
+        $pdf->Ln(5);
+        $pdf->Separator();
       }
 
       $pdf->Output('F','pdf/last-'.$this->getUser()->getId().'.pdf'); 

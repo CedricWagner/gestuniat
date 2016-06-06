@@ -164,11 +164,18 @@ class DefaultController extends Controller
                 }
             }
 
+            // retrieve late vignettes
+            $vignettes = $this->getDoctrine()
+                ->getRepository('AppBundle:Vignette')
+                ->findBy(array('datePaiement'=>null));
+
+
             return $this->render('operateur/dashboard.html.twig', [
                 'alerteForm' => $alerteForm->createView(),
                 'lstAlertes' => $lstAlertes,
                 'lstHistory' => $lstHistory,
                 'lateSections' => $lateSections,
+                'unpaidVignettes' => sizeof($vignettes),
                 'lstFuturTerms' => $lstFuturTerms,
             ]);
         }
