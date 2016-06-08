@@ -18,9 +18,39 @@ class RentierController extends Controller
 
     /**
      * @Route("/rentier/liste/destinataires/individuels/{annee}/{numTrimestre}", name="list_dest_indivs", defaults={"annee" = 0,"numTrimestre" = 0})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function listDestIndivsAction($annee,$numTrimestre)
+    {
+        $datetime = new \DateTime();
+        if ($annee==0) {
+            $annee = $this->getDoctrine()
+                ->getRepository('AppBundle:EnvoiRentier')
+                ->findLastAnnee();
+        }
+        if ($numTrimestre==0) {
+            $numTrimestre = $this->getDoctrine()
+                ->getRepository('AppBundle:EnvoiRentier')
+                ->findLastTrimestre($annee);
+        }
+
+        $lstDeces = $this->getDoctrine()
+            ->getRepository('AppBundle:Contact')
+            ->findDeces($annee,$numTrimestre);
+
+        return $this->render('operateur/rentiers/deces.html.twig',[
+                'lstDeces'=>$lstDeces,
+                'annee'=>$annee,
+                'numTrimestre'=>$numTrimestre,
+            ]);
+
+    }
+
+    /**
+     * @Route("/rentier/liste/destinataires/rentiers/{annee}/{numTrimestre}", name="list_dest_rentiers", defaults={"annee" = 0,"numTrimestre" = 0})
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function listDestRentiersAction($annee,$numTrimestre)
     {
         $datetime = new \DateTime();
         if ($annee==0) {
@@ -39,14 +69,14 @@ class RentierController extends Controller
             ->findBy(array('annee'=>$annee,'numTrimestre'=>$numTrimestre),array('section'=>'ASC'));
 
         foreach ($envoisRentiers as $envoiRentier) {
-            $envoiRentier->setEnvoisIndiv(
+            $envoiRentier->setEnvoisRentiers(
                 $this->getDoctrine()
-                    ->getRepository('AppBundle:DestIndivEnvoi')
+                    ->getRepository('AppBundle:DestRentierEnvoi')
                     ->findBy(array('envoiRentier'=>$envoiRentier))
             );
         }
 
-        return $this->render('operateur/rentiers/envois-indiv.html.twig',[
+        return $this->render('operateur/rentiers/envois-rentiers.html.twig',[
                 'envoisRentiers'=>$envoisRentiers,
                 'annee'=>$annee,
                 'numTrimestre'=>$numTrimestre,
@@ -55,10 +85,10 @@ class RentierController extends Controller
     }
 
     /**
-     * @Route("/rentier/liste/destinataires/rentiers/{annee}/{numTrimestre}", name="list_dest_rentiers", defaults={"annee" = 0,"numTrimestre" = 0})
-     * @Security("has_role('ROLE_USER')")
+     * @Route("/rentier/liste/deces-rentiers/{annee}/{numTrimestre}", name="list_deces_rentiers", defaults={"annee" = 0,"numTrimestre" = 0})
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
-    public function listDestRentiersAction($annee,$numTrimestre)
+    public function listDecesRentiersAction($annee,$numTrimestre)
     {
     	$datetime = new \DateTime();
     	if ($annee==0) {
@@ -94,7 +124,7 @@ class RentierController extends Controller
 
     /**
      * @Route("/rentier/generer-factures/destinataires/individuels/{annee}/{numTrimestre}", name="generate_factures_envois_indiv", defaults={"annee" = 0,"numTrimestre" = 0})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function generateFactureDestIndivsAction(Request $request,$annee,$numTrimestre)
     {
@@ -122,7 +152,7 @@ class RentierController extends Controller
 
     /**
      * @Route("/rentier/export/destinataires/individuels/{annee}/{numTrimestre}.{format}", name="export_liste_dest_indiv", defaults={"annee" = 0,"numTrimestre" = 0}, requirements={"format":"pdf|csv"})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function exportListeDestIndivsAction(Request $request,$annee,$numTrimestre,$format)
     {
@@ -174,7 +204,7 @@ class RentierController extends Controller
 
     /**
      * @Route("/rentier/export/destinataires/rentiers/{annee}/{numTrimestre}.{format}", name="export_liste_dest_rentiers", defaults={"annee" = 0,"numTrimestre" = 0}, requirements={"format":"pdf|csv"})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function exportListeDestRentiersAction(Request $request,$annee,$numTrimestre,$format)
     {

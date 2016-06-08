@@ -95,6 +95,16 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 							$qb->andwhere('cotis.datePaiement <= :p_date_fin_annee');
 							$params['p_date_debut_annee'] = new \DateTime($datetime->format('Y').'-01-01');
 							$params['p_date_fin_annee'] = new \DateTime($datetime->format('Y').'-12-31');
+						}elseif($fv->getValeur() == 'COTISATION_RETARD'){
+							$qb->andwhere('contact NOT IN (
+								SELECT c2 
+								FROM AppBundle\Entity\Cotisation cotis 
+								JOIN AppBundle\Entity\Contact c2 WITH cotis.contact = c2 
+								WHERE cotis.contact = contact 
+								AND cotis.datePaiement >= :p_date_debut_annee 
+								AND cotis.datePaiement <= :p_date_fin_annee)');
+							$params['p_date_debut_annee'] = new \DateTime($datetime->format('Y').'-01-01');
+							$params['p_date_fin_annee'] = new \DateTime($datetime->format('Y').'-12-31');
 						}
 						break;
 					case 'selDiplome':
@@ -169,6 +179,50 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 			->where('contact.section = :p_section')
 			->andwhere('contact.isActif = true')
 			->setParameters(array('p_section'=>$section))
+			->getQuery()
+    		->execute();
+
+        return $result;
+	}
+
+	public function findDeces($annee,$numTrimestre){
+		
+		switch ($numTrimestre) {
+			case 1:
+				$params = array(
+					'p_debut'=> new \DateTime($annee.'-01-01'),
+					'p_fin'=> new \DateTime($annee.'-03-31'),
+					);
+				break;
+			case 2:
+				$params = array(
+					'p_debut'=> new \DateTime($annee.'-04-01'),
+					'p_fin'=> new \DateTime($annee.'-06-30'),
+					);
+				break;
+			case 3:
+				$params = array(
+					'p_debut'=> new \DateTime($annee.'-07-01'),
+					'p_fin'=> new \DateTime($annee.'-09-30'),
+					);
+				break;
+			case 4:
+				$params = array(
+					'p_debut'=> new \DateTime($annee.'-10-01'),
+					'p_fin'=> new \DateTime($annee.'-12-31'),
+					);
+				break;
+			default:
+				case 1:
+				break;
+		}
+
+		$qb = $this->createQueryBuilder('contact');
+		$result = $qb
+			->select('contact')
+			->where('contact.dateDeces >= :p_debut')
+			->andwhere('contact.dateDeces <= :p_fin')
+			->setParameters($params)
 			->getQuery()
     		->execute();
 

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Alerte;
+use AppBundle\Entity\Section;
 use AppBundle\Entity\Effectif;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use AppBundle\Form\AlerteCreationType;
@@ -170,12 +171,56 @@ class DefaultController extends Controller
                 ->findBy(array('datePaiement'=>null));
 
 
+            // retrieve expiring OffreDecouvertes
+            $contactsDecouvertes = $this->getDoctrine()
+                ->getRepository('AppBundle:Contact')
+                ->findBy(array('isOffreDecouverte'=>true));
+
+            $prevTrimestre = new \DateTime();
+            $prevTrimestre->sub(new \DateInterval('PT9M'));
+
+            $expiringOffres = 0;
+            foreach ($contactsDecouvertes as $contactD) {
+                if($contactD->getDateOffreDecouverte() && $contactD->getDateOffreDecouverte() < $prevTrimestre){
+                    $expiringOffres++;
+                }
+            }
+
+            //late cotisations
+            $sectionDivers = $this->getDoctrine()
+                ->getRepository('AppBundle:Section')
+                ->find(Section::getIdSectionDivers());
+
+            $contactsDivers = $this->getDoctrine()
+                ->getRepository('AppBundle:Contact')
+                ->findBy(array('section'=>$sectionDivers));
+
+            dump($contactsDivers);
+            $nbUnpaidCotisations = 0;
+            foreach ($contactsDivers as $_contact) {
+                $paid = false;
+                $cotisations = $this->getDoctrine()
+                    ->getRepository('AppBundle:cotisation')
+                    ->findBy(array('contact'=>$_contact));
+                
+                foreach ($cotisations as $cotisation) {
+                    if($cotisation->getDatePaiement() && $cotisation->getDatePaiement()->format('Y') == $dateToday->format('Y')){
+                        $paid = true;
+                    }
+                }
+                if(!$paid){
+                    $nbUnpaidCotisations++;
+                }
+            }
+
             return $this->render('operateur/dashboard.html.twig', [
                 'alerteForm' => $alerteForm->createView(),
                 'lstAlertes' => $lstAlertes,
                 'lstHistory' => $lstHistory,
                 'lateSections' => $lateSections,
                 'unpaidVignettes' => sizeof($vignettes),
+                'nbUnpaidCotisations' => $nbUnpaidCotisations,
+                'expiringOffres' => $expiringOffres,
                 'lstFuturTerms' => $lstFuturTerms,
             ]);
         }

@@ -137,6 +137,37 @@ class PDFGeneratorController extends Controller
     }
 
     /**
+     * @Route("pdf/contact/{idContact}/generer/lettre-echeance", name="generate_lettre_echeance")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function generateLettreEchanceAction($idContact)
+    {
+
+      $date = New \DateTime();
+
+      $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($idContact);
+
+      $pdf = new PDF_DefaultModel();
+      $pdf->AddPage();
+      $pdf->Title('LETTRE DE REMERCIEMENT');
+      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->SetLeftMargin(40);
+      $pdf->AddParagraphe($this->render('docs/lettres/echeance-decouverte.html.twig')->getContent());
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+    }
+
+    /**
      * @Route("pdf/contact/{idContact}/generer/lettre-section/{target}", name="generate_lettre_section", requirements={"target":"Président|Secrétaire|Trésorier"})
      * @Security("has_role('ROLE_USER')")
      */

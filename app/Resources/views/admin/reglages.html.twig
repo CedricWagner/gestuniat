@@ -52,5 +52,37 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="kit-container" onclick="location.href='{{ path('list_fonctionSections') }}'">
+				<div class="kit-label">
+					Fonctions de section
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-user-flag"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="kit-container" onclick="location.href='{{ path('list_fonctionGroupements') }}'">
+				<div class="kit-label">
+					Fonctions de groupement
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-user-asterisk"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="kit-container" onclick="location.href='{{ path('list_admin_diplomes') }}'">
+				<div class="kit-label">
+					Diplomes
+				</div>
+				<div class="kit-icon">
+					<span class="glyphicons glyphicons-certificate"></span>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 {% endblock %}

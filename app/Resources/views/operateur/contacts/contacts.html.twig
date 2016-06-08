@@ -78,6 +78,7 @@
 			<option {{ currentFilter and currentFilter.getFiltreValeur('selPaiement') == 'V_RETARD' ? 'selected="selected"' : '' }} value="V_RETARD">Vignette contributive en retard</option>
 			<option {{ currentFilter and currentFilter.getFiltreValeur('selPaiement') == 'DON' ? 'selected="selected"' : '' }} value="DON">Dons</option>
 			<option {{ currentFilter and currentFilter.getFiltreValeur('selPaiement') == 'COTISATION' ? 'selected="selected"' : '' }} value="COTISATION">Cotisation à jour</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selPaiement') == 'COTISATION_RETARD' ? 'selected="selected"' : '' }} value="COTISATION_RETARD">Cotisation en retard</option>
 		</select>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionRentier" aria-controls="sectionRentier">Rentier<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>

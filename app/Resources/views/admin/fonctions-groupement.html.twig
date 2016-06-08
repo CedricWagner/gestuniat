@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Fonctions de groupement{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'admin/reglages.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Fonctions de groupement</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('dashboard') }}">Accueil</a></li>
+	  <li><a href="{{ path('reglages') }}">Réglages</a></li>
+	  <li class="active">Fonctions de groupement</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Nom</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for fonctionGroupement in fonctionGroupements %}
+				<tr>
+					<td style="position:relative;">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'fonctionGroupement','object':fonctionGroupement,'deletePath':path('delete_fonctionGroupement',{'idFonctionGroupement':fonctionGroupement.id})} %}
+						{% include 'modals/default.html.twig' with {'form':fonctionGroupementForms[fonctionGroupement.id],'entity':'fonctionGroupement','object':fonctionGroupement,'title':'Edition du fonctionGroupement'} %}
+					</td>
+					<td>{{ fonctionGroupement.label }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-fonctionGroupement-0">Saisir une nouvelle fonction de groupement</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newFonctionGroupementForm,'entity':'fonctionGroupement','object':false,'title':'Saisir une nouvelle fonction de groupement'} %}
+{% endblock %}

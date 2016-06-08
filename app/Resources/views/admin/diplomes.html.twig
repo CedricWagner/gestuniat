@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Diplomes{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'admin/reglages.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Diplomes</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('dashboard') }}">Accueil</a></li>
+	  <li><a href="{{ path('reglages') }}">Réglages</a></li>
+	  <li class="active">Diplomes</li>
+	</ol>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Nom</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for diplome in diplomes %}
+				<tr>
+					<td style="position:relative;">
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'diplome','object':diplome,'deletePath':path('delete_diplome',{'idDiplome':diplome.id})} %}
+						{% include 'modals/default.html.twig' with {'form':diplomeForms[diplome.id],'entity':'diplome','object':diplome,'title':'Edition du diplome'} %}
+					</td>
+					<td>{{ diplome.label }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-diplome-0">Saisir un nouveau diplome</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newDiplomeForm,'entity':'diplome','object':false,'title':'Saisir un nouveau diplome'} %}
+{% endblock %}

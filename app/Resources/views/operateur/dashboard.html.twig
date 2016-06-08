@@ -18,6 +18,16 @@ Gestuniat - Votre Dashboard
 			 {{unpaidVignettes}} vignettes sont en attente de règlement.
 		</div>
 	{% endif %}
+	{% if expiringOffres > 0 %}
+	<div class="alert alert-warning">
+		 {{expiringOffres}} offres découvertes sont sur le point d'arriver à expiration.
+	</div>
+	{% endif %}
+	{% if nbUnpaidCotisations > 0 %}
+	<div class="alert alert-warning">
+		 Il y a {{nbUnpaidCotisations}} cotisations en attente de paiement dans la sections divers.
+	</div>
+	{% endif %}
 	<h1>Gestionnaire des termes</h1>
 	<p class="grey-text">Liste des termes des dossiers en cours et notes personnelles</p>
 	<button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#ajouter-alerte"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Ajouter alerte perso.</button>
@@ -27,7 +37,7 @@ Gestuniat - Votre Dashboard
 	<button class="btn btn-default borderless" data-toggle="modal" data-target="#terms">Liste des termes</button>
 	{% include 'modals/termes.html.twig' %}
 	<select onchange="eval(this.value)" class="select-default">
-		<option value="toggleAlertes(['.alerte','.terme','.suivi'])">Termes et alertes</option>
+		<option value="toggleAlertes(['.alerte','.suivi'])">Termes et alertes</option>
 		<option value="toggleAlertes(['.suivi'])">Termes uniquement</option>
 		<option value="toggleAlertes(['.alerte'])">Alertes uniquement</option>
 	</select>
