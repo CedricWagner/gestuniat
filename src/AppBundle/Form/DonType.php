@@ -30,7 +30,7 @@ class DonType extends AbstractType
             ->add('date',DateType::class,array('label' => 'Date','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('montant',NumberType::class,array('label' => 'Montant demandé'))
+            ->add('montant',NumberType::class,array('label' => 'Montant'))
             ->add('moyenPaiement',EntityType::class,array('label' => 'Moyen de paiement','class'=>'AppBundle:MoyenPaiement','placeholder'=>'Indéfini','choice_label'=>'label'))
             ->add('isAnonyme',CheckboxType::class,array('label' => 'Don anonyme'))
             ->add('intermediaire',TextType::class,array('label' => 'Intermédiaire'))

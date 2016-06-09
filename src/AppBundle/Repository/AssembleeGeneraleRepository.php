@@ -25,4 +25,49 @@ class AssembleeGeneraleRepository extends \Doctrine\ORM\EntityRepository
 
         return sizeof($result)?$result[0]:null;
 	}
+
+
+	public function findAGs($annee,$numTrimestre){
+		
+		switch ($numTrimestre) {
+			case 1:
+				$params = array(
+					'p_debut'=> (new \DateTime($annee.'-01-01'))->format('d/m/Y'),
+					'p_fin'=> (new \DateTime($annee.'-03-31'))->format('d/m/Y'),
+					);
+				break;
+			case 2:
+				$params = array(
+					'p_debut'=> (new \DateTime($annee.'-04-01'))->format('d/m/Y'),
+					'p_fin'=> (new \DateTime($annee.'-06-30'))->format('d/m/Y'),
+					);
+				break;
+			case 3:
+				$params = array(
+					'p_debut'=> (new \DateTime($annee.'-07-01'))->format('d/m/Y'),
+					'p_fin'=> (new \DateTime($annee.'-09-30'))->format('d/m/Y'),
+					);
+				break;
+			case 4:
+				$params = array(
+					'p_debut'=> (new \DateTime($annee.'-10-01'))->format('d/m/Y'),
+					'p_fin'=> (new \DateTime($annee.'-12-31'))->format('d/m/Y'),
+					);
+				break;
+			default:
+				case 1:
+				break;
+		}
+
+		$qb = $this->createQueryBuilder('assembleeGenerale');
+		$result = $qb
+			->select('assembleeGenerale')
+			->where('assembleeGenerale.date >= :p_debut')
+			->andwhere('assembleeGenerale.date <= :p_fin')
+			->setParameters($params)
+			->getQuery()
+    		->execute();
+
+        return $result;
+	}
 }
