@@ -171,6 +171,21 @@ class FiltrePerso
 
     }
 
+    public function getFiltreValeurCompare($label,$value)
+    {
+        $_filtreValeur = null;
+        foreach ($this->filtreValeurs as $filtreValeur) {
+            if ($filtreValeur->getChamp()->getLabel()==$label) {
+                if($value==$filtreValeur->getValeur()){
+                    $_filtreValeur = $filtreValeur;
+                }
+            }
+        }
+
+        return $_filtreValeur?true:false;
+
+    }
+
 
 }
 

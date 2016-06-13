@@ -33,13 +33,19 @@ class RentierController extends Controller
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastTrimestre($annee);
         }
-
-        $lstDeces = $this->getDoctrine()
-            ->getRepository('AppBundle:Contact')
-            ->findDeces($annee,$numTrimestre);
-
-        return $this->render('operateur/rentiers/deces.html.twig',[
-                'lstDeces'=>$lstDeces,
+        $envoisRentiers = $this->getDoctrine()
+            ->getRepository('AppBundle:EnvoiRentier')
+            ->findBy(array('annee'=>$annee,'numTrimestre'=>$numTrimestre),array('section'=>'ASC'));
+        foreach ($envoisRentiers as $envoiRentier) {
+            $envoiRentier->setEnvoisIndiv(
+                $this->getDoctrine()
+                    ->getRepository('AppBundle:DestIndivEnvoi')
+                    ->findBy(array('envoiRentier'=>$envoiRentier))
+            );
+        }
+        
+        return $this->render('operateur/rentiers/envois-indiv.html.twig',[
+                'envoisRentiers'=>$envoisRentiers,
                 'annee'=>$annee,
                 'numTrimestre'=>$numTrimestre,
             ]);
@@ -286,6 +292,46 @@ class RentierController extends Controller
                 break;
             default:
                 return $this->redirectToRoute('list_deces_rentiers',array(
+                        'annee'=>$annee,
+                        'numTrimestre'=>$numTrimestre,
+                    ));
+                break;
+        }
+
+    }
+
+    /**
+     * @Route("/rentier/export/ags/{annee}/{numTrimestre}.{format}", name="export_liste_ags", defaults={"annee" = 0,"numTrimestre" = 0}, requirements={"format":"pdf|csv"})
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function exportListeAGsAction(Request $request,$annee,$numTrimestre,$format)
+    {
+
+        $datetime = new \DateTime();
+
+        $lstAGs = $this->getDoctrine()
+            ->getRepository('AppBundle:AssembleeGenerale')
+            ->findAGs($annee,$numTrimestre);
+
+        switch ($format) {
+            case 'csv':
+                
+                $csv = $this->get('app.csvgenerator');
+                $csv->setName('export_liste-assemblees-gen');
+                
+
+                $csv->addLine(array('Section','Date','Heure','Lieu','Orateur','Participants'));
+
+                foreach ($lstAGs as $ag) {
+                    $fields = array($ag->getSection()->getNom(),$ag->getDate()?$ag->getDate()->format('d/m/Y'):'',$ag->getHeure(),$ag->getLieu(),$ag->getOrateur(),$ag->getNbParticipants());
+                    
+                    $csv->addLine($fields);
+                }
+
+                return new Response($csv->generateContent(),200,$csv->getHeaders());
+                break;
+            default:
+                return $this->redirectToRoute('list_ags_rentiers',array(
                         'annee'=>$annee,
                         'numTrimestre'=>$numTrimestre,
                     ));

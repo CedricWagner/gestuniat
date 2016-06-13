@@ -64,7 +64,7 @@ class DefaultModel extends FPDF {
 
         if($header){
             $this->SetFont('Helvetica','B',10);
-            $this->Cell($w*2,10,'  '.$header,0,0,'L',true);
+            $this->Cell($w*2,10,'  '.utf8_decode($header),0,0,'L',true);
             $this->Ln(9);
             $this->SetFont('Helvetica','',9);
         }
@@ -73,7 +73,7 @@ class DefaultModel extends FPDF {
         {
             $cpt++;
             $this->SetLeftMargin(12);
-            $this->Cell($w,10,($field!=''?'  '.utf8_decode($field).' : ':'  ').utf8_decode($value),0,0,'L',true);
+            $this->Cell($w,10,($field!=''&&$field!=' '?'  '.utf8_decode($field).' : ':'  ').utf8_decode($value),0,0,'L',true);
             if($cpt%$cols==0){
                 $this->Ln();
             }
@@ -83,8 +83,59 @@ class DefaultModel extends FPDF {
             for ($i=0; $i < $cols-$cpt%$cols; $i++) { 
                 $this->Cell($w,10,' ',0,0,'L',true);
             }
+            $this->Ln();
         }
         $this->Ln(2);
+    }
+
+    function ProcurationBlock($fields,$header=false){
+        $this->SetLeftMargin(12);
+        $this->Ln(2);
+        $this->SetFillColor(235,235,235);
+        $this->SetTextColor(51,51,51);
+        $this->SetFont('Helvetica','',9);
+        $w = ($this->getPageWidth()-24)/2;
+        $cpt=0;
+
+        if($header){
+            $this->SetFont('Helvetica','B',10);
+            $this->Cell($w*2,10,'  '.utf8_decode($header),0,0,'L',true);
+            $this->Ln(9);
+            $this->SetFont('Helvetica','',9);
+        }
+    
+        $x = $this->GetX();
+        $y = $this->GetY();
+
+        $this->SetY($this->GetY()-5);
+        
+        foreach($fields as $field => $value)
+        {
+            $this->SetLeftMargin(20);
+            $this->AddParagraphe($value);
+            $this->SetLeftMargin(14);
+            $this->SetX(14);
+            $this->SetY($this->GetY()-12);
+            $this->AddCheckBox();
+            $this->SetY($this->GetY()+12);
+        }
+
+        $this->Rect($x,$y,$this->GetPageWidth()-24,$this->GetY()-$y,'F');
+        
+        $this->SetY($y);
+        foreach($fields as $field => $value)
+        {
+            $this->SetLeftMargin(20);
+            $this->AddParagraphe($value);
+            $this->SetLeftMargin(14);
+            $this->SetX(14);
+            $this->SetY($this->GetY()-12);
+            $this->AddCheckBox();
+            $this->SetY($this->GetY()+12);
+            $this->Image('img/bloc-signature.png',140,$this->GetY()-12,50);
+        }
+
+        $this->SetLeftMargin(12);
     }
 
     function Title($title){

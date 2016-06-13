@@ -25,6 +25,7 @@
 				<th>Destinataire</th>
 				<th>Lieu</th>
 				<th>FIVA</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -39,6 +40,15 @@
 					<td>{{ pouvoir.destinataire }}</td>
 					<td>{{ pouvoir.lieu }}</td>
 					<td>{{ pouvoir.isFIVA ? 'Oui' : 'Non' }}</td>
+					<td>
+						<div class="dropdown">
+							<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-haspopup="true">Imprimer&nbsp;<span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li><a target="_blank" href="{{path('generate_pouvoir',{'idPouvoir':pouvoir.id})}}">En français</a></li>
+								<li><a target="_blank" href="{{path('generate_vollmacht',{'idPouvoir':pouvoir.id})}}">En allemand</a></li>
+							</ul>
+						</div>
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>

@@ -225,6 +225,12 @@ function ajaxApplyFilter(formFilter,ajaxUrl,page,orderby){
 			//case cb
 			if ($(this).attr('type')&&$(this).attr('type')=='checkbox') {
 				if($(this).is(':checked')){
+
+					// var inputName = $(this).attr('name');
+					// var values = '';
+					// $(formFilter).find('*[name="'+inputName+'"]:checked').each(function(){
+					// 	values+=$(this).val()+',';
+					// });
 					fields.push({'type':'text','name':$(this).attr('name'),'value':$(this).val()});
 				}
 			}

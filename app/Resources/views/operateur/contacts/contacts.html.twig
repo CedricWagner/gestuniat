@@ -28,7 +28,7 @@
 		{% for sj in statutsJuridiques %}
 			<div class="checkbox">
 			  <label>
-			    <input type="checkbox" {{ currentFilter and currentFilter.getFiltreValeur('cbStatut') == sj.id ? 'checked="checked"' : '' }} name="cbStatut" value="{{ sj.id }}">
+			    <input type="checkbox" {{ currentFilter and currentFilter.getFiltreValeurCompare('cbStatut',sj.id) ? 'checked="checked"' : '' }} name="cbStatut" value="{{ sj.id }}">
 			    	{{ sj.label }}
 			  </label>
 			</div>
