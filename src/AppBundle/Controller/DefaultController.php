@@ -195,7 +195,6 @@ class DefaultController extends Controller
                 ->getRepository('AppBundle:Contact')
                 ->findBy(array('section'=>$sectionDivers));
 
-            dump($contactsDivers);
             $nbUnpaidCotisations = 0;
             foreach ($contactsDivers as $_contact) {
                 $paid = false;

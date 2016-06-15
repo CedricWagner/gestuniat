@@ -10,6 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Contact;
 use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
+use AppBundle\Utils\FPDF\templates\Etiquette as PDF_Etiquette;
+use AppBundle\Utils\FPDF\templates\Enveloppe as PDF_Enveloppe;
 use AppBundle\Utils\FPDF\templates\CarteIDFonction as PDF_CarteIDFonction;
 use AppBundle\Utils\FPDF\templates\Table as PDF_Table;
 use AppBundle\Utils\FPDF\templates\OrdreMission as PDF_OrdreMission;
@@ -1036,6 +1038,74 @@ ou culturel ».</i>");
         );
 
         return $response; 
+    }
+
+    /**
+     * @Route("/contact-diplome/{idContactDiplome}/generer/etiquettes", name="generate_etiquette_diplome")
+     * @Security("has_role('ROLE_SPECTATOR')")
+    */
+    public function generateEtiquetteDiplomeAction($idContactDiplome){
+      $pdf = new PDF_Etiquette('L7163');
+      $pdf->AddPage();
+
+      $contactDiplome = $this->getDoctrine()
+        ->getRepository('AppBundle:ContactDiplome')
+        ->find($idContactDiplome);
+
+      $pdf->AddFont('Mistral');
+      $pdf->SetFont('mistral','',40);
+
+      $text = sprintf("%s %s", $contactDiplome->getContact()->getNom(), $contactDiplome->getContact()->getPrenom());
+      $pdf->Add_Label(utf8_decode($text));
+
+      $text = sprintf("%s", $contactDiplome->getContact()->getSection()?$contactDiplome->getContact()->getSection()->getNom():'');
+      $pdf->Add_Label(utf8_decode($text));
+
+      $text = sprintf("%s", $contactDiplome->getDateObtention()->format('d/m/Y'));
+      $pdf->Add_Label(utf8_decode($text));
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+
+    }
+
+    /**
+     * @Route("/contact-diplome/{idContactDiplome}/generer/enveloppe", name="generate_enveloppe_diplome")
+     * @Security("has_role('ROLE_SPECTATOR')")
+    */
+    public function generateEnveloppeDiplomeAction($idContactDiplome){
+      $pdf = new PDF_Enveloppe();
+      $pdf->AddPage();
+
+      $contactDiplome = $this->getDoctrine()
+        ->getRepository('AppBundle:ContactDiplome')
+        ->find($idContactDiplome);
+
+      $pdf->SetFont('Helvetica','',20);
+
+      $pdf->AddDest(array(
+          $contactDiplome->getContact()->getNom().' '.$contactDiplome->getContact()->getPrenom(),
+          $contactDiplome->getDiplome()->getlabel(),
+          $contactDiplome->getContact()->getSection()->getNom(),
+        ));
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+
     }
 
 }

@@ -1,0 +1,46 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * OffreDecouverteEnvoi
+ *
+ * @ORM\Table(name="offre_decouverte_envoi")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\OffreDecouverteEnvoiRepository")
+ */
+class OffreDecouverteEnvoi
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="EnvoiRentier")
+     * @ORM\JoinColumn(name="envoiRentier_id", referencedColumnName="id")
+     */
+    protected $envoiRentier;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Contact")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     */
+    protected $contact;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

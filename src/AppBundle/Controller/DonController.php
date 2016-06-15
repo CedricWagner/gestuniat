@@ -39,7 +39,6 @@ class DonController extends Controller
 	  		$donForms[$don->getId()] = $donForm->createView();
 	  		
 	  		$tools = $this->get('app.tools');
-	  		dump($tools->asLetters($don->getMontant(),true));
 
 	  	}
 

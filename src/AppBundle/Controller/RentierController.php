@@ -11,6 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\EnvoiRentier;
 use AppBundle\Entity\DestIndivEnvoi;
 use AppBundle\Entity\DestRentierEnvoi;
+use AppBundle\Entity\OrganismeEnvoi;
+use AppBundle\Entity\OffreDecouverteEnvoi;
+use AppBundle\Entity\Section;
 
 
 class RentierController extends Controller
@@ -151,32 +154,110 @@ class RentierController extends Controller
     }
 
     /**
+     * @Route("/rentier/liste/organismes/{annee}/{numTrimestre}", name="list_organismes_rentiers", defaults={"annee" = 0,"numTrimestre" = 0})
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function listOrganismesRentiersAction($annee,$numTrimestre)
+    {
+        $datetime = new \DateTime();
+        if ($annee==0) {
+            $annee = $this->getDoctrine()
+                ->getRepository('AppBundle:EnvoiRentier')
+                ->findLastAnnee();
+        }
+        if ($numTrimestre==0) {
+            $numTrimestre = $this->getDoctrine()
+                ->getRepository('AppBundle:EnvoiRentier')
+                ->findLastTrimestre($annee);
+        }
+
+        $envoisRentiers = $this->getDoctrine()
+            ->getRepository('AppBundle:EnvoiRentier')
+            ->findBy(array('annee'=>$annee,'numTrimestre'=>$numTrimestre),array('section'=>'ASC'));
+
+        $organismesEnvois = array();
+
+        foreach ($envoisRentiers as $envoiRentier) {
+            $_organismesEnvois = $this->getDoctrine()
+                    ->getRepository('AppBundle:OrganismeEnvoi')
+                    ->findBy(array('envoiRentier'=>$envoiRentier));
+            $organismesEnvois = array_merge($_organismesEnvois, $organismesEnvois);
+        }
+
+        return $this->render('operateur/rentiers/envois-organismes.html.twig',[
+                'organismesEnvois'=>$organismesEnvois,
+                'annee'=>$annee,
+                'numTrimestre'=>$numTrimestre,
+            ]);
+
+    }
+
+    /**
+     * @Route("/rentier/liste/offres-decouvertes/{annee}/{numTrimestre}", name="list_offres_decouvertes_rentiers", defaults={"annee" = 0,"numTrimestre" = 0})
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function listOffresDecouvertesAction($annee,$numTrimestre)
+    {
+        $datetime = new \DateTime();
+        if ($annee==0) {
+            $annee = $this->getDoctrine()
+                ->getRepository('AppBundle:EnvoiRentier')
+                ->findLastAnnee();
+        }
+        if ($numTrimestre==0) {
+            $numTrimestre = $this->getDoctrine()
+                ->getRepository('AppBundle:EnvoiRentier')
+                ->findLastTrimestre($annee);
+        }
+
+        $envoisRentiers = $this->getDoctrine()
+            ->getRepository('AppBundle:EnvoiRentier')
+            ->findBy(array('annee'=>$annee,'numTrimestre'=>$numTrimestre),array('section'=>'ASC'));
+
+        $offresDecouvertesEnvois = array();
+
+        foreach ($envoisRentiers as $envoiRentier) {
+            $_offresDecouvertesEnvois = $this->getDoctrine()
+                    ->getRepository('AppBundle:OffreDecouverteEnvoi')
+                    ->findBy(array('envoiRentier'=>$envoiRentier));
+            $offresDecouvertesEnvois = array_merge($_offresDecouvertesEnvois, $offresDecouvertesEnvois);
+        }
+
+        return $this->render('operateur/rentiers/envois-offres-decouvertes.html.twig',[
+                'offresDecouvertesEnvois'=>$offresDecouvertesEnvois,
+                'annee'=>$annee,
+                'numTrimestre'=>$numTrimestre,
+            ]);
+
+    }
+
+    /**
      * @Route("/rentier/liste/ags/{annee}/{numTrimestre}", name="list_ags_rentiers", defaults={"annee" = 0,"numTrimestre" = 0})
      * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function listAGsRentiersAction($annee,$numTrimestre)
     {
-    	$datetime = new \DateTime();
-    	if ($annee==0) {
-    		$annee = $this->getDoctrine()
-    			->getRepository('AppBundle:EnvoiRentier')
-    			->findLastAnnee();
-    	}
-    	if ($numTrimestre==0) {
-    		$numTrimestre = $this->getDoctrine()
-    			->getRepository('AppBundle:EnvoiRentier')
-    			->findLastTrimestre($annee);
-    	}
+        $datetime = new \DateTime();
+        if ($annee==0) {
+            $annee = $this->getDoctrine()
+                ->getRepository('AppBundle:EnvoiRentier')
+                ->findLastAnnee();
+        }
+        if ($numTrimestre==0) {
+            $numTrimestre = $this->getDoctrine()
+                ->getRepository('AppBundle:EnvoiRentier')
+                ->findLastTrimestre($annee);
+        }
 
-    	$lstAGs = $this->getDoctrine()
-    		->getRepository('AppBundle:AssembleeGenerale')
-    		->findAGs($annee,$numTrimestre);
+        $lstAGs = $this->getDoctrine()
+            ->getRepository('AppBundle:AssembleeGenerale')
+            ->findAGs($annee,$numTrimestre);
 
-    	return $this->render('operateur/rentiers/ags.html.twig',[
-    			'lstAGs'=>$lstAGs,
-    			'annee'=>$annee,
-    			'numTrimestre'=>$numTrimestre,
-    		]);
+        return $this->render('operateur/rentiers/ags.html.twig',[
+                'lstAGs'=>$lstAGs,
+                'annee'=>$annee,
+                'numTrimestre'=>$numTrimestre,
+            ]);
 
     }
 
@@ -379,6 +460,116 @@ class RentierController extends Controller
     }
 
     /**
+     * @Route("/rentier/export/organismes/{annee}/{numTrimestre}.{format}", name="export_liste_organismes", defaults={"annee" = 0,"numTrimestre" = 0}, requirements={"format":"pdf|csv"})
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function exportListeOrganismesAction(Request $request,$annee,$numTrimestre,$format)
+    {
+
+        $datetime = new \DateTime();
+
+        $envoisRentiers = $this->getDoctrine()
+            ->getRepository('AppBundle:EnvoiRentier')
+            ->findBy(array('annee'=>$annee,'numTrimestre'=>$numTrimestre),array('section'=>'ASC'));
+
+        $organismesEnvois = array();
+
+        foreach ($envoisRentiers as $envoiRentier) {
+            $_organismesEnvois = $this->getDoctrine()
+                    ->getRepository('AppBundle:OrganismeEnvoi')
+                    ->findBy(array('envoiRentier'=>$envoiRentier));
+            $organismesEnvois = array_merge($_organismesEnvois, $organismesEnvois);
+        }
+
+        switch ($format) {
+            case 'csv':
+                
+                $csv = $this->get('app.csvgenerator');
+                $csv->setName('export_liste-organismes');
+                
+                $csv->addLine(array('Organisme','Type organisme','Nom du titulaire','Fonction du titulaire','Code postale','Ville','Adresse','Pays'));
+
+                foreach ($organismesEnvois as $organismeEnvoi) {
+                    $fields = array(
+                        $organismeEnvoi->getOrganisme()->getNom(),
+                        $organismeEnvoi->getOrganisme()->getTypeOrganisme()->getLabel(),
+                        $organismeEnvoi->getOrganisme()->getNomTitulaire(),
+                        $organismeEnvoi->getOrganisme()->getFonctionTitulaire(),
+                        $organismeEnvoi->getOrganisme()->getCp(),
+                        $organismeEnvoi->getOrganisme()->getVille(),
+                        $organismeEnvoi->getOrganisme()->getAdresse().' '.$organismeEnvoi->getOrganisme()->getAdresseComp(),
+                        $organismeEnvoi->getOrganisme()->getPays()
+                    );
+                    
+                    $csv->addLine($fields);
+                }
+
+                return new Response($csv->generateContent(),200,$csv->getHeaders());
+                break;
+            default:
+                return $this->redirectToRoute('list_organismes_rentiers',array(
+                        'annee'=>$annee,
+                        'numTrimestre'=>$numTrimestre,
+                    ));
+                break;
+        }
+    }
+
+    /**
+     * @Route("/rentier/export/offres-decouvertes/{annee}/{numTrimestre}.{format}", name="export_liste_offres_decouvertes", defaults={"annee" = 0,"numTrimestre" = 0}, requirements={"format":"pdf|csv"})
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function exportListeOffresDecouvertesAction(Request $request,$annee,$numTrimestre,$format)
+    {
+
+        $datetime = new \DateTime();
+
+        $envoisRentiers = $this->getDoctrine()
+            ->getRepository('AppBundle:EnvoiRentier')
+            ->findBy(array('annee'=>$annee,'numTrimestre'=>$numTrimestre),array('section'=>'ASC'));
+
+        $offresDecouvertesEnvois = array();
+
+        foreach ($envoisRentiers as $envoiRentier) {
+            $_offresDecouvertesEnvois = $this->getDoctrine()
+                    ->getRepository('AppBundle:OffreDecouverteEnvoi')
+                    ->findBy(array('envoiRentier'=>$envoiRentier));
+            $offresDecouvertesEnvois = array_merge($_offresDecouvertesEnvois, $offresDecouvertesEnvois);
+        }
+
+        switch ($format) {
+            case 'csv':
+                
+                $csv = $this->get('app.csvgenerator');
+                $csv->setName('export_liste-offres-decouvertes');
+                
+                $csv->addLine(array('Nom','Prénom','Code postal','Commune','Adresse','Pays'));
+
+                foreach ($offresDecouvertesEnvois as $offreDecouverteEnvoi) {
+                    $fields = array(
+                        $offreDecouverteEnvoi->getContact()->getNom(),
+                        $offreDecouverteEnvoi->getContact()->getPrenom(),
+                        $offreDecouverteEnvoi->getContact()->getCp(),
+                        $offreDecouverteEnvoi->getContact()->getCommune(),
+                        $offreDecouverteEnvoi->getContact()->getAdresse().' '.$offreDecouverteEnvoi->getContact()->getAdresseComp(),
+                        $offreDecouverteEnvoi->getContact()->getPays(),
+                    );
+                    
+                    $csv->addLine($fields);
+                }
+
+                return new Response($csv->generateContent(),200,$csv->getHeaders());
+                break;
+            default:
+                return $this->redirectToRoute('list_offres_decouvertes_rentiers',array(
+                        'annee'=>$annee,
+                        'numTrimestre'=>$numTrimestre,
+                    ));
+                break;
+        }
+    }
+
+    /**
      * @Route("/rentier/export/destinataires/rentiers/{annee}/{numTrimestre}.{format}", name="export_liste_dest_rentiers", defaults={"annee" = 0,"numTrimestre" = 0}, requirements={"format":"pdf|csv"})
      * @Security("has_role('ROLE_SPECTATOR')")
      */
@@ -463,8 +654,8 @@ class RentierController extends Controller
 				$numTrimestre = 4;
 				break;
 			default:
-				//for test only
-                $numTrimestre = 2;
+				//for dev only:
+                $numTrimestre = 3;
                 //for prod
 				// $numTrimestre = false;
 				break;
@@ -488,6 +679,7 @@ class RentierController extends Controller
 		        $em->persist($envoiRentier);
 		        $em->flush();
 
+                //Envois indiv
                 $contacts = $this->getDoctrine()
                     ->getRepository('AppBundle:Contact')
                     ->findBy(array('isEnvoiIndiv'=>true,'section'=>$section));
@@ -502,20 +694,8 @@ class RentierController extends Controller
                     $em->flush();
                 }
 
-		        $contacts = $this->getDoctrine()
-		        	->getRepository('AppBundle:Contact')
-		        	->findBy(array('isOffreDecouverte'=>true,'section'=>$section));
 
-                foreach ($contacts as $contact) {
-                    $destIndivEnvoi = new DestIndivEnvoi();
-                    $destIndivEnvoi->setContact($contact);
-                    $destIndivEnvoi->setEnvoiRentier($envoiRentier);
-
-                    $em = $this->get('doctrine.orm.entity_manager');
-                    $em->persist($destIndivEnvoi);
-                    $em->flush();
-                }
-
+                //Destinataires rentiers
                 $contacts = $this->getDoctrine()
                     ->getRepository('AppBundle:Contact')
                     ->findBy(array('isRentier'=>true,'section'=>$section));
@@ -530,7 +710,44 @@ class RentierController extends Controller
                     $em->persist($destRentierEnvoi);
                     $em->flush();
                 }
-			}
+            }
+
+            //Organisme
+	        $organismes = $this->getDoctrine()
+	        	->getRepository('AppBundle:Organisme')
+	        	->findAll();
+
+            $envoiRentier = new EnvoiRentier();
+            $envoiRentier->setDate($datetime);
+            $envoiRentier->setAnnee($datetime->format('Y'));
+            $envoiRentier->setNumTrimestre($numTrimestre);
+            $envoiRentier->setSection($this->getDoctrine()->getRepository('AppBundle:Section')->find(Section::getIdSectionDivers()));
+
+            foreach ($organismes as $organisme) {
+                $organismeEnvoi = new OrganismeEnvoi();
+                $organismeEnvoi->setOrganisme($organisme);
+                $organismeEnvoi->setEnvoiRentier($envoiRentier);
+
+                $em = $this->get('doctrine.orm.entity_manager');
+                $em->persist($organismeEnvoi);
+                $em->flush();
+            }
+
+            //Offres decouvertes
+            $contacts = $this->getDoctrine()
+                ->getRepository('AppBundle:Contact')
+                ->findBy(array('isOffreDecouverte'=>true));
+
+            foreach ($contacts as $contact) {
+                $offreDecouverteEnvoi = new OffreDecouverteEnvoi();
+                $offreDecouverteEnvoi->setContact($contact);
+                $offreDecouverteEnvoi->setEnvoiRentier($envoiRentier);
+
+                $em = $this->get('doctrine.orm.entity_manager');
+                $em->persist($offreDecouverteEnvoi);
+                $em->flush();
+            }
+
 		}
 
 		return new Response('',Response::HTTP_OK);

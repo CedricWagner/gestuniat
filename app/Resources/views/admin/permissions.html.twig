@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Permissions{% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+	{% include 'admin/reglages.inc.html.twig'  %}
+
+{% endblock %}
+
+{% block content %}
+	<h2>Permissions</h2>
+	<ol class="breadcrumb">
+	  <li><a href="{{ path('dashboard') }}">Accueil</a></li>
+	  <li><a href="{{ path('reglages') }}">Réglages</a></li>
+	  <li class="active">Permissions</li>
+	</ol>
+	{% set roles = {'SPECTATOR':'Spectateurs','USER':'Utilisateurs','JURIST':'Juristes','ADMIN':'Administrateurs'} %}
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th>Contexte</th>
+				<th>Action</th>
+				<th>Spectateurs</th>
+				<th>Utilisateurs</th>
+				<th>Juristes</th>
+				<th>Administrateurs</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for permission in permissions %}
+				<tr>
+					<td>{{permission.contexte}}</td>
+					<td>{{permission.label}}</td>
+					{% for key,role in roles %}
+						<td><input type="checkbox" onclick="applyPermission(this)" {{ permission.checkPermissionRole(key)?'checked="checked"':'' }} data-perm="{{permission.id}}" data-role="{{key}}" name="cbPerm"></td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

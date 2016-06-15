@@ -64,6 +64,8 @@ class EnvoiRentier
 
     private $envoisIndiv;
     private $envoisRentiers;
+    private $organismes;
+    private $offresDecouvertes;
 
 
     /**
@@ -218,6 +220,30 @@ class EnvoiRentier
     public function getEnvoisRentiers()
     {
         return $this->envoisRentiers;
+    }
+
+    public function setOrganismes($organismes)
+    {
+        $this->organismes = $organismes;
+
+        return $this;
+    }
+
+    public function getOrganismes()
+    {
+        return $this->organismes;
+    }
+
+    public function setOffresDecouvertes($offresDecouvertes)
+    {
+        $this->offresDecouvertes = $offresDecouvertes;
+
+        return $this;
+    }
+
+    public function getOffresDecouvertes()
+    {
+        return $this->offresDecouvertes;
     }
 
     /**

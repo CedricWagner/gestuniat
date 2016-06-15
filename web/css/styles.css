@@ -85,7 +85,7 @@ body.internal #main-content header .header-button .nb-alertes{
     background-color: #354052;
     width: 220px;
     height: 100%;
-    position: absolute;
+    position: fixed;
     z-index: 1;
 }
 
@@ -796,6 +796,7 @@ table.table .sortable.sorted.DESC::after{
     padding: 15px;
     text-align: center;
     color: 555555;
+    margin-bottom: 20px;
     transition:all 0.2s;
 }
 
@@ -876,12 +877,8 @@ label[for*="procuration_is"]{
         transition: all 0.5s;
     }
 
-    #left-sidebar:hover .menu-label{
-        display: block;
-    }
-
     .menu-label{
-        display: none;
+        display: none !important;
     }
 
     .menu-container ul li .glyphicons{

@@ -23,6 +23,8 @@
 				<th>Diplome</th>
 				<th>Date obtention</th>
 				<th>Invitation à l'AG</th>
+				<th>Etiquette</th>
+				<th>Enveloppe</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -49,6 +51,8 @@
 							</ul>
 						</div>
 					</td>
+					<td><a target="_blank" class="btn btn-primary" href="{{ path('generate_etiquette_diplome',{'idContactDiplome':cd.id}) }}">Imprimer</a></td>
+					<td><a target="_blank" class="btn btn-primary" href="{{ path('generate_enveloppe_diplome',{'idContactDiplome':cd.id}) }}">Imprimer</a></td>
 				</tr>
 			{% endfor %}
 		</tbody>
