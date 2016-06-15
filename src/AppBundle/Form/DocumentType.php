@@ -30,8 +30,6 @@ class DocumentType extends AbstractType
 
         $entity = $options['data'];
 
-        dump($entity);
-
         $idContact = $entity->getContact()->getId();
 
         $builder

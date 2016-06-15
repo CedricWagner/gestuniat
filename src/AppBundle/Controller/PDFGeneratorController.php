@@ -10,6 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Contact;
 use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
+use AppBundle\Utils\FPDF\templates\Etiquette as PDF_Etiquette;
+use AppBundle\Utils\FPDF\templates\Enveloppe as PDF_Enveloppe;
 use AppBundle\Utils\FPDF\templates\CarteIDFonction as PDF_CarteIDFonction;
 use AppBundle\Utils\FPDF\templates\Table as PDF_Table;
 use AppBundle\Utils\FPDF\templates\OrdreMission as PDF_OrdreMission;
@@ -20,7 +22,7 @@ class PDFGeneratorController extends Controller
 
     /**
      * @Route("pdf/contact/{idContact}/generer/bulletin-adh", name="generate_bulletin_adhesion")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function generateBulletinAdhAction($idContact)
     {
@@ -103,8 +105,84 @@ class PDFGeneratorController extends Controller
 
 
     /**
+     * @Route("pdf/procuration/{idProcuration}/generer", name="generate_procuration")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generateProcurationAction($idProcuration)
+    {
+      $datetime = new \DateTime();
+
+      $procuration = $this->getDoctrine()
+        ->getRepository('AppBundle:Procuration')
+        ->find($idProcuration);
+
+      $pdf = new PDF_DefaultModel();
+      $pdf->AddPage();
+      $pdf->Title('PROCURATION');
+
+      $pdf->GreyJoyBlock(array(
+        "Nom de naissance"=>$procuration->getContact()->getNomJeuneFille(),
+        "Nom / Prénom"=>$procuration->getContact()->getNom().' '.$procuration->getContact()->getPrenom(),
+        "Né(e) le"=>$procuration->getContact()->getDateNaissance()?$procuration->getContact()->getDateNaissance()->format('d/m/Y'):'',
+        ""=>'',
+        "N° de Sécurité Social"=>$procuration->getContact()->getNumSecu(),
+        " "=>'',
+        "Adresse"=>$procuration->getContact()->getAdresse().' '.$procuration->getContact()->getAdresseComp().' '.$procuration->getContact()->getCp().' '.$procuration->getContact()->getCommune(),
+      ),'JE SOUSSIGNÉ(E)');
+
+      $pdf->GreyJoyBlock(array(
+        "Nom / Prénom ou raison sociale"=>'',
+        ""=>'',
+        "Adresse"=>'',
+      ),'DONNE PROCURATION À : (conformément aux articles 1984 à 2010 du code civil)');
+
+      $pdf->ProcurationBlock(array(
+        "Recevoir, à ma place, toute correspondance et me transmettre tout document <br />nécessitant ma décision et/ou ma signature",
+        "Vous faire parvenir tous les courriers de réponse<br />  ",
+        "Compléter tout questionnaire ou apporter toute information nécessaire<br />à l'étude de mon dossier",
+        "Vous adresser une demande de renseignement ou une information<br />  ",
+      ),'POUR : (vous devez cocher et signer en face de chaque pouvoir que vous donnez)');
+
+      $pdf->Ln(2);
+
+      $pdf->ProcurationBlock(array(
+        "Ma contestation<br /> ",
+        "Toute information concernant mes paiements.<br />  ",
+        "Mon changement d’adresse ou de mode de paiement.<br />",
+      ),'OU RELATIF À : (vous devez cocher et signer en face de chaque pouvoir que vous donnez)');
+
+      $pdf->addHeader = false;
+
+      $pdf->SetFont('','B');
+      $pdf->SetFontRed();
+      $pdf->AddParagraphe("Joindre les copies de carte d'identité ou de passeport en cours de validité pour vous-même et le mandataire.<br />J'ai bien noté les informations importants précisées.");
+      $pdf->AddParagraphe("J'atteste sur l'honneur l'exactitude des renseignements portés sur cette déclaration.");
+      $pdf->SetFontDefault();
+      $pdf->SetFont('','');
+      $pdf->AddParagraphe("Je reconnais être informé(e) qu'une vérification de l'exactitude de mes déclarations et de l'authenticité des documents  produits à l'appui de ma demande, peut être effectuée dans le cadre de l'exercice du droit de communication prévu par les articles : L. 114-19 à L.114-21 du code de la Sécurité Sociale.");
+
+      $y = $pdf->GetY();
+      $pdf->SetLeftMargin(80);
+      $pdf->Signature('Fait à : ','Votre signature ');
+      $pdf->SetY($y);
+      $pdf->SetLeftMargin(140);
+      $pdf->Signature('Le : ','Signature du mandataire ');
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+
+    }
+
+    /**
      * @Route("pdf/contact/{idContact}/generer/lettre-remerciement", name="generate_lettre_remerciement")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function generateLettreRemAction($idContact)
     {
@@ -120,10 +198,69 @@ class PDFGeneratorController extends Controller
       $pdf->Title('LETTRE DE REMERCIEMENT');
       $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
-      $pdf->AddParagraphe('Cher(e) Membre,');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe($this->render('docs/lettres/remerciement.html.twig',['contact'=>$contact])->getContent());
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+    }
+
+    /**
+     * @Route("pdf/contact/{idContact}/generer/lettre-echeance", name="generate_lettre_echeance")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generateLettreEchanceAction($idContact)
+    {
+
+      $date = New \DateTime();
+
+      $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($idContact);
+
+      $pdf = new PDF_DefaultModel();
+      $pdf->AddPage();
+      $pdf->Title('LETTRE D\'ECHEANCE');
+      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->SetLeftMargin(40);
+      $pdf->AddParagraphe($this->render('docs/lettres/echeance-decouverte.html.twig',['contact'=>$contact])->getContent());
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+    }
+
+    /**
+     * @Route("pdf/contact/{idContact}/generer/lettre-felicitations", name="generate_lettre_felicitations")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generateLettreFelicitationsAction($idContact)
+    {
+
+      $date = New \DateTime();
+
+      $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($idContact);
+
+      $pdf = new PDF_DefaultModel();
+      $pdf->AddPage();
+      $pdf->Title('LETTRE DE FELICITATION');
+      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->SetLeftMargin(40);
+      $pdf->AddParagraphe($this->render('docs/lettres/felicitations.html.twig',['contact'=>$contact])->getContent());
 
       $response = new Response();
       $response->setContent($pdf->Output());
@@ -138,7 +275,7 @@ class PDFGeneratorController extends Controller
 
     /**
      * @Route("pdf/contact/{idContact}/generer/lettre-section/{target}", name="generate_lettre_section", requirements={"target":"Président|Secrétaire|Trésorier"})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function generateLettreSectionAction($idContact,$target)
     {
@@ -154,10 +291,7 @@ class PDFGeneratorController extends Controller
       $pdf->Title('LETTRE SECTION');
       $pdf->RightText("À l'attention du ".$target." de la section\nStrasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
-      $pdf->AddParagraphe('Cher(e) Membre,');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe($this->render('docs/lettres/section.html.twig',['contact'=>$contact])->getContent());
 
       $response = new Response();
       $response->setContent($pdf->Output());
@@ -172,7 +306,7 @@ class PDFGeneratorController extends Controller
 
     /**
      * @Route("pdf/contact/{idPermanence}/generer/ordre-permanence/{target}", name="generate_ordre_perm", requirements={"target":"Président|Vice-Président|Secrétaire|Trésorier"})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function generateOrdrePermAction($idPermanence,$target)
     {
@@ -294,7 +428,7 @@ class PDFGeneratorController extends Controller
 
     /**
      * @Route("pdf/contact/{idContact}/generer/invitation-ag/{target}", name="generate_invitation_ag", requirements={"target":"Président|Vice-Président|Secrétaire|Trésorier"})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function generateInvitationAGAction($idContact,$target)
     {
@@ -364,7 +498,7 @@ class PDFGeneratorController extends Controller
 
     /**
      * @Route("pdf/contact/{idContact}/generer/lettre-accompagnement", name="generate_lettre_accompagnement")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function generateLettreAccompagnementAction($idContact)
     {
@@ -380,10 +514,7 @@ class PDFGeneratorController extends Controller
       $pdf->Title('LETTRE D\'ACCOMPAGNEMENT');
       $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
-      $pdf->AddParagraphe('Cher(e) Membre,');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
-      $pdf->AddParagraphe('Lorem Ipsum dolor sit amet. Lorem Ipsum dolor sit amet.');
+      $pdf->AddParagraphe($this->render('docs/lettres/accompagnement.html.twig',['contact'=>$contact])->getContent());
 
       $response = new Response();
       $response->setContent($pdf->Output());
@@ -398,7 +529,7 @@ class PDFGeneratorController extends Controller
 
     /**
      * @Route("pdf/contact/{idContact}/generer/carte-id-fonction", name="generate_carte_id_fonction")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function generateCarteIDFonctionAction($idContact)
     {
@@ -556,6 +687,95 @@ class PDFGeneratorController extends Controller
     }
 
     /**
+     * @Route("pdf/pouvoir/{idPouvoir}/generer/vollmacht", name="generate_vollmacht")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generateVollmachtAction($idPouvoir)
+    {
+        $pouvoir = $this->getDoctrine()
+          ->getRepository('AppBundle:Pouvoir')
+          ->find($idPouvoir);
+
+        $title = 'VOLLMACHT';
+
+        $pdf = new PDF_DefaultModel();
+        $pdf->AddPage();
+        $pdf->Title($title);
+        $pdf->setFontDefault();
+        $pdf->SetFont('','',10);
+        
+        $pdf->AddParagraphe('Ich, der Unterzeichnende');
+        $pdf->AddParagraphe('Name : <b>'.$pouvoir->getContact()->getNom().' '.$pouvoir->getContact()->getPrenom().'</b>');
+        $pdf->AddParagraphe('geboren am : <b>'.($pouvoir->getContact()->getDateNaissance()?$pouvoir->getContact()->getDateNaissance()->format('d/m/Y'):'').'</b>');
+        $pdf->AddParagraphe('in : <b>'.$pouvoir->getContact()->getLieuNaissance().'</b>');
+        $pdf->AddParagraphe('Adresse : <b>'.$pouvoir->getContact()->getAdresse().' '.$pouvoir->getContact()->getAdresseComp().' '.$pouvoir->getContact()->getAdresseComp().' '.$pouvoir->getContact()->getCp().' '.$pouvoir->getContact()->getCommune().'</b>');
+
+        $pdf->AddParagraphe('erteile hiermit dem Allters- u. Invalidenverband UNIAT, dem ich als Mitglied angehöre.<br />Vollmacht mich zu vertreten.');
+
+        $pdf->AddParagraphe('gegen die/bei der : '.$pouvoir->getDestinataire());
+
+        $pdf->Ln(80);
+
+        $pdf->AddParagraphe('Ort :');
+        $pdf->Signature('Datum :','Unterschrift :');
+
+        $response = new Response();
+        $response->setContent($pdf->Output());
+
+        $response->headers->set(
+           'Content-Type',
+           'application/pdf'
+        );
+
+        return $response; 
+    }
+
+    /**
+     * @Route("pdf/pouvoir/{idPouvoir}/generer/pouvoir", name="generate_pouvoir")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function generatePouvoirAction($idPouvoir)
+    {
+        $pouvoir = $this->getDoctrine()
+          ->getRepository('AppBundle:Pouvoir')
+          ->find($idPouvoir);
+
+        $title = 'POUVOIR';
+
+        $pdf = new PDF_DefaultModel();
+        $pdf->AddPage();
+        $pdf->Title($title);
+        $pdf->setFontDefault();
+        $pdf->SetFont('','',10);
+        
+        $pdf->AddParagraphe('Je soussigné(e),');
+        $pdf->AddParagraphe('Nom : <b>'.$pouvoir->getContact()->getNom().' '.$pouvoir->getContact()->getPrenom().'</b>');
+        $pdf->AddParagraphe('né(e) le : <b>'.($pouvoir->getContact()->getDateNaissance()?$pouvoir->getContact()->getDateNaissance()->format('d/m/Y'):'').'</b>');
+        $pdf->AddParagraphe('à : <b>'.$pouvoir->getContact()->getLieuNaissance().'</b>');
+        $pdf->AddParagraphe('Domicilié(e) à : <b>'.$pouvoir->getContact()->getAdresse().' '.$pouvoir->getContact()->getAdresseComp().' '.$pouvoir->getContact()->getCp().' '.$pouvoir->getContact()->getCommune().'</b>');
+
+        $pdf->AddParagraphe("adhérent(e) de l'UNIAT, autorise la communication de tous les éléments d'information et
+donne délégation de pouvoir à l'UNIAT pour me représenter et me défendre dans mon affaire");
+
+        $pdf->AddParagraphe('de / auprès de : '.$pouvoir->getDestinataire());
+
+        $pdf->Ln(80);
+
+        $pdf->AddParagraphe('Fait à :');
+        $pdf->Signature('Date :','Signature :');
+
+        $response = new Response();
+        $response->setContent($pdf->Output());
+
+        $response->headers->set(
+           'Content-Type',
+           'application/pdf'
+        );
+
+        return $response; 
+    }
+
+    /**
      * @Route("/don/{idDon}/generate-recu-don", name="generate_recu_don")
      * @Security("has_role('ROLE_SPECTATOR')")
      */
@@ -623,7 +843,7 @@ ou culturel ».</i>");
         $pdf->setFontDefault();
         $pdf->SetFont('','',10);
         $pdf->RightText("Strasbourg \nle ".$date->format('d/m/Y')." \nSection : ".($don->getContact()->getSection()?$don->getContact()->getSection()->getNom():''));
-        $pdf->AddParagraphe($this->render('docs/lettres/remerciement-don.html.twig',['montant'=>$don->getMontant()])->getContent());
+        $pdf->AddParagraphe($this->render('docs/lettres/remerciement-don.html.twig',['montant'=>$don->getMontant(),'contact'=>$don->getContact()])->getContent());
 
         $response = new Response();
         $response->setContent($pdf->Output());
@@ -818,6 +1038,74 @@ ou culturel ».</i>");
         );
 
         return $response; 
+    }
+
+    /**
+     * @Route("/contact-diplome/{idContactDiplome}/generer/etiquettes", name="generate_etiquette_diplome")
+     * @Security("has_role('ROLE_SPECTATOR')")
+    */
+    public function generateEtiquetteDiplomeAction($idContactDiplome){
+      $pdf = new PDF_Etiquette('L7163');
+      $pdf->AddPage();
+
+      $contactDiplome = $this->getDoctrine()
+        ->getRepository('AppBundle:ContactDiplome')
+        ->find($idContactDiplome);
+
+      $pdf->AddFont('Mistral');
+      $pdf->SetFont('mistral','',40);
+
+      $text = sprintf("%s %s", $contactDiplome->getContact()->getNom(), $contactDiplome->getContact()->getPrenom());
+      $pdf->Add_Label(utf8_decode($text));
+
+      $text = sprintf("%s", $contactDiplome->getContact()->getSection()?$contactDiplome->getContact()->getSection()->getNom():'');
+      $pdf->Add_Label(utf8_decode($text));
+
+      $text = sprintf("%s", $contactDiplome->getDateObtention()->format('d/m/Y'));
+      $pdf->Add_Label(utf8_decode($text));
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+
+    }
+
+    /**
+     * @Route("/contact-diplome/{idContactDiplome}/generer/enveloppe", name="generate_enveloppe_diplome")
+     * @Security("has_role('ROLE_SPECTATOR')")
+    */
+    public function generateEnveloppeDiplomeAction($idContactDiplome){
+      $pdf = new PDF_Enveloppe();
+      $pdf->AddPage();
+
+      $contactDiplome = $this->getDoctrine()
+        ->getRepository('AppBundle:ContactDiplome')
+        ->find($idContactDiplome);
+
+      $pdf->SetFont('Helvetica','',20);
+
+      $pdf->AddDest(array(
+          $contactDiplome->getContact()->getNom().' '.$contactDiplome->getContact()->getPrenom(),
+          $contactDiplome->getDiplome()->getlabel(),
+          $contactDiplome->getContact()->getSection()->getNom(),
+        ));
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response; 
+
     }
 
 }

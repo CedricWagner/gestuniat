@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Liste des assemblées générales (trimestre {{ numTrimestre }} / {{ annee }}){% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+<div class="section">
+	<h1>Assemblées générales</h1>
+	<p>Année <b>{{ annee }}</b> </p>
+	<p>Trimestre N°<b>{{ numTrimestre }}</b> </p>
+</div>
+<div class="section">
+	<form>
+		<p>Année
+			<select id="selAnnee" class="form-control">
+				{% for _annee in 2005.."now"|date("Y") %}
+					<option value="{{ _annee }}" {{ _annee == annee ? 'selected="selected"' : '' }}>{{ _annee }}</option>
+				{% endfor %}
+			</select>
+		</p>
+		<p>Trimestre
+			<select class="form-control" id="selTrimestre">
+				{% for _numTrimestre in 1..4 %}
+					<option value="{{ _numTrimestre }}" {{ _numTrimestre == numTrimestre ? 'selected="selected"' : '' }}>{{ _numTrimestre }}</option>
+				{% endfor %}
+			</select>
+		</p>
+		<p><a href="#" class="btn btn-default" onclick="displayAGs()">Rechercher >></a></p>
+	</form>
+</div>
+
+<script type="text/javascript">
+	function displayAGs(){
+		var annee = $('#selAnnee').val();
+		var trimestre = $('#selTrimestre').val();
+
+		location.href = '{{ path('list_ags_rentiers') }}/'+annee+'/'+trimestre;
+
+		return false;
+	}
+</script>
+
+{% endblock %}
+
+{% block content %}
+	<h2>Liste des assemblées générales</h2>
+	<div class="btn-group">
+	  <button type="button" class="btn btn-export dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    Exporter la liste des assemblées générales &nbsp;<span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu">
+	    <li><a href="{{ path('export_liste_ags',{'annee':annee,'numTrimestre':numTrimestre,'format':'csv'}) }}">Format CSV</a></li>
+	  </ul>
+	</div>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th>Section</th>
+				<th>Date</th>
+				<th>Lieu</th>
+				<th>Orateur</th>
+				<th>Nombre de participants</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ag in lstAGs %}
+				<tr>
+					<td>{{ ag.section.nom }}</td>
+					<td>{{ ag.date.format('d/m/Y') }}</td>
+					<td>{{ ag.lieu }}</td>
+					<td>{{ ag.orateur }}</td>
+					<td>{{ ag.nbParticipants }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

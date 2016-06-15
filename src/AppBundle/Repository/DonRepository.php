@@ -10,4 +10,50 @@ namespace AppBundle\Repository;
  */
 class DonRepository extends \Doctrine\ORM\EntityRepository
 {
+
+
+	public function findDons($annee,$numTrimestre){
+		
+		switch ($numTrimestre) {
+			case 1:
+				$params = array(
+					'p_debut'=> (new \DateTime($annee.'-01-01'))->format('d/m/Y'),
+					'p_fin'=> (new \DateTime($annee.'-03-31'))->format('d/m/Y'),
+					);
+				break;
+			case 2:
+				$params = array(
+					'p_debut'=> (new \DateTime($annee.'-04-01'))->format('d/m/Y'),
+					'p_fin'=> (new \DateTime($annee.'-06-30'))->format('d/m/Y'),
+					);
+				break;
+			case 3:
+				$params = array(
+					'p_debut'=> (new \DateTime($annee.'-07-01'))->format('d/m/Y'),
+					'p_fin'=> (new \DateTime($annee.'-09-30'))->format('d/m/Y'),
+					);
+				break;
+			case 4:
+				$params = array(
+					'p_debut'=> (new \DateTime($annee.'-10-01'))->format('d/m/Y'),
+					'p_fin'=> (new \DateTime($annee.'-12-31'))->format('d/m/Y'),
+					);
+				break;
+			default:
+				case 1:
+				break;
+		}
+
+		$qb = $this->createQueryBuilder('don');
+		$result = $qb
+			->select('don')
+			->where('don.date >= :p_debut')
+			->andwhere('don.date <= :p_fin')
+			->andwhere('don.isAnonyme != true')
+			->setParameters($params)
+			->getQuery()
+    		->execute();
+
+        return $result;
+	}
 }

@@ -594,8 +594,6 @@ class SectionController extends Controller
             ->getRepository('AppBundle:Contact')
             ->countContactsBySection($section);
 
-        // dump($nbContacts);
-
         return new Response($nbContacts);
 
     }

@@ -58,6 +58,15 @@ class DossierRepository extends \Doctrine\ORM\EntityRepository
 						$qb->andwhere('section = :p_section');
 						$params['p_section'] = $fv->getValeur();
 						break;
+					case 'selVignette':
+						if($fv->getValeur()=='V_PAYEE'){
+							$qb->join('AppBundle:Vignette', 'vignette', 'WITH', 'vignette.dossier = dossier');
+							$qb->andwhere('vignette.datePaiement IS NOT NULL');
+						}elseif($fv->getValeur()=='V_RETARD'){
+							$qb->join('AppBundle:Vignette', 'vignette', 'WITH', 'vignette.dossier = dossier');
+							$qb->andwhere('vignette.datePaiement IS NULL');
+						}
+						break;
 				}
 			}
 		}

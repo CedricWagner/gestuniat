@@ -38,8 +38,16 @@
 		<select name="selSection" class="form-control">
 			<option value="0">Toutes</option>
 			{% for key, section in sections %}
-				<option {{ currentFilter and currentFilter.getFiltreValeur('setSection') == key ? 'selected="selected"' :'' }} value="{{section.id}}">{{section.nom}}</option>
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selSection') == key ? 'selected="selected"' :'' }} value="{{section.id}}">{{section.nom}}</option>
 			{% endfor %}
+		</select>
+	</div>
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionSelVignette" aria-controls="sectionSelVignette">Vignettes contributives<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionSelVignette">
+		<select name="selVignette" class="form-control">
+			<option value="0">Toutes</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selVignette') == 'V_PAYEE' ? 'selected="selected"' :'' }} value="V_PAYEE">Vignettes payées</option>
+			<option {{ currentFilter and currentFilter.getFiltreValeur('selVignette') == 'V_RETARD' ? 'selected="selected"' :'' }} value="V_RETARD">Vignettes en retard</option>
 		</select>
 	</div>
 	<div class="filter-section section-save-filter">

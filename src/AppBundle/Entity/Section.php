@@ -428,4 +428,8 @@ class Section
     {
         return $this->isActive;
     }
+
+    public static function getIdSectionDivers(){
+        return 1;
+    }
 }

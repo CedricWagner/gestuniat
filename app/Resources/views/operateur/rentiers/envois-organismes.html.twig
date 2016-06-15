@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Liste des organismes (trimestre {{ numTrimestre }} / {{ annee }}){% endblock %}
+
+{% block additionnal_classes %}internal has-left-column{% endblock %}
+
+{% block left_column %}
+
+<div class="section">
+	<h1>Organismes</h1>
+	<p>Année <b>{{ annee }}</b> </p>
+	<p>Trimestre N°<b>{{ numTrimestre }}</b> </p>
+</div>
+<div class="section">
+	<form>
+		<p>Année
+			<select id="selAnnee" class="form-control">
+				{% for _annee in 2005.."now"|date("Y") %}
+					<option value="{{ _annee }}" {{ _annee == annee ? 'selected="selected"' : '' }}>{{ _annee }}</option>
+				{% endfor %}
+			</select>
+		</p>
+		<p>Trimestre
+			<select class="form-control" id="selTrimestre">
+				{% for _numTrimestre in 1..4 %}
+					<option value="{{ _numTrimestre }}" {{ _numTrimestre == numTrimestre ? 'selected="selected"' : '' }}>{{ _numTrimestre }}</option>
+				{% endfor %}
+			</select>
+		</p>
+		<p><a href="#" class="btn btn-default" onclick="displayOrganismes()">Rechercher >></a></p>
+	</form>
+</div>
+
+<script type="text/javascript">
+	function displayOrganismes(){
+		var annee = $('#selAnnee').val();
+		var trimestre = $('#selTrimestre').val();
+
+		location.href = '{{ path('list_organismes_rentiers') }}/'+annee+'/'+trimestre;
+
+		return false;
+	}
+</script>
+
+{% endblock %}
+
+{% block content %}
+	<h2>Liste des organismes</h2>
+	<div class="btn-group">
+	  <button type="button" class="btn btn-export dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    Exporter la liste des organismes &nbsp;<span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu">
+	    <li><a href="{{ path('export_liste_organismes',{'annee':annee,'numTrimestre':numTrimestre,'format':'csv'}) }}">Format CSV</a></li>
+	  </ul>
+	</div>
+	<table class="table table-striped table-hover selectable">
+		<thead>
+			<tr>
+				<th>Nom</th>
+				<th>Nom du titulaire</th>
+				<th>Fonction</th>
+				<th>Ville</th>
+				<th>Type d'organisme</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for organismeEnvoi in organismesEnvois %}
+				<tr>
+					<td>{{ organismeEnvoi.organisme.nom }}</td>
+					<td>{{ organismeEnvoi.organisme.nomTitulaire }}</td>
+					<td>{{ organismeEnvoi.organisme.fonctionTitulaire }}</td>
+					<td>{{ organismeEnvoi.organisme.ville }}</td>
+					<td>{{ organismeEnvoi.organisme.typeOrganisme.label }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

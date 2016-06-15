@@ -234,6 +234,15 @@ class ContactController extends Controller
       $dossierForm = $this->createForm(DossierType::class, $dossier);
       $dossierForm->handleRequest($request);
 
+      $prevTrimestre = new \DateTime();
+      $prevTrimestre->sub(new \DateInterval('PT9M'));
+
+      // is offreDecouverte expiring
+      $isExpiring = false;
+      if($contact->getDateOffreDecouverte()){
+          $isExpiring = $contact->getDateOffreDecouverte() < $prevTrimestre;
+      }
+
 
       return $this->render('operateur/contacts/view-contact.html.twig', [
             'contact' => $contact,
@@ -247,6 +256,7 @@ class ContactController extends Controller
             'dossierForm' => $dossierForm->createView(),
             'documentForm' => $documentForm->createView(),
             'donForm' => $donForm->createView(),
+            'isExpiring' => $isExpiring,
         ]);
     }
 

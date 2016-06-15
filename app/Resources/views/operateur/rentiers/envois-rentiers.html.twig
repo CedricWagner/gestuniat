@@ -16,14 +16,14 @@
 		<p>Année
 			<select id="selAnnee" class="form-control">
 				{% for _annee in 2005.."now"|date("Y") %}
-					<option value="{{ _annee }}" {{ _annee == "now"|date("Y") ? 'selected="selected"' : '' }}>{{ _annee }}</option>
+					<option value="{{ _annee }}" {{ _annee == annee ? 'selected="selected"' : '' }}>{{ _annee }}</option>
 				{% endfor %}
 			</select>
 		</p>
 		<p>Trimestre
 			<select class="form-control" id="selTrimestre">
 				{% for _numTrimestre in 1..4 %}
-					<option value="{{ _numTrimestre }}" {{ _numTrimestre == 4 ? 'selected="selected"' : '' }}>{{ _numTrimestre }}</option>
+					<option value="{{ _numTrimestre }}" {{ _numTrimestre == numTrimestre ? 'selected="selected"' : '' }}>{{ _numTrimestre }}</option>
 				{% endfor %}
 			</select>
 		</p>
@@ -51,7 +51,6 @@
 	    Exporter la liste des destinataires &nbsp;<span class="caret"></span>
 	  </button>
 	  <ul class="dropdown-menu">
-	    <li><a href="{{ path('export_liste_dest_rentiers',{'annee':annee,'numTrimestre':numTrimestre,'format':'pdf'}) }}">Format PDF</a></li>
 	    <li><a href="{{ path('export_liste_dest_rentiers',{'annee':annee,'numTrimestre':numTrimestre,'format':'csv'}) }}">Format CSV</a></li>
 	  </ul>
 	</div>

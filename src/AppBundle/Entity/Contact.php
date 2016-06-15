@@ -1467,4 +1467,20 @@ class Contact
     public function displayHeader(){
         
     }
+
+    public function displayCivility(){
+        $txt = '';
+        switch ($this->civilite->getLabel()) {
+            case 'Monsieur':
+                $txt = 'Cher Monsieur,';
+                break;
+            case 'Madame':
+                $txt = 'Chère Madame,';
+                break;
+            default:
+                $txt = 'Chère Madame, cher Monsieur,';
+                break;
+        }
+        return $txt;
+    }
 }

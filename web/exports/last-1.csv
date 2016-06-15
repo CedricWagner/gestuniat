@@ -1,2 +1,2 @@
-Nom,Titulaire,Fonction,Adresse,"Adresse complémentaire","Code postal",Ville
-"Night Watch","JS S","Lord Commander","The wall","Traitor avenue",01000,Castleblack
+Nom,Prénom,Num,Statut,Adresse,CP,Commune,Section,"Fonction (section)","Fonction (groupement)","Date d'entrée"
+Ackbar,Alain,8,Décédé(e),,,,,,,26/05/2016

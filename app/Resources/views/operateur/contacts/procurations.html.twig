@@ -23,6 +23,7 @@
 				<th>Date</th>
 				<th>Statut</th>
 				<th>Lieu</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -35,6 +36,7 @@
 					<td>{{ procuration.date ? procuration.date.format('d/m/Y') : '' }}</td>
 					<td>{{ procuration.statut }}</td>
 					<td>{{ procuration.lieu }}</td>
+					<td><a class="btn btn-primary" href="{{ path('generate_procuration',{'idProcuration':procuration.id}) }}" target="_blank">Imprimer</a></td>
 				</tr>
 			{% endfor %}
 		</tbody>

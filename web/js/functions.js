@@ -225,6 +225,12 @@ function ajaxApplyFilter(formFilter,ajaxUrl,page,orderby){
 			//case cb
 			if ($(this).attr('type')&&$(this).attr('type')=='checkbox') {
 				if($(this).is(':checked')){
+
+					// var inputName = $(this).attr('name');
+					// var values = '';
+					// $(formFilter).find('*[name="'+inputName+'"]:checked').each(function(){
+					// 	values+=$(this).val()+',';
+					// });
 					fields.push({'type':'text','name':$(this).attr('name'),'value':$(this).val()});
 				}
 			}
@@ -462,8 +468,6 @@ function printSuivisAction(container){
 		selection.push($(this).data('id'));
 	});
 
-	console.log(selection);
-
 	ajax_start();
 	$.ajax({
 	  method: "POST",
@@ -473,5 +477,23 @@ function printSuivisAction(container){
 	.done(function(response) {
 		ajax_stop();
 		location.href = response;
+	});
+}
+
+function applyPermission(obj){
+
+	var role = $(obj).data('role');
+	var idPerm = $(obj).data('perm');
+	var checked = $(obj).is(':checked');
+
+
+	ajax_start();
+	$.ajax({
+	  method: "POST",
+	  url: '/permission/apply',
+	  data: { role:role, idPerm:idPerm, checked:checked }
+	})
+	.done(function(response) {
+		ajax_stop();
 	});
 }
