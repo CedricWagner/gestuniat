@@ -22,6 +22,8 @@ class FonctionGroupementController extends Controller
 	public function listFonctionGroupementsAction()
 	{
 
+		$this->get('app.security')->checkAccess('FONCTION_READ');
+
 	  	$fonctionGroupements = $this->getDoctrine()
 	  					->getRepository('AppBundle:FonctionGroupement')
 	  					->findAll();
@@ -53,6 +55,8 @@ class FonctionGroupementController extends Controller
 	*/
 	public function saveFonctionGroupementAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('FONCTION_WRITE');
 
 		if($request->query->get('idFonctionGroupement')){
 			$fonctionGroupement = $this->getDoctrine()
@@ -88,6 +92,8 @@ class FonctionGroupementController extends Controller
 	*/
 	public function deleteFonctionGroupementAction($idFonctionGroupement)
 	{
+
+		$this->get('app.security')->checkAccess('FONCTION_DELETE');
 
 	    $fonctionGroupement = $this->getDoctrine()
 	      ->getRepository('AppBundle:FonctionGroupement')

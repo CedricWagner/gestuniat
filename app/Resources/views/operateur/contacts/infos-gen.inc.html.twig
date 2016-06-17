@@ -13,23 +13,27 @@
 	{% if contact.fonctionSection %}
 		<div style="position:relative">
 			Fonction : {{contact.fonctionSection.label}}&nbsp;
-			<a  href="#" class="dropdown-toggle" id="options-fonc-section" data-toggle="dropdown" aria-haspopup="true"><span style="vertical-align:bottom" class="glyphicon glyphicon-option-horizontal"></span></a>
-			<ul class="dropdown-menu" aria-labelledby="options-fonc-section">
-				<li class="contextual-item"><a target="_blank" class="no-padding-top" href="{{ path('generate_lettre_felicitations',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-notes-2"></span><span class="item-label">Générer une lettre de félicitations</span></a></li>
-				<li class="contextual-item"><a target="_blank" class="no-padding-top" href="{{ path('generate_carte_id_fonction' ,{'idContact':contact.id})}}"><span class="glyphicons glyphicons-nameplate"></span><span class="item-label">Générer la carte d'identité de fonction</span></a></li>
-			</ul>
+			{% if app_security.hasAccess('CONTACT_KIT_ADH') %}
+				<a  href="#" class="dropdown-toggle" id="options-fonc-section" data-toggle="dropdown" aria-haspopup="true"><span style="vertical-align:bottom" class="glyphicon glyphicon-option-horizontal"></span></a>
+				<ul class="dropdown-menu" aria-labelledby="options-fonc-section">
+					<li class="contextual-item"><a target="_blank" class="no-padding-top" href="{{ path('generate_lettre_felicitations',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-notes-2"></span><span class="item-label">Générer une lettre de félicitations</span></a></li>
+					<li class="contextual-item"><a target="_blank" class="no-padding-top" href="{{ path('generate_carte_id_fonction' ,{'idContact':contact.id})}}"><span class="glyphicons glyphicons-nameplate"></span><span class="item-label">Générer la carte d'identité de fonction</span></a></li>
+				</ul>
+			{% endif %}	
 		</div>
 	{% endif %}	
 </div>
 <div class="section">
-	{% set isPayed = false %}
-	{% for cotisation in contact.cotisations %}
-		{% if cotisation.datePaiement is not null and cotisation.datePaiement.format('Y') == "now"|date('Y') %}
-			{% set isPayed = true %}
+	{% if app_security.hasAccess('COTISATION_READ') %}
+		{% set isPayed = false %}
+		{% for cotisation in contact.cotisations %}
+			{% if cotisation.datePaiement is not null and cotisation.datePaiement.format('Y') == "now"|date('Y') %}
+				{% set isPayed = true %}
+			{% endif %}
+		{% endfor %}
+		{% if isPayed %}
+			<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Cotisation <span class="label label-success">Réglée</span></p>
 		{% endif %}
-	{% endfor %}
-	{% if isPayed %}
-		<p class="underlined"><span class="glyphicons glyphicons-coins"></span>&nbsp;&nbsp;Cotisation <span class="label label-success">Réglée</span></p>
 	{% endif %}
 	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Profil créé le <a href="#">{{ contact.dateEntree ? contact.dateEntree.format('d M Y') :'' }}</a></p>
 	{% if contact.mail %}
@@ -44,32 +48,63 @@
 	{% if contact.numSecu %}
 		<p class="underlined"><span class="glyphicons glyphicons-credit-card"></span>&nbsp;&nbsp;{{ contact.numSecu }}</p>
 	{% endif %}
-	<p class="underlined"><span class="glyphicons glyphicons-marriage"></span>&nbsp;&nbsp;Membre conjoint : 
-		{% if contact.membreConjoint %}
-			<a href="{{ path('view_contact',{'idContact':contact.membreConjoint.id }) }}">{{ contact.membreConjoint.prenom }} {{ contact.membreConjoint.nom }}</a>&nbsp;<a href="#" data-toggle="modal" data-target="#modal-conjoint"><span class="glyphicons glyphicons-edit clickable"></span></a>
-		{% else %}
-			Aucun <a href="#" data-toggle="modal" data-target="#modal-conjoint"><span class="glyphicons glyphicons-plus-sign"></span></a>
-		{% endif %}
-	</p>
+	{% if app_security.hasAccess('CONJOINT_READ') %}
+		<p class="underlined"><span class="glyphicons glyphicons-marriage"></span>&nbsp;&nbsp;Membre conjoint : 
+			{% if contact.membreConjoint %}
+				<a href="{{ path('view_contact',{'idContact':contact.membreConjoint.id }) }}">{{ contact.membreConjoint.prenom }} {{ contact.membreConjoint.nom }}</a>&nbsp;
+				{% if app_security.hasAccess('CONJOINT_WRITE') %}
+					<a href="#" data-toggle="modal" data-target="#modal-conjoint"><span class="glyphicons glyphicons-edit clickable"></span></a>
+				{% endif %}
+			{% else %}
+				Aucun <a href="#" data-toggle="modal" data-target="#modal-conjoint"><span class="glyphicons glyphicons-plus-sign"></span></a>
+			{% endif %}
+		</p>
+	{% endif %}
 	<p class="underlined"><span class="glyphicons glyphicons-home"></span>&nbsp;&nbsp;{{ contact.adresse }} {{ contact.cp }} {{ contact.commune }}</p>
 	<div class="row">
 		<div class="col-md-12">
-			<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-danger" onclick="if(confirm('Valider la suppression du contact (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_contact',{'idContact':contact.id }) }}"> Supprimer </a></p>
+			<p><a class="btn btn-default" href="{{ path('full_contact',{'idContact':contact.id }) }}"> Profil complet >> </a>&nbsp;&nbsp;&nbsp;&nbsp;
+			{% if app_security.hasAccess('CONTACT_DELETE') %}
+				<a class="btn btn-danger" onclick="if(confirm('Valider la suppression du contact (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_contact',{'idContact':contact.id }) }}"> Supprimer </a>
+			{% endif %}
+			</p>
 		</div>
 	</div>
 </div>
 <div class="section">
-	<p><a class="btn btn-default btn-block" href="{{ path('list_cotisations',{'idContact':contact.id}) }}">Cotisations</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_documents',{'idContact':contact.id}) }}">Gestionnaire des documents</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_vignettes',{'idContact':contact.id}) }}">Vignettes contributives</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_dons',{'idContact':contact.id}) }}">Dons</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_contrats',{'idContact':contact.id}) }}">Prévoyances</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('kit_adh_contact',{'idContact':contact.id}) }}">Kit adhésion</a></p>
-	<p><a class="btn btn-default btn-block">Etiquettes</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_procurations',{'idContact':contact.id}) }}">Procuration</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_pouvoirs',{'idContact':contact.id}) }}">Pouvoirs</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_diplomes',{'idContact':contact.id}) }}">Diplômes</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('pieces_a_fournir_contact',{'idContact':contact.id}) }}">Pièces à fournir</a></p>
+	{% if app_security.hasAccess('COTISATION_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_cotisations',{'idContact':contact.id}) }}">Cotisations</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('DOSSIER_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_documents',{'idContact':contact.id}) }}">Gestionnaire des documents</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('VIGNETTE_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_vignettes',{'idContact':contact.id}) }}">Vignettes contributives</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('DON_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_dons',{'idContact':contact.id}) }}">Dons</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('PREV_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_contrats',{'idContact':contact.id}) }}">Prévoyances</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('CONTACT_KIT_ADH') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('kit_adh_contact',{'idContact':contact.id}) }}">Kit adhésion</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('CONTACT_ET_PRINT') %}
+		<p><a class="btn btn-default btn-block">Etiquettes</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('PROCURATION_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_procurations',{'idContact':contact.id}) }}">Procuration</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('POUVOIR_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_pouvoirs',{'idContact':contact.id}) }}">Pouvoirs</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('DIPLOME_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_diplomes',{'idContact':contact.id}) }}">Diplômes</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('PIECES_PRINT') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('pieces_a_fournir_contact',{'idContact':contact.id}) }}">Pièces à fournir</a></p>
+	{% endif %}
 </div>
 
 {% include 'modals/editer-membre-conjoint.html.twig' %}

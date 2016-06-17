@@ -22,62 +22,65 @@ class OrganismeController extends Controller
      */
     public function listOrganismesAction($idFilter,$page,$nb,$orderby,$order)
     {
+
+      $this->get('app.security')->checkAccess('ORGANISME_READ');
+
     	$currentFilter = null;
 
-        if ($idFilter!=0) {
-            $currentFilter = $this->getDoctrine()
-              ->getRepository('AppBundle:FiltrePerso')
-              ->find($idFilter);
+      if ($idFilter!=0) {
+          $currentFilter = $this->getDoctrine()
+            ->getRepository('AppBundle:FiltrePerso')
+            ->find($idFilter);
 
-            $filtreValeurs = $this->getDoctrine()
-              ->getRepository('AppBundle:FiltreValeur')
-              ->findBy(array('filtrePerso'=>$currentFilter));
+          $filtreValeurs = $this->getDoctrine()
+            ->getRepository('AppBundle:FiltreValeur')
+            ->findBy(array('filtrePerso'=>$currentFilter));
 
-            $currentFilter->setFiltreValeurs($filtreValeurs);
-        }
+          $currentFilter->setFiltreValeurs($filtreValeurs);
+      }
 
-        $session = $this->get('session');
-        if($nb==0){
-            if($session->get('pagination-nb')){
-                $nb = $session->get('pagination-nb');
-            }else{
-                $nb=20;
-            }
-        }else{
-            $session->set('pagination-nb', $nb);
-        }
+      $session = $this->get('session');
+      if($nb==0){
+          if($session->get('pagination-nb')){
+              $nb = $session->get('pagination-nb');
+          }else{
+              $nb=20;
+          }
+      }else{
+          $session->set('pagination-nb', $nb);
+      }
 
-        $filtresPerso = $this->getDoctrine()
-                  ->getRepository('AppBundle:FiltrePerso')
-                  ->findBy(array('operateur'=>$this->getUser(),'contexte'=>'organisme'),array('label'=>'ASC'));
+      $filtresPerso = $this->getDoctrine()
+                ->getRepository('AppBundle:FiltrePerso')
+                ->findBy(array('operateur'=>$this->getUser(),'contexte'=>'organisme'),array('label'=>'ASC'));
 
-        if($currentFilter){
-			$organismes = $this->getDoctrine()
-			  ->getRepository('AppBundle:Organisme')
-			  ->findByFilter($filtreValeurs,$page,$nb);
-        }else{
-			$organismes = $this->getDoctrine()
-			  ->getRepository('AppBundle:Organisme')
-			  ->findAllWithPagination($page,$nb);
-        }
+      if($currentFilter){
+  			$organismes = $this->getDoctrine()
+  			  ->getRepository('AppBundle:Organisme')
+  			  ->findByFilter($filtreValeurs,$page,$nb);
+      }else{
+  			$organismes = $this->getDoctrine()
+  			  ->getRepository('AppBundle:Organisme')
+  			  ->findAllWithPagination($page,$nb);
+      }
 
-        $organisme = new Organisme();
-        $newOrganismeForm =  $this->createForm(OrganismeType::class, $organisme,array(
-        		'action'=>$this->generateUrl('save_organisme')
-        	));
+      $organisme = new Organisme();
+      $newOrganismeForm =  $this->createForm(OrganismeType::class, $organisme,array(
+      		'action'=>$this->generateUrl('save_organisme')
+      	));
 
-        $types = $this->getDoctrine()
-        	->getRepository('AppBundle:TypeOrganisme')
-        	->findAll();
+      $types = $this->getDoctrine()
+      	->getRepository('AppBundle:TypeOrganisme')
+      	->findAll();
 
-        return $this->render('operateur/organismes/organismes.html.twig', [
-            'filtresPerso' => $filtresPerso,
-            'currentFilter' => $currentFilter,
-            'types' => $types,
-            'newOrganismeForm' => $newOrganismeForm->createView(),
-            'items' => $organismes,
-            'pagination' => array('count'=>count($organismes),'nb'=>$nb,'page'=>$page,'orderby'=>$orderby,'order'=>$order),
-        ]);
+      return $this->render('operateur/organismes/organismes.html.twig', [
+          'filtresPerso' => $filtresPerso,
+          'currentFilter' => $currentFilter,
+          'types' => $types,
+          'newOrganismeForm' => $newOrganismeForm->createView(),
+          'items' => $organismes,
+          'pagination' => array('count'=>count($organismes),'nb'=>$nb,'page'=>$page,'orderby'=>$orderby,'order'=>$order),
+      ]);
 
     }
 
@@ -101,16 +104,19 @@ class OrganismeController extends Controller
     			'entity' => 'organisme',
     			'title' => 'Editer un organisme',
     			'form' => $organismeForm->createView(),
-    			'action' => $this->generateUrl('save_organisme').'?idOrganisme='.$organisme->getId(),
+          'action' => $this->generateUrl('save_organisme').'?idOrganisme='.$organisme->getId(),
+    			'isWritable' => $this->get('app.security')->hasAccess('ORGANISME_WRITE'),
     		])->getContent());
     }
 
 	/**
 	* @Route("/organisme/save", name="save_organisme")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveOrganismeAction(Request $request)
 	{
+
+    $this->get('app.security')->checkAccess('ORGANISME_WRITE');
 
 		if($request->query->get('idOrganisme')){
 			$organisme = $this->getDoctrine()
@@ -140,14 +146,17 @@ class OrganismeController extends Controller
 
     /**
      * @Route("/organisme/listing/action", name="organisme_action_listing")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function organismeListingAction(Request $request)
     {
 
+      $this->get('app.security')->checkAccess('ORGANISME_READ');
+
       $action = $request->request->get('action');
       switch ($action) {
         case 'DELETE_ITEMS':
+          $this->get('app.security')->checkAccess('ORGANISME_DELETE');
           $selection = $request->request->get('selection');
           foreach ($selection as $id) {
             $this->deleteOrganismeAction($id);
@@ -155,6 +164,7 @@ class OrganismeController extends Controller
           $path = $this->generateUrl('list_organismes');
           break;
         case 'ETIQUETTES':
+          $this->get('app.security')->checkAccess('ORGANISME_ET_PRINT');
           $selection = $request->request->get('selection');
           $pdf = new PDF_Etiquette('L7163');
           $pdf->AddPage();
@@ -169,6 +179,7 @@ class OrganismeController extends Controller
           $path = $this->generateUrl('download_last_pdf',['fileName'=>'export-etiquettes']);
           break;
         case 'EXPORT':
+          $this->get('app.security')->checkAccess('ORGANISME_PRINT');
           $selection = $request->request->get('selection');
           $csv = $this->get('app.csvgenerator');
           $csv->setName('export_liste-organismes');
@@ -204,14 +215,16 @@ class OrganismeController extends Controller
 
 	/**
 	* @Route("/organisme/delete/{idOrganisme}", name="delete_organisme")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteOrganismeAction($idOrganisme)
 	{
 
-	    $organisme = $this->getDoctrine()
-	      ->getRepository('AppBundle:Organisme')
-	      ->find($idOrganisme);
+    $this->get('app.security')->checkAccess('ORGANISME_DELETE');
+
+    $organisme = $this->getDoctrine()
+      ->getRepository('AppBundle:Organisme')
+      ->find($idOrganisme);
 		
 		$contact = $organisme->getContact();
 

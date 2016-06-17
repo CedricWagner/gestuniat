@@ -32,20 +32,30 @@
 			{% for don in dons %}
 				<tr>
 					<td style="position:relative">
-						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'don','object':don,'deletePath':path('delete_don',{'idDon':don.id})} %}
-						{% include 'modals/default.html.twig' with {'form':donForms[don.id],'entity':'don','object':don,'title':'Edition du don'} %}
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'don','object':don,'deletePath':path('delete_don',{'idDon':don.id}),'isDeletable':app_security.hasAccess('DON_DELETE')} %}
+						{% include 'modals/default.html.twig' with {'form':donForms[don.id],'entity':'don','object':don,'title':'Edition du don','isWritable':app_security.hasAccess('DON_WRITE')} %}
 					</td>
 					<td>{{ don.montant }} €</td>
 					<td>{{ don.date ? don.date.format('d/m/Y') : '' }}</td>
 					<td>{{ don.isAnonyme ? 'Oui' : 'Non' }}</td>
 					<td>{{ don.moyenPaiement ? don.moyenPaiement.label : '' }}</td>
-					<td><a target="_blank" class="btn btn-primary" href="{{ path('generate_recu_don',{'idDon':don.id}) }}">Générer</a></td>
-					<td><a target="_blank" class="btn btn-primary" href="{{ path('generate_remerciement_don',{'idDon':don.id}) }}">Générer</a></td>
+					<td>
+						{% if app_security.hasAccess('DON_PRINT') %}
+							<a target="_blank" class="btn btn-primary" href="{{ path('generate_recu_don',{'idDon':don.id}) }}">Générer</a>
+						{% endif %}
+					</td>
+					<td>
+						{% if app_security.hasAccess('DON_PRINT') %}
+							<a target="_blank" class="btn btn-primary" href="{{ path('generate_remerciement_don',{'idDon':don.id}) }}">Générer</a>
+						{% endif %}
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-don-0">Saisir un nouveau don</button>
-	<br />
-	{% include 'modals/default.html.twig' with {'form':newDonForm,'entity':'don','object':false,'title':'Ajouter un nouveau don'} %}
+	{% if app_security.hasAccess('DON_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-don-0">Saisir un nouveau don</button>
+		<br />
+		{% include 'modals/default.html.twig' with {'form':newDonForm,'entity':'don','object':false,'title':'Ajouter un nouveau don'} %}
+	{% endif %}
 {% endblock %}

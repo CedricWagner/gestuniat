@@ -21,6 +21,9 @@ class AssembleeGeneraleController extends Controller
 	*/
 	public function listAssembleeGeneralesAction($idSection)
 	{
+
+		$this->get('app.security')->checkAccess('AG_READ');
+
 	  	$section = $this->getDoctrine()
 	  					->getRepository('AppBundle:Section')
 	  					->find($idSection);
@@ -53,10 +56,12 @@ class AssembleeGeneraleController extends Controller
 
 	/**
 	* @Route("/assembleeGenerale/save", name="save_assembleeGenerale")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveAssembleeGeneraleAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('AG_WRITE');
 
 		$datetime = new \DateTime();
 
@@ -93,10 +98,12 @@ class AssembleeGeneraleController extends Controller
 
 	/**
 	* @Route("/assembleeGenerale/delete/{idAssembleeGenerale}", name="delete_assembleeGenerale")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteAssembleeGeneraleAction($idAssembleeGenerale)
 	{
+
+		$this->get('app.security')->checkAccess('AG_DELETE');
 
 	    $assembleeGenerale = $this->getDoctrine()
 	      ->getRepository('AppBundle:AssembleeGenerale')

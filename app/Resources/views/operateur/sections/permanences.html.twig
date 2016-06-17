@@ -30,13 +30,14 @@
 			{% for permanence in permanences %}
 				<tr>
 					<td style="position:relative">
-						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'permanence','object':permanence,'deletePath':path('delete_permanence',{'idPermanence':permanence.id})} %}
-						{% include 'modals/default.html.twig' with {'form':permanenceForms[permanence.id],'entity':'permanence','object':permanence,'title':'Edition de la permanence'} %}
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'permanence','object':permanence,'deletePath':path('delete_permanence',{'idPermanence':permanence.id}),'isDeletable': app_security.hasAccess('PERMANENCE_DELETE')} %}
+						{% include 'modals/default.html.twig' with {'form':permanenceForms[permanence.id],'entity':'permanence','object':permanence,'title':'Edition de la permanence','isWritable': app_security.hasAccess('PERMANENCE_WRITE')} %}
 					</td>
 					<td>{{ permanence.typeTournee ? permanence.typeTournee.label : '' }}</td>
 					<td>{{ permanence.label }}</td>
 					<td>{{ permanence.dateMAJ ? permanence.dateMAJ.format('d/m/Y') : '' }}</td>
 					<td>
+					 {% if  app_security.hasAccess('PERMANENCE_PRINT') %}
 						<div class="btn-group">
 							<button href="" class="btn btn-primary dropdown-toggle" type="button" id="dd-gen-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Générer&nbsp;<span class="caret"></span></button>
 							 <ul class="dropdown-menu" aria-labelledby="dd-gen-order">
@@ -46,12 +47,15 @@
 							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Secrétaire'}) }}">Secrétaire</a></li>
 							  </ul>
 						</div>
+					 {% endif %}
 					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-permanence-0">Saisir une nouvelle permanence</button>
-	<br />
-	{% include 'modals/default.html.twig' with {'form':newPermanenceForm,'entity':'permanence','object':false,'title':'Ajouter une nouvelle permanence'} %}
+	{% if  app_security.hasAccess('PERMANENCE_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-permanence-0">Saisir une nouvelle permanence</button>
+		<br />
+		{% include 'modals/default.html.twig' with {'form':newPermanenceForm,'entity':'permanence','object':false,'title':'Ajouter une nouvelle permanence'} %}
+	{% endif %}
 {% endblock %}

@@ -31,8 +31,8 @@
 			{% for vignette in vignettes %}
 				<tr>
 					<td style="position:relative">
-						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'vignette','object':vignette,'deletePath':path('delete_vignette',{'idVignette':vignette.id})} %}
-						{% include 'modals/default.html.twig' with {'form':vignetteForms[vignette.id],'entity':'vignette','object':vignette,'title':'Edition de la vignette'} %}
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'vignette','object':vignette,'deletePath':path('delete_vignette',{'idVignette':vignette.id}),'isDeletable':app_security.hasAccess('VIGNETTE_DELETE')} %}
+						{% include 'modals/default.html.twig' with {'form':vignetteForms[vignette.id],'entity':'vignette','object':vignette,'title':'Edition de la vignette','isWritable':app_security.hasAccess('VIGNETTE_WRITE')} %}
 					</td>
 					<td>{{ vignette.montant }} €</td>
 					<td>{{ vignette.dateDemande ? vignette.dateDemande.format('d/m/Y') : '' }}</td>
@@ -43,7 +43,9 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-vignette-0">Saisir une nouvelle vignette</button>
-	<br />
-	{% include 'modals/default.html.twig' with {'form':newVignetteForm,'entity':'vignette','object':false,'title':'Ajouter une nouvelle vignette'} %}
+	{% if app_security.hasAccess('VIGNETTE_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-vignette-0">Saisir une nouvelle vignette</button>
+		<br />
+		{% include 'modals/default.html.twig' with {'form':newVignetteForm,'entity':'vignette','object':false,'title':'Ajouter une nouvelle vignette'} %}
+	{% endif %}
 {% endblock %}

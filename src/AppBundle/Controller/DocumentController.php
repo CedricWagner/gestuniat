@@ -28,6 +28,9 @@ class DocumentController extends Controller
 	*/
 	public function listDocumentsAction($idContact)
 	{
+
+		$this->get('app.security')->checkAccess('DOSSIER_READ');
+
 	  	$contact = $this->getDoctrine()
 	  					->getRepository('AppBundle:Contact')
 	  					->find($idContact);
@@ -68,6 +71,8 @@ class DocumentController extends Controller
      */
     public function listDossiersAction($idFilter,$page,$nb,$orderby,$order)
     {
+
+    	$this->get('app.security')->checkAccess('DOSSIER_READ');
 
         $currentFilter = null;
 
@@ -128,6 +133,9 @@ class DocumentController extends Controller
 	*/
 	public function viewDossierAction($idContact,$idDossier)
 	{
+
+		$this->get('app.security')->checkAccess('DOSSIER_READ');
+
 	  	$contact = $this->getDoctrine()
 	  					->getRepository('AppBundle:Contact')
 	  					->find($idContact);
@@ -209,10 +217,12 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/document/save", name="save_document")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveDocumentAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('DOSSIER_WRITE');
 
 		$contact = $this->getDoctrine()
 				->getRepository('AppBundle:Contact')
@@ -252,10 +262,12 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/dossier/save", name="save_dossier")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveDossierAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('DOSSIER_WRITE');
 
 		$datetime = new \DateTime();
 
@@ -298,10 +310,12 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/dossier/save/full", name="save_dossier_full")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveDossierFullAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('DOSSIER_WRITE');
 
 		$datetime = new \DateTime();
 
@@ -419,10 +433,12 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/document/delete/{idDocument}", name="delete_document")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteDocumentAction($idDocument)
 	{
+
+		$this->get('app.security')->checkAccess('DOSSIER_DELETE');
 
 	    $document = $this->getDoctrine()
 	      ->getRepository('AppBundle:Document')
@@ -441,10 +457,11 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/dossier/delete/{idDossier}", name="delete_dossier")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteDossierAction($idDossier)
 	{
+		$this->get('app.security')->checkAccess('DOSSIER_DELETE');
 
 	    $dossier = $this->getDoctrine()
 	      ->getRepository('AppBundle:Dossier')
@@ -468,7 +485,7 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/download/last/{fileName}", name="download_last_pdf")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function downloadLastPdfAction($fileName)
 	{
@@ -485,7 +502,7 @@ class DocumentController extends Controller
 
 	/**
 	* @Route("/download/last/{type}/{fileName}", name="download_last_export")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function downloadLastExportAction($fileName,$type)
 	{

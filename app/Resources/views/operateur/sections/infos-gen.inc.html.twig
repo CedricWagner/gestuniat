@@ -7,7 +7,10 @@
 <div class="section">
 	<p class="underlined"><span class="glyphicons glyphicons-user"></span>&nbsp;&nbsp;Délégué : 
 		{% if section.delegue %}
-			<a href="{{ path('view_contact',{'idContact':section.delegue.id}) }}">{{ section.delegue ? (section.delegue.prenom~' '~section.delegue.nom) : '' }}</a>&nbsp;<a href="#" data-toggle="modal" data-target="#modal-delegue"><span class="glyphicons glyphicons-edit"></span></a>
+			<a href="{{ path('view_contact',{'idContact':section.delegue.id}) }}">{{ section.delegue ? (section.delegue.prenom~' '~section.delegue.nom) : '' }}</a>&nbsp;
+			{% if app_security.hasAccess('SECTION_WRITE') %}
+				<a href="#" data-toggle="modal" data-target="#modal-delegue"><span class="glyphicons glyphicons-edit"></span></a>
+			{% endif %}
 		{% else %}
 			Non défini <a href="#" data-toggle="modal" data-target="#modal-delegue"><span class="glyphicons glyphicons-plus-sign"></span></a>
 		{% endif %}
@@ -28,7 +31,10 @@
 	<div class="row">
 		<div class="col-md-12">
 			<p><a class="btn btn-default" href="{{ path('full_section',{'idSection':section.id }) }}"> Profil complet >> </a>
-			<a class="btn btn-danger" onclick="if(confirm('Valider la suppression du section (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_section',{'idSection':section.id }) }}"> Supprimer </a></p>
+			{% if app_security.hasAccess('SECTION_CLOSE') %}
+				<a class="btn btn-danger" onclick="if(confirm('Valider la suppression du section (cette action est irréversible) ?')){ return true; }else{ return false; }" href="{{ path('delete_section',{'idSection':section.id }) }}"> Supprimer </a>
+			{% endif %}
+		</p>
 		</div>
 	</div>
 </div>
@@ -41,9 +47,15 @@
 		    )) }}
 		</span>
 		</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}">Gestion des timbres</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_permanences',{'idSection':section.id}) }}">Permanences</a></p>
-	<p><a class="btn btn-default btn-block" href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}">Assemblées Générales</a></p>
+	{% if app_security.hasAccess('TIMBRE_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}">Gestion des timbres</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('PERMANENCE_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_permanences',{'idSection':section.id}) }}">Permanences</a></p>
+	{% endif %}
+	{% if app_security.hasAccess('AG_READ') %}
+		<p><a class="btn btn-default btn-block" href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}">Assemblées Générales</a></p>
+	{% endif %}
 	<p><a class="btn btn-default btn-block" href="{{ path('list_documentSections',{'idSection':section.id}) }}">Documents</a></p>
 </div>
 <div class="section">
@@ -51,11 +63,13 @@
 		{{ render(controller('AppBundle:Section:displayFonctionsAdherentsSection',  
 			{ 'section': section }
 		)) }}
-	<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-destintaires-rentier"><span class="glyphicons glyphicons-more-windows"></span>&nbsp;Destinataires Rentier</a></p>
-	{{ render(controller(
-        'AppBundle:Section:displayDestinataireRentiers',
-        { 'section': section }
-    )) }}
+	{% if app_security.hasAccess('RENTIER_DESTINATAIRE') %}
+		<p><a class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-destintaires-rentier"><span class="glyphicons glyphicons-more-windows"></span>&nbsp;Destinataires Rentier</a></p>
+		{{ render(controller(
+	        'AppBundle:Section:displayDestinataireRentiers',
+	        { 'section': section }
+	    )) }}
+	{% endif %}
 </div>
 
 

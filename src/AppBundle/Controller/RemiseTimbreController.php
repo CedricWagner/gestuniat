@@ -17,10 +17,12 @@ class RemiseTimbreController extends Controller
 
 	/**
 	* @Route("/section/{idSection}/remiseTimbres", name="list_remiseTimbres")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listRemiseTimbresAction($idSection)
 	{
+		$this->get('app.security')->checkAccess('TIMBRE_READ');
+
 	  	$section = $this->getDoctrine()
 	  					->getRepository('AppBundle:Section')
 	  					->find($idSection);
@@ -53,10 +55,11 @@ class RemiseTimbreController extends Controller
 
 	/**
 	* @Route("/remiseTimbre/save", name="save_remiseTimbre")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveRemiseTimbreAction(Request $request)
 	{
+		$this->get('app.security')->checkAccess('TIMBRE_WRITE');
 
 		$section = $this->getDoctrine()
 				->getRepository('AppBundle:Section')
@@ -91,10 +94,11 @@ class RemiseTimbreController extends Controller
 
 	/**
 	* @Route("/remiseTimbre/delete/{idRemiseTimbre}", name="delete_remiseTimbre")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteRemiseTimbreAction($idRemiseTimbre)
 	{
+		$this->get('app.security')->checkAccess('TIMBRE_DELETE');
 
 	    $remiseTimbre = $this->getDoctrine()
 	      ->getRepository('AppBundle:RemiseTimbre')

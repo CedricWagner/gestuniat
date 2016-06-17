@@ -17,7 +17,9 @@
 						<a href="#" class="dropdown-toggle" id="options-dossier-{{ dossier.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
 						<ul class="dropdown-menu" aria-labelledby="options-dossier-{{ dossier.id }}">
 							<li class="contextual-item"><a class="no-padding-top" href="{{ path('view_dossier',{'idContact':contact.id,'idDossier':dossier.id}) }}" ><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
-							<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_dossier',{'idDossier':dossier.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+							{% if app_security.hasAccess('DOSSIER_DELETE') %}
+								<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_dossier',{'idDossier':dossier.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+							{% endif %}
 						</ul>
 					</div>
 				</td>
@@ -34,9 +36,13 @@
 					<div class="position:relative">
 						<a href="#" class="dropdown-toggle" id="options-document-{{ document.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
 						<ul class="dropdown-menu" aria-labelledby="options-document-{{ document.id }}">
-							<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditDocument({{ document.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+							{% if app_security.hasAccess('DOSSIER_WRITE') %}
+								<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditDocument({{ document.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+							{% endif %}
 							<li class="contextual-item"><a class="no-padding-top" href="{{ path('download_document',{'idDocument':document.id}) }}"><span class="glyphicons glyphicons-download-alt"></span><span class="item-label">Télécharger</span></a></li>
-							<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_document',{'idDocument':document.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+							{% if app_security.hasAccess('DOSSIER_DELETE') %}
+								<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_document',{'idDocument':document.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+							{% endif %}
 						</ul>
 					</div>
 				</td>
@@ -49,8 +55,10 @@
 		{% endfor %}
 	</tbody>
 </table>
-<button class="btn btn-primary" data-toggle="modal" data-target="#add-dossier-0">Saisir un nouveau dossier</button>
-<button class="btn btn-primary" data-toggle="modal" data-target="#add-document-0">Saisir un nouveau document</button>
-<br />
-{% include 'modals/default.html.twig' with {'form':newDocumentForm,'entity':'document','object':false,'title':'Ajouter un nouveau document'} %}
-{% include 'modals/default.html.twig' with {'form':newDossierForm,'entity':'dossier','object':false,'title':'Ajouter un nouveau dossier'} %}
+{% if app_security.hasAccess('DOSSIER_WRITE') %}
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-dossier-0">Saisir un nouveau dossier</button>
+	<button class="btn btn-primary" data-toggle="modal" data-target="#add-document-0">Saisir un nouveau document</button>
+	<br />
+	{% include 'modals/default.html.twig' with {'form':newDocumentForm,'entity':'document','object':false,'title':'Ajouter un nouveau document'} %}
+	{% include 'modals/default.html.twig' with {'form':newDossierForm,'entity':'dossier','object':false,'title':'Ajouter un nouveau dossier'} %}
+{% endif %}

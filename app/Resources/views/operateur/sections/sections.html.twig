@@ -69,7 +69,9 @@
 			<div class="actions-container">
 				<span>Effectuer une action sur la sélection &nbsp;&nbsp;&nbsp;</span>
 				<select name="selAction" id="selAction" class="padded">
-					<option value="DELETE_ITEMS">Supprimer les éléments</option>
+					{% if app_security.hasAccess('SECTION_CLOSE') %}
+						<option value="DELETE_ITEMS">Supprimer les éléments</option>
+					{% endif %}
 					<option value="EXPORT">Exporter la liste</option>
 				</select>
 				<button class="btn btn-primary" onclick="doSectionListingAction($('#selAction').val())">Valider</button>

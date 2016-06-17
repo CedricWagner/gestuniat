@@ -21,6 +21,9 @@ class DocumentSectionController extends Controller
 	*/
 	public function listDocumentsAction($idSection)
 	{
+
+		$this->get('app.security')->checkAccess('SECTION_READ');
+
 	  	$section = $this->getDoctrine()
 	  					->getRepository('AppBundle:Section')
 	  					->find($idSection);
@@ -44,10 +47,12 @@ class DocumentSectionController extends Controller
 
 	/**
 	* @Route("/section/document/save", name="save_documentSection")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveDocumentAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('SECTION_WRITE');
 
 		$section = $this->getDoctrine()
 				->getRepository('AppBundle:Section')
@@ -130,10 +135,12 @@ class DocumentSectionController extends Controller
 
 	/**
 	* @Route("/section/document/delete/{idDocumentSection}", name="delete_documentSection")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteDocumentAction($idDocumentSection)
 	{
+
+		$this->get('app.security')->checkAccess('SECTION_DELETE');
 
 	    $document = $this->getDoctrine()
 	      ->getRepository('AppBundle:DocumentSection')

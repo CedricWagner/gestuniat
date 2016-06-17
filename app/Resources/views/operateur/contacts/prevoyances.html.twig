@@ -44,7 +44,9 @@
 								<a href="#" class="dropdown-toggle" id="options-agrr-{{ agrr.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
 								<ul class="dropdown-menu" aria-labelledby="options-agrr-{{ agrr.id }}">
 									<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditContratAgrr({{ agrr.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
-									<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_agrr', {'idAgrr':agrr.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+									{% if app_security.hasAccess('PREV_DELETE') %}
+										<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_agrr', {'idAgrr':agrr.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+									{% endif %}
 								</ul>
 							</td>
 							<td>{{ agrr.numContrat }}</td>
@@ -71,8 +73,10 @@
 			</table>
 			<div class="row">
 				<div class="col-md-12">
-					<button class="btn btn-primary" data-toggle="modal" data-target="#ajouter-agrr">Saisir un nouveau contrat AGRR Prévoyance</button>
-					{% include 'modals/ajouter-agrr.html.twig' %}
+					{% if app_security.hasAccess('PREV_WRITE') %}
+						<button class="btn btn-primary" data-toggle="modal" data-target="#ajouter-agrr">Saisir un nouveau contrat AGRR Prévoyance</button>
+						{% include 'modals/ajouter-agrr.html.twig' %}
+					{% endif %}
 				</div>
 			</div>
 			<br />
@@ -96,7 +100,9 @@
 								<a href="#" class="dropdown-toggle" id="options-obseque-{{ obseque.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
 								<ul class="dropdown-menu" aria-labelledby="options-obseque-{{ obseque.id }}">
 									<li class="contextual-item"><a class="no-padding-top" href="#" onclick="ajaxShowEditContratObseque({{ obseque.id }})"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
-									<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_obseque', {'idObseque':obseque.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+									{% if app_security.hasAccess('PREV_DELETE') %}
+										<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_obseque', {'idObseque':obseque.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+									{% endif %}
 								</ul>
 							</td>
 							<td>{{ obseque.numContrat }}</td>
@@ -126,8 +132,10 @@
 			</table>
 			<div class="row">
 				<div class="col-md-12">
-					<button class="btn btn-primary" data-toggle="modal" data-target="#ajouter-obseque">Saisir un nouveau contrat de prévoyance obsèques</button>
-					{% include 'modals/ajouter-obseque.html.twig' %}
+					{% if app_security.hasAccess('PREV_WRITE') %}
+						<button class="btn btn-primary" data-toggle="modal" data-target="#ajouter-obseque">Saisir un nouveau contrat de prévoyance obsèques</button>
+						{% include 'modals/ajouter-obseque.html.twig' %}
+					{% endif %}
 				</div>
 			</div>
 			<br />

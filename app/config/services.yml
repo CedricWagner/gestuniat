@@ -5,3 +5,4 @@ imports:
     - { resource: services/history.yml }
     - { resource: services/tools.yml }
     - { resource: services/suivi.yml }
+    - { resource: services/security.yml }

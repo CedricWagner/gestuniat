@@ -1,7 +1,13 @@
+{% if isDeletable is not defined %}
+	{% set isDeletable = true %}
+{% endif %}
+
 <div style="position:relative">
 	<a href="#" class="dropdown-toggle" id="options-{{ entity }}-{{ object.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
 	<ul class="dropdown-menu" aria-labelledby="options-{{ entity }}-{{ object.id }}">
 		<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-{{ entity }}-{{ object.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
-		<li class="contextual-item"><a class="no-padding-top" href="{{ deletePath }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+		{% if isDeletable %}
+			<li class="contextual-item"><a class="no-padding-top" href="{{ deletePath }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+		{% endif %}
 	</ul>
 </div>

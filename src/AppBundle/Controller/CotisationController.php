@@ -17,10 +17,13 @@ class CotisationController extends Controller
 
 	/**
 	* @Route("/contact/{idContact}/cotisations", name="list_cotisations")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listCotisationsAction($idContact)
 	{
+
+		$this->get('app.security')->checkAccess('COTISATION_READ');
+
 	  	$contact = $this->getDoctrine()
 	  					->getRepository('AppBundle:Contact')
 	  					->find($idContact);
@@ -60,10 +63,11 @@ class CotisationController extends Controller
 
 	/**
 	* @Route("/cotisation/save", name="save_cotisation")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveCotisationAction(Request $request)
 	{
+		$this->get('app.security')->checkAccess('COTISATION_WRITE');
 
 		$contact = $this->getDoctrine()
 				->getRepository('AppBundle:Contact')
@@ -98,10 +102,12 @@ class CotisationController extends Controller
 
 	/**
 	* @Route("/cotisation/delete/{idCotisation}", name="delete_cotisation")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteCotisationAction($idCotisation)
 	{
+
+		$this->get('app.security')->checkAccess('COTISATION_WRITE');
 
 	    $cotisation = $this->getDoctrine()
 	      ->getRepository('AppBundle:Cotisation')

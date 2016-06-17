@@ -395,6 +395,22 @@ h1{
 
 /* FORM */
 
+.readonly form input[type="text"], .readonly form select{
+    -webkit-appearance: initial;
+    appearance: initial;
+}
+
+.readonly form input, .readonly form select{
+    border:none;
+    pointer-events: none;
+    tab-index: -1;
+    cursor: default;
+}
+
+.readonly button[type="submit"], .readonly .btn-primary{
+    display: none;
+}
+
 form label {
     width: 135px;
     float: left;

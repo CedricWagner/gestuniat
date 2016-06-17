@@ -12,13 +12,23 @@
             <th>Patrimoine</th>
             <th>Intérêts</th>
           </tr>
-          {% for year in allYears %}
-              <tr>
-                <td><button class="btn btn-link" data-toggle="modal" data-target="#edit-patrimoine-{{ year }}">{{ patrimoines[year].annee }}</button></td>
-                <td>{{ patrimoines[year].valeur }}€</td>
-                <td>{{ patrimoines[year].interets }}€</td>
-              </tr>
-          {% endfor %}
+          {% if app_security.hasAccess('PATRIMOINE_WRITE') %}
+            {% for year in allYears %}
+                <tr>
+                  <td><button class="btn btn-link" data-toggle="modal" data-target="#edit-patrimoine-{{ year }}">{{ patrimoines[year].annee }}</button></td>
+                  <td>{{ patrimoines[year].valeur }}€</td>
+                  <td>{{ patrimoines[year].interets }}€</td>
+                </tr>
+            {% endfor %}
+          {% else %}
+            {% for year in allYears %}
+                <tr>
+                  <td>{{ patrimoines[year].annee }}</td>
+                  <td>{{ patrimoines[year].valeur }}€</td>
+                  <td>{{ patrimoines[year].interets }}€</td>
+                </tr>
+            {% endfor %}
+          {% endif %}
         </table>
       </div>
       <div class="modal-footer">

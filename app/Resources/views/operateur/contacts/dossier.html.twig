@@ -14,8 +14,10 @@ Gestuniat - Dossier {{ dossier.nom }}
 {% endblock %}
 
 {% block content %}
-	<h2>Détails du dossier "{{dossier.nom}}"&nbsp;&nbsp;<a href="#" data-toggle="modal" data-target="#edit-dossier-{{dossier.id}}"><span class="glyphicons glyphicons-edit"></span></a></h2>
-	{% include 'modals/default.html.twig' with {'form':dossierForm,'entity':'dossier','object':dossier,'title':'Edition du dossier'} %}
+	<h2>Détails du dossier "{{dossier.nom}}"&nbsp;&nbsp;
+		<a href="#" data-toggle="modal" data-target="#edit-dossier-{{dossier.id}}"><span class="glyphicons glyphicons-edit"></span></a>
+	</h2>
+	{% include 'modals/default.html.twig' with {'form':dossierForm,'entity':'dossier','object':dossier,'title':'Edition du dossier','isWritable': app_security.hasAccess('DOSSIER_WRITE')} %}
 	<ol class="breadcrumb">
 	  <li><a href="{{ path('view_contact',{'idContact':contact.id }) }}">{{ contact.prenom }} {{ contact.nom }}</a></li>
 	  <li><a href="{{ path('list_documents',{'idContact':contact.id }) }}">Explorateur de documents</a></li>
@@ -27,20 +29,24 @@ Gestuniat - Dossier {{ dossier.nom }}
 				<div class="section-header">
 					<h3>Suivi du dossier</h3>
 				</div>
-				<div class="section-main-content">
-					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Ajouter un suivi</button>
-					{% include 'modals/ajouter-suivi-default.html.twig' %}
-					<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-dossier')">Imprimer la sélection</a></small>
-				</div>
-				<div class="section-sub-content">
-					{% for suivi in lstSuivis %}
-						{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
-					{% endfor %}
-				</div>
-				<div class="section-main-content" id="suivis-dossier">
-					<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
-					{% include 'modals/liste-suivis.html.twig' %}
-				</div>
+				{% if app_security.hasAccess('SUIVI_READ') %}
+					<div class="section-main-content">
+						{% if app_security.hasAccess('SUIVI_WRITE') %}
+							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Ajouter un suivi</button>
+							{% include 'modals/ajouter-suivi-default.html.twig' %}
+						{% endif %}
+						<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-dossier')">Imprimer la sélection</a></small>
+					</div>
+					<div class="section-sub-content">
+						{% for suivi in lstSuivis %}
+							{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
+						{% endfor %}
+					</div>
+					<div class="section-main-content" id="suivis-dossier">
+						<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
+						{% include 'modals/liste-suivis.html.twig' %}
+					</div>
+				{% endif %}
 			</div>
 		</div>
 		<div class="col-md-8 col-sm-12">
@@ -62,8 +68,8 @@ Gestuniat - Dossier {{ dossier.nom }}
 					{% for vignette in vignettes %}
 						<tr>
 							<td style="position:relative">
-								{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'vignette','object':vignette,'deletePath':path('delete_vignette',{'idVignette':vignette.id})} %}
-								{% include 'modals/default.html.twig' with {'form':vignetteForms[vignette.id],'entity':'vignette','object':vignette,'title':'Edition de la vignette'} %}
+								{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'vignette','object':vignette,'deletePath':path('delete_vignette',{'idVignette':vignette.id}),'isDeletable':app_security.hasAccess('VIGNETTE_DELETE')} %}
+								{% include 'modals/default.html.twig' with {'form':vignetteForms[vignette.id],'entity':'vignette','object':vignette,'title':'Edition de la vignette','isWritable':app_security.hasAccess('VIGNETTE_WRITE')} %}
 							</td>
 							<td>{{ vignette.montant }} €</td>
 							<td>{{ vignette.dateDemande ? vignette.dateDemande.format('d/m/Y') : '' }}</td>
@@ -73,9 +79,11 @@ Gestuniat - Dossier {{ dossier.nom }}
 					{% endfor %}
 				</tbody>
 			</table>
-			<button class="btn btn-primary" data-toggle="modal" data-target="#add-vignette-0">Saisir une nouvelle vignette</button>
-			<br />
-			{% include 'modals/default.html.twig' with {'form':newVignetteForm,'entity':'vignette','object':false,'title':'Ajouter une nouvelle vignette'} %}
+			{% if app_security.hasAccess('VIGNETTE_WRITE') %}
+				<button class="btn btn-primary" data-toggle="modal" data-target="#add-vignette-0">Saisir une nouvelle vignette</button>
+				<br />
+				{% include 'modals/default.html.twig' with {'form':newVignetteForm,'entity':'vignette','object':false,'title':'Ajouter une nouvelle vignette'} %}
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

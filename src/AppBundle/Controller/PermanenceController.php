@@ -17,10 +17,13 @@ class PermanenceController extends Controller
 
 	/**
 	* @Route("/section/{idSection}/permanences", name="list_permanences")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listPermanencesAction($idSection)
 	{
+
+		$this->get('app.security')->checkAccess('PERMANENCE_READ');
+
 	  	$section = $this->getDoctrine()
 	  					->getRepository('AppBundle:Section')
 	  					->find($idSection);
@@ -53,10 +56,12 @@ class PermanenceController extends Controller
 
 	/**
 	* @Route("/permanence/save", name="save_permanence")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function savePermanenceAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('PERMANENCE_WRITE');
 
 		$datetime = new \DateTime();
 
@@ -95,10 +100,12 @@ class PermanenceController extends Controller
 
 	/**
 	* @Route("/permanence/delete/{idPermanence}", name="delete_permanence")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deletePermanenceAction($idPermanence)
 	{
+
+		$this->get('app.security')->checkAccess('PERMANENCE_DELETE');
 
 	    $permanence = $this->getDoctrine()
 	      ->getRepository('AppBundle:Permanence')

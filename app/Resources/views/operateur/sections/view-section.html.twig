@@ -22,20 +22,28 @@ Gestuniat - Section {{ section.nom }}
 				<div class="section-header">
 					<h3>Suivi section</h3>
 				</div>
-				<div class="section-main-content">
-					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Rédiger un nouveau commentaire</button>
-					{% include 'modals/ajouter-suivi-default.html.twig' %}
-					<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-section')">Imprimer la sélection</a></small>
-				</div>
-				<div class="section-sub-content" id="suivis-section">
-					{% for suivi in lstSuivis %}
-						{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
-					{% endfor %}
-				</div>
-				<div class="section-main-content">
-					<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
-					{% include 'modals/liste-suivis.html.twig' %}
-				</div>
+				{% if app_security.hasAccess('SUIVI_READ') %}
+					<div class="section-main-content">
+						{% if app_security.hasAccess('SUIVI_WRITE') %}
+							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Rédiger un nouveau commentaire</button>
+							{% include 'modals/ajouter-suivi-default.html.twig' %}
+						{% endif %}
+						<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-section')">Imprimer la sélection</a></small>
+					</div>
+					<div class="section-sub-content" id="suivis-section">
+						{% for suivi in lstSuivis %}
+							{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
+						{% endfor %}
+					</div>
+					<div class="section-main-content">
+						<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
+						{% include 'modals/liste-suivis.html.twig' %}
+					</div>
+				{% else %}
+					<div class="section-sub-content">
+						<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+					</div>
+				{% endif %}
 			</div>
 		</div>
 		<div class="col-md-8 col-sm-12">
@@ -46,14 +54,18 @@ Gestuniat - Section {{ section.nom }}
 							<h3>Gestion des timbres</h3>
 						</div>
 						<div class="section-main-content">
-							<p>Pour l'année {{ "now"|date("Y") - 1 }} </p>
-							<div class="btn-group-vertical" role="group">
-								<button style="cursor: default;" class="btn btn-default btn-block" role="button">Timbres<span class="badge">{{ etatTimbres.payes }}</span></button>
-								<button style="cursor: default;" class="btn btn-default btn-block" role="button">Adhérents<span class="badge">{{ etatTimbres.emis }}</span></button>
-								<button style="cursor: default;" class="btn btn-default btn-block" role="button">Reste à régler<span class="badge red">{{ etatTimbres.remis }}</span></button>
-							</div>
-							<br />
-							<a href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}" class="btn btn-default btn-block" >Gestion des timbres >></a>
+							{% if app_security.hasAccess('TIMBRE_READ') %}
+								<p>Pour l'année {{ "now"|date("Y") - 1 }} </p>
+								<div class="btn-group-vertical" role="group">
+									<button style="cursor: default;" class="btn btn-default btn-block" role="button">Timbres<span class="badge">{{ etatTimbres.payes }}</span></button>
+									<button style="cursor: default;" class="btn btn-default btn-block" role="button">Adhérents<span class="badge">{{ etatTimbres.emis }}</span></button>
+									<button style="cursor: default;" class="btn btn-default btn-block" role="button">Reste à régler<span class="badge red">{{ etatTimbres.remis }}</span></button>
+								</div>
+								<br />
+								<a href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}" class="btn btn-default btn-block" >Gestion des timbres >></a>
+							{% else %}
+									<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+							{% endif %}
 						</div>
 					</div>
 				</div>
@@ -74,108 +86,126 @@ Gestuniat - Section {{ section.nom }}
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6">
-					<div class="section-block">
-						<div class="section-header">
-							<h3>Permanences</h3>
-						</div>
-						<div class="section-main-content">
-							<div class="row">
-								<div class="col-md-6">
-									<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-permanence-0"><span class="glyphicons glyphicons-table"></span>Ajouter perm.</button>
-									{% include 'modals/default.html.twig' with {'form':newPermanenceForm,'entity':'permanence','object':false,'title':'Ajouter une nouvelle permanence','action':path('save_permanence',{'idSection':section.id})} %}	
-								</div>
-								<div class="col-md-6">
-									<a href="{{ path('list_permanences',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste perm.</a>
+				{% if app_security.hasAccess('PERMANENCE_READ') %}
+					<div class="col-md-6">
+						<div class="section-block">
+							<div class="section-header">
+								<h3>Permanences</h3>
+							</div>
+							<div class="section-main-content">
+								<div class="row">
+									<div class="col-md-6">
+										{% if app_security.hasAccess('PERMANENCE_WRITE') %}
+											<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-permanence-0"><span class="glyphicons glyphicons-table"></span>Ajouter perm.</button>
+											{% include 'modals/default.html.twig' with {'form':newPermanenceForm,'entity':'permanence','object':false,'title':'Ajouter une nouvelle permanence','action':path('save_permanence',{'idSection':section.id})} %}	
+										{% endif %}
+									</div>
+									<div class="col-md-6">
+										<a href="{{ path('list_permanences',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste perm.</a>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="section-sub-content text-center clearfix">
-							{% if permanence %}
-								<h4>{{ permanence.label }}</h4>
-								<div class="row">
-									<div class="col-md-4">
-										<p>Type de tournée :<br />
-											{{ permanence.typeTournee ? permanence.typeTournee.label : '' }}
-										</p>
+							<div class="section-sub-content text-center clearfix">
+								{% if permanence %}
+									<h4>{{ permanence.label }}</h4>
+									<div class="row">
+										<div class="col-md-4">
+											<p>Type de tournée :<br />
+												{{ permanence.typeTournee ? permanence.typeTournee.label : '' }}
+											</p>
+										</div>
+										<div class="col-md-4">
+											<p>Lieu :<br />
+												{{ permanence.lieu }}
+											</p>
+										</div>
+										<div class="col-md-4">
+											<p>Horaire :<br />
+												{{ permanence.horaire }}
+											</p>
+										</div>
 									</div>
-									<div class="col-md-4">
-										<p>Lieu :<br />
-											{{ permanence.lieu }}
-										</p>
+									<div style="position:relative" class="pull-right">
+										{% if app_security.hasAccess('PERMANENCE_WRITE') or app_security.hasAccess('PERMANENCE_DELETE') %}
+											<a href="#" class="dropdown-toggle" id="options-ag-{{permanence.id}}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+											<ul class="dropdown-menu" aria-labelledby="options-ag-{{ permanence.id }}">
+												{% if app_security.hasAccess('PERMANENCE_WRITE') %}
+													<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-permanence-{{ permanence.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+												{% endif %}
+												{% if app_security.hasAccess('PERMANENCE_DELETE') %}
+													<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_permanence',{'idPermanence':permanence.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+												{% endif %}
+											</ul>
+											{% include 'modals/default.html.twig' with {'form':permanenceForm,'entity':'permanence','object':permanence,'title':'Editer une assemblée générale','action':path('save_permanence',{'idSection':section.id,'idPermanence':permanence.id})} %}
+										{% endif %}
 									</div>
-									<div class="col-md-4">
-										<p>Horaire :<br />
-											{{ permanence.horaire }}
-										</p>
-									</div>
-								</div>
-								<div style="position:relative" class="pull-right">
-									<a href="#" class="dropdown-toggle" id="options-ag-{{permanence.id}}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
-									<ul class="dropdown-menu" aria-labelledby="options-ag-{{ permanence.id }}">
-										<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-permanence-{{ permanence.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
-										<li class="contextual-item"><a class="no-padding-top" href="{# printpath #}"><span class="glyphicons glyphicons-print"></span><span class="item-label">Imprimer</span></a></li>
-										<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_permanence',{'idPermanence':permanence.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
-									</ul>
-									{% include 'modals/default.html.twig' with {'form':permanenceForm,'entity':'permanence','object':permanence,'title':'Editer une assemblée générale','action':path('save_permanence',{'idSection':section.id,'idPermanence':permanence.id})} %}
-								</div>
-							{% else %}
-								<h4>Aucune permanence</h4>
-							{% endif %}
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="section-block">
-						<div class="section-header">
-							<h3>Assemblées générales</h3>
-						</div>
-						<div class="section-main-content">
-							<div class="row">
-								<div class="col-md-6">
-									<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-assembleeGenerale-0"><span class="glyphicons glyphicons-table"></span>Ajouter AG</button>
-									{% include 'modals/default.html.twig' with {'form':newAssembleeGeneraleForm,'entity':'assembleeGenerale','object':false,'title':'Ajouter une nouvelle assemblée générale','action':path('save_assembleeGenerale',{'idSection':section.id})} %}	
-								</div>
-								<div class="col-md-6">
-									<a href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste AG</a>
-								</div>
+								{% else %}
+									<h4>Aucune permanence</h4>
+								{% endif %}
 							</div>
 						</div>
-						<div class="section-sub-content text-center clearfix">
-							{% if assembleeGenerale %}
-								<h4>Assemblée du {{ assembleeGenerale.date.format('d/m/Y') }}</h4>
+					</div>
+				{% endif %}
+				{% if app_security.hasAccess('AG_READ') %}
+					<div class="col-md-6">
+						<div class="section-block">
+							<div class="section-header">
+								<h3>Assemblées générales</h3>
+							</div>
+							<div class="section-main-content">
 								<div class="row">
-									<div class="col-md-4">
-										<p>Lieu :<br />
-											{{ assembleeGenerale.lieu }}
-										</p>
+									<div class="col-md-6">
+										{% if app_security.hasAccess('AG_WRITE') %}
+											<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-assembleeGenerale-0"><span class="glyphicons glyphicons-table"></span>Ajouter AG</button>
+											{% include 'modals/default.html.twig' with {'form':newAssembleeGeneraleForm,'entity':'assembleeGenerale','object':false,'title':'Ajouter une nouvelle assemblée générale','action':path('save_assembleeGenerale',{'idSection':section.id})} %}	
+										{% endif %}
 									</div>
-									<div class="col-md-4">
-										<p>Orateur :<br />
-											{{ assembleeGenerale.orateur }}
-										</p>
-									</div>
-									<div class="col-md-4">
-										<p>Heure :<br />
-											{{ assembleeGenerale.heure }}
-										</p>
+									<div class="col-md-6">
+										<a href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste AG</a>
 									</div>
 								</div>
-								<div style="position:relative" class="pull-right">
-									<a href="#" class="dropdown-toggle" id="options-ag-{{assembleeGenerale.id}}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
-									<ul class="dropdown-menu" aria-labelledby="options-ag-{{ assembleeGenerale.id }}">
-										<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-assembleeGenerale-{{ assembleeGenerale.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
-										<li class="contextual-item"><a class="no-padding-top" href="{# printpath #}"><span class="glyphicons glyphicons-print"></span><span class="item-label">Imprimer</span></a></li>
-										<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_assembleeGenerale',{'idAssembleeGenerale':assembleeGenerale.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
-									</ul>
-									{% include 'modals/default.html.twig' with {'form':assembleeGeneraleForm,'entity':'assembleeGenerale','object':assembleeGenerale,'title':'Editer une assemblée générale','action':path('save_assembleeGenerale',{'idSection':section.id,'idAssembleeGenerale':assembleeGenerale.id})} %}
-								</div>
-							{% else %}
-								<h4>Aucune assemblée générale</h4>
-							{% endif %}
+							</div>
+							<div class="section-sub-content text-center clearfix">
+								{% if assembleeGenerale %}
+									<h4>Assemblée du {{ assembleeGenerale.date.format('d/m/Y') }}</h4>
+									<div class="row">
+										<div class="col-md-4">
+											<p>Lieu :<br />
+												{{ assembleeGenerale.lieu }}
+											</p>
+										</div>
+										<div class="col-md-4">
+											<p>Orateur :<br />
+												{{ assembleeGenerale.orateur }}
+											</p>
+										</div>
+										<div class="col-md-4">
+											<p>Heure :<br />
+												{{ assembleeGenerale.heure }}
+											</p>
+										</div>
+									</div>
+									<div style="position:relative" class="pull-right">
+										{% if app_security.hasAccess('AG_WRITE') or app_security.hasAccess('AG_DELETE') %}
+											<a href="#" class="dropdown-toggle" id="options-ag-{{assembleeGenerale.id}}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+											<ul class="dropdown-menu" aria-labelledby="options-ag-{{ assembleeGenerale.id }}">
+												{% if app_security.hasAccess('AG_WRITE') %}
+													<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-assembleeGenerale-{{ assembleeGenerale.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Editer</span></a></li>
+												{% endif %}
+												{% if app_security.hasAccess('AG_DELETE') %}
+													<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_assembleeGenerale',{'idAssembleeGenerale':assembleeGenerale.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+												{% endif %}
+											</ul>
+											{% include 'modals/default.html.twig' with {'form':assembleeGeneraleForm,'entity':'assembleeGenerale','object':assembleeGenerale,'title':'Editer une assemblée générale','action':path('save_assembleeGenerale',{'idSection':section.id,'idAssembleeGenerale':assembleeGenerale.id})} %}
+										{% endif %}
+									</div>
+								{% else %}
+									<h4>Aucune assemblée générale</h4>
+								{% endif %}
+							</div>
 						</div>
 					</div>
-				</div>
+				{% endif %}
 			</div>
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
@@ -184,90 +214,98 @@ Gestuniat - Section {{ section.nom }}
 			</div>
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
-					<div class="section-block">
-						<div class="section-header">
-							<h3>Patrimoine</h3>
-						</div>
-						<div class="section-main-content">
-							<table>
-								<thead>
-									<tr>
-										<th>
-											Année
-										</th>
-										{% for year in displayedYears %}
-											<th><button class="btn btn-link" data-toggle="modal" data-target="#edit-patrimoine-{{ year }}">{{ year }}</button>
+					{% if app_security.hasAccess('PATRIMOINE_READ') %}
+						<div class="section-block">
+							<div class="section-header">
+								<h3>Patrimoine</h3>
+							</div>
+							<div class="section-main-content">
+								<table>
+									<thead>
+										<tr>
+											<th>
+												Année
 											</th>
-										{% endfor %}
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Effectifs</td>
-										{% for year in displayedYears %}
-											{% if effectifs[year] is defined %}
-												<td>{{ effectifs[year] ? effectifs[year].valeur : '-' }}</td>
+											{% if app_security.hasAccess('PATRIMOINE_WRITE') %}
+												{% for year in displayedYears %}
+													<th><button class="btn btn-link" data-toggle="modal" data-target="#edit-patrimoine-{{ year }}">{{ year }}</button>
+													</th>
+												{% endfor %}
+											{% else %}
+												{% for year in displayedYears %}
+													<th>{{ year }}</th>
+												{% endfor %}
 											{% endif %}
-										{% endfor %}
-									</tr>
-									<tr>
-										{% set lastPatrimoine = 0 %}
-										<td>Patrimoine</td>
-										{% for year in displayedYears %}
-											<td>{{ patrimoines[year].valeur }}</td>
-										{% endfor %}
-									</tr>
-									<tr>
-										<td>Variation</td>
-										{% for year in displayedYears %}
-											<td>
-												{% if patrimoines[year].valeur != 0 and lastPatrimoine != 0 %}
-													{% if patrimoines[year].valeur > lastPatrimoine %}
-														 +{{ ((patrimoines[year].valeur - lastPatrimoine) / lastPatrimoine * 100)|round(1,'common') }}%
-													{% elseif patrimoines[year].valeur < lastPatrimoine %}
-														{{ ((patrimoines[year].valeur - lastPatrimoine) / lastPatrimoine * 100)|round(1,'common') }}%
-													{% else %}
-														+0%
-													{% endif %}
-												{% else %}
-													-
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Effectifs</td>
+											{% for year in displayedYears %}
+												{% if effectifs[year] is defined %}
+													<td>{{ effectifs[year] ? effectifs[year].valeur : '-' }}</td>
 												{% endif %}
-											</td>
-											{% set lastPatrimoine = patrimoines[year].valeur %}
-										{% endfor %}
-									</tr>
-									<tr>
-										<td>Intérêts</td>
-										{% for year in displayedYears %}
-											<td>{{ patrimoines[year].interets }}</td>
-										{% endfor %}
-									</tr>
-								</tbody>
-							</table>
-							<br />
-							{% include 'modals/liste-patrimoines.html.twig' %}
-							<button class="btn btn-default" data-toggle="modal" data-target="#all-patrimoines">Voir tout le patrimoine >></button>
+											{% endfor %}
+										</tr>
+										<tr>
+											{% set lastPatrimoine = 0 %}
+											<td>Patrimoine</td>
+											{% for year in displayedYears %}
+												<td>{{ patrimoines[year].valeur }}</td>
+											{% endfor %}
+										</tr>
+										<tr>
+											<td>Variation</td>
+											{% for year in displayedYears %}
+												<td>
+													{% if patrimoines[year].valeur != 0 and lastPatrimoine != 0 %}
+														{% if patrimoines[year].valeur > lastPatrimoine %}
+															 +{{ ((patrimoines[year].valeur - lastPatrimoine) / lastPatrimoine * 100)|round(1,'common') }}%
+														{% elseif patrimoines[year].valeur < lastPatrimoine %}
+															{{ ((patrimoines[year].valeur - lastPatrimoine) / lastPatrimoine * 100)|round(1,'common') }}%
+														{% else %}
+															+0%
+														{% endif %}
+													{% else %}
+														-
+													{% endif %}
+												</td>
+												{% set lastPatrimoine = patrimoines[year].valeur %}
+											{% endfor %}
+										</tr>
+										<tr>
+											<td>Intérêts</td>
+											{% for year in displayedYears %}
+												<td>{{ patrimoines[year].interets }}</td>
+											{% endfor %}
+										</tr>
+									</tbody>
+								</table>
+								<br />
+								{% include 'modals/liste-patrimoines.html.twig' %}
+								<button class="btn btn-default" data-toggle="modal" data-target="#all-patrimoines">Voir tout le patrimoine >></button>
+							</div>
+							{% for year in allYears %}
+								<div class="modal fade" id="edit-patrimoine-{{year}}" tabindex="-1" role="dialog" aria-labelledby="edit-patrimoine-label">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								        <h4 class="modal-title" id="edit-patrimoine-label">Editer un patrimoine</h4>
+								      </div>
+								      <div class="modal-body">
+								        {{ form(patrimoineForms[year], {'attr': {'novalidate': 'novalidate','id' : 'patrimoine-edit-'~year,'class' : 'clearfix modal-form large-input'}}) }}
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+								        <button type="button" class="btn btn-primary" onclick="$('form#patrimoine-edit-{{year}}').submit()">Enregistrer</button>
+								      </div>
+								    </div><!-- /.modal-content -->
+								  </div><!-- /.modal-dialog -->
+								</div><!-- /.modal -->
+							{% endfor %}
 						</div>
-						{% for year in allYears %}
-							<div class="modal fade" id="edit-patrimoine-{{year}}" tabindex="-1" role="dialog" aria-labelledby="edit-patrimoine-label">
-							  <div class="modal-dialog" role="document">
-							    <div class="modal-content">
-							      <div class="modal-header">
-							        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							        <h4 class="modal-title" id="edit-patrimoine-label">Editer un patrimoine</h4>
-							      </div>
-							      <div class="modal-body">
-							        {{ form(patrimoineForms[year], {'attr': {'novalidate': 'novalidate','id' : 'patrimoine-edit-'~year,'class' : 'clearfix modal-form large-input'}}) }}
-							      </div>
-							      <div class="modal-footer">
-							        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-							        <button type="button" class="btn btn-primary" onclick="$('form#patrimoine-edit-{{year}}').submit()">Enregistrer</button>
-							      </div>
-							    </div><!-- /.modal-content -->
-							  </div><!-- /.modal-dialog -->
-							</div><!-- /.modal -->
-						{% endfor %}
-					</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>

@@ -33,16 +33,26 @@
 
 
 {% block content %}
-	<h1>Liste des organismes <button class="btn btn-primary" data-toggle="modal" data-target="#add-organisme-0">Ajouter un organisme</button></h1>
-	{% include 'modals/default.html.twig' with {'form':newOrganismeForm,'entity':'organisme','object':false,'title':'Ajouter un nouvel organisme'} %}
+	<h1>Liste des organismes 
+	{% if  app_security.hasAccess('SECTION_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-organisme-0">Ajouter un organisme</button>
+		{% include 'modals/default.html.twig' with {'form':newOrganismeForm,'entity':'organisme','object':false,'title':'Ajouter un nouvel organisme'} %}
+	{% endif %}
+	</h1>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="actions-container">
 				<span>Effectuer une action sur la sélection &nbsp;&nbsp;&nbsp;</span>
 				<select name="selAction" id="selAction" class="padded">
-					<option value="DELETE_ITEMS">Supprimer les éléments</option>
-					<option value="ETIQUETTES">Exporter les étiquettes</option>
-					<option value="EXPORT">Exporter la liste</option>
+					{% if  app_security.hasAccess('ORGANISME_DELETE') %}
+						<option value="DELETE_ITEMS">Supprimer les éléments</option>
+					{% endif %}
+					{% if  app_security.hasAccess('ORGANISME_ET_PRINT') %}
+						<option value="ETIQUETTES">Exporter les étiquettes</option>
+					{% endif %}
+					{% if  app_security.hasAccess('ORGANISME_PRINT') %}
+						<option value="EXPORT">Exporter la liste</option>
+					{% endif %}
 				</select>
 				<button class="btn btn-primary" onclick="doOrganismeListingAction($('#selAction').val())">Valider</button>
 			</div>

@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-// use AppBundle\Entity\TermeInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Alerte
@@ -25,6 +25,7 @@ class Alerte
     /**
      * @var string
      *
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @ORM\Column(name="label", type="string", length=255)
      */
     private $label;

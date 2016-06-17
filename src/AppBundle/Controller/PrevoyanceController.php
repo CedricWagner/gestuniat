@@ -20,10 +20,12 @@ class PrevoyanceController extends Controller
 
     /**
      * @Route("/contact/{idContact}/contrats", name="list_contrats")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function listContratsAction($idContact)
     {
+
+    	$this->get('app.security')->checkAccess('PREV_READ');
 
     	$contact = $this->getDoctrine()
     		->getRepository('AppBundle:Contact')
@@ -77,10 +79,12 @@ class PrevoyanceController extends Controller
 
     /**
      * @Route("/agrr/show-edit", name="show_edit_agrr")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function showEditAgrrAction(Request $request)
     {
+
+    	$this->get('app.security')->checkAccess('PREV_READ');
 
     	$agrr = $this->getDoctrine()
     		->getRepository('AppBundle:ContratPrevoyance')
@@ -100,10 +104,12 @@ class PrevoyanceController extends Controller
 
 	/**
 	* @Route("/agrr/edit", name="edit_agrr")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function editAgrrAction(Request $request)
 	{
+
+    	$this->get('app.security')->checkAccess('PREV_WRITE');
 	  		
 	  	if($request->query->get('idAgrr')){
 		    $agrr = $this->getDoctrine()
@@ -172,10 +178,11 @@ class PrevoyanceController extends Controller
 
 	/**
 	* @Route("/agrr/delete/{idAgrr}", name="delete_agrr")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteAgrrAction($idAgrr)
 	{
+    	$this->get('app.security')->checkAccess('PREV_DELETE');
 
 	    $agrr = $this->getDoctrine()
 	      ->getRepository('AppBundle:ContratPrevoyance')
@@ -194,10 +201,11 @@ class PrevoyanceController extends Controller
 
    	/**
      * @Route("/obseque/show-edit", name="show_edit_obseque")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function showEditObsequeAction(Request $request)
     {
+    	$this->get('app.security')->checkAccess('PREV_READ');
 
     	$obseque = $this->getDoctrine()
     		->getRepository('AppBundle:ContratPrevObs')
@@ -217,10 +225,11 @@ class PrevoyanceController extends Controller
 
 	/**
 	 * @Route("/obseque/edit", name="edit_obseque")
-	 * @Security("has_role('ROLE_USER')")
+	 * @Security("has_role('ROLE_SPECTATOR')")
 	 */
 	public function editObsequeAction(Request $request)
 	{
+    	$this->get('app.security')->checkAccess('PREV_WRITE');
   		
 	  	if($request->query->get('idObseque')){
 		    $obseque = $this->getDoctrine()
@@ -284,23 +293,24 @@ class PrevoyanceController extends Controller
 
 	/**
 	* @Route("/obseque/delete/{idObseque}", name="delete_obseque")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteObsequeAction($idObseque)
 	{
-
+    	$this->get('app.security')->checkAccess('PREV_DELETE');
+    	
 	    $obseque = $this->getDoctrine()
 	      ->getRepository('AppBundle:ContratPrevObs')
 	      ->find($idObseque);
 		
 		$contact = $obseque->getContact();
-
+		
 		$em = $this->get('doctrine.orm.entity_manager');
 		$em->remove($obseque);
 		$em->flush();
-
+		
 		$this->get('session')->getFlashBag()->add('success', 'Suppression effectuée !');
-
+		
 	    return $this->redirectToRoute('list_contrats',array('idContact'=>$contact->getId()));
 	}
 

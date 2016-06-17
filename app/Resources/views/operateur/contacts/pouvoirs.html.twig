@@ -32,8 +32,8 @@
 			{% for pouvoir in pouvoirs %}
 				<tr>
 					<td style="position:relative">
-						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'pouvoir','object':pouvoir,'deletePath':path('delete_pouvoir',{'idPouvoir':pouvoir.id})} %}
-						{% include 'modals/default.html.twig' with {'form':pouvoirForms[pouvoir.id],'entity':'pouvoir','object':pouvoir,'title':'Edition du pouvoir'} %}
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'pouvoir','object':pouvoir,'deletePath':path('delete_pouvoir',{'idPouvoir':pouvoir.id}),'isDeletable':app_security.hasAccess('POUVOIR_DELETE')} %}
+						{% include 'modals/default.html.twig' with {'form':pouvoirForms[pouvoir.id],'entity':'pouvoir','object':pouvoir,'title':'Edition du pouvoir','isWritable':app_security.hasAccess('POUVOIR_WRITE')} %}
 					</td>
 					<td>{{ pouvoir.date ? pouvoir.date.format('d/m/Y') : '' }}</td>
 					<td>{{ pouvoir.affaire }}</td>
@@ -53,7 +53,9 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-pouvoir-0">Saisir un nouveau pouvoir</button>
-	<br />
-	{% include 'modals/default.html.twig' with {'form':newPouvoirForm,'entity':'pouvoir','object':false,'title':'Ajouter un nouveau pouvoir'} %}
+	{% if app_security.hasAccess('POUVOIR_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-pouvoir-0">Saisir un nouveau pouvoir</button>
+		<br />
+		{% include 'modals/default.html.twig' with {'form':newPouvoirForm,'entity':'pouvoir','object':false,'title':'Ajouter un nouveau pouvoir'} %}
+	{% endif %}
 {% endblock %}

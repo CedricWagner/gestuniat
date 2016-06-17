@@ -17,7 +17,7 @@ class TypeOrganismeController extends Controller
 
 	/**
 	* @Route("/admin/types-organisme", name="list_typeOrganismes")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_ADMIN')")
 	*/
 	public function listTypeOrganismesAction()
 	{
@@ -49,7 +49,7 @@ class TypeOrganismeController extends Controller
 
 	/**
 	* @Route("/typeOrganisme/save", name="save_typeOrganisme")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_ADMIN')")
 	*/
 	public function saveTypeOrganismeAction(Request $request)
 	{
@@ -82,7 +82,7 @@ class TypeOrganismeController extends Controller
 
 	/**
 	* @Route("/typeOrganisme/delete/{idTypeOrganisme}", name="delete_typeOrganisme")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_ADMIN')")
 	*/
 	public function deleteTypeOrganismeAction($idTypeOrganisme)
 	{

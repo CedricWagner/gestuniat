@@ -22,9 +22,15 @@
 				<th></th>
 				<th>Diplome</th>
 				<th>Date obtention</th>
-				<th>Invitation à l'AG</th>
-				<th>Etiquette</th>
-				<th>Enveloppe</th>
+				{% if app_security.hasAccess('DIPLOME_PRINT') %}
+					<th>Invitation à l'AG</th>
+				{% endif %}
+				{% if app_security.hasAccess('DIPLOME_PRINT_ENVELOPPE') %}
+					<th>Etiquette</th>
+				{% endif %}
+				{% if app_security.hasAccess('DIPLOME_PRINT_ENVELOPPE') %}
+					<th>Enveloppe</th>
+				{% endif %}
 			</tr>
 		</thead>
 		<tbody>
@@ -34,30 +40,44 @@
 						<a href="#" class="dropdown-toggle" id="options-cd-{{ cd.id }}" data-toggle="dropdown" aria-haspopup="true"><span class="glyphicon glyphicon-option-horizontal"></span></a>
 						<ul class="dropdown-menu" aria-labelledby="options-cd-{{ cd.id }}">
 							<li class="contextual-item"><a class="no-padding-top" href="#" data-toggle="modal" data-target="#edit-cd-{{ cd.id }}"><span class="glyphicons glyphicons-eye-open"></span><span class="item-label">Voir</span></a></li>
-							<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_contact_diplome', {'idContactDiplome':cd.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+							{% if app_security.hasAccess('DIPLOME_DELETE') %}
+								<li class="contextual-item"><a class="no-padding-top" href="{{ path('delete_contact_diplome', {'idContactDiplome':cd.id}) }}" onclick="if(confirm('Valider la suppression ?')){ return true; }else{ return false; }"><span class="glyphicons glyphicons-bin"></span><span class="item-label">Supprimer</span></a></li>
+							{% endif %}
 						</ul>
 						{% include 'modals/editer-remise-diplome.html.twig' %}
 					</td>
 					<td>{{ cd.diplome.label }}</td>
 					<td>{{ cd.dateObtention.format('d/m/Y') }}</td>
 					<td>
-						<div class="btn-group">
-							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Générer <span class="caret"></span></button>
-							<ul class="dropdown-menu">
-								<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Trésorier'}) }}" target="_blank">Pour le trésorier</a></li>
-								<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Secrétaire'}) }}" target="_blank">Pour le secrétaire</a></li>
-								<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Président'}) }}" target="_blank">Pour le président</a></li>
-								<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Vice-Président'}) }}" target="_blank">Pour le vice-président</a></li>
-							</ul>
-						</div>
+						{% if app_security.hasAccess('DIPLOME_PRINT') %}
+							<div class="btn-group">
+								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Générer <span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Trésorier'}) }}" target="_blank">Pour le trésorier</a></li>
+									<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Secrétaire'}) }}" target="_blank">Pour le secrétaire</a></li>
+									<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Président'}) }}" target="_blank">Pour le président</a></li>
+									<li><a href="{{ path('generate_invitation_ag',{'idContact':contact.id,'target':'Vice-Président'}) }}" target="_blank">Pour le vice-président</a></li>
+								</ul>
+							</div>
+						{% endif %}
 					</td>
-					<td><a target="_blank" class="btn btn-primary" href="{{ path('generate_etiquette_diplome',{'idContactDiplome':cd.id}) }}">Imprimer</a></td>
-					<td><a target="_blank" class="btn btn-primary" href="{{ path('generate_enveloppe_diplome',{'idContactDiplome':cd.id}) }}">Imprimer</a></td>
+					<td>
+						{% if app_security.hasAccess('DIPLOME_PRINT_ETIQUETTE') %}
+							<a target="_blank" class="btn btn-primary" href="{{ path('generate_etiquette_diplome',{'idContactDiplome':cd.id}) }}">Imprimer</a>
+						{% endif %}
+					</td>
+					<td>
+						{% if app_security.hasAccess('DIPLOME_PRINT_ENVELOPPE') %}
+							<a target="_blank" class="btn btn-primary" href="{{ path('generate_enveloppe_diplome',{'idContactDiplome':cd.id}) }}">Imprimer</a>
+						{% endif %}
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-cd">Saisir une nouvelle remise de diplôme</button>
+	{% if app_security.hasAccess('DIPLOME_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-cd">Saisir une nouvelle remise de diplôme</button>
+	{% endif %}
 	<br />
 	{% include 'modals/ajouter-remise-diplome.html.twig' %}
 {% endblock %}

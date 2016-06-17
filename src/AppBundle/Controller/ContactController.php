@@ -31,10 +31,12 @@ class ContactController extends Controller
 {
     /**
      * @Route("/contact/liste/{idFilter}/{page}/{nb}/{orderby}-{order}", name="list_contacts", defaults={"idFilter" = 0,"page" = 1,"nb" = 0, "orderby"= "numAdh","order"= "ASC"})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function listContactsAction($idFilter,$page,$nb,$orderby,$order)
     {
+
+      $this->get('app.security')->checkAccess('CONTACT_READ');
 
         $currentFilter = null;
 
@@ -112,10 +114,13 @@ class ContactController extends Controller
      * @Route("/contact/{idContact}", name="view_contact"), requirements={
      *     "idContact": "\d+"
      * })
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function viewContactAction(Request $request,$idContact)
     {
+
+      $this->get('app.security')->checkAccess('CONTACT_READ');
+
       // Contact
       $contact = $this->getDoctrine()
               ->getRepository('AppBundle:Contact')
@@ -272,14 +277,36 @@ class ContactController extends Controller
               ->find($idContact);
       $prevDateDeces = $contact->getDateDeces();
       $prevRentier = $contact->getIsRentier();
+      $prevEnvoiIndiv = $contact->getIsEnvoiIndiv();
+      $prevOffreDecouverte = $contact->getIsOffreDecouverte();
+      $prevDateOffreDecouverte = $contact->getDateOffreDecouverte();
 
       $contactForm = $this->createForm(ContactFullEditionType::class, $contact);
          
       $contactForm->handleRequest($request);
 
-      if($this->get('security.authorization_checker')->isGranted('ROLE_USER')){
+      if($this->get('app.security')->hasAccess('CONTACT_WRITE')){
         if ($contactForm->isSubmitted() && $contactForm->isValid()) {
           
+          // check security : envoiIndiv
+          if($prevEnvoiIndiv != $contact->getIsEnvoiIndiv()){
+            if(!$this->get('app.security')->hasAccess('CONTACT_SET_ENVOI_INDIV')){
+              $contact->setIsEnvoiIndiv($prevEnvoiIndiv);
+              $this->get('session')->getFlashBag()->add('danger','Vous n\'avez pas la permission de modifier ce champ : Envoi Individuel');
+              return $this->redirectToRoute('full_contact',['idContact'=>$contact->getId()]);
+            }
+          }
+
+          // check security : offreDecouverte
+          if($prevOffreDecouverte != $contact->getIsOffreDecouverte()){
+            if(!$this->get('app.security')->hasAccess('CONTACT_SET_OFFRE_DECOUVERTE')){
+              $contact->setIsOffreDecouverte($prevOffreDecouverte);
+              $contact->setDateOffreDecouverte($prevDateOffreDecouverte);
+              $this->get('session')->getFlashBag()->add('danger','Vous n\'avez pas la permission de modifier ce champ : Offre Découverte');
+              return $this->redirectToRoute('full_contact',['idContact'=>$contact->getId()]);
+            }
+          }
+
           // case décès
           if($prevDateDeces == null && $contact->getDateDeces() != null){
             if($contact->getMembreConjoint()){
@@ -329,12 +356,30 @@ class ContactController extends Controller
             }
           }
 
+          // change envoiIndiv
+          if($prevEnvoiIndiv != $contact->getIsEnvoiIndiv()){
+            if($contact->getIsEnvoiIndiv()){
+              $this->get('app.suivi')->create($contact,'Est devenu "Envois individuel"');
+            }else{
+              $this->get('app.suivi')->create($contact,'N\'est plus en "Envois individuel"');
+            }
+          }
+
+          // change offreDecouverte
+          if($prevOffreDecouverte != $contact->getIsOffreDecouverte()){
+            if($contact->getIsEnvoiIndiv()){
+              $this->get('app.suivi')->create($contact,'Est devenu "Offre découverte"');
+            }else{
+              $this->get('app.suivi')->create($contact,'N\'est plus en "Offre découverte"');
+            }
+          }
+
         }
         if ($contactForm->isSubmitted() && !$contactForm->isValid()) {
           $this->get('app.tools')->handleFormErrors($contactForm);
         }
       }else{
-        $this->get('session')->getFlashBag()->add('danger', 'Vous ne possédez pas les droits nécessaires pour cette action');    
+        $this->get('session')->getFlashBag()->add('warning', 'Vous ne possédez pas les droits nécessaire à la modification du contact');
       }
 
       return $this->render('operateur/contacts/full-contact.html.twig', [
@@ -373,10 +418,12 @@ class ContactController extends Controller
 
     /**
      * @Route("/contact/{idContact}/editer-membre-conjoint", name="contact_edit_conjoint")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function editConjointAction(Request $request,$idContact)
     {
+
+      $this->get('app.security')->checkAccess('CONJOINT_WRITE');
 
       $contact = $this->getDoctrine()
         ->getRepository('AppBundle:Contact')
@@ -574,10 +621,12 @@ class ContactController extends Controller
 
     /**
      * @Route("/contact/{idContact}/suppression", name="delete_contact")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function deleteContactAction($idContact)
     {
+
+      $this->get('app.security')->checkAccess('CONTACT_DELETE');
 
       $contact = $this->getDoctrine()
         ->getRepository('AppBundle:Contact')
@@ -600,7 +649,7 @@ class ContactController extends Controller
 
     /**
      * @Route("/contact/listing/action", name="contact_action_listing")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function contactListingAction(Request $request)
     {
@@ -608,6 +657,7 @@ class ContactController extends Controller
       $action = $request->request->get('action');
       switch ($action) {
         case 'DELETE_ITEMS':
+          $this->get('app.security')->checkAccess('CONTACT_DELETE');
           $selection = $request->request->get('selection');
           foreach ($selection as $id) {
             $this->deleteContactAction($id);
@@ -667,10 +717,13 @@ class ContactController extends Controller
 
     /**
      * @Route("/nouveau-contact", name="add_contact")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function addContactAction(Request $request)
     {
+
+      $this->get('app.security')->checkAccess('CONTACT_WRITE');
+
       $contact = new Contact();
 
       $contactForm = $this->createForm(ContactFullEditionType::class, $contact);

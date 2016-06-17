@@ -17,7 +17,7 @@ class RegimeAffiliationController extends Controller
 
 	/**
 	* @Route("/admin/regimes-affiliation", name="list_regimeAffiliations")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_ADMIN')")
 	*/
 	public function listRegimeAffiliationsAction()
 	{
@@ -49,7 +49,7 @@ class RegimeAffiliationController extends Controller
 
 	/**
 	* @Route("/regimeAffiliation/save", name="save_regimeAffiliation")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_ADMIN')")
 	*/
 	public function saveRegimeAffiliationAction(Request $request)
 	{
@@ -82,7 +82,7 @@ class RegimeAffiliationController extends Controller
 
 	/**
 	* @Route("/regimeAffiliation/delete/{idRegimeAffiliation}", name="delete_regimeAffiliation")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_ADMIN')")
 	*/
 	public function deleteRegimeAffiliationAction($idRegimeAffiliation)
 	{

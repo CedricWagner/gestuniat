@@ -1,4 +1,4 @@
-<div class="modal fade" id="edit-cd-{{ cd.id }}" tabindex="-1" role="dialog" aria-labelledby="label-edit-cd-{{ cd.id }}">
+<div class="modal fade {{ app_security.hasAccess('DIPLOME_WRITE') ? '' : 'readonly'}}" id="edit-cd-{{ cd.id }}" tabindex="-1" role="dialog" aria-labelledby="label-edit-cd-{{ cd.id }}">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

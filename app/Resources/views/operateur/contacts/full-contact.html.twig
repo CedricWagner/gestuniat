@@ -27,7 +27,7 @@
 		<li role="presentation"><a href="#adhesion" aria-controls="adhesion" role="tab" data-toggle="tab">Adhésion</a></li>
 		<li role="presentation"><a href="#rentier" aria-controls="rentier" role="tab" data-toggle="tab">Rentier</a></li>
 	</ul>
-	<div class="full-contact-form inline-form">	
+	<div class="full-contact-form inline-form {{ app_security.hasAccess('CONTACT_WRITE') ? '' : 'readonly' }}">	
 		{{ form_start(contactForm,{'attr':{'novalidate':'novalidate'}}) }}
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane clearfix active" id="info-gen">

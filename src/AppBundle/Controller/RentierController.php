@@ -25,6 +25,8 @@ class RentierController extends Controller
      */
     public function listDestIndivsAction($annee,$numTrimestre)
     {
+        $this->get('app.security')->checkAccess('RENTIER_ENVOI_INDIV');
+
         $datetime = new \DateTime();
         if ($annee==0) {
             $annee = $this->getDoctrine()
@@ -61,6 +63,8 @@ class RentierController extends Controller
      */
     public function listDestRentiersAction($annee,$numTrimestre)
     {
+        $this->get('app.security')->checkAccess('RENTIER_DESTINATAIRE');
+
         $datetime = new \DateTime();
         if ($annee==0) {
             $annee = $this->getDoctrine()
@@ -99,6 +103,8 @@ class RentierController extends Controller
      */
     public function listDecesRentiersAction($annee,$numTrimestre)
     {
+        $this->get('app.security')->checkAccess('DECES_READ');
+
         $datetime = new \DateTime();
         if ($annee==0) {
             $annee = $this->getDoctrine()
@@ -129,6 +135,8 @@ class RentierController extends Controller
      */
     public function listDonateursRentiersAction($annee,$numTrimestre)
     {
+        $this->get('app.security')->checkAccess('DON_READ');
+
         $datetime = new \DateTime();
         if ($annee==0) {
             $annee = $this->getDoctrine()
@@ -159,6 +167,8 @@ class RentierController extends Controller
      */
     public function listOrganismesRentiersAction($annee,$numTrimestre)
     {
+        $this->get('app.security')->checkAccess('ORGANISME_READ');
+
         $datetime = new \DateTime();
         if ($annee==0) {
             $annee = $this->getDoctrine()
@@ -198,6 +208,8 @@ class RentierController extends Controller
      */
     public function listOffresDecouvertesAction($annee,$numTrimestre)
     {
+        $this->get('app.security')->checkAccess('CONTACT_READ');
+
         $datetime = new \DateTime();
         if ($annee==0) {
             $annee = $this->getDoctrine()
@@ -237,6 +249,8 @@ class RentierController extends Controller
      */
     public function listAGsRentiersAction($annee,$numTrimestre)
     {
+        $this->get('app.security')->checkAccess('RENTIER_AG');
+
         $datetime = new \DateTime();
         if ($annee==0) {
             $annee = $this->getDoctrine()
@@ -267,6 +281,7 @@ class RentierController extends Controller
      */
     public function generateFactureDestIndivsAction(Request $request,$annee,$numTrimestre)
     {
+        $this->get('app.security')->checkAccess('RENTIER_INVOICE');
 
         $datetime = new \DateTime();
 
@@ -295,6 +310,7 @@ class RentierController extends Controller
      */
     public function exportListeDestIndivsAction(Request $request,$annee,$numTrimestre,$format)
     {
+        $this->get('app.security')->checkAccess('RENTIER_ENVOI_INDIV');
 
         $datetime = new \DateTime();
 
@@ -347,6 +363,7 @@ class RentierController extends Controller
      */
     public function exportListeDecesAction(Request $request,$annee,$numTrimestre,$format)
     {
+        $this->get('app.security')->checkAccess('DECES_PRINT');
 
         $datetime = new \DateTime();
 
@@ -387,6 +404,7 @@ class RentierController extends Controller
      */
     public function exportListeAGsAction(Request $request,$annee,$numTrimestre,$format)
     {
+        $this->get('app.security')->checkAccess('RENTIER_AG');
 
         $datetime = new \DateTime();
 
@@ -427,6 +445,7 @@ class RentierController extends Controller
      */
     public function exportListeDonateursAction(Request $request,$annee,$numTrimestre,$format)
     {
+        $this->get('app.security')->checkAccess('DON_READ');
 
         $datetime = new \DateTime();
 
@@ -465,6 +484,8 @@ class RentierController extends Controller
      */
     public function exportListeOrganismesAction(Request $request,$annee,$numTrimestre,$format)
     {
+
+        $this->get('app.security')->checkAccess('ORGANISME_READ');
 
         $datetime = new \DateTime();
 
@@ -521,6 +542,7 @@ class RentierController extends Controller
      */
     public function exportListeOffresDecouvertesAction(Request $request,$annee,$numTrimestre,$format)
     {
+        $this->get('app.security')->checkAccess('CONTACT_READ');
 
         $datetime = new \DateTime();
 
@@ -575,6 +597,8 @@ class RentierController extends Controller
      */
     public function exportListeDestRentiersAction(Request $request,$annee,$numTrimestre,$format)
     {
+
+        $this->get('app.security')->checkAccess('RENTIER_DESTINATAIRE');
 
         $datetime = new \DateTime();
 
@@ -638,46 +662,48 @@ class RentierController extends Controller
 	public function generateDestIndivAction()
 	{
 
-		$datetime = new \DateTime();
+        $this->get('app.security')->checkAccess('RENTIER_ENVOI_INDIV');
 
-		switch ($datetime->format('d/m')) {
-			case '05/01':
-				$numTrimestre = 1;
-				break;
-			case '05/04':
-				$numTrimestre = 2;
-				break;
-			case '05/07':
-				$numTrimestre = 3;
-				break;
-			case '05/10':
-				$numTrimestre = 4;
-				break;
-			default:
-				//for dev only:
+        $datetime = new \DateTime();
+
+        switch ($datetime->format('d/m')) {
+            case '05/01':
+                $numTrimestre = 1;
+                break;
+            case '05/04':
+                $numTrimestre = 2;
+                break;
+            case '05/07':
+                $numTrimestre = 3;
+                break;
+            case '05/10':
+                $numTrimestre = 4;
+                break;
+            default:
+                //for dev only:
                 $numTrimestre = 3;
                 //for prod
-				// $numTrimestre = false;
-				break;
-		}
+                // $numTrimestre = false;
+                break;
+        }
 
-		if($numTrimestre){
+        if($numTrimestre){
 
-			$sections = $this->getDoctrine()
-				->getRepository('AppBundle:Section')
-				->findBy(array('isActive'=>true));
+            $sections = $this->getDoctrine()
+                ->getRepository('AppBundle:Section')
+                ->findBy(array('isActive'=>true));
 
-			foreach ($sections as $section) {
+            foreach ($sections as $section) {
 
-				$envoiRentier = new EnvoiRentier();
-				$envoiRentier->setDate($datetime);
-				$envoiRentier->setAnnee($datetime->format('Y'));
-				$envoiRentier->setNumTrimestre($numTrimestre);
-				$envoiRentier->setSection($section);
+                $envoiRentier = new EnvoiRentier();
+                $envoiRentier->setDate($datetime);
+                $envoiRentier->setAnnee($datetime->format('Y'));
+                $envoiRentier->setNumTrimestre($numTrimestre);
+                $envoiRentier->setSection($section);
 
-		        $em = $this->get('doctrine.orm.entity_manager');
-		        $em->persist($envoiRentier);
-		        $em->flush();
+                $em = $this->get('doctrine.orm.entity_manager');
+                $em->persist($envoiRentier);
+                $em->flush();
 
                 //Envois indiv
                 $contacts = $this->getDoctrine()
@@ -713,9 +739,9 @@ class RentierController extends Controller
             }
 
             //Organisme
-	        $organismes = $this->getDoctrine()
-	        	->getRepository('AppBundle:Organisme')
-	        	->findAll();
+            $organismes = $this->getDoctrine()
+                ->getRepository('AppBundle:Organisme')
+                ->findAll();
 
             $envoiRentier = new EnvoiRentier();
             $envoiRentier->setDate($datetime);
@@ -748,10 +774,9 @@ class RentierController extends Controller
                 $em->flush();
             }
 
-		}
+        }
 
-		return new Response('',Response::HTTP_OK);
+        return new Response('',Response::HTTP_OK);
 
-	}
-
+    }
 }

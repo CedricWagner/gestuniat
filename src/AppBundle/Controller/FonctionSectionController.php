@@ -22,6 +22,8 @@ class FonctionSectionController extends Controller
 	public function listFonctionSectionsAction()
 	{
 
+		$this->get('app.security')->checkAccess('FONCTION_READ');
+
 	  	$fonctionSections = $this->getDoctrine()
 	  					->getRepository('AppBundle:FonctionSection')
 	  					->findAll();
@@ -53,6 +55,8 @@ class FonctionSectionController extends Controller
 	*/
 	public function saveFonctionSectionAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('FONCTION_WRITE');
 
 		if($request->query->get('idFonctionSection')){
 			$fonctionSection = $this->getDoctrine()
@@ -88,6 +92,8 @@ class FonctionSectionController extends Controller
 	*/
 	public function deleteFonctionSectionAction($idFonctionSection)
 	{
+
+		$this->get('app.security')->checkAccess('FONCTION_DELETE');
 
 	    $fonctionSection = $this->getDoctrine()
 	      ->getRepository('AppBundle:FonctionSection')

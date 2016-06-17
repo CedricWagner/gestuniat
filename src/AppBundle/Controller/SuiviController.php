@@ -18,10 +18,12 @@ class SuiviController extends Controller
 
   /**
    * @Route("/suivi/show-edit", name="show_edit_suivi")
-   * @Security("has_role('ROLE_USER')")
+   * @Security("has_role('ROLE_SPECTATOR')")
    */
   public function showEditSuiviAction(Request $request)
   {
+
+    $this->get('app.security')->checkAccess('SUIVI_READ');
 
     $suivi = $this->getDoctrine()
       ->getRepository('AppBundle:Suivi')
@@ -39,10 +41,11 @@ class SuiviController extends Controller
 
   /**
    * @Route("/suivi/edit", name="edit_suivi")
-   * @Security("has_role('ROLE_USER')")
+   * @Security("has_role('ROLE_SPECTATOR')")
    */
   public function editSuiviAction(Request $request)
   {
+    $this->get('app.security')->checkAccess('SUIVI_WRITE');
 
     $suivi = $this->getDoctrine()
       ->getRepository('AppBundle:Suivi')
@@ -72,10 +75,11 @@ class SuiviController extends Controller
 
   /**
    * @Route("/suivi/dossier/save", name="save_suivi_dossier")
-   * @Security("has_role('ROLE_USER')")
+   * @Security("has_role('ROLE_SPECTATOR')")
    */
   public function editSuiviDossierAction(Request $request)
   {
+    $this->get('app.security')->checkAccess('SUIVI_WRITE');
 
     $datetime = new \DateTime();
     
@@ -119,6 +123,7 @@ class SuiviController extends Controller
    */
   public function deleteSuiviAction(Request $request, $idSuivi)
   {
+    $this->get('app.security')->checkAccess('SUIVI_DELETE');
 
     $suivi = $this->getDoctrine()
        ->getRepository('AppBundle:Suivi')
@@ -138,10 +143,12 @@ class SuiviController extends Controller
     /**
    * @Route("/check-suivi", name="check_suivi")
    * @Method("POST")
-   * @Security("has_role('ROLE_USER')")
+   * @Security("has_role('ROLE_SPECTATOR')")
    */
   public function checkSuiviAction(Request $request)
   {
+      $this->get('app.security')->checkAccess('SUIVI_WRITE');
+
       if($request->isXmlHttpRequest()){
           $idSuivi = $request->request->get('idSuivi');
           $target = $request->request->get('target'); 
@@ -178,6 +185,8 @@ class SuiviController extends Controller
    */
   public function printSuiviAction(Request $request)
   {
+      $this->get('app.security')->checkAccess('SUIVI_PRINT');
+
       $selection = $request->request->get('selection');
       $suivis = array();
       $pdf = new PDF_DefaultModel();

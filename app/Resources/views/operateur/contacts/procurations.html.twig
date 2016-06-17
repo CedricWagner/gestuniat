@@ -30,8 +30,8 @@
 			{% for procuration in procurations %}
 				<tr>
 					<td style="position:relative">
-						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'procuration','object':procuration,'deletePath':path('delete_procuration',{'idProcuration':procuration.id})} %}
-						{% include 'modals/default.html.twig' with {'additionalClass':'label-large', 'form':procurationForms[procuration.id],'entity':'procuration','object':procuration,'title':'Edition de la procuration'} %}
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'procuration','object':procuration,'deletePath':path('delete_procuration',{'idProcuration':procuration.id}),'isDeletable':app_security.hasAccess('PROCURATION_DELETE')} %}
+						{% include 'modals/default.html.twig' with {'additionalClass':'label-large', 'form':procurationForms[procuration.id],'entity':'procuration','object':procuration,'title':'Edition de la procuration','isWritable':app_security.hasAccess('PROCURATION_WRITE')} %}
 					</td>
 					<td>{{ procuration.date ? procuration.date.format('d/m/Y') : '' }}</td>
 					<td>{{ procuration.statut }}</td>
@@ -41,7 +41,9 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-procuration-0">Saisir une nouvelle procuration</button>
-	<br />
-	{% include 'modals/default.html.twig' with {'additionalClass':'label-large', 'form':newProcurationForm,'entity':'procuration','object':false,'title':'Ajouter une procuration'} %}
+	{% if app_security.hasAccess('PROCURATION_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-procuration-0">Saisir une nouvelle procuration</button>
+		<br />
+		{% include 'modals/default.html.twig' with {'additionalClass':'label-large', 'form':newProcurationForm,'entity':'procuration','object':false,'title':'Ajouter une procuration'} %}
+	{% endif %}
 {% endblock %}

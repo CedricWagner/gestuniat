@@ -17,10 +17,13 @@ class PouvoirController extends Controller
 
 	/**
 	* @Route("/contact/{idContact}/pouvoirs", name="list_pouvoirs")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listPouvoirsAction($idContact)
 	{
+
+		$this->get('app.security')->checkAccess('POUVOIR_READ');
+
 	  	$contact = $this->getDoctrine()
 	  					->getRepository('AppBundle:Contact')
 	  					->find($idContact);
@@ -53,10 +56,12 @@ class PouvoirController extends Controller
 
 	/**
 	* @Route("/pouvoir/save", name="save_pouvoir")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function savePouvoirAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('POUVOIR_WRITE');
 
 		$contact = $this->getDoctrine()
 				->getRepository('AppBundle:Contact')
@@ -97,10 +102,12 @@ class PouvoirController extends Controller
 
 	/**
 	* @Route("/pouvoir/delete/{idPouvoir}", name="delete_pouvoir")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deletePouvoirAction($idPouvoir)
 	{
+
+		$this->get('app.security')->checkAccess('POUVOIR_DELETE');
 
 	    $pouvoir = $this->getDoctrine()
 	      ->getRepository('AppBundle:Pouvoir')

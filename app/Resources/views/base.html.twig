@@ -29,30 +29,44 @@
                             <div class="spacer"></div>
                             <ul class="menu">
                                 <li><a href="{{ path('dashboard') }}"><span class="glyphicons glyphicons-home"></span><span class="menu-label">Accueil</span></a></li>
-                                <li><span class="glyphicons glyphicons-user"></span><span class="menu-label">Contacts</span>
-                                    <ul>
-                                        <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des contacts</a></li>
-                                        <li class="item-add"><a href="{{ path('add_contact') }}"><span class="glyphicons glyphicons-plus"></span>Ajouter un contact</a></li>
-                                    </ul>
-                                </li>
-                                <li><span class="glyphicons glyphicons-flag"></span><span class="menu-label">Sections</span>
-                                    <ul>
-                                        <li><a href="{{ path('list_sections') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des sections</a></li>
-                                        <li class="item-add"><a href="{{ path('add_section') }}"><span class="glyphicons glyphicons-plus"></span>Ajouter une section</a></li>
-                                    </ul>
-                                </li>
-                                <li><span class="glyphicons glyphicons-folder-open"></span><span class="menu-label">Dossiers</span>
-                                    <ul>
-                                        <li><a href="{{ path('list_dossiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des dossiers</a></li>
-                                    </ul>
-                                </li>
+                                {% if app_security.hasAccess('CONTACT_READ') %}
+                                    <li><span class="glyphicons glyphicons-user"></span><span class="menu-label">Contacts</span>
+                                        <ul>
+                                            <li><a href="{{ path('list_contacts') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des contacts</a></li>
+                                            {% if app_security.hasAccess('CONTACT_WRITE') %}
+                                                <li class="item-add"><a href="{{ path('add_contact') }}"><span class="glyphicons glyphicons-plus"></span>Ajouter un contact</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                {% if app_security.hasAccess('SECTION_READ') %}
+                                    <li><span class="glyphicons glyphicons-flag"></span><span class="menu-label">Sections</span>
+                                        <ul>
+                                            <li><a href="{{ path('list_sections') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des sections</a></li>
+                                            {% if app_security.hasAccess('CONTACT_WRITE') %}
+                                                <li class="item-add"><a href="{{ path('add_section') }}"><span class="glyphicons glyphicons-plus"></span>Ajouter une section</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                {% if app_security.hasAccess('DOSSIER_READ') %}
+                                    <li><span class="glyphicons glyphicons-folder-open"></span><span class="menu-label">Dossiers</span>
+                                        <ul>
+                                            <li><a href="{{ path('list_dossiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des dossiers</a></li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                                {% if app_security.hasAccess('ORGANISME_READ') %}
                                 <li>
                                     <span class="glyphicons glyphicons-government"></span><span class="menu-label">Organismes</span>
                                     <ul>
                                         <li><a href="{{ path('list_organismes') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des organismes</a></li>
-                                        <li class="item-add"><a href="{# path('list_organismes',{'action':'ajout'}) #}"><span class="glyphicons glyphicons-plus"></span>Ajouter un organisme</a></li>
+                                        {% if app_security.hasAccess('ORGANISME_WRITE') %}
+                                            <li class="item-add"><a href="{# path('list_organismes',{'action':'ajout'}) #}"><span class="glyphicons glyphicons-plus"></span>Ajouter un organisme</a></li>
+                                        {% endif %}
                                     </ul>
                                 </li>
+                                {% endif %}
                                 <li><span class="glyphicons glyphicons-adjust-alt"></span><span class="menu-label">Filtres perso.</span>
                                     <ul>
                                         {{ render(controller('AppBundle:Filter:displayMenuItems')) }}
@@ -60,21 +74,37 @@
                                 </li>
                                 <li><span class="glyphicons glyphicons-book"></span><span class="menu-label">Rentier</span>
                                     <ul>
-                                        <li><a href="{{ path('list_dest_indivs') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois individuels</a></li>
-                                        <li><a href="{{ path('list_dest_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois rentiers</a></li>
-                                        <li><a href="{{ path('list_organismes_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois organismes</a></li>
-                                        <li><a href="{{ path('list_offres_decouvertes_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois offres découvertes</a></li>
-                                        <li><a href="{{ path('list_deces_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des décès</a></li>
-                                        <li><a href="{{ path('list_donateurs_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des donateurs</a></li>
-                                        <li><a href="{{ path('list_ags_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Assemblées générales</a></li>
+                                        {% if  app_security.hasAccess('RENTIER_DESTINATAIRE') %}
+                                            <li><a href="{{ path('list_dest_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois rentiers</a></li>
+                                        {% endif %}
+                                        {% if  app_security.hasAccess('RENTIER_ENVOI_INDIV') %}
+                                            <li><a href="{{ path('list_dest_indivs') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois individuels</a></li>
+                                        {% endif %}
+                                        {% if  app_security.hasAccess('ORGANISME_READ') %}
+                                            <li><a href="{{ path('list_organismes_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois organismes</a></li>
+                                        {% endif %}
+                                        {% if  app_security.hasAccess('CONTACT_READ') %}
+                                            <li><a href="{{ path('list_offres_decouvertes_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Envois offres découvertes</a></li>
+                                        {% endif %}
+                                        {% if  app_security.hasAccess('CONTACT_READ') %}
+                                            <li><a href="{{ path('list_deces_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des décès</a></li>
+                                        {% endif %}
+                                        {% if  app_security.hasAccess('DON_READ') %}
+                                            <li><a href="{{ path('list_donateurs_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Liste des donateurs</a></li>
+                                        {% endif %}
+                                        {% if  app_security.hasAccess('AG_READ') %}
+                                            <li><a href="{{ path('list_ags_rentiers') }}"><span class="glyphicons glyphicons-chevron-right"></span>Assemblées générales</a></li>
+                                        {% endif %}
                                     </ul>
                                 </li>
                             </ul>
                             <div class="spacer"></div>
-                            <ul class="menu">
-                                <li><a href="#" data-toggle="modal" data-target="#modal-support" ><span class="glyphicons glyphicons-life-preserver"></span><span class="menu-label">Support</span></a>
-                                </li>
-                            </ul>
+                            {% if app_security.hasAccess('SUPPORT_USE') %}
+                                <ul class="menu">
+                                    <li><a href="#" data-toggle="modal" data-target="#modal-support" ><span class="glyphicons glyphicons-life-preserver"></span><span class="menu-label">Support</span></a>
+                                    </li>
+                                </ul>
+                            {% endif %}
                         </div>
                     {% endblock %}    
                 </div>

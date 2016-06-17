@@ -71,6 +71,7 @@ class DefaultController extends Controller
 
         if ($alerteForm->isSubmitted() && $alerteForm->isValid()) {
                 
+            $this->get('app.security')->checkAccess('ALERTE_WRITE');
 
             $alerte->setDateCreation($datetime);
             $alerte->setOperateur($this->getUser());
@@ -85,6 +86,10 @@ class DefaultController extends Controller
             return  $this->redirectToRoute('dashboard');
 
         }else{
+
+            if ($alerteForm->isSubmitted() && !$alerteForm->isValid()) {
+                $this->get('app.tools')->handleFormErrors($alerteForm);
+            }
 
             $alertes = $this->getDoctrine()
             ->getRepository('AppBundle:Alerte')
@@ -262,7 +267,7 @@ class DefaultController extends Controller
     /**
      * @Route("/check-alerte", name="check_alerte")
      * @Method("POST")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function checkAlerteAction(Request $request)
     {
@@ -300,10 +305,13 @@ class DefaultController extends Controller
     /**
      * @Route("/delete-alerte", name="delete_alerte")
      * @Method("GET")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function deleteAlerteAction(Request $request)
     {
+
+        $this->get('app.security')->checkAccess('ALERTE_DELETE');
+
         $idAlerte = $request->query->get('idAlerte');
         $target = $request->query->get('target');
 
@@ -352,10 +360,12 @@ class DefaultController extends Controller
 
     /**
      * @Route("/edit-alerte", name="edit_alerte")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function editAlerteAction(Request $request)
     {
+
+        $this->get('app.security')->checkAccess('ALERTE_WRITE');
 
         $idAlerte = $request->query->get('idAlerte');
 
@@ -393,17 +403,17 @@ class DefaultController extends Controller
 
         $suivis = $this->getDoctrine()
             ->getRepository('AppBundle:Suivi')
-            ->findBy(array('operateur'=>$this->getUser(),'isOk'=>false),array('dateEcheance'=>'ASC'));
+            ->findBy(array('isOk'=>false),array('dateEcheance'=>'ASC'));
 
 
         $lstTerms = array();
 
         foreach ($alertes as $_alerte) {
-            $lstTerms[$_alerte->getDateCreation()->format('Y-m-d H:i:s')] = $_alerte;
+            $lstTerms[$_alerte->getDateCreation()->format('Y-m-d H:i:s').$_alerte->getId()] = $_alerte;
         }
         foreach ($suivis as $suivi) {
             if ($suivi->getDateEcheance()) {
-                $lstTerms[$suivi->getDateCreation()->format('Y-m-d H:i:s')] = $suivi;
+                $lstTerms[$suivi->getDateCreation()->format('Y-m-d H:i:s').$suivi->getId()] = $suivi;
             }
         }
 

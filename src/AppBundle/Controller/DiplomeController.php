@@ -26,6 +26,8 @@ class DiplomeController extends Controller
 	public function listDiplomesAction()
 	{
 
+		$this->get('app.security')->checkAccess('DIPLOME_READ');
+
 	  	$diplomes = $this->getDoctrine()
 	  					->getRepository('AppBundle:Diplome')
 	  					->findAll();
@@ -57,6 +59,8 @@ class DiplomeController extends Controller
 	*/
 	public function saveDiplomeAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('DIPLOME_WRITE');
 
 		if($request->query->get('idDiplome')){
 			$diplome = $this->getDoctrine()
@@ -93,6 +97,8 @@ class DiplomeController extends Controller
 	public function deleteDiplomeAction($idDiplome)
 	{
 
+		$this->get('app.security')->checkAccess('DIPLOME_DELETE');
+
 	    $diplome = $this->getDoctrine()
 	      ->getRepository('AppBundle:Diplome')
 	      ->find($idDiplome);
@@ -123,6 +129,9 @@ class DiplomeController extends Controller
 	*/
 	public function listContactDiplomesAction($idContact)
 	{
+
+		$this->get('app.security')->checkAccess('DIPLOME_READ');
+
 	  	$contact = $this->getDoctrine()
 	  					->getRepository('AppBundle:Contact')
 	  					->find($idContact);
@@ -168,10 +177,12 @@ class DiplomeController extends Controller
 
 	/**
 	* @Route("/contact-diplome/save", name="save_contact_diplome")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveContactDiplomeAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('DIPLOME_WRITE');
 
 		$contact = $this->getDoctrine()
 				->getRepository('AppBundle:Contact')
@@ -216,10 +227,12 @@ class DiplomeController extends Controller
 
 	/**
 	* @Route("/contact-diplome/delete/{idContactDiplome}", name="delete_contact_diplome")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteContactDiplomeAction($idContactDiplome)
 	{
+
+		$this->get('app.security')->checkAccess('DIPLOME_DELETE');
 
 	    $cd = $this->getDoctrine()
 	      ->getRepository('AppBundle:ContactDiplome')

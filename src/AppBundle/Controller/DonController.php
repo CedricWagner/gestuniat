@@ -22,6 +22,9 @@ class DonController extends Controller
 	*/
 	public function listDonsAction($idContact)
 	{
+
+		$this->get('app.security')->checkAccess('DON_READ');
+
 	  	$contact = $this->getDoctrine()
 	  					->getRepository('AppBundle:Contact')
 	  					->find($idContact);
@@ -57,10 +60,12 @@ class DonController extends Controller
 
 	/**
 	* @Route("/don/save", name="save_don")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveDonAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('DON_WRITE');
 
 		$contact = $this->getDoctrine()
 				->getRepository('AppBundle:Contact')
@@ -111,10 +116,12 @@ class DonController extends Controller
 
 	/**
 	* @Route("/don/delete/{idDon}", name="delete_don")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteDonAction($idDon)
 	{
+
+		$this->get('app.security')->checkAccess('DON_DELETE');
 
 	    $don = $this->getDoctrine()
 	      ->getRepository('AppBundle:Don')

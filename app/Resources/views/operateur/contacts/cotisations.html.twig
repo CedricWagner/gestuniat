@@ -30,8 +30,8 @@
 			{% for cotisation in cotisations %}
 				<tr>
 					<td style="position:relative">
-						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'cotisation','object':cotisation,'deletePath':path('delete_cotisation',{'idCotisation':cotisation.id})} %}
-						{% include 'modals/default.html.twig' with {'form':cotisationForms[cotisation.id],'entity':'cotisation','object':cotisation,'title':'Edition de la cotisation'} %}
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'cotisation','object':cotisation,'deletePath':path('delete_cotisation',{'idCotisation':cotisation.id}),'isDeletable':app_security.hasAccess('COTISATION_DELETE')} %}
+						{% include 'modals/default.html.twig' with {'form':cotisationForms[cotisation.id],'entity':'cotisation','object':cotisation,'title':'Edition de la cotisation','isWritable':app_security.hasAccess('COTISATION_WRITE')} %}
 					</td>
 					<td>{{ cotisation.dateCreation.format('d/m/Y') }}</td>
 					<td>{{ cotisation.isSemestriel ? 'Semestriel' : 'Annuel' }}</td>
@@ -41,7 +41,9 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-cotisation-0">Saisir une nouvelle cotisation</button>
+	{% if app_security.hasAccess('COTISATION_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-cotisation-0">Saisir une nouvelle cotisation</button>
+	{% endif %}
 	<br />
 	{% include 'modals/default.html.twig' with {'form':newCotisationForm,'entity':'cotisation','object':false,'title':'Ajouter une nouvelle cotisation'} %}
 {% endblock %}

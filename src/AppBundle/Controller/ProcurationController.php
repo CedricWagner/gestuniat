@@ -18,10 +18,13 @@ class ProcurationController extends Controller
 
 	/**
 	* @Route("/contact/{idContact}/procurations", name="list_procurations")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listProcurationsAction($idContact)
 	{
+
+		$this->get('app.security')->checkAccess('PROCURATION_READ');
+
 	  	$contact = $this->getDoctrine()
 	  					->getRepository('AppBundle:Contact')
 	  					->find($idContact);
@@ -54,10 +57,11 @@ class ProcurationController extends Controller
 
 	/**
 	* @Route("/procuration/save", name="save_procuration")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveProcurationAction(Request $request)
 	{
+		$this->get('app.security')->checkAccess('PROCURATION_WRITE');
 
 		$contact = $this->getDoctrine()
 				->getRepository('AppBundle:Contact')
@@ -106,10 +110,11 @@ class ProcurationController extends Controller
 
 	/**
 	* @Route("/procuration/delete/{idProcuration}", name="delete_procuration")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteProcurationAction($idProcuration)
 	{
+		$this->get('app.security')->checkAccess('PROCURATION_DELETE');
 
 	    $procuration = $this->getDoctrine()
 	      ->getRepository('AppBundle:Procuration')

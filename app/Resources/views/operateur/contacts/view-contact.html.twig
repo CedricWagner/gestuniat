@@ -28,20 +28,28 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 				<div class="section-header">
 					<h3>Suivi contact</h3>
 				</div>
-				<div class="section-main-content">
-					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Ajouter un suivi</button>
-					{% include 'modals/ajouter-suivi-default.html.twig' %}
-					<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-contact')">Imprimer la sélection</a></small>
-				</div>
-				<div class="section-sub-content" id="suivis-contact">
-					{% for suivi in lstSuivis %}
-						{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
-					{% endfor %}
-				</div>
-				<div class="section-main-content">
-					<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
-					{% include 'modals/liste-suivis.html.twig' %}
-				</div>
+				{% if app_security.hasAccess('SUIVI_READ') %}
+					<div class="section-main-content">
+						{% if app_security.hasAccess('SUIVI_WRITE') %}
+							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Ajouter un suivi</button>
+							{% include 'modals/ajouter-suivi-default.html.twig' %}
+						{% endif %}
+						<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-contact')">Imprimer la sélection</a></small>
+					</div>
+					<div class="section-sub-content" id="suivis-contact">
+						{% for suivi in lstSuivis %}
+							{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
+						{% endfor %}
+					</div>
+					<div class="section-main-content">
+						<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
+						{% include 'modals/liste-suivis.html.twig' %}
+					</div>
+				{% else %}
+					<div class="section-sub-content">
+						<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+					</div>
+				{% endif %}
 			</div>
 		</div>
 		<div class="col-md-8 col-sm-12">
@@ -51,25 +59,41 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						<div class="section-header">
 							<h3>Documents</h3>
 						</div>
-						<div class="section-main-content">
-							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-dossier-0"><span class="glyphicons glyphicons-folder-open"></span>Créer un dossier</button>
-							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-document-0"><span class="glyphicons glyphicons-folder-open"></span>Créer un document</button>
-							<a class="btn btn-default btn-block" href="{{ path('list_documents',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
-						</div>
-							{% include 'modals/default.html.twig' with {'action':path('save_dossier',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':dossierForm,'entity':'dossier','object':false,'title':'Ajouter un dossier'} %}
-							{% include 'modals/default.html.twig' with {'action':path('save_document',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':documentForm,'entity':'document','object':false,'title':'Ajouter un document'} %}
-					</div>		
+						{% if app_security.hasAccess('DOSSIER_READ') %}
+							<div class="section-main-content">
+								{% if app_security.hasAccess('DOSSIER_WRITE') %}
+									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-dossier-0"><span class="glyphicons glyphicons-folder-open"></span>Créer un dossier</button>
+									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-document-0"><span class="glyphicons glyphicons-folder-open"></span>Créer un document</button>
+								{% endif %}
+								<a class="btn btn-default btn-block" href="{{ path('list_documents',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
+							</div>
+								{% include 'modals/default.html.twig' with {'action':path('save_dossier',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':dossierForm,'entity':'dossier','object':false,'title':'Ajouter un dossier'} %}
+								{% include 'modals/default.html.twig' with {'action':path('save_document',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':documentForm,'entity':'document','object':false,'title':'Ajouter un document'} %}
+						{% else %}
+							<div class="section-sub-content">
+								<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+							</div>
+						{% endif %}
+					</div>
 				</div>
 				<div class="col-md-4 col-sm-12">
 					<div class="section-block">
 						<div class="section-header">
 							<h3>Vignettes contributives</h3>
 						</div>
-						<div class="section-main-content">
-							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-vignette-0"><span class="glyphicons glyphicons-tag"></span>Ajouter une vignette</button>
-							<a class="btn btn-default btn-block" href="{{ path('list_vignettes',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
-							{% include 'modals/default.html.twig' with {'action':path('save_vignette',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':vignetteForm,'entity':'vignette','object':false,'title':'Ajouter une vignette'} %}
-						</div>
+						{% if app_security.hasAccess('VIGNETTE_READ') %}
+							<div class="section-main-content">
+								{% if app_security.hasAccess('VIGNETTE_WRITE') %}
+									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-vignette-0"><span class="glyphicons glyphicons-tag"></span>Ajouter une vignette</button>
+								{% endif %}
+								<a class="btn btn-default btn-block" href="{{ path('list_vignettes',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
+								{% include 'modals/default.html.twig' with {'action':path('save_vignette',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':vignetteForm,'entity':'vignette','object':false,'title':'Ajouter une vignette'} %}
+							</div>
+						{% else %}
+							<div class="section-sub-content">
+								<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+							</div>
+						{% endif %}
 					</div>
 					
 				</div>
@@ -78,11 +102,19 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						<div class="section-header">
 							<h3>Dons</h3>
 						</div>
-						<div class="section-main-content">
-							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-don-0"><span class="glyphicons glyphicons-tag"></span>Ajouter un don</button>
-							<a class="btn btn-default btn-block" href="{{ path('list_dons',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
-						</div>
-						{% include 'modals/default.html.twig' with {'action':path('save_don',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':donForm,'entity':'don','object':false,'title':'Ajouter un don'} %}
+						{% if app_security.hasAccess('DON_READ') %}
+							<div class="section-main-content">
+								{% if app_security.hasAccess('DON_WRITE') %}
+									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-don-0"><span class="glyphicons glyphicons-tag"></span>Ajouter un don</button>
+								{% endif %}
+								<a class="btn btn-default btn-block" href="{{ path('list_dons',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
+							</div>
+							{% include 'modals/default.html.twig' with {'action':path('save_don',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':donForm,'entity':'don','object':false,'title':'Ajouter un don'} %}
+						{% else %}
+							<div class="section-sub-content">
+								<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+							</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -97,54 +129,60 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						<div class="section-header">
 							<h3>Prévoyances en cours</h3>
 						</div>
-						<div class="section-main-content">
-							<p>
-								<a href="{{ path('list_contrats',{'idContact':contact.id}) }}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-notes"></span>Gestion des prévoyances</a>
-							</p>
-							<div class="btn-group-vertical" role="group">
-								<button class="btn btn-default btn-block" role="button" data-toggle="collapse" href="#collapseAgrr" aria-expanded="false" aria-controls="collapseAgrr">AGRR Prévoyance <span class="badge">{{ agrrs|length }}</span></button>
-								<div class="collapse" id="collapseAgrr">
-								  <div class="section-sub-content">
-								  	{% for agrr in agrrs %}
-								  		<div class="listing-item clearfix">
-								  			<div class="listing-item-content">
-								  				<p>
-								  					{% if agrr.cible == 'CONTACT' and contact.id == agrr.contact.id  %}
-														{{ agrr.contact.nom }} {{ agrr.contact.prenom }} (membre principal)
-													{% elseif contact.membreConjoint and agrr.contact.id == contact.membreConjoint.id %}
-														<a href="{{ path('list_contrats',{'idContact':agrr.contact.id}) }}">{{ agrr.contact.nom }} {{ agrr.contact.prenom }}</a> (membre conjoint)
-													{% endif %}
-													{% if agrr.cible == 'AD' %}
-														{{ agrr.nomPrenomAD }} (ayant droit)
-													{% endif %}
-												</p>
-								  				<p>{{ agrr.etat == 0 ? 'En attente' : agrr.etat == 1 ? 'Actif' : agrr.etat == 2 ? 'Résilié' : '' }}&nbsp;&nbsp;|&nbsp;&nbsp;Date d'effet : {{ agrr.dateEffet ? agrr.dateEffet.format('d/m/Y') : '--' }}</p>
-								  			</div>
-								  		</div>
-								  	{% endfor %}
-								  </div>
-								</div>
-								<button class="btn btn-default btn-block"role="button" data-toggle="collapse" href="#collapseObseque" aria-expanded="false" aria-controls="collapseObseque">Prévoyance obsèques <span class="badge">{{ obseques|length }}</span></button>
-								<div class="collapse" id="collapseObseque">
-								  <div class="section-sub-content">
-								  	{% for obseque in obseques %}
-								  		<div class="listing-item clearfix">
-								  			<div class="listing-item-content">
-								  				<p>
-								  					{% if obseque.cible == 'CONTACT' and contact.id == obseque.contact.id  %}
-														{{ obseque.contact.nom }} {{ obseque.contact.prenom }} (membre principal)
-													{% elseif contact.membreConjoint and obseque.contact.id == contact.membreConjoint.id %}
-														<a href="{{ path('list_contrats',{'idContact':obseque.contact.id}) }}">{{ obseque.contact.nom }} {{ obseque.contact.prenom }}</a> (membre conjoint)
-													{% endif %}
-												</p>
-								  				<p>Date d'effet : {{ obseque.dateEffet ? obseque.dateEffet.format('d/m/Y') : '--' }}</p>
-								  			</div>
-								  		</div>
-								  	{% endfor %}
-								  </div>
+						{% if app_security.hasAccess('PREV_READ') %}
+							<div class="section-main-content">
+								<p>
+									<a href="{{ path('list_contrats',{'idContact':contact.id}) }}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-notes"></span>Gestion des prévoyances</a>
+								</p>
+								<div class="btn-group-vertical" role="group">
+									<button class="btn btn-default btn-block" role="button" data-toggle="collapse" href="#collapseAgrr" aria-expanded="false" aria-controls="collapseAgrr">AGRR Prévoyance <span class="badge">{{ agrrs|length }}</span></button>
+									<div class="collapse" id="collapseAgrr">
+									  <div class="section-sub-content">
+									  	{% for agrr in agrrs %}
+									  		<div class="listing-item clearfix">
+									  			<div class="listing-item-content">
+									  				<p>
+									  					{% if agrr.cible == 'CONTACT' and contact.id == agrr.contact.id  %}
+															{{ agrr.contact.nom }} {{ agrr.contact.prenom }} (membre principal)
+														{% elseif contact.membreConjoint and agrr.contact.id == contact.membreConjoint.id %}
+															<a href="{{ path('list_contrats',{'idContact':agrr.contact.id}) }}">{{ agrr.contact.nom }} {{ agrr.contact.prenom }}</a> (membre conjoint)
+														{% endif %}
+														{% if agrr.cible == 'AD' %}
+															{{ agrr.nomPrenomAD }} (ayant droit)
+														{% endif %}
+													</p>
+									  				<p>{{ agrr.etat == 0 ? 'En attente' : agrr.etat == 1 ? 'Actif' : agrr.etat == 2 ? 'Résilié' : '' }}&nbsp;&nbsp;|&nbsp;&nbsp;Date d'effet : {{ agrr.dateEffet ? agrr.dateEffet.format('d/m/Y') : '--' }}</p>
+									  			</div>
+									  		</div>
+									  	{% endfor %}
+									  </div>
+									</div>
+									<button class="btn btn-default btn-block"role="button" data-toggle="collapse" href="#collapseObseque" aria-expanded="false" aria-controls="collapseObseque">Prévoyance obsèques <span class="badge">{{ obseques|length }}</span></button>
+									<div class="collapse" id="collapseObseque">
+									  <div class="section-sub-content">
+									  	{% for obseque in obseques %}
+									  		<div class="listing-item clearfix">
+									  			<div class="listing-item-content">
+									  				<p>
+									  					{% if obseque.cible == 'CONTACT' and contact.id == obseque.contact.id  %}
+															{{ obseque.contact.nom }} {{ obseque.contact.prenom }} (membre principal)
+														{% elseif contact.membreConjoint and obseque.contact.id == contact.membreConjoint.id %}
+															<a href="{{ path('list_contrats',{'idContact':obseque.contact.id}) }}">{{ obseque.contact.nom }} {{ obseque.contact.prenom }}</a> (membre conjoint)
+														{% endif %}
+													</p>
+									  				<p>Date d'effet : {{ obseque.dateEffet ? obseque.dateEffet.format('d/m/Y') : '--' }}</p>
+									  			</div>
+									  		</div>
+									  	{% endfor %}
+									  </div>
+									</div>
 								</div>
 							</div>
-						</div>
+						{% else %}
+							<div class="section-sub-content">
+								<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+							</div>
+						{% endif %}
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -152,23 +190,29 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						<div class="section-header">
 							<h3>Kit Adhésion</h3>
 						</div>
-						<div class="section-main-content">
-							<a target="_blank" href="{{path('generate_bulletin_adhesion',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-note"></span>Bulletin d'adhésion</a>
-							<a target="_blank" href="{{path('generate_lettre_echeance',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'échéance</a>
-							<a target="_blank" href="{{path('generate_carte_id_fonction',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-nameplate"></span>Carte d'identité de fonction</a>
-							<a target="_blank" href="{{path('generate_lettre_remerciement',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre de remerciement</a>
-							<div class="btn-group btn-group-justified" style="padding-top:5px;padding-bottom:5px;" role="group">
-								<div class="btn-group" role="group">
-									<button target="_blank" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicons glyphicons-message-full"></span>Lettre section&nbsp;<span class="caret"></span></button>
-									<ul class="dropdown-menu">
-										<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Président'})}}">À destination du Président</a></li>
-										<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Secrétaire'})}}">À destination du Secrétaire</a></li>
-										<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Trésorier'})}}">À destination du Trésorier</a></li>
-									</ul>
+						{% if app_security.hasAccess('CONTACT_KIT_ADH') %}
+							<div class="section-main-content">
+								<a target="_blank" href="{{path('generate_bulletin_adhesion',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-note"></span>Bulletin d'adhésion</a>
+								<a target="_blank" href="{{path('generate_lettre_echeance',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'échéance</a>
+								<a target="_blank" href="{{path('generate_carte_id_fonction',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-nameplate"></span>Carte d'identité de fonction</a>
+								<a target="_blank" href="{{path('generate_lettre_remerciement',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre de remerciement</a>
+								<div class="btn-group btn-group-justified" style="padding-top:5px;padding-bottom:5px;" role="group">
+									<div class="btn-group" role="group">
+										<button target="_blank" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicons glyphicons-message-full"></span>Lettre section&nbsp;<span class="caret"></span></button>
+										<ul class="dropdown-menu">
+											<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Président'})}}">À destination du Président</a></li>
+											<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Secrétaire'})}}">À destination du Secrétaire</a></li>
+											<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Trésorier'})}}">À destination du Trésorier</a></li>
+										</ul>
+									</div>
 								</div>
+								<a target="_blank" href="{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'accompagnement</a>
 							</div>
-							<a target="_blank" href="{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'accompagnement</a>
-						</div>
+						{% else %}
+							<div class="section-sub-content">
+								<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+							</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>

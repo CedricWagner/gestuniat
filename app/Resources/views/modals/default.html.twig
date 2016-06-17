@@ -23,7 +23,11 @@
   {% set action = '' %}
 {% endif %}
 
-<div class="modal fade" id="{{ verb }}-{{ entity }}-{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ verb }}-{{ entity }}-{{ id }}-label">
+{% if isWritable is not defined  %}
+  {% set isWritable = true %}
+{% endif %}
+
+<div class="modal fade {{ isWritable ? '' : 'readonly' }}" id="{{ verb }}-{{ entity }}-{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ verb }}-{{ entity }}-{{ id }}-label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

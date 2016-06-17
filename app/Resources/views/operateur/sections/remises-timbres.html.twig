@@ -31,8 +31,8 @@
 			{% for remiseTimbre in remiseTimbres %}
 				<tr>
 					<td style="position:relative">
-						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'remiseTimbre','object':remiseTimbre,'deletePath':path('delete_remiseTimbre',{'idRemiseTimbre':remiseTimbre.id})} %}
-						{% include 'modals/default.html.twig' with {'form':remiseTimbreForms[remiseTimbre.id],'entity':'remiseTimbre','object':remiseTimbre,'title':'Edition de la remise de timbres'} %}
+						{% include 'operateur/contacts/contextual-default.inc.html.twig' with {'entity':'remiseTimbre','object':remiseTimbre,'deletePath':path('delete_remiseTimbre',{'idRemiseTimbre':remiseTimbre.id}),'isDeletable': app_security.hasAccess('TIMBRE_DELETE')} %}
+						{% include 'modals/default.html.twig' with {'form':remiseTimbreForms[remiseTimbre.id],'entity':'remiseTimbre','object':remiseTimbre,'title':'Edition de la remise de timbres','isWritable': app_security.hasAccess('TIMBRE_WRITE')} %}
 					</td>
 					<td>{{ remiseTimbre.annee }}</td>
 					<td>{{ remiseTimbre.isAnnuel ? 'Annuel' : 'Semestriel' }}</td>
@@ -43,7 +43,9 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-remiseTimbre-0">Saisir une nouvelle remise de timbres</button>
-	<br />
-	{% include 'modals/default.html.twig' with {'form':newRemiseTimbreForm,'entity':'remiseTimbre','object':false,'title':'Ajouter une nouvelle remise de timbres'} %}
+	{% if  app_security.hasAccess('TIMBRE_WRITE') %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-remiseTimbre-0">Saisir une nouvelle remise de timbres</button>
+		<br />
+		{% include 'modals/default.html.twig' with {'form':newRemiseTimbreForm,'entity':'remiseTimbre','object':false,'title':'Ajouter une nouvelle remise de timbres'} %}
+	{% endif %}
 {% endblock %}

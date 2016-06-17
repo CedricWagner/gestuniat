@@ -24,11 +24,14 @@ class SectionController extends Controller
 
     /**
      * @Route("/section/liste/{idFilter}/{page}/{nb}", name="list_sections", defaults={"idFilter" = 0,"page" = 1,"nb" = 0, "orderby"= "nom","order"= "ASC"})
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function listSectionsAction($idFilter,$page,$nb,$orderby,$order)
     {
-    	$currentFilter = null;
+      
+      $this->get('app.security')->checkAccess('SECTION_READ');
+
+      $currentFilter = null;
 
         if ($idFilter!=0) {
             $currentFilter = $this->getDoctrine()
@@ -58,13 +61,13 @@ class SectionController extends Controller
                   ->findBy(array('operateur'=>$this->getUser(),'contexte'=>'section'),array('label'=>'ASC'));
 
         if($currentFilter){
-    			$sections = $this->getDoctrine()
-    			  ->getRepository('AppBundle:Section')
-    			  ->findByFilter($filtreValeurs,$page,$nb);
+          $sections = $this->getDoctrine()
+            ->getRepository('AppBundle:Section')
+            ->findByFilter($filtreValeurs,$page,$nb);
         }else{
-    			$sections = $this->getDoctrine()
-    			  ->getRepository('AppBundle:Section')
-    			  ->findAllWithPagination($page,$nb);
+          $sections = $this->getDoctrine()
+            ->getRepository('AppBundle:Section')
+            ->findAllWithPagination($page,$nb);
         }
 
         return $this->render('operateur/sections/sections.html.twig', [
@@ -81,48 +84,50 @@ class SectionController extends Controller
      * @Route("/section/{idSection}/accueil", name="view_section"), requirements={
      *     "idSection": "\d+"
      * })
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function viewSectionAction(Request $request, $idSection)
     {
-		$datetime = new \DateTime();
+      $this->get('app.security')->checkAccess('SECTION_READ');
+      
+      $datetime = new \DateTime();
 
-        // Section
-        $section = $this->getDoctrine()
-          ->getRepository('AppBundle:Section')
-          ->find($idSection);
+      // Section
+      $section = $this->getDoctrine()
+        ->getRepository('AppBundle:Section')
+        ->find($idSection);
 
-        // Suivis
-        $suivi = new Suivi();
+      // Suivis
+      $suivi = new Suivi();
 
-        $suiviForm = $this->createForm(SuiviDefaultType::class, $suivi);
-        $suiviForm->handleRequest($request);
+      $suiviForm = $this->createForm(SuiviDefaultType::class, $suivi);
+      $suiviForm->handleRequest($request);
 
-        if ($suiviForm->isSubmitted() && $suiviForm->isValid()) {
+      if ($suiviForm->isSubmitted() && $suiviForm->isValid()) {
                     
 
-			$suivi->setDateCreation($datetime);
-			$suivi->setDateEdition($datetime);
-			$suivi->setOperateur($this->getUser());
-			$suivi->setSection($section);
+          $suivi->setDateCreation($datetime);
+          $suivi->setDateEdition($datetime);
+          $suivi->setOperateur($this->getUser());
+          $suivi->setSection($section);
 
-			$em = $this->get('doctrine.orm.entity_manager');
-			$em->persist($suivi);
-			$em->flush();
+          $em = $this->get('doctrine.orm.entity_manager');
+          $em->persist($suivi);
+          $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
+          $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
         }
         if ($suiviForm->isSubmitted() && !$suiviForm->isValid()) {
           $this->get('app.tools')->handleFormErrors($suiviForm);
         }
 
-		$lstSuivis = $this->getDoctrine()
-			->getRepository('AppBundle:Suivi')
-			->findBy(array('section'=>$section,'isOk'=>false),array('dateCreation'=>'ASC'),5);
+        $lstSuivis = $this->getDoctrine()
+          ->getRepository('AppBundle:Suivi')
+          ->findBy(array('section'=>$section,'isOk'=>false),array('dateCreation'=>'ASC'),5);
 
-		$lstAllSuivis = $this->getDoctrine()
-			->getRepository('AppBundle:Suivi')
-			->findBy(array('section'=>$section),array('dateCreation'=>'ASC'));
+        $lstAllSuivis = $this->getDoctrine()
+          ->getRepository('AppBundle:Suivi')
+          ->findBy(array('section'=>$section),array('dateCreation'=>'ASC'));
 
         $patrimoine = new Patrimoine();
         $patrimoine->setAnnee($datetime->format('Y'));
@@ -197,7 +202,7 @@ class SectionController extends Controller
             $etatTimbres['payes'] += $timbre->getNbPayes();
         }
 
-		return $this->render('operateur/sections/view-section.html.twig', [
+    return $this->render('operateur/sections/view-section.html.twig', [
             'section' => $section,
             'displayedYears' => $displayedYears,
             'allYears' => $allYears,
@@ -209,22 +214,24 @@ class SectionController extends Controller
             'assembleeGeneraleForm' => $assembleeGeneraleForm->createView(),
             'newAssembleeGeneraleForm' => $newAssembleeGeneraleForm->createView(),
             'permanenceForm' => $permanenceForm->createView(),
-		        'patrimoineForms' => $patrimoineForms,
+            'patrimoineForms' => $patrimoineForms,
             'suiviForm' => $suiviForm->createView(),
-		        'newPatrimoineForm' => $newPatrimoineForm->createView(),
-		        'lstSuivis' => $lstSuivis,
+            'newPatrimoineForm' => $newPatrimoineForm->createView(),
+            'lstSuivis' => $lstSuivis,
             'lstAllSuivis' => $lstAllSuivis,
-		        'etatTimbres' => $etatTimbres,
-		]);
+            'etatTimbres' => $etatTimbres,
+    ]);
 
     }
 
     /**
      * @Route("/section/{idSection}/profil-complet", name="full_section")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function fullSectionAction(Request $request, $idSection)
     {
+      $this->get('app.security')->checkAccess('SECTION_READ');
+
         $section = $this->getDoctrine()
         ->getRepository('AppBundle:Section')
         ->find($idSection);
@@ -233,15 +240,17 @@ class SectionController extends Controller
         $sectionForm->handleRequest($request);
 
         if ($sectionForm->isSubmitted() && $sectionForm->isValid()) {
-            $em = $this->get('doctrine.orm.entity_manager');
-            $em->persist($section);
-            $em->flush(); 
+          $this->get('app.security')->checkAccess('SECTION_WRITE');
+          
+          $em = $this->get('doctrine.orm.entity_manager');
+          $em->persist($section);
+          $em->flush(); 
 
-            $history = $this->get('app.history');
-            $history->init($this->getUser(),['id'=>$idSection,'name'=>'Section'],'UPDATE')
-                    ->log(true);  
+          $history = $this->get('app.history');
+          $history->init($this->getUser(),['id'=>$idSection,'name'=>'Section'],'UPDATE')
+                  ->log(true);  
 
-            $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');    
+          $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');    
         }
         if ($sectionForm->isSubmitted() && !$sectionForm->isValid()) {
           $this->get('app.tools')->handleFormErrors($sectionForm);
@@ -257,7 +266,7 @@ class SectionController extends Controller
 
     /**
      * @Route("/section/{idSection}/liste-adherents", name="list_contacts_section")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function listAdherentsAction($idSection)
     {
@@ -277,10 +286,12 @@ class SectionController extends Controller
 
     /**
      * @Route("/section/ajout", name="add_section")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function addSectionAction(request $request)
     {
+
+        $this->get('app.security')->checkAccess('SECTION_WRITE');
 
         $datetime = new \DateTime();
 
@@ -318,14 +329,17 @@ class SectionController extends Controller
 
      /**
      * @Route("/section/listing/action", name="section_action_listing")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function sectionListingAction(Request $request)
     {
 
+
       $action = $request->request->get('action');
       switch ($action) {
         case 'DELETE_ITEMS':
+          $this->get('app.security')->checkAccess('SECTION_CLOSE');
+          
           $selection = $request->request->get('selection');
           foreach ($selection as $id) {
             $this->deleteSectionAction($id);
@@ -333,6 +347,8 @@ class SectionController extends Controller
           $path = $this->generateUrl('list_sections');
           break;
         case 'EXPORT':
+          $this->get('app.security')->checkAccess('SECTION_READ');
+
           $selection = $request->request->get('selection');
           $csv = $this->get('app.csvgenerator');
           $csv->setName('export_liste-sections');
@@ -342,6 +358,7 @@ class SectionController extends Controller
             $section = $this->getDoctrine()
               ->getRepository('AppBundle:Section')
               ->find($id);
+
             $fields = array(
               $section->getNom(),
               $section->getId(),
@@ -364,10 +381,12 @@ class SectionController extends Controller
 
     /**
      * @Route("/section/{idSection}/suppression", name="delete_section")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function deleteSectionAction($idSection)
     {
+        $this->get('app.security')->checkAccess('SECTION_CLOSE');
+
         $section = $this->getDoctrine()
             ->getRepository('AppBundle:Section')
             ->find($idSection);
@@ -389,10 +408,12 @@ class SectionController extends Controller
 
     /**
      * @Route("/section/{idSection}/delegue/edition", name="section_edit_delegue")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function editDelegueAction(request $request, $idSection)
     {
+        $this->get('app.security')->checkAccess('SECTION_WRITE');
+
         $section = $this->getDoctrine()
             ->getRepository('AppBundle:Section')
             ->find($idSection);
@@ -420,10 +441,11 @@ class SectionController extends Controller
 
     /**
      * @Route("/section/{idSection}/patrimoine/enregistrer", name="save_patrimoine")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function savePatrimoineAction(Request $request, $idSection)
     {
+        $this->get('app.security')->checkAccess('PATRIMOINE_WRITE');
 
         $section = $this->getDoctrine()
                 ->getRepository('AppBundle:Section')
@@ -459,10 +481,12 @@ class SectionController extends Controller
 
     /**
      * @Route("/section/{idSection}/destinataires-rentiers/save", name="save_dest_rentiers")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function saveDestRentiersAction(Request $request, $idSection)
     {
+
+        $this->get('app.security')->checkAccess('CONTACT_SET_DEST_RENTIER');
 
         $section = $this->getDoctrine()
                 ->getRepository('AppBundle:Section')
@@ -534,10 +558,11 @@ class SectionController extends Controller
 
 
     /**
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function displayFonctionsAdherentsSectionAction($section)
     {
+
         $contacts = $this->getDoctrine()
             ->getRepository('AppBundle:Contact')
             ->findFonctionsSection($section);
@@ -550,10 +575,12 @@ class SectionController extends Controller
     }
 
     /**
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function displayDestinataireRentiersAction($section)
     {
+        $this->get('app.security')->checkAccess('SECTION_READ');
+
         $contacts = $this->getDoctrine()
             ->getRepository('AppBundle:Contact')
             ->findBy(array('section'=>$section,'isRentier'=>true));
@@ -586,10 +613,11 @@ class SectionController extends Controller
     }
 
     /**
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_SPECTATOR')")
      */
     public function displayNbAdherentsAction($section)
     {
+
         $nbContacts = $this->getDoctrine()
             ->getRepository('AppBundle:Contact')
             ->countContactsBySection($section);

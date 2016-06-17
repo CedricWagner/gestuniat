@@ -22,7 +22,7 @@
 	  <li class="active">Edition d'une section</li>
 	{% endif %} 
 	</ol>
-	<div class="full-contact-form inline-form">	
+	<div class="full-contact-form inline-form {{ app_security.hasAccess('SECTION_WRITE') ? '' : 'readonly' }}">	
 		{{ form_start(sectionForm,{'attr':{'novalidate':'novalidate'}}) }}
 			<div class="form-group clearfix">
 				{{ form_row(sectionForm.nom) }}

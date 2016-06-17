@@ -17,10 +17,12 @@ class VignetteController extends Controller
 
 	/**
 	* @Route("/contact/{idContact}/vignettes", name="list_vignettes")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function listVignettesAction($idContact)
 	{
+		$this->get('app.security')->checkAccess('VIGNETTE_READ');
+
 	  	$contact = $this->getDoctrine()
 	  					->getRepository('AppBundle:Contact')
 	  					->find($idContact);
@@ -55,10 +57,11 @@ class VignetteController extends Controller
 
 	/**
 	* @Route("/vignette/save", name="save_vignette")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function saveVignetteAction(Request $request)
 	{
+		$this->get('app.security')->checkAccess('VIGNETTE_WRITE');
 
 		$contact = $this->getDoctrine()
 				->getRepository('AppBundle:Contact')
@@ -94,10 +97,11 @@ class VignetteController extends Controller
 
 	/**
 	* @Route("/vignette/delete/{idVignette}", name="delete_vignette")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function deleteVignetteAction($idVignette)
 	{
+		$this->get('app.security')->checkAccess('VIGNETTE_DELETE');
 
 	    $vignette = $this->getDoctrine()
 	      ->getRepository('AppBundle:Vignette')

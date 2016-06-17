@@ -1,0 +1,5 @@
+services:
+  app.security:
+    class: "AppBundle\\Utils\\Security"
+    calls:
+        - [setContainer, ["@service_container"]]

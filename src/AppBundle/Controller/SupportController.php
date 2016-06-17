@@ -17,9 +17,12 @@ class SupportController extends Controller
 
 
 	/**
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
  	*/
     public function displaySupportFormAction(){
+    	
+    	$this->get('app.security')->checkAccess('SUPPORT_USE');
+
     	$support = new Support();
 
         $supportForm =  $this->createForm(SupportType::class, $support,array(
@@ -32,10 +35,12 @@ class SupportController extends Controller
 
 	/**
 	* @Route("/support/send", name="send_support")
-	* @Security("has_role('ROLE_USER')")
+	* @Security("has_role('ROLE_SPECTATOR')")
 	*/
 	public function sendSupportAction(Request $request)
 	{
+
+		$this->get('app.security')->checkAccess('SUPPORT_USE');
 
 		$support = new Support();
 
