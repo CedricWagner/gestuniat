@@ -30,15 +30,15 @@ class SectionFullType extends AbstractType
             ->add('nom',TextType::class,array('label' => 'Nom'))
             ->add('subventions',TextType::class,array('label' => 'Subventions'))
             ->add('destDernierListing',TextType::class,array('label' => 'Destinataire du dernier listing'))
-            ->add('dateDernierListing',DateType::class,array('label' => 'Date du dernier listing','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateDernierListing',DateType::class,array('label' => 'Date du dernier listing','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('numBulletin',null,array('label' => 'Bulletin municipal'))
-            ->add('dateRemiseBulletin',DateType::class,array('label' => 'Date de remise du bulletin','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateRemiseBulletin',DateType::class,array('label' => 'Date de remise du bulletin','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('infosComp',TextareaType::class,array('label' => 'Informations complémentaires'))
-            ->add('dateDerniereAG',DateType::class,array('label' => 'Date de la dernière AG','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateDerniereAG',DateType::class,array('label' => 'Date de la dernière AG','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('isActive',CheckboxType::class,array('label' => 'Est active'))

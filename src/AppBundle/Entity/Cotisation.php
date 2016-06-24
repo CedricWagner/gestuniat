@@ -39,6 +39,7 @@ class Cotisation
     /**
      * @var string
      * @Assert\NotBlank(message="Ce champ est obligatoire")
+     * @Assert\Type(type="numeric", message="La valeur saisie n'est pas un montant valide")
      * @ORM\Column(name="montant", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $montant;
@@ -46,7 +47,6 @@ class Cotisation
     /**
      * @var \DateTime
      * @Assert\NotBlank(message="Ce champ est obligatoire")
-     * @Assert\Type(type="float", message="La valeur saisie n'est pas un montant valide")
      * @ORM\Column(name="dateCreation", type="date")
      */
     private $dateCreation;

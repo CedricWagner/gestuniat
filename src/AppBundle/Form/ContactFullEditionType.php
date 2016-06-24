@@ -39,26 +39,33 @@ class ContactFullEditionType extends AbstractType
             ->add('commune',TextType::class,array('label' => 'Commune'))
             ->add('bp',TextType::class,array('label' => 'Boite postale'))
             ->add('pays',TextType::class,array('label' => 'Pays'))
-            ->add('dateNaissance',BirthdayType::class,array('label' => 'Date de naissance','placeholder' => array(
+            ->add('dateNaissance',BirthdayType::class,array('label' => 'Date de naissance','years'=>range($currentYear->format('Y'),1900),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
-                )))
+                ),
+                'invalid_message'=>'La valeur saisie n\'est pas valide'
+                ))
             ->add('lieuNaissance',TextType::class,array('label' => 'Lieu de naissance'))
-            ->add('dateDeces',DateType::class,array('label' => 'Date de décès','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateDeces',DateType::class,array('label' => 'Date de décès','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('mentionDeces',TextType::class,array('label' => 'Mention décès'))
-            ->add('dateAdhesion',DateType::class,array('label' => 'Date d\'adhésion','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateAdhesion',DateType::class,array('label' => 'Date d\'adhésion','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('typeAdhesion',ChoiceType::class,array('label'=>'Type d\'adhésion','choices'=>array(
                     'Annuel'=>'ANNUEL',
                     'Semestriel'=>'SEMESTRIEL',
                 )))
-            ->add('statutJuridique',EntityType::class,array('label' => 'Type de profil','class'=>'AppBundle:StatutJuridique','choice_label'=>'label'))
+            ->add('statutJuridique',EntityType::class,array('label' => 'Type de profil','class'=>'AppBundle:StatutJuridique','choice_label'=>'label'
+                // ,'placeholder'=>'Prospect'
+                ,'preferred_choices' => function ($val, $key) {
+                    return $val->getLabel()=='Prospect';
+                },
+                ))
             ->add('statutMatrimonial',EntityType::class,array('label' => 'Statut matrimonial','class'=>'AppBundle:StatutMatrimonial','choice_label'=>'label','placeholder' => 'Inconnu'))
             ->add('civilite',EntityType::class,array('label' => 'Civilité','class'=>'AppBundle:Civilite','choice_label'=>'label','placeholder' => 'Inconnu'))
             ->add('fonctionSection',EntityType::class,array('label' => 'Fonction de section','class'=>'AppBundle:FonctionSection','choice_label'=>'label','placeholder' => 'Aucune'))
-            ->add('dateDelivranceFonc',DateType::class,array('label' => 'Date de délivrance de la fonction','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateDelivranceFonc',DateType::class,array('label' => 'Date de délivrance de la fonction','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('fonctionGroupement',EntityType::class,array('label' => 'Fonction de groupement','class'=>'AppBundle:FonctionGroupement','choice_label'=>'label','placeholder' => 'Aucune'))
@@ -68,7 +75,7 @@ class ContactFullEditionType extends AbstractType
             ->add('isCA',CheckboxType::class,array('label' => 'Est membre du CA'))
             ->add('fonctionRepresentation',TextType::class,array('label' => 'Fonction représentation'))
             ->add('numSecu',TextType::class,array('label' => 'Numéro de sécu'))
-            ->add('dateCIF',DateType::class,array('label' => 'Date CIF','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateCIF',DateType::class,array('label' => 'Date CIF','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('isRentier',CheckboxType::class,array('label' => 'Est dépositaire rentier'))
@@ -77,7 +84,7 @@ class ContactFullEditionType extends AbstractType
             ->add('isCourrier',CheckboxType::class,array('label' => 'Courrier'))
             ->add('isEnvoiIndiv',CheckboxType::class,array('label' => 'Envoi individuel'))
             ->add('isOffreDecouverte',CheckboxType::class,array('label' => 'Profite de l\'offre découverte'))
-            ->add('dateOffreDecouverte',DateType::class,array('label' => 'Début de l\'offre découverte','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateOffreDecouverte',DateType::class,array('label' => 'Début de l\'offre découverte','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('save',SubmitType::class,array('label' => 'Enregistrer'))

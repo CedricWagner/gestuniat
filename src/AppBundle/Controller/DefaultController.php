@@ -63,14 +63,15 @@ class DefaultController extends Controller
     public function dashboardAction(Request $request)
     {
         $session = $this->get('session');
-
-        $alerte = new Alerte();
-        $alerteForm = $this->createForm(AlerteCreationType::class, $alerte);
-        $alerteForm->handleRequest($request);
         $datetime = new \DateTime();
 
+        $alerte = new Alerte();
+        $alerte->setDateEcheance($datetime);
+        $alerteForm = $this->createForm(AlerteCreationType::class, $alerte);
+        $alerteForm->handleRequest($request);
+
         if ($alerteForm->isSubmitted() && $alerteForm->isValid()) {
-                
+            
             $this->get('app.security')->checkAccess('ALERTE_WRITE');
 
             $alerte->setDateCreation($datetime);

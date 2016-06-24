@@ -46,22 +46,22 @@ class ContratAgrrType extends AbstractType
             ->add('optionPrec',TextType::class,array('label' => 'Option précédente'))
             ->add('comGarantie',TextType::class,array('label' => 'Com. garanties'))
             ->add('regimeAffiliation',EntityType::class,array('label' => 'Régime d\'affiliation','class'=>'AppBundle:RegimeAffiliation','placeholder'=>'Aucun','choice_label'=>'label'))
-            ->add('dateEffet',DateType::class,array('label' => 'Date d\'effet','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateEffet',DateType::class,array('label' => 'Date d\'effet','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('dateModif',DateType::class,array('label' => 'Date de modification','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateModif',DateType::class,array('label' => 'Date de modification','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('dateEffetModif',DateType::class,array('label' => 'Date effet de la modification','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateEffetModif',DateType::class,array('label' => 'Date effet de la modification','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('dateRes',DateType::class,array('label' => 'Date de résiliation','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateRes',DateType::class,array('label' => 'Date de résiliation','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('dateEffetRes',DateType::class,array('label' => 'Date effet res.','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateEffetRes',DateType::class,array('label' => 'Date effet res.','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('dateConfirmAGGR',DateType::class,array('label' => 'Date confirmation AGRR.','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateConfirmAGGR',DateType::class,array('label' => 'Date confirmation AGRR.','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('isAutreMutu',CheckboxType::class,array('label' => 'Autre mutuelle'))

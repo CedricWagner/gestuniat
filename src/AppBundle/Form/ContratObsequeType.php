@@ -34,14 +34,14 @@ class ContratObsequeType extends AbstractType
                     )
                 ))
             ->add('option',TextType::class,array('label' => 'Option'))
-            ->add('dateEffet',DateType::class,array('label' => 'Date d\'effet','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateEffet',DateType::class,array('label' => 'Date d\'effet','years'=>range($currentYear->format('Y')+20,1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('dateVersement',DateType::class,array('label' => 'Date de versement','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateVersement',DateType::class,array('label' => 'Date de versement','years'=>range($currentYear->format('Y')+20,1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('isResilie',CheckboxType::class,array('label' => 'Contrat résilié'))
-            ->add('dateRes',DateType::class,array('label' => 'Date de résiliation','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateRes',DateType::class,array('label' => 'Date de résiliation','years'=>range($currentYear->format('Y')+20,1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('commentaire',TextareaType::class,array('label' => 'Commentaire'))

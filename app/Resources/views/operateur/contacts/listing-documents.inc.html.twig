@@ -56,7 +56,9 @@
 	</tbody>
 </table>
 {% if app_security.hasAccess('DOSSIER_WRITE') %}
-	<button class="btn btn-primary" data-toggle="modal" data-target="#add-dossier-0">Saisir un nouveau dossier</button>
+	{% if addDossier is not defined or (addDossier is defined and addDossier != false) %}
+		<button class="btn btn-primary" data-toggle="modal" data-target="#add-dossier-0">Saisir un nouveau dossier</button>
+	{% endif %}
 	<button class="btn btn-primary" data-toggle="modal" data-target="#add-document-0">Saisir un nouveau document</button>
 	<br />
 	{% include 'modals/default.html.twig' with {'form':newDocumentForm,'entity':'document','object':false,'title':'Ajouter un nouveau document'} %}

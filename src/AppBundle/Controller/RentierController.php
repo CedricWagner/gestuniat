@@ -667,16 +667,16 @@ class RentierController extends Controller
         $datetime = new \DateTime();
 
         switch ($datetime->format('d/m')) {
-            case '05/01':
+            case '31/03':
                 $numTrimestre = 1;
                 break;
-            case '05/04':
+            case '30/06':
                 $numTrimestre = 2;
                 break;
-            case '05/07':
+            case '30/09':
                 $numTrimestre = 3;
                 break;
-            case '05/10':
+            case '31/12':
                 $numTrimestre = 4;
                 break;
             default:

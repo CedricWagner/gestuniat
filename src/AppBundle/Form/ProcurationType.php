@@ -26,7 +26,7 @@ class ProcurationType extends AbstractType
         $currentYear = new \DateTime(date('Y'));
 
         $builder
-            ->add('date',DateType::class,array('label' => 'Date d\'obtention','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('date',DateType::class,array('label' => 'Date d\'obtention','years'=>range($currentYear->format('Y')+20,1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('lieu',TextType::class,array('label' => 'Lieu'))

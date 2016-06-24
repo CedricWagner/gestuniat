@@ -193,20 +193,22 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						{% if app_security.hasAccess('CONTACT_KIT_ADH') %}
 							<div class="section-main-content">
 								<a target="_blank" href="{{path('generate_bulletin_adhesion',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-note"></span>Bulletin d'adhésion</a>
-								<a target="_blank" href="{{path('generate_lettre_echeance',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'échéance</a>
-								<a target="_blank" href="{{path('generate_carte_id_fonction',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-nameplate"></span>Carte d'identité de fonction</a>
-								<a target="_blank" href="{{path('generate_lettre_remerciement',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre de remerciement</a>
-								<div class="btn-group btn-group-justified" style="padding-top:5px;padding-bottom:5px;" role="group">
-									<div class="btn-group" role="group">
-										<button target="_blank" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicons glyphicons-message-full"></span>Lettre section&nbsp;<span class="caret"></span></button>
-										<ul class="dropdown-menu">
-											<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Président'})}}">À destination du Président</a></li>
-											<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Secrétaire'})}}">À destination du Secrétaire</a></li>
-											<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Trésorier'})}}">À destination du Trésorier</a></li>
-										</ul>
+								{% if contact.section %}
+									<a target="_blank" href="{{path('generate_lettre_echeance',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'échéance</a>
+									<a target="_blank" href="{{path('generate_carte_id_fonction',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-nameplate"></span>Carte d'identité de fonction</a>
+									<a target="_blank" href="{{path('generate_lettre_remerciement',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre de remerciement</a>
+									<div class="btn-group btn-group-justified" style="padding-top:5px;padding-bottom:5px;" role="group">
+										<div class="btn-group" role="group">
+											<button target="_blank" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicons glyphicons-message-full"></span>Lettre section&nbsp;<span class="caret"></span></button>
+											<ul class="dropdown-menu">
+												<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Président'})}}">À destination du Président</a></li>
+												<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Secrétaire'})}}">À destination du Secrétaire</a></li>
+												<li><a target="_blank" href="{{path('generate_lettre_section',{'idContact':contact.id,'target':'Trésorier'})}}">À destination du Trésorier</a></li>
+											</ul>
+										</div>
 									</div>
-								</div>
-								<a target="_blank" href="{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'accompagnement</a>
+									<a target="_blank" href="{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}" class="btn btn-primary btn-block"><span class="glyphicons glyphicons-message-full"></span>Lettre d'accompagnement</a>
+								{% endif %}
 							</div>
 						{% else %}
 							<div class="section-sub-content">

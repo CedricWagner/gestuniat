@@ -236,6 +236,7 @@ class ContactController extends Controller
 
       //    Dossier
       $dossier = new Dossier();
+      $dossier->setDateOuverture(new \DateTime());
       $dossierForm = $this->createForm(DossierType::class, $dossier);
       $dossierForm->handleRequest($request);
 
@@ -410,8 +411,18 @@ class ContactController extends Controller
 
       $arrContacts = array();
       foreach ($contacts as $contact) {
-        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getprenom(),'numAdh'=>$contact->getNumAdh(),'path'=>$this->generateUrl('view_contact',array('idContact'=>$contact->getId())));
+        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getPrenom(),'numAdh'=>$contact->getNumAdh(),'path'=>$this->generateUrl('view_contact',array('idContact'=>$contact->getId())));
       }  
+
+      if($request->request->get('joinSection')){
+        $sections = $this->getDoctrine()
+          ->getRepository('AppBundle:Section')
+          ->search($request->request->get('txtSearch'));
+
+        foreach ($sections as $section) {
+          $arrContacts[]=array('id'=>$section->getId(),'nom'=>'Section : '.$section->getNom(),'prenom'=>'','numAdh'=>$section->getId(),'path'=>$this->generateUrl('view_section',array('idSection'=>$section->getId())));
+        }
+      }
 
       return new Response(json_encode($arrContacts)); 
     }
@@ -763,6 +774,8 @@ class ContactController extends Controller
           ]);
         }
 
+        $contact->setDateEntree(new \DateTime());
+
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($contact);
         $em->flush();
@@ -770,7 +783,7 @@ class ContactController extends Controller
         $this->get('session')->getFlashBag()->add('success', 'Enregistrement effectué !');
 
         $history = $this->get('app.history');
-        $history->init($this->getUser(),['id'=>$idContact,'name'=>'Contact'],'INSERT')
+        $history->init($this->getUser(),['id'=>$contact->getId(),'name'=>'Contact'],'INSERT')
                 ->log(true); 
 
         return $this->redirectToRoute('view_contact',array('idContact'=>$contact->getId()));

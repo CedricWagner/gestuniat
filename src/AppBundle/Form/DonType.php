@@ -27,7 +27,7 @@ class DonType extends AbstractType
         $currentYear = new \DateTime(date('Y'));
 
         $builder
-            ->add('date',DateType::class,array('label' => 'Date','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('date',DateType::class,array('label' => 'Date','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('montant',NumberType::class,array('label' => 'Montant'))

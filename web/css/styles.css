@@ -3,6 +3,7 @@ body{
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: 300;
+    background-color: #f5f5f5;
 }
 
 body.loading *:hover, body.loading:hover{
@@ -21,6 +22,8 @@ body.loading *:hover, body.loading:hover{
 #main-content header{
     padding: 50px 20px;
     background-color: #32637c;
+    z-index: 1;
+    position: relative;
 }
 
 body.internal #main-content header{
@@ -210,6 +213,11 @@ body.internal #main-content header .header-button .nb-alertes{
     border:solid thin #ccc;
     background-color: white; 
     padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.container.fullwidth h1{
+    margin-top: 10px;
 }
 
 .filter-container{
@@ -231,6 +239,7 @@ body.has-left-column .left-column-container{
     display: block;
     float: left;
     width: 20%;
+    background-color: #f5f5f5;
 }
 
 body.has-filter .container-border, body.has-left-column .container-border{
@@ -351,6 +360,11 @@ h1{
 .dropdown-menu > li > a.no-padding-top {
     padding-top: 0px;
     padding-bottom: 0px;
+}
+
+.dropdown-menu{
+    right: 0;
+    left: inherit;
 }
 
 

@@ -50,8 +50,10 @@ class DocumentController extends Controller
 				'action'=> $this->generateUrl('save_document').'?idContact='.$contact->getId(),
 			));
 
+	  	$newDossier = new Dossier();
+	  	$newDossier->setDateOuverture(new \DateTime());
 
-	  	$newDossierForm = $this->createForm(DossierType::class, new Dossier() ,array(
+	  	$newDossierForm = $this->createForm(DossierType::class, $newDossier ,array(
 				'action'=> $this->generateUrl('save_dossier').'?idContact='.$contact->getId(),
 			));
 

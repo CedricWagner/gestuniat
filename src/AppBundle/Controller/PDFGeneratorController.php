@@ -651,7 +651,7 @@ class PDFGeneratorController extends Controller
 
         $pdf->SetY($pdf->GetPageHeight()-65);
         $pdf->SetLeftMargin(120);
-        $pdf->Signature('Date :','Le délégué :');
+        $pdf->Signature('Date :','Signature :');
 
         $response = new Response();
         $response->setContent($pdf->Output());

@@ -22,7 +22,7 @@ class AlerteCreationType extends AbstractType
         $builder
             ->add('label',TextType::class,array('label' => 'Titre'))
             ->add('texte',TextareaType::class,array('label' => 'Description'))
-            ->add('dateEcheance',DateTimeType::class,array('label' => 'Échéance'))
+            ->add('dateEcheance',DateTimeType::class,array('label' => 'Échéance','invalid_message'=>'La date saisie n\'est pas valide'))
         ;
     }
     

@@ -28,7 +28,7 @@ class DossierType extends AbstractType
 
         $builder
             ->add('nom',TextType::class,array('label' => 'Nom du dossier'))
-            ->add('dateOuverture',DateType::class,array('label' => 'Date d\'ouverture','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateOuverture',DateType::class,array('label' => 'Date d\'ouverture','years'=>range($currentYear->format('Y')+20,1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
         ;

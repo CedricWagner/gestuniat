@@ -346,7 +346,7 @@ function ajaxAutocompSearchContact(container){
 		$.ajax({
 		  method: "POST",
 		  url: '/search/contact',
-		  data: { txtSearch:$(container).find('.autocomp-value').val() }
+		  data: { txtSearch:$(container).find('.autocomp-value').val(), joinSection:true }
 		})
 		.done(function(response) {
 			response = JSON.parse(response);

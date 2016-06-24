@@ -33,7 +33,7 @@ class RemiseTimbreType extends AbstractType
                 'multiple' => false,
                 ))
             ->add('annee',null,array('label' => 'Année'))
-            ->add('dateRemise',DateType::class,array('label' => 'Date remise','years'=>range(2005,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateRemise',DateType::class,array('label' => 'Date remise','years'=>range($currentYear->format('Y'),2005),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('nbEmis',null,array('label' => 'Timbres émis'))

@@ -51,7 +51,7 @@ Gestuniat - Dossier {{ dossier.nom }}
 		</div>
 		<div class="col-md-8 col-sm-12">
 			<h4>Documents</h4>
-			{% include 'operateur/contacts/listing-documents.inc.html.twig' %}
+			{% include 'operateur/contacts/listing-documents.inc.html.twig' with {'addDossier':false} %}
 			<br />
 			<h4>Vignettes contributives</h4>
 			<table class="table table-striped table-hover selectable">

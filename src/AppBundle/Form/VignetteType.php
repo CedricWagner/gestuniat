@@ -32,7 +32,7 @@ class VignetteType extends AbstractType
         $idContact = $entity->getContact()->getId();
 
         $builder
-            ->add('dateDemande',DateType::class,array('label' => 'Date de la demande','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateDemande',DateType::class,array('label' => 'Date de la demande','years'=>range($currentYear->format('Y')+20,1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('dossier',EntityType::class,array(
@@ -46,7 +46,7 @@ class VignetteType extends AbstractType
                 ))
             ->add('montant',NumberType::class,array('label' => 'Montant demandé'))
             ->add('moyenPaiement',EntityType::class,array('label' => 'Moyen de paiement','class'=>'AppBundle:MoyenPaiement','placeholder'=>'Indéfini','choice_label'=>'label'))
-            ->add('datePaiement',DateType::class,array('label' => 'Date du paiement','years'=>range(1950,$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('datePaiement',DateType::class,array('label' => 'Date du paiement','years'=>range($currentYear->format('Y')+20,1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
         ;

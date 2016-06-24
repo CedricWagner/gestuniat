@@ -25,6 +25,23 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
         return $pag;
 	}
 
+	public function search($txtSearch){
+
+
+		$qb = $this->createQueryBuilder('section');
+		$qb
+			->select('section')
+			->where('section.isActive = true')
+			->andwhere('section.nom LIKE :nom OR section.id = :id')
+			->setParameters(array('nom'=>$txtSearch.'%','id'=>$txtSearch))
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+
+        $pag = new Paginator($qb);
+
+        return $pag;
+	}
+
 	public function findByFilter($filterValues,$page=1,$nb=20,$orderby='nom',$order='ASC'){
 		
 		$params = array();

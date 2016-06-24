@@ -27,7 +27,7 @@ class ContactDiplomeType extends AbstractType
 
         $builder
             ->add('diplome',EntityType::class,array('label' => 'Diplôme','class'=>'AppBundle:Diplome','choice_label'=>'label'))
-            ->add('dateObtention',DateType::class,array('label' => 'Date d\'obtention','years'=>range(1950,$currentYear->format('Y')+5),'placeholder' => array(
+            ->add('dateObtention',DateType::class,array('label' => 'Date d\'obtention','years'=>range($currentYear->format('Y')+5,1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
         ;

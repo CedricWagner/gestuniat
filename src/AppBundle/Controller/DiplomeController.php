@@ -152,6 +152,7 @@ class DiplomeController extends Controller
 	  	$newContactDiplome = new ContactDiplome();
 	  	$newContactDiplome->setDateObtention(new \DateTime());
 
+	  	$nextAg = false;
 	  	if($contact->getSection()){
 		  	$nextAg = $this->getDoctrine()
 		  		->getRepository('AppBundle:AssembleeGenerale')

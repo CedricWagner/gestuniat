@@ -26,15 +26,15 @@ class CotisationType extends AbstractType
         $currentYear = new \DateTime(date('Y'));
 
         $builder
-            ->add('dateCreation',DateType::class,array('label' => 'Date de demande','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('dateCreation',DateType::class,array('label' => 'Date de demande','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('isSemestriel',CheckboxType::class,array('label' => 'Semestriel'))
             ->add('montant',TextType::class,array('label' => 'Montant'))
-            ->add('datePaiement',DateType::class,array('label' => 'Date de paiement','years'=>range(1950,$currentYear->format('Y')),'placeholder' => array(
+            ->add('datePaiement',DateType::class,array('label' => 'Date de paiement','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
-            ->add('moyenPaiement',EntityType::class,array('label' => 'Moyen de paiement','class'=>'AppBundle:MoyenPaiement','choice_label'=>'label'))
+            ->add('moyenPaiement',EntityType::class,array('label' => 'Moyen de paiement','class'=>'AppBundle:MoyenPaiement','choice_label'=>'label','placeholder'=>'Aucun'))
             
         ;
     }

@@ -202,25 +202,25 @@ class SectionController extends Controller
             $etatTimbres['payes'] += $timbre->getNbPayes();
         }
 
-    return $this->render('operateur/sections/view-section.html.twig', [
-            'section' => $section,
-            'displayedYears' => $displayedYears,
-            'allYears' => $allYears,
-            'patrimoines' => $patrimoines,
-            'effectifs' => $effectifs,
-            'permanence' => $permanence,
-            'assembleeGenerale' => $assembleeGenerale,
-            'newPermanenceForm' => $newPermanenceForm->createView(),
-            'assembleeGeneraleForm' => $assembleeGeneraleForm->createView(),
-            'newAssembleeGeneraleForm' => $newAssembleeGeneraleForm->createView(),
-            'permanenceForm' => $permanenceForm->createView(),
-            'patrimoineForms' => $patrimoineForms,
-            'suiviForm' => $suiviForm->createView(),
-            'newPatrimoineForm' => $newPatrimoineForm->createView(),
-            'lstSuivis' => $lstSuivis,
-            'lstAllSuivis' => $lstAllSuivis,
-            'etatTimbres' => $etatTimbres,
-    ]);
+      return $this->render('operateur/sections/view-section.html.twig', [
+              'section' => $section,
+              'displayedYears' => $displayedYears,
+              'allYears' => $allYears,
+              'patrimoines' => $patrimoines,
+              'effectifs' => $effectifs,
+              'permanence' => $permanence,
+              'assembleeGenerale' => $assembleeGenerale,
+              'newPermanenceForm' => $newPermanenceForm->createView(),
+              'assembleeGeneraleForm' => $assembleeGeneraleForm->createView(),
+              'newAssembleeGeneraleForm' => $newAssembleeGeneraleForm->createView(),
+              'permanenceForm' => $permanenceForm->createView(),
+              'patrimoineForms' => $patrimoineForms,
+              'suiviForm' => $suiviForm->createView(),
+              'newPatrimoineForm' => $newPatrimoineForm->createView(),
+              'lstSuivis' => $lstSuivis,
+              'lstAllSuivis' => $lstAllSuivis,
+              'etatTimbres' => $etatTimbres,
+      ]);
 
     }
 
@@ -296,6 +296,7 @@ class SectionController extends Controller
         $datetime = new \DateTime();
 
         $section = new Section();
+        $section->setIsActive(true);
 
         $sectionForm = $this->createForm(SectionFullType::class, $section);
         $sectionForm->handleRequest($request);
@@ -323,8 +324,6 @@ class SectionController extends Controller
             'isInsert' => true,
             'sectionForm' => $sectionForm->createView(),
         ]);
-
-
     }
 
      /**

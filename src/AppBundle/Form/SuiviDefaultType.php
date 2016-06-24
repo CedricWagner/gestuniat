@@ -25,7 +25,7 @@ class SuiviDefaultType extends AbstractType
 
         $builder
             ->add('texte',TextareaType::class,array('label' => 'Description'))
-            ->add('dateEcheance',DateType::class,array('label' => 'Échéance','years'=>range($currentYear->format('Y'),$currentYear->format('Y')+20),'placeholder' => array(
+            ->add('dateEcheance',DateType::class,array('label' => 'Échéance','years'=>range($currentYear->format('Y')+5,$currentYear->format('Y')),'placeholder' => array(
                     'year' => 'année', 'month' => 'mois', 'day' => 'jour'
                 )))
             ->add('isOk',CheckboxType::class,array('label' => 'Terminé'))
