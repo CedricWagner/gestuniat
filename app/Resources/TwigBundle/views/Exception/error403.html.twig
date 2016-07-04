@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Vous n'avez pas le droit d'effectuer cette action</h1>
+
+    <p class="bg-danger" style="padding:20px;">
+    	L'action que vous souhaitez effectuer requiert des droits que vous ne possédez pas. <a href="{{ path('homepage') }}">Retourner à l'accueil</a>.
+    </p>
+{% endblock %}

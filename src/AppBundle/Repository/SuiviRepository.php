@@ -35,4 +35,16 @@ class SuiviRepository extends \Doctrine\ORM\EntityRepository
 
         return $qb->getQuery()->execute();
 	}
+
+	public function countHistory(){
+
+		$qb = $this->createQueryBuilder('suivi');
+		$qb
+			->select('COUNT(suivi.id)')
+			->where('suivi.isOk = :p_isOk ')
+			->andwhere('suivi.dateEcheance is not null')
+			->setParameters(array('p_isOk'=>true));
+
+        return $qb->getQuery()->getSingleScalarResult();
+	}
 }

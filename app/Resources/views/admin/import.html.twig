@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestuniat - Import{% endblock %}
+
+{% block additionnal_classes %}internal{% endblock %}
+
+
+{% block content %}
+	<h2>Import</h2>
+	
+	<div class="row">
+		<div class="span12">
+			<button onclick="launchImport()" class="btn btn-primary">Lancer l'import</button>&nbsp;
+
+			<p>Suppression&nbsp;<input type="checkbox" checked="checked" name="cbSuppr" id="cbSuppr"></p>
+			<p>Fichiers systèmes&nbsp;<input type="checkbox" checked="checked" name="cbSystem" id="cbSystem"></p>
+
+			<p>Continuer&nbsp;<input type="checkbox" checked="checked" name="cbKeepGoing" id="cbKeepGoing"></p>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="span12">
+			<ul id="results">
+
+			</ul>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block additionnal_javascripts %}
+    <script type="text/javascript">
+    	function launchImport(){
+    		report('Lancement...');
+
+			if($('#cbSuppr').is(':checked')){
+	    		stepDelete();
+			}
+			if($('#cbSystem').is(':checked')){
+    			stepSystem();
+			}
+
+    		stepFiles();
+
+    	}
+
+    	function report(txt){
+    		$("#results").append('<li>'+txt+'</li>');
+    	}
+
+    	function stepDelete(){
+    		$.ajax({
+			  method: "GET",
+			  url: '/import/export_20160628/delete'
+			})
+			.done(function(response) {
+				if(response=='pending'){
+					report('Supressions effectués');
+				}else{
+					report(response);
+				}
+			});
+    	}
+
+    	function stepSystem(){
+    		$.ajax({
+			  method: "GET",
+			  url: '/import/export_20160628/systemOnly'
+			})
+			.done(function(response) {
+				if(response=='pending'){
+					report('Fichiers systèmes importés');
+				}else{
+					report(response);
+				}
+			});
+    	}
+
+    	function stepFiles(){
+    		$.ajax({
+			  method: "GET",
+			  url: '/import/export_20160628/filesOnly'
+			})
+			.done(function(response) {
+				if(response=='pending'){
+					report('-> ');
+					if($('#cbKeepGoing').is(':checked')){
+						stepFiles();				
+					}else{
+						report('Stoppé par l\'utilisateur');
+					}
+				}else{
+					report(response);				
+				}
+			});
+    	}
+    </script>
+{% endblock %}

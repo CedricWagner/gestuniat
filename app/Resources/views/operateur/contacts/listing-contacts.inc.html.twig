@@ -1,32 +1,26 @@
-
 {% set nbPages = pagination.count/pagination.nb %}
 {% set nbPages = nbPages|round(0,'ceil') %}
 <div class="row">
 	<div class="col-md-12">
-		<nav class="pull-right">
-		  <ul class="pagination">
-		    <li>
-		      <a href="#" onclick="ajaxApplyFilter('#filter-contact','{{ path('render_filter') }}',{{ pagination.page - 1 }})" aria-label="Précédent">
-		        <span aria-hidden="true">&laquo;</span>
-		      </a>
-		    </li>
-		    {% for i in 1..nbPages %}
-		    	<li {{ i == pagination.page ? 'class="active"' : '' }} ><a href="#" onclick="ajaxApplyFilter('#filter-contact','{{ path('render_filter') }}',{{ i }})">{{ i }}</a></li>
-		    {% endfor %}
-		    <li>
-		      <a href="#" onclick="ajaxApplyFilter('#filter-contact','{{ path('render_filter') }}',{{ pagination.page + 1 }})" aria-label="Suivant">
-		        <span aria-hidden="true">&raquo;</span>
-		      </a>
-		    </li>
-		  </ul>
+		<nav class="pull-right" style="margin-top:20px">
+		  	<label>Éléments par page </label>
+			{% set nbs = [1,10,20,40,100] %}
+			<select id="sel-nb-per-page" class="select-default" onchange="ajaxApplyFilter('#filter-contact','{{ path('render_filter') }}')">
+				{% for nb in nbs %}
+					<option {{ pagination.nb == nb ? 'selected="selected"' : '' }} value="{{ nb }}">{{ nb }}</option>
+				{% endfor %}
+			</select>
 		</nav>
 
-		{% set nbs = [1,10,20,40,100] %}
-		<select id="sel-nb-per-page" style="margin:20px" class="select-default pull-right" onchange="ajaxApplyFilter('#filter-contact','{{ path('render_filter') }}')">
-			{% for nb in nbs %}
-				<option {{ pagination.nb == nb ? 'selected="selected"' : '' }} value="{{ nb }}">{{ nb }}</option>
-			{% endfor %}
-		</select>
+		<nav class="pull-right" style="margin-top:20px;margin-right:20px">
+		  <label>Page en cours </label>
+		  <select class="select-default" onchange="eval(this.value)">
+		    {% for i in 1..nbPages %}
+		    	<option {{ i == pagination.page ? 'selected="selected"' : '' }} value="ajaxApplyFilter('#filter-contact','{{ path('render_filter') }}',{{ i }})" >{{ i }}
+		    	</option>
+		    {% endfor %}
+		  </select>
+		</nav>
 	</div>
 </div>
 <div class="table-responsive">
@@ -41,7 +35,7 @@
 				'commune':{'label':'Commune','sort':true},
 				'section':{'label':'Section','sort':false},
 				'fonction':{'label':'Fonction','sort':false},
-				'dateEntree':{'label':'Date d\'adhésion','sort':true},
+				'dateEntree':{'label':'Date d\'entrée','sort':true},
 				} %}
 			<tr>
 				<th><input class="cb-select cb-select-all" type="checkbox" /></th>
@@ -85,6 +79,16 @@
 		$("[data-toggle='tooltip']").tooltip();
 	});
 
+	$('table.selectable .cb-select-all').change(function(){
+		$(this).parents('table.selectable').find('tbody tr .cb-select-line').prop('checked', $(this).prop("checked"));
+		$('table.selectable .cb-select-line').each(function(){
+			toggleTableLine($(this));
+		})
+	});
+
+	$('table.selectable .cb-select-line').change(function(){
+		toggleTableLine($(this));
+	});
 
 </script>
 

@@ -1,6 +1,6 @@
 function toggleAlertes(classes){
 	$('.listing-item').fadeOut();
-	for(let _class of classes){
+	for(_class of classes){
 		$('.listing-item'+_class).fadeIn();
 	}
 }
@@ -14,7 +14,7 @@ function ajax_start(){
 
 function ajax_stop(){
 	$ajaxs--;
-	console.log($ajaxs);
+
 	if($ajaxs == 0){
 		$('body').removeClass('loading');
 	}
@@ -55,6 +55,18 @@ function ajaxCheckSuivi(target,idSuivi,action){
 			$("#listing-"+target+"-"+idSuivi).addClass('done');
 			$("#listing-"+target+"-"+idSuivi+' .cb-check-alerte').attr('value','done');
 		}
+	});
+}
+
+function ajaxPaginateHistory(numPage){
+	ajax_start();
+	$.ajax({
+	  method: "GET",
+	  url: "/suivi-history/"+numPage
+	})
+	.done(function(response) {
+		ajax_stop();
+		$('#history-container').html(response);
 	});
 }
 

@@ -122,4 +122,11 @@ class ContactDiplome
     {
         return $this->diplome;
     }
+
+
+    public function populateFromCSV($line){
+        $this->dateObtention = $line[3] != "" ? new \DateTime($line[3]) : null;
+
+        return $this;
+    }
 }

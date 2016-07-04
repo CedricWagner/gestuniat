@@ -20,8 +20,6 @@ class SupportController extends Controller
 	* @Security("has_role('ROLE_SPECTATOR')")
  	*/
     public function displaySupportFormAction(){
-    	
-    	$this->get('app.security')->checkAccess('SUPPORT_USE');
 
     	$support = new Support();
 

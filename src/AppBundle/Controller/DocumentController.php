@@ -224,7 +224,7 @@ class DocumentController extends Controller
 	public function saveDocumentAction(Request $request)
 	{
 
-		$this->get('app.security')->checkAccess('DOSSIER_WRITE');
+		$this->get('app.security')->checkAccess('DOSSIER_ADD_DOC');
 
 		$contact = $this->getDoctrine()
 				->getRepository('AppBundle:Contact')

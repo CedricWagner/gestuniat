@@ -39,6 +39,50 @@ class SuiviController extends Controller
         ])->getContent()); 
   }
 
+
+  /**
+   * @Route("/suivi-history/{numPage}", name="show_history")
+   * @Security("has_role('ROLE_SPECTATOR')")
+   */
+  public function displayHistoryAction($numPage)
+  {
+
+    $nb = 20;
+
+    $lstSuivis = $this->getDoctrine()
+                       ->getRepository('AppBundle:Suivi')
+                       ->findBy(array('isOk'=>true),array(),$nb,$nb*($numPage-1));
+    $countSuivis = $this->getDoctrine()
+                        ->getRepository('AppBundle:Suivi')
+                        ->countHistory();
+
+    $lstAlertes = $this->getDoctrine()
+                       ->getRepository('AppBundle:Alerte')
+                       ->findBy(array('isOk'=>true),array(),$nb,$nb*($numPage-1));
+    $countAlertes = $this->getDoctrine()
+                        ->getRepository('AppBundle:Alerte')
+                        ->countHistory();
+
+    $count = $countSuivis + $countAlertes;
+
+    $nbPages = intval(ceil($count/$nb));
+
+    $lstHistory = array();
+
+    foreach ($lstAlertes as $_alerte) {
+        $lstHistory[$_alerte->getDateEcheance()->format('Y-m-d').'_'.$_alerte->getId()] = $_alerte;
+    }
+    foreach ($lstSuivis as $suivi) {
+        if ($suivi->getDateEcheance()) {
+            $lstHistory[$suivi->getDateEcheance()->format('Y-m-d').'_'.$suivi->getId()] = $suivi;
+        }
+    }
+
+     ksort($lstHistory);
+
+    return new Response($this->render('operateur/dashboard/listing-history.inc.html.twig',['lstHistory'=>$lstHistory,'nbPages'=>$nbPages,'currentPage'=>$numPage])->getContent());
+  }
+
   /**
    * @Route("/suivi/edit", name="edit_suivi")
    * @Security("has_role('ROLE_SPECTATOR')")

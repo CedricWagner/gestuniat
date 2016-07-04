@@ -50,7 +50,7 @@ class PDFGeneratorController extends Controller
         "Nom / Prénom"=>$contact->getNom().' '.$contact->getPrenom(),
         "Nom J. Fille"=>$contact->getNomJeuneFille(),
         "Né(e) le"=>$contact->getDateNaissance()?$contact->getDateNaissance()->format('d/m/Y'):'',
-        ""=>''
+        "À"=>''
       ),'MEMBRE');
       if($contact->getMembreConjoint()){
         $pdf->GreyJoyBlock(array(

@@ -54,7 +54,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 		</div>
 		<div class="col-md-8 col-sm-12">
 			<div class="row">
-				<div class="col-md-4 col-sm-12">
+				<div class="col-lg-4 col-sm-12">
 					<div class="section-block">
 						<div class="section-header">
 							<h3>Documents</h3>
@@ -62,8 +62,10 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						{% if app_security.hasAccess('DOSSIER_READ') %}
 							<div class="section-main-content">
 								{% if app_security.hasAccess('DOSSIER_WRITE') %}
-									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-dossier-0"><span class="glyphicons glyphicons-folder-open"></span>Créer un dossier</button>
-									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-document-0"><span class="glyphicons glyphicons-folder-open"></span>Créer un document</button>
+									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-dossier-0"><span class="glyphicons glyphicons-plus"></span>Dossier</button>
+								{% endif %}
+								{% if app_security.hasAccess('DOSSIER_ADD_DOC') %}
+									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-document-0"><span class="glyphicons glyphicons-plus"></span>Document</button>
 								{% endif %}
 								<a class="btn btn-default btn-block" href="{{ path('list_documents',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
 							</div>
@@ -76,7 +78,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						{% endif %}
 					</div>
 				</div>
-				<div class="col-md-4 col-sm-12">
+				<div class="col-lg-4 col-md-6 col-sm-12">
 					<div class="section-block">
 						<div class="section-header">
 							<h3>Vignettes contributives</h3>
@@ -84,7 +86,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						{% if app_security.hasAccess('VIGNETTE_READ') %}
 							<div class="section-main-content">
 								{% if app_security.hasAccess('VIGNETTE_WRITE') %}
-									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-vignette-0"><span class="glyphicons glyphicons-tag"></span>Ajouter une vignette</button>
+									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-vignette-0"><span class="glyphicons glyphicons-plus"></span>Vignette</button>
 								{% endif %}
 								<a class="btn btn-default btn-block" href="{{ path('list_vignettes',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
 								{% include 'modals/default.html.twig' with {'action':path('save_vignette',{'idContact':contact.id}), 'additionalClass':'label-large', 'form':vignetteForm,'entity':'vignette','object':false,'title':'Ajouter une vignette'} %}
@@ -97,7 +99,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 					</div>
 					
 				</div>
-				<div class="col-md-4 col-sm-12">
+				<div class="col-lg-4 col-md-6 col-sm-12">
 					<div class="section-block">
 						<div class="section-header">
 							<h3>Dons</h3>
@@ -105,7 +107,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						{% if app_security.hasAccess('DON_READ') %}
 							<div class="section-main-content">
 								{% if app_security.hasAccess('DON_WRITE') %}
-									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-don-0"><span class="glyphicons glyphicons-tag"></span>Ajouter un don</button>
+									<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-don-0"><span class="glyphicons glyphicons-plus"></span>Don</button>
 								{% endif %}
 								<a class="btn btn-default btn-block" href="{{ path('list_dons',{'idContact':contact.id}) }}"><span class="glyphicons glyphicons-eye-open"></span>Explorer</a>
 							</div>
@@ -124,7 +126,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-lg-6">
 					<div class="section-block">
 						<div class="section-header">
 							<h3>Prévoyances en cours</h3>
@@ -185,7 +187,7 @@ Gestuniat - Profil de {{ contact.prenom }} {{ contact.nom }}
 						{% endif %}
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-lg-6">
 					<div class="section-block">
 						<div class="section-header">
 							<h3>Kit Adhésion</h3>

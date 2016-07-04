@@ -216,4 +216,15 @@ class Pouvoir
     {
         return $this->contact;
     }
+
+    public function populateFromCSV($line){
+        $this->isFIVA = $line[3] == "True" ? true : false;
+        $this->affaire = utf8_encode($line[4]);
+        $this->destinataire = utf8_encode($line[5]);
+        $this->lieu = utf8_encode($line[6]);
+        $this->date = $line[7] == "" ? new \DateTime($line[7]) : null;
+
+        return $this;
+    }
+
 }

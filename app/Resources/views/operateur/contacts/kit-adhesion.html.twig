@@ -68,7 +68,7 @@
 	<div class="row">
 		{% if contact.section %}
 			<div class="col-md-3">
-				<div class="kit-container" onclick="window.open='{{path('generate_lettre_remerciement',{'idContact':contact.id})}}'">
+				<div class="kit-container" onclick="window.open('{{path('generate_lettre_remerciement',{'idContact':contact.id})}}')">
 					<div class="kit-label">
 						Lettre de remerciement
 					</div>

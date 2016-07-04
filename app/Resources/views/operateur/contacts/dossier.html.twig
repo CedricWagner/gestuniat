@@ -37,12 +37,12 @@ Gestuniat - Dossier {{ dossier.nom }}
 						{% endif %}
 						<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-dossier')">Imprimer la sélection</a></small>
 					</div>
-					<div class="section-sub-content">
+					<div class="section-sub-content" id="suivis-dossier">
 						{% for suivi in lstSuivis %}
 							{% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}
 						{% endfor %}
 					</div>
-					<div class="section-main-content" id="suivis-dossier">
+					<div class="section-main-content" id="list-all-suivis-dossier">
 						<button class="btn btn-default btn-block" data-toggle="modal" data-target="#liste-all-suivi">Voir tous les suivis >></button>
 						{% include 'modals/liste-suivis.html.twig' %}
 					</div>

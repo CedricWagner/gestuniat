@@ -253,4 +253,19 @@ class RemiseTimbre
     {
         return $this->section;
     }
+
+    public function populateFromCSV($line){
+        $this->annee = $line[2];
+        if ($line[3]=="True") {
+            $this->isAnnuel = true;
+        }else{
+            $this->isAnnuel = false;
+        }
+        $this->nbEmis = $line[4];
+        $this->nbRemis = $line[5];
+        $this->nbPayes = $line[6];
+        $this->dateRemise = new \DateTime($line[7]);
+        
+        return $this;
+    }
 }

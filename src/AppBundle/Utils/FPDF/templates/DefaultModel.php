@@ -212,8 +212,16 @@ class DefaultModel extends FPDF {
         $this->Cell($width-10,10,'01/07/'.$params['annee'],null,1,null,true);
         $this->SetFont('','',9);
         $this->Cell($width,10,utf8_decode('  Droit d\'entrée : '.$params['droit_entree'].' euros'),null,1,null,true);
-        $this->Cell($width,10,utf8_decode('  Cotisation annuelle : '.$params['cotisation_annuelle'].' euros'),null,1,null,true);
-        $this->Cell($width,10,utf8_decode('  Cotisation semestrielle : '.$params['cotisation_semestrielle'].' euros'),null,1,null,true);
+        $this->Cell(10,10,' ',null,0,null,true);
+        $this->SetX(15);
+        $this->AddCheckBox();
+        $this->SetX(20);
+        $this->Cell($width-8,10,utf8_decode('  Cotisation annuelle : '.$params['cotisation_annuelle'].' euros'),null,1,null,true);
+        $this->Cell(10,10,' ',null,0,null,true);
+        $this->SetX(15);
+        $this->AddCheckBox();
+        $this->SetX(20);
+        $this->Cell($width-8,10,utf8_decode('  Cotisation semestrielle : '.$params['cotisation_semestrielle'].' euros'),null,1,null,true);
         $this->Cell($width,10,utf8_decode('  Ouverture d\'un dossier : '.$params['ouverture_dossier'].' euros'),null,1,null,true);
         $this->SetFont('','B',10);
         $this->Cell($width,14,utf8_decode('  TOTAL'),null,null,null,true);

@@ -52,7 +52,7 @@ class PrevoyanceController extends Controller
     	// Obseque
     	$obseques = $this->getDoctrine()
     		->getRepository('AppBundle:ContratPrevObs')
-    		->findAll();
+    		->findBy(array('contact'=>$contact));
 
 	    if($contact->getMembreConjoint()){
 	    	$obsequesConjoint = $this->getDoctrine()

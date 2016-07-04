@@ -39,6 +39,7 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 			->select('contact')
 			->where('contact.isActif = true');
 		$isj=0;
+		$anciennete=array();
 		foreach ($filterValues as $fv) {
 			if($fv->getValeur()!=''&&$fv->getValeur()!='0'){
 				switch ($fv->getChamp()->getLabel()) {
@@ -47,12 +48,42 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 							$params['p_commune'] = $fv->getValeur();
 						break;
 					case 'dateCreation':
-						$qb->andwhere('contact.dateEntree = :p_date_entree');
-						$params['p_date_entree'] = $fv->getValeur();
+						switch ($fv->getValeur()) {
+							case 'TODAY':
+								$qb->andwhere('contact.dateEntree = :p_date_entree');
+								$params['p_date_entree'] = new \DateTime();
+								break;
+							case 'THIS_WEEK':
+								$qb->andwhere('contact.dateEntree >= :p_date_entree');
+								$params['p_date_entree'] = new \DateTime('-1 week');
+								break;
+							case 'THIS_MONTH':
+								$qb->andwhere('contact.dateEntree >= :p_date_entree');
+								$params['p_date_entree'] = new \DateTime('-1 month');
+								break;
+							case 'LAST_6_MONTHS':
+								$qb->andwhere('contact.dateEntree >= :p_date_entree');
+								$params['p_date_entree'] = new \DateTime('-6 months');
+								break;
+							case 'LAST_YEAR':
+								$qb->andwhere('contact.dateEntree >= :p_date_entree');
+								$params['p_date_entree'] = new \DateTime('-1 year');
+								break;
+							case 'MORE_THAN_A_YEAR':
+								$qb->andwhere('contact.dateEntree < :p_date_entree');
+								$params['p_date_entree'] = new \DateTime('-1 year');
+								break;
+								
+							default:
+								# code...
+								break;
+						}
 						break;
-					case 'dateAnciennete':
-						$qb->andwhere('contact.dateAdhesion >= :p_date_adhesion');
-						$params['p_date_adhesion'] = $fv->getValeur();
+					case 'dateAncienneteMonth':
+						$anciennete['month'] = $fv->getValeur();
+						break;
+					case 'dateAncienneteYear':
+						$anciennete['year'] = $fv->getValeur();
 						break;
 					case 'cbStatut':
 						if($isj==0){
@@ -140,6 +171,24 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 				}
 			}
 		}
+
+		if(isset($anciennete['month'])||isset($anciennete['year'])){
+			if(isset($anciennete['month'])){
+				$month = $anciennete['month'];
+			}else{
+				$month = "01";
+			}
+			
+			if(isset($anciennete['year'])){
+				$year = $anciennete['year'];
+			}else{
+				$year = "1900";
+			}
+
+			$qb->andwhere('contact.dateAdhesion <= :p_date_adhesion');
+			$params['p_date_adhesion'] = sprintf("%04d-%02d-%02d", $year, $month, "01");
+		}
+
 		$qb ->setParameters($params)
             ->orderby('contact.'.$orderby,$order)
             ->setFirstResult(($nb*$page)-$nb)
@@ -152,15 +201,25 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 
 	public function search($txtSearch, $exclude=false){
 
+		$strs = explode(' ', $txtSearch);
+
+		$params = array('nom'=>$txtSearch.'%','prenom'=>$txtSearch.'%','numAdh'=>$txtSearch);
 
 		$qb = $this->createQueryBuilder('contact');
 		$qb
 			->select('contact')
 			->where('contact.isActif = true')
-			->andwhere('contact.nom LIKE :nom OR contact.prenom LIKE :prenom OR contact.numAdh = :numAdh')
-			->setParameters(array('nom'=>$txtSearch.'%','prenom'=>$txtSearch.'%','numAdh'=>$txtSearch))
+			->andwhere("contact.nom LIKE :nom OR contact.prenom LIKE :prenom OR contact.numAdh = :numAdh")
             ->setFirstResult(0)
             ->setMaxResults(20);
+			if(sizeof($strs)>1){
+				$qb ->orwhere("contact.nom LIKE :str1 AND contact.prenom LIKE :str2")
+					->orwhere("contact.prenom LIKE :str1 AND contact.nom LIKE :str2");
+				$params['str1'] = $strs[0].'%';
+				$params['str2'] = $strs[1].'%';
+			}
+			$qb->setParameters($params);
+			
 
         $pag = new Paginator($qb);
 

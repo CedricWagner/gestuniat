@@ -430,4 +430,20 @@ class Organisme
     {
         return $this->civilite;
     }
+
+    public function populateFromCSV($line){
+        $this->nomTitulaire = utf8_encode($line[3]);
+        $this->nom = utf8_encode($line[4]);
+        $this->fonctionTitulaire = utf8_encode($line[5]);
+        $this->adresse = utf8_encode($line[6]);
+        $this->adresseComp = utf8_encode($line[7]);
+        $this->cp = utf8_encode($line[8]);
+        $this->ville = utf8_encode($line[9]);
+        $this->pays = utf8_encode($line[10]);
+        $this->bp = utf8_encode($line[11]);
+        $this->telephone = utf8_encode($line[12]);
+
+
+        return $this;
+    }
 }

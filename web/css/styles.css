@@ -22,8 +22,6 @@ body.loading *:hover, body.loading:hover{
 #main-content header{
     padding: 50px 20px;
     background-color: #32637c;
-    z-index: 1;
-    position: relative;
 }
 
 body.internal #main-content header{
@@ -77,7 +75,8 @@ body.internal #main-content header .header-button .nb-alertes{
 }
 
 #global-search-zone{
-    padding: 20px;
+    padding: 10px;
+    height: initial;
 }
 
 #global-search-container{
@@ -476,8 +475,10 @@ form input, form textarea, form select{
 
 .autocomp-result ul{
     width: 100%;
-
+    position: relative;
+    z-index: 10;
 }
+
 
 .autocomp-result ul .active a{
     color: white;
@@ -728,11 +729,11 @@ table.table .sortable.sorted.DESC::after{
     background-color: #468847;
 }
 
-.label.statut-2{
+.label.statut-1{
     background-color: #468847;
 }
 
-.label.statut-3{
+.label.statut-8{
     background-color: #f0ad4e;
 }
 

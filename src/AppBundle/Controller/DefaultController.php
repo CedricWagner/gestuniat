@@ -98,7 +98,7 @@ class DefaultController extends Controller
 
             $suivis = $this->getDoctrine()
             ->getRepository('AppBundle:Suivi')
-            ->findBy(array(),array('dateEcheance'=>'ASC'));
+            ->findBy(array('isOk'=>false),array('dateEcheance'=>'ASC'));
 
             $lstTerms = array();
 
@@ -143,9 +143,6 @@ class DefaultController extends Controller
                     }
                 }
 
-                if($term->getIsOk()){
-                    $lstHistory[] = $term;
-                }
             }
 
             $this->updateAlertesInSession();
@@ -221,7 +218,7 @@ class DefaultController extends Controller
             return $this->render('operateur/dashboard.html.twig', [
                 'alerteForm' => $alerteForm->createView(),
                 'lstAlertes' => $lstAlertes,
-                'lstHistory' => $lstHistory,
+                // 'lstHistory' => $lstHistory,
                 'lateSections' => $lateSections,
                 'unpaidVignettes' => sizeof($vignettes),
                 'nbUnpaidCotisations' => $nbUnpaidCotisations,

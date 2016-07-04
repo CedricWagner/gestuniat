@@ -217,4 +217,14 @@ class Cotisation
     {
         return $this->moyenPaiement;
     }
+
+    
+    public function populateFromCSV($line){
+        $this->dateCreation = $line[5] != "" ? new \DateTime($line[5]) : new \DateTime($line[5]);
+        $this->montant = $line[2];
+        $this->datePaiement = $line[3] != "" ? new \DateTime($line[3]) : null;
+        $this->isSemestriel = false;
+
+        return $this;
+    }
 }

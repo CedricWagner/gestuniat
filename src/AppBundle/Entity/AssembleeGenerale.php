@@ -216,4 +216,14 @@ class AssembleeGenerale
     {
         return $this->section;
     }
+
+    public function populateFromCSV($line){
+        $this->date = new \DateTime($line[3]);
+        $this->orateur = utf8_encode($line[4]);
+        $this->lieu = utf8_encode($line[6]);
+        $this->heure = utf8_encode($line[13]);
+        $this->nbParticipants = utf8_encode($line[12]);
+
+        return $this;
+    }
 }

@@ -247,4 +247,13 @@ class Don
     {
         return $this->moyenPaiement;
     }
+
+    public function populateFromCSV($line){
+        $this->date = new \DateTime($line[3]);
+        $this->montant = intval($line[4]);
+        $this->intermediaire = utf8_encode($line[5]);
+        $this->isAnonyme = $line[6] == "True" ? true : false;
+
+        return $this;
+    }
 }

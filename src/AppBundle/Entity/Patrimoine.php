@@ -172,4 +172,13 @@ class Patrimoine
     {
         return $this->annee;
     }
+
+
+    public function populateFromCSV($line){
+        $this->annee = $line[2];
+        $this->valeur = $line[3];
+        $this->interets = $line[4];
+        
+        return $this;
+    }
 }

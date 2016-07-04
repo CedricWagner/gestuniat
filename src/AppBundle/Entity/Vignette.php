@@ -246,4 +246,12 @@ class Vignette
     {
         return $this->contact;
     }
+
+    public function populateFromCSV($line){
+        $this->dateDemande = $line[2] != "" ? new \DateTime($line[2]) : null;
+        $this->montant = $line[3];
+        $this->datePaiement = $line[5] != "" ? new \DateTime($line[5]) : null;
+
+        return $this;
+    }
 }

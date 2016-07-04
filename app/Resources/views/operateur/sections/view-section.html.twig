@@ -25,7 +25,7 @@ Gestuniat - Section {{ section.nom }}
 				{% if app_security.hasAccess('SUIVI_READ') %}
 					<div class="section-main-content">
 						{% if app_security.hasAccess('SUIVI_WRITE') %}
-							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Rédiger un nouveau commentaire</button>
+							<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#add-suivi-default"><span class="glyphicons glyphicons-pen" aria-hidden="true"></span>Nouveau commentaire</button>
 							{% include 'modals/ajouter-suivi-default.html.twig' %}
 						{% endif %}
 						<small class="label-print-all"><a href="#" onclick="printSuivisAction('#suivis-section')">Imprimer la sélection</a></small>
@@ -45,31 +45,30 @@ Gestuniat - Section {{ section.nom }}
 					</div>
 				{% endif %}
 			</div>
+			<div class="section-separator"></div>
+			<div class="section-block">
+				<div class="section-header">
+					<h3>Gestion des timbres</h3>
+				</div>
+				<div class="section-main-content">
+					{% if app_security.hasAccess('TIMBRE_READ') %}
+						<p>Pour l'année {{ "now"|date("Y") - 1 }} </p>
+						<div class="btn-group-vertical" role="group">
+							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Timbres<span class="badge">{{ etatTimbres.payes }}</span></button>
+							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Adhérents<span class="badge">{{ etatTimbres.emis }}</span></button>
+							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Reste à régler<span class="badge red">{{ etatTimbres.remis }}</span></button>
+						</div>
+						<br />
+						<a href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}" class="btn btn-default btn-block" >Gestion des timbres >></a>
+					{% else %}
+							<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
+					{% endif %}
+				</div>
+			</div>
 		</div>
 		<div class="col-md-8 col-sm-12">
 			<div class="row">
-				<div class="col-md-4">
-					<div class="section-block">
-						<div class="section-header">
-							<h3>Gestion des timbres</h3>
-						</div>
-						<div class="section-main-content">
-							{% if app_security.hasAccess('TIMBRE_READ') %}
-								<p>Pour l'année {{ "now"|date("Y") - 1 }} </p>
-								<div class="btn-group-vertical" role="group">
-									<button style="cursor: default;" class="btn btn-default btn-block" role="button">Timbres<span class="badge">{{ etatTimbres.payes }}</span></button>
-									<button style="cursor: default;" class="btn btn-default btn-block" role="button">Adhérents<span class="badge">{{ etatTimbres.emis }}</span></button>
-									<button style="cursor: default;" class="btn btn-default btn-block" role="button">Reste à régler<span class="badge red">{{ etatTimbres.remis }}</span></button>
-								</div>
-								<br />
-								<a href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}" class="btn btn-default btn-block" >Gestion des timbres >></a>
-							{% else %}
-									<div class="alert alert-warning">Vous n'avez pas les droits requis pour voir cette section</div>
-							{% endif %}
-						</div>
-					</div>
-				</div>
-				<div class="col-md-8">
+				<div class="col-md-12">
 					<div class="section-block block-text">
 						<div class="section-header">
 							<h3>Note</h3>
@@ -87,7 +86,7 @@ Gestuniat - Section {{ section.nom }}
 			</div>
 			<div class="row">
 				{% if app_security.hasAccess('PERMANENCE_READ') %}
-					<div class="col-md-6">
+					<div class="col-lg-6">
 						<div class="section-block">
 							<div class="section-header">
 								<h3>Permanences</h3>
@@ -96,12 +95,12 @@ Gestuniat - Section {{ section.nom }}
 								<div class="row">
 									<div class="col-md-6">
 										{% if app_security.hasAccess('PERMANENCE_WRITE') %}
-											<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-permanence-0"><span class="glyphicons glyphicons-table"></span>Ajouter perm.</button>
+											<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-permanence-0"><span class="glyphicons glyphicons-table"></span>Ajouter</button>
 											{% include 'modals/default.html.twig' with {'form':newPermanenceForm,'entity':'permanence','object':false,'title':'Ajouter une nouvelle permanence','action':path('save_permanence',{'idSection':section.id})} %}	
 										{% endif %}
 									</div>
 									<div class="col-md-6">
-										<a href="{{ path('list_permanences',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste perm.</a>
+										<a href="{{ path('list_permanences',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Liste</a>
 									</div>
 								</div>
 							</div>
@@ -147,7 +146,7 @@ Gestuniat - Section {{ section.nom }}
 					</div>
 				{% endif %}
 				{% if app_security.hasAccess('AG_READ') %}
-					<div class="col-md-6">
+					<div class="col-lg-6">
 						<div class="section-block">
 							<div class="section-header">
 								<h3>Assemblées générales</h3>
@@ -156,12 +155,12 @@ Gestuniat - Section {{ section.nom }}
 								<div class="row">
 									<div class="col-md-6">
 										{% if app_security.hasAccess('AG_WRITE') %}
-											<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-assembleeGenerale-0"><span class="glyphicons glyphicons-table"></span>Ajouter AG</button>
+											<button class="btn btn-primary btn-block" role="button" data-toggle="modal" data-target="#add-assembleeGenerale-0"><span class="glyphicons glyphicons-table"></span>Ajouter</button>
 											{% include 'modals/default.html.twig' with {'form':newAssembleeGeneraleForm,'entity':'assembleeGenerale','object':false,'title':'Ajouter une nouvelle assemblée générale','action':path('save_assembleeGenerale',{'idSection':section.id})} %}	
 										{% endif %}
 									</div>
 									<div class="col-md-6">
-										<a href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Voir liste AG</a>
+										<a href="{{ path('list_assembleeGenerales',{'idSection':section.id}) }}" class="btn btn-primary btn-block" role="button"><span class="glyphicons glyphicons-notes-2"></span>Liste</a>
 									</div>
 								</div>
 							</div>

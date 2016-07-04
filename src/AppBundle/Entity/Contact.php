@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Debug\Exception\ContextErrorException as ContextErrorException;
 
 /**
  * Contact
@@ -1482,5 +1483,77 @@ class Contact
                 break;
         }
         return $txt;
+    }
+
+    public function populateFromCSV($line){
+        try {
+            $this->isDossierPaye = false;
+            $this->nom = '';
+            $this->prenom = '';
+            $this->isCA = false;
+            $this->isOffreDecouverte = false; 
+            $this->numAdh = $line[0];
+            if ($line[2] == "True") {
+                $this->isActif = false;
+            }else{
+                $this->isActif = true;
+            }
+            if ($line[3] != '') {
+                $this->dateSortie = new \DateTime($line[3]);
+            }
+            if ($line[4] != '') {
+                $this->dateEntree = new \DateTime($line[4]);
+            }
+            $this->isRentier = $line[5] == "True" ? true : false;
+            $this->nbRentiers = $line[6];
+            $this->bp = utf8_encode($line[7]);
+            $this->isCourrier = $line[8] == "True" ? true : false;
+            $this->isBI = $line[9] == "True" ? true : false;
+            $this->isEnvoiIndiv = $line[11] == "True" ? true : false;
+            $this->adresse = utf8_encode($line[12]);
+            $this->adresseComp = utf8_encode($line[13]);
+            $this->cp = $line[14];
+            $this->commune = utf8_encode($line[15]);
+            $this->pays = utf8_encode($line[16]);
+            $this->telFixe = $line[17];
+            $this->telPort = $line[18];
+            $this->encaisseur = utf8_encode($line[19]);
+            $this->mail = utf8_encode($line[20]);
+            $this->dateSortie = $line[22] != '' ? new \DateTime($line[22]) : null;
+            $this->observation = utf8_encode($line[23]);
+            $this->isDossierPaye = $line[24] == "True" ? true : false;
+
+        } catch (ContextErrorException $e) {
+            
+            return $this;            
+        }
+        return $this;
+    }
+
+    public function populateMembreFromCSV($line){
+        $this->nom = '';
+        $this->prenom = '';
+        $this->fonctionRepresentation = utf8_encode($line[6]);
+        $this->dateCIF = $line[7] != '' ? new \DateTime($line[7]) : null;
+        $this->isCA = $line[8] == "True" ? true : false;
+        $nomPrenom = explode(' ', $line[11]);
+        if (sizeof($nomPrenom) > 0) {
+            $this->nom = utf8_encode($nomPrenom[0]); 
+        }
+        if (sizeof($nomPrenom) > 1) {
+            $this->prenom = utf8_encode($nomPrenom[1]); 
+        }
+        if (sizeof($nomPrenom) > 2) {
+            $this->prenom = $this->prenom.' '.utf8_encode($nomPrenom[2]); 
+        }
+        $this->nomJeuneFille = utf8_encode($line[12]);
+        $this->dateNaissance = $line[13] ? new \DateTime($line[13]) : null;
+        $this->lieuNaissance = utf8_encode($line[14]);
+        $this->numSecu = $line[16];
+        $this->mentionDeces = $line[19];
+        $this->dateDeces = $line[20] ? new \DateTime($line[20]) : null;
+
+
+        return $this;
     }
 }

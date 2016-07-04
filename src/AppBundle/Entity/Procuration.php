@@ -402,4 +402,19 @@ class Procuration
     {
         return $this->isDemandeRens;
     }
+
+    public function populateFromCSV($line){
+        $this->lieu = utf8_encode($line[3]);
+        $this->date = $line[4] != "" ? new \DateTime($line[4]) : null;
+        $this->isRecevoirCorres = $line[5] == "True" ? true : false;
+        $this->isCourrierRep = $line[6] == "True" ? true : false;
+        $this->isCompletQues = $line[7] == "True" ? true : false;
+        $this->isDemandeRens = $line[8] == "True" ? true : false;
+        $this->isRelContest = $line[13] == "True" ? true : false;
+        $this->isRelPaiement = $line[14] == "True" ? true : false;
+        $this->isRelChangement = $line[15] == "True" ? true : false;
+
+        return $this;
+    }
+
 }

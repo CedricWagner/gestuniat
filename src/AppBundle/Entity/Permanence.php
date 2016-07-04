@@ -279,4 +279,15 @@ class Permanence
     {
         return $this->dateMAJ;
     }
+
+
+    public function populateFromCSV($line){
+        $this->label = utf8_encode($line[3]);
+        $this->horaire = utf8_encode($line[4]);
+        $this->lieu = utf8_encode($line[5]);
+        $this->militants = utf8_encode($line[7].' '.$line[8].' '.$line[9]);
+        $this->dateMAJ = new \DateTime($line[11]);
+        
+        return $this;
+    }
 }

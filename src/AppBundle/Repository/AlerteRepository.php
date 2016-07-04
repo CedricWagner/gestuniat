@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class AlerteRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function countHistory(){
+
+		$qb = $this->createQueryBuilder('alerte');
+		$qb
+			->select('COUNT(alerte.id)')
+			->where('alerte.isOk = :p_isOk ')
+			->setParameters(array('p_isOk'=>true));
+
+        return $qb->getQuery()->getSingleScalarResult();
+	}
 }

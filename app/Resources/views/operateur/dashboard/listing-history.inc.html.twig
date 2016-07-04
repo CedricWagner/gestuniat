@@ -1,0 +1,21 @@
+<div class="listing-container">
+	<nav>
+		<label>Page en cours </label>
+		<select class="select-default" onchange="ajaxPaginateHistory(this.value)">
+			{% for page in 1..nbPages %}
+				<option value="{{page}}" {{ currentPage == page ? 'selected="selected"' : '' }}>{{page}}</option>
+			{% endfor %}
+		</select>
+	</nav>
+
+	{% if lstHistory %}
+		{% for history in lstHistory %}
+			{% if history.type == 'alerte' %}
+	        	{% include 'operateur/dashboard/alerte-item.inc.html.twig' with {'alerte': history} %}
+			{% endif %}
+			{% if history.type == 'suivi' %}
+	        	{% include 'operateur/dashboard/suivi-item.inc.html.twig' with {'suivi': history} %}
+			{% endif %}
+	    {% endfor %}
+	{% endif %}
+</div>

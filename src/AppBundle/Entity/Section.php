@@ -430,6 +430,26 @@ class Section
     }
 
     public static function getIdSectionDivers(){
-        return 1;
+        return 50;
     }
+
+    public function populateFromCSV($line){
+        $id = intval($line[0]);
+        if(is_integer($id)&&$id!=0){
+            $this->nom = utf8_encode($line[1]);
+            $this->subventions = utf8_encode($line[6]);
+            $this->dateDernierListing = new \DateTime($line[8]);
+            $this->destDernierListing = utf8_encode($line[9]);
+            $this->infosComp = utf8_encode($line[10]);
+            $this->numBulletin = utf8_encode($line[12]);
+            $this->dateRemiseBulletin = new \DateTime($line[13]);
+            $this->dateCreation = new \DateTime($line[37]);
+            $this->dateMaj = new \DateTime($line[38]);
+            $this->isActive = true;
+        }
+
+        return $this;
+    }
+
+
 }

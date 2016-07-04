@@ -411,7 +411,7 @@ class ContactController extends Controller
 
       $arrContacts = array();
       foreach ($contacts as $contact) {
-        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getPrenom(),'numAdh'=>$contact->getNumAdh(),'path'=>$this->generateUrl('view_contact',array('idContact'=>$contact->getId())));
+        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getPrenom(),'numAdh'=>$contact->getSection()->getId(),'path'=>$this->generateUrl('view_contact',array('idContact'=>$contact->getId())));
       }  
 
       if($request->request->get('joinSection')){
@@ -606,7 +606,7 @@ class ContactController extends Controller
         ->getRepository('AppBundle:Contact')
         ->find($idContact);
 
-        $items = array(
+                $items = array(
             1 => array( 'title'=>"Adhésion à la mutuelle",
                         'fullTitle'=>"Objet : Adhésion à la mutuelle <br />        - Frais médicaux<br />        - Options",
                         'values'=>array(
@@ -621,7 +621,107 @@ class ContactController extends Controller
                         'values'=>array(
                                           "Copie avis de non-imposition 2___",
                                           "Copie carte d'identité",
+                                          "Copie de la notification d'admission à Pôle-Emploi",
+                                          "Copie du livret militaire",
+                                          "Copie du livret de famille",
+                                          "Justificatif de ressources pour la période du __________ au __________",
+                                          "Copie des avis de paiement Pôle-Emploi depuis le début de l'année",
+                                          "Autres :",
                           )),
+             3 => array( 'title'=>"FIVA",
+                        'fullTitle'=>"Objet : FIVA",
+                        'values'=>array(
+                                          "Décision CPAM de reconnaissance de la maladie professionnelle",
+                                          "Copie notification de rente CPAM ou CAAA + rapport médical joint",
+                                          "Copie carte d'indentité",
+                                          "Bilan pneumologique ou compte rendu de la dernière EFR (Exploration Fonctionnelle Respiratoire)",
+                                          "Compte rendu du dernier scanner ou radio des poumons",
+                                          "Certificat médical du médecin mettant en évidence la maladie amiante",
+                                          "Certificats de travail concernant les périodes d'exposition à l'amiante",
+                                          "RIB",
+                                          "Acte de décès",
+                                          "Copie du livret de famille",
+                                          "Pouvoir",
+                                          "Autres",
+                          )),
+             4 => array( 'title'=>"Carte d'invalidité",
+                        'fullTitle'=>"Objet : Carte d'invalidité Macaron Européen <br />
+                        AAH (Allocation aux Adultes Handicapés) / TH (Travailleur Handicapé)",
+                        'values'=>array(
+                                          "Formulaire de demande complété et signé",
+                                          "Formulaire médical dûment rempli par le médecin traitant et concluant à : un handicap supérieur à 80% (avec station debout pénible s'il y a lieu) / la difficulté à se déplacer (le cas échéant)",
+                                          "1 photo d'identité pour la carte d'invalidité",
+                                          "1 photo d'identité pour le macaron GIC",
+                                          "Copie de la carte d'invalidité et du macaron échus",
+                                          "Copie de la carte d'identité",
+                                          "Copie du justificatif de domicile (facture gaz, électricité, téléphone...)",
+                                          "1 CV",
+                                          "Copie du contrat de travail",
+                                          "Copie de la notification RTH ou AAH échue",
+                          )),
+             5 => array( 'title'=>"Pension CRAV et R.C",
+                        'fullTitle'=>"Objet : Pension CRAV et R.C",
+                        'values'=>array(
+                                          "Copie de l'avis de non-imposition 2____",
+                                          "Copie de la carte d'identité",
+                                          "Copie de la notification de pension d'invalidité",
+                                          "Copie de la notification d'admission aux ASSEDIC",
+                                          "Copie du livret militaire",
+                                          "Copie du livret de famille",
+                                          "RIB",
+                                          "Procuration",
+                                          "Relevé de carrière",
+                                          "Autres",
+                          )),
+             6 => array( 'title'=>"Pension d'invalidité",
+                        'fullTitle'=>"Objet : Pension d'invalidité",
+                        'values'=>array(
+                                          "Formulaire complété",
+                                          "Copie du livret de famille",
+                                          "Attestation de l'employeur",
+                                          "RIB",
+                                          "Copie de l'avis d'imposition de l'année ______",
+                                          "Copie de la carte d'identité",
+                                          "Certificat médical",
+                          )),
+             7 => array( 'title'=>"Pension réversion",
+                        'fullTitle'=>"Objet : Pension réversion",
+                        'values'=>array(
+                                          "Acte de décès",
+                                          "Copie du livret de famille",
+                                          "Extrait de l'acte de naissance",
+                                          "RIB au nom de la veuve",
+                                          "Revenu des 3 derniers mois du survivant, copie fiche de paie, attestation ASSEDIC, extraits bancaires",
+                                          "Copie de l'avis de non imposition",
+                                          "Attestations fiscales de pension personnelle + RC",
+                                          "Copie du livret militaire",
+                                          "Copie de la carte d'identité",
+                          )),
+             7 => array( 'title'=>"Adhésion à la mutuelle : frais médicaux",
+                        'fullTitle'=>"Objet : Adhésion à la mutuelle : frais médicaux",
+                        'values'=>array(
+                                          "Formulaire complété",
+                                          "Copie de l'attestation vitale de chacun des souscripteurs",
+                                          "RIB",
+                                          "Certificat de radiation de la précédente mutuelle",
+                          )),
+             8 => array( 'title'=>"Adhésion à la mutuelle : options",
+                        'fullTitle'=>"Objet : Adhésion à la mutuelle : frais médicaux",
+                        'values'=>array(
+                                          "Formulaire complété",
+                                          "Copie de l'attestation vitale de chacun des souscripteurs",
+                                          "RIB",
+                                          "Certificat de radiation de la précédente mutuelle",
+                          )),
+             9 => array( 'title'=>"Prévoyance Obsèques UNIAT-IRIAL 
+                                    Versement capital décès",
+                        'fullTitle'=>"Objet : Prévoyance Obsèques UNIAT-IRIAL",
+                        'values'=>array(
+                                          "Acte de décès",
+                                          "Facture acquittée des Pompes Funèbres",
+                                          "Certificat d'hérédité, à se procurer en Mairie",
+                                          "Relevé d'identité bancaire ou postal, au nom de la personne qui a payé les obsèques",
+                          )),                                                                                                                                     
           );
 
         return $this->render('operateur/contacts/pieces-a-fournir.html.twig',array(
@@ -659,6 +759,34 @@ class ContactController extends Controller
     }
 
     /**
+     * @Route("/contact/{idContact}/imprimer/etiquette", name="contact_print_etiquette")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function contactPrintEtiquetteAction($idContact)
+    {
+      $this->get('app.security')->checkAccess('CONTACT_ET_PRINT');
+
+      $pdf = new PDF_Etiquette('L7163');
+      $pdf->AddPage();
+
+      $contact = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->find($idContact);
+      $text = sprintf("%s\n%s\n%s\n%s %s, %s", $contact->getNom().' '.$contact->getPrenom(), $contact->getAdresse(), $contact->getAdresseComp(), $contact->getCP(), $contact->getCommune(), $contact->getPays());
+      $pdf->Add_Label(utf8_decode($text));
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response;
+    }
+    
+    /**
      * @Route("/contact/listing/action", name="contact_action_listing")
      * @Security("has_role('ROLE_SPECTATOR')")
      */
@@ -688,6 +816,38 @@ class ContactController extends Controller
           }
           $pdf->Output('F','pdf/last-'.$this->getUser()->getId().'.pdf');
           $path = $this->generateUrl('download_last_pdf',['fileName'=>'export-etiquettes']);
+          break;
+        case 'ETIQUETTES_DIP':
+          $selection = $request->request->get('selection');
+          $pdf = new PDF_Etiquette('L7163');
+          $pdf->AddPage();
+          
+          $pdf->AddFont('Mistral');
+          $pdf->SetFont('mistral','',40);
+
+          foreach ($selection as $id) {
+            $contact = $this->getDoctrine()
+              ->getRepository('AppBundle:Contact')
+              ->find($id);
+            
+            $cds = $this->getDoctrine()
+                       ->getRepository('AppBundle:ContactDiplome')
+                       ->findBy(array('contact'=>$contact));
+
+            foreach ($cds as $contactDiplome) {
+              $text = sprintf("%s %s", $contactDiplome->getContact()->getNom(), $contactDiplome->getContact()->getPrenom());
+              $pdf->Add_Label(utf8_decode($text));
+
+              $text = sprintf("%s", $contactDiplome->getContact()->getSection()?$contactDiplome->getContact()->getSection()->getNom():'');
+              $pdf->Add_Label(utf8_decode($text));
+
+              $text = sprintf("%s", $contactDiplome->getDateObtention()->format('d/m/Y'));
+              $pdf->Add_Label(utf8_decode($text));
+            }
+
+          }
+          $pdf->Output('F','pdf/last-'.$this->getUser()->getId().'.pdf');
+          $path = $this->generateUrl('download_last_pdf',['fileName'=>'export-etiquettes-diplomes']);
           break;
         case 'EXPORT':
           $selection = $request->request->get('selection');

@@ -18,11 +18,36 @@
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionDateCreation" aria-controls="sectionDateCreation">Date de création<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionDateCreation">
-		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateCreation') : '' }}" type="date" name="dateCreation" placeholder="jj/mm/aaaa" />
+		{% set options = {	'TODAY':"Aujourd'hui",
+							'THIS_WEEK':'Cette semaine',
+							'THIS_MONTH':'Ce mois-ci',
+							'LAST_6_MONTHS':'Ces 6 derniers mois',
+							'LAST_YEAR':'Cette année',
+							'MORE_THAN_A_YEAR':'Plus d\'un an',
+						} %}
+		<select name="dateCreation" class="select-default">
+			<option value="0">Toutes</option>
+			{% for key,value in options %}
+				<option value="{{key}}" {{ currentFilter and currentFilter.getFiltreValeur('dateCreation') == key ? 'selected="selected"' : '' }}>{{value}}</option>
+			{% endfor %}
+		</select>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionAnciennete" aria-controls="sectionAnciennete">Ancienneté<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionAnciennete">
-		<input class="form-control" value="{{ currentFilter ? currentFilter.getFiltreValeur('dateAnciennete') : '' }}" type="date" name="dateAnciennete" placeholder="jj/mm/aaaa" />
+		<p>Adhérent avant le <br />
+			<select name="dateAncienneteMonth">
+				<option value="0">Mois</option>
+				{% for month in 1..12 %}
+					<option {{ currentFilter and currentFilter.getFiltreValeur('dateAncienneteMonth') == month ? 'selected="selected"' : '' }} value="{{month}}">{{month}}</option>
+				{% endfor %}
+			</select>
+			<select name="dateAncienneteYear">
+				<option value="0">Année</option>
+				{% for year in "now"|date('Y')..1900 %}
+					<option {{ currentFilter and currentFilter.getFiltreValeur('dateAncienneteYear') == year ? 'selected="selected"' : '' }} value="{{year}}">{{year}}</option>
+				{% endfor %}
+			</select>
+		</label>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionStatut" aria-controls="sectionStatut">Statut<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
 	<div class="filter-section collapse" id="sectionStatut">
@@ -140,6 +165,9 @@
 					{% endif %}
 					{% if app_security.hasAccess('CONTACT_ET_PRINT') %}
 						<option value="ETIQUETTES">Imprimer les étiquettes</option>
+					{% endif %}
+					{% if app_security.hasAccess('CONTACT_ET_PRINT') %}
+						<option value="ETIQUETTES_DIP">Imprimer les étiquettes pour diplômes</option>
 					{% endif %}
 					<option value="EXPORT">Exporter la liste</option>
 				</select>

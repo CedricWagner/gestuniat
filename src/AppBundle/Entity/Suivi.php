@@ -355,4 +355,23 @@ class Suivi
     {
         return $this->section;
     }
+
+
+    public function populateEtatFromCSV($line){
+        $this->dateCreation = $line[2] != "" ? new \DateTime($line[2]) : new \DateTime('1900-01-01');
+        $this->dateEcheance = $line[3] != "" ? new \DateTime($line[3]) : null;
+        $this->texte = utf8_encode($line[4]);
+        $this->dateEdition = $line[6] != "" && strlen($line[6] == 10 ) ? new \DateTime($line[6]) : null;
+
+        return $this;
+    }
+
+    public function populateSuiviFromCSV($line){
+        $this->dateCreation = $line[6] != "" ? new \DateTime($line[6]) : new \DateTime('1900-01-01');
+        $this->texte = utf8_encode($line[7]);
+        $this->dateEcheance = $line[8] != "" && strlen($line[6] == 10) ? new \DateTime($line[8]) : null;
+        $this->dateEdition = $line[10] != "" && strlen($line[6] == 10) ? new \DateTime($line[10]) : null;
+
+        return $this;
+    }
 }

@@ -48,7 +48,10 @@ class Tools extends Controller
 	                      60 => 'soixante', 70 => 'soixante-dix', 80 => 'quatre-vingt', 90 => 'quatre-vingt-dix');
 	                    
 	    if (isset($convert[1]) && $convert[1] != '') {
-	      return $this->asLetters($convert[0]).' euros et '.$this->asLetters($convert[1]).' centimes';
+	      return $this->asLetters(intval($convert[0])).' euros et '.$this->asLetters(intval($convert[1])).' centimes';
+	    }
+	    if($number=='00'){
+	    	$number = 0;
 	    }
 	    if ($number < 0) return 'moins '.$this->asLetters(-$number);
 	    if ($number < 17) {

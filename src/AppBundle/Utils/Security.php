@@ -15,7 +15,7 @@ class Security extends Controller
 		if($this->hasAccess($action)){
 			
 		}else{
-			throw new \Exception("Permission denied : ".$action, 1);
+			throw new \Exception("Permission denied : ".$action, 403);
 		}
 	}
 
@@ -25,7 +25,7 @@ class Security extends Controller
 						->findOneBy(array('code'=>$action));
 
 		if(!$permission){
-			throw new \Exception("Permission not found : ".$action, 1);
+			throw new \Exception("Permission not found : ".$action, 403);
 			return false;
 		}
 

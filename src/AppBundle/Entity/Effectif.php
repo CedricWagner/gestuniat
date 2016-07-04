@@ -123,4 +123,11 @@ class Effectif
     {
         return $this->section;
     }
+
+    public function populateFromCSV($line){
+        $this->annee = $line[2];
+        $this->valeur = $line[3];
+        
+        return $this;
+    }
 }

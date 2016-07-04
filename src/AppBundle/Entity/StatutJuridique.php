@@ -64,15 +64,15 @@ class StatutJuridique
     }
 
     public static function getIdStatutAdherent(){
-        return 2;
+        return 1;
     }
 
     public static function getIdPoursuiteAdh(){
-        return 4;
+        return 8;
     }
 
     public static function getIdDeces(){
-        return 5;
+        return 2;
     }
 }
 

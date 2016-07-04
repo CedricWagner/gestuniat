@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <small class="label-print-all">
-          <a href="#" onclick="printSuivisAction('#liste-all-suivi')">Imprimer la sélection</a>
+          <a href="#" onclick="printSuivisAction('#list-all-suivis-dossier')">Imprimer la sélection</a>
         </small>
         {% for suivi in lstAllSuivis %}
             {% include 'operateur/contacts/suivi-item.inc.html.twig' with {'suivi': suivi} %}

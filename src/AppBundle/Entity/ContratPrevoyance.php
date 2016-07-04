@@ -40,7 +40,7 @@ class ContratPrevoyance
      * @var int
      *
      * @Assert\NotBlank(message="Ce champ est obligatoire")
-     * @ORM\Column(name="numContrat", type="integer")
+     * @ORM\Column(name="numContrat", type="string", length=40)
      */
     private $numContrat;
 
@@ -556,5 +556,59 @@ class ContratPrevoyance
     public function getContact()
     {
         return $this->contact;
+    }
+
+    public function populateFromCSV($line){
+        $this->dateEffet = $line[2] != "" ? new \DateTime($line[2]) : null;
+        $this->option = utf8_encode($line[3]);
+        $this->optionPrec = utf8_encode($line[4]);
+        $this->numContrat = utf8_encode($line[6]);
+        $this->commentaire = '';
+        if($line[7]!=""){
+            $this->commentaire = 'Nature : '.utf8_encode($line[7]).' / ';
+        }
+        $this->comGarantie = utf8_encode($line[9]);
+        $this->dateConfirmAGGR = $line[10] != "" ? new \DateTime($line[10]) : null;
+        $this->dateModif = $line[18] != "" ? new \DateTime($line[18]) : null;
+        $this->dateEffetModif = $line[20] != "" ? new \DateTime($line[20]) : null;
+        $this->dateRes = $line[22] != "" ? new \DateTime($line[22]) : null;
+        $this->dateEffetRes = $line[24] != "" ? new \DateTime($line[24]) : null;
+        if ($line[26]!="") {
+           $this->commentaire = $this->commentaire.' '.utf8_encode($line[26])." / ";
+        }
+        $this->isAutreMutu = $line[27] == "True" ? true : false;
+        if ($line[28]!="") {
+            $this->commentaire = $this->commentaire.' '.utf8_encode($line[28]);
+        }
+        $this->cible = "CONTACT";
+
+        return $this;
+    }
+
+    public function populateFromCSV2($line){
+        $this->dateEffet = $line[11] != "" ? new \DateTime($line[11]) : null;
+        $this->option = utf8_encode($line[12]);
+        $this->optionPrec = utf8_encode($line[5]);
+        $this->numContrat = utf8_encode($line[13]);
+        $this->commentaire = '';
+        if($line[14]!=""){
+            $this->commentaire = 'Nature : '.utf8_encode($line[14]).' / ';
+        }
+        $this->comGarantie = utf8_encode($line[16]);
+        $this->dateConfirmAGGR = $line[17] != "" ? new \DateTime($line[17]) : null;
+        $this->dateModif = $line[19] != "" ? new \DateTime($line[19]) : null;
+        $this->dateEffetModif = $line[21] != "" ? new \DateTime($line[21]) : null;
+        $this->dateRes = $line[23] != "" ? new \DateTime($line[23]) : null;
+        $this->dateEffetRes = $line[25] != "" ? new \DateTime($line[25]) : null;
+        if ($line[26]!="") {
+           $this->commentaire = $this->commentaire.' '.utf8_encode($line[26])." / ";
+        }
+        $this->isAutreMutu = $line[27] == "True" ? true : false;
+        if ($line[28]!="") {
+            $this->commentaire = $this->commentaire.' '.utf8_encode($line[28]);
+        }
+        $this->cible = "CONTACT";
+
+        return $this;
     }
 }

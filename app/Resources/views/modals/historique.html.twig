@@ -6,15 +6,8 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="historique-label">Voir l'historique</h4>
       </div>
-      <div class="modal-body">
-     	{% for history in lstHistory %}
-        {% if history.type == 'alerte' %}
-          {% include 'operateur/dashboard/alerte-item.inc.html.twig' with {'alerte': history} %}
-        {% endif %}
-        {% if history.type == 'suivi' %}
-          {% include 'operateur/dashboard/suivi-item.inc.html.twig' with {'suivi': history} %}
-        {% endif %}
-     	{% endfor %}
+      <div class="modal-body" id="history-container">
+     	{{ render(controller('AppBundle:Suivi:displayHistory',{'numPage':1})) }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>

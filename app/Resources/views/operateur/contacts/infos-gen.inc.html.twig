@@ -5,7 +5,7 @@
 	<p>N° <b>{{ contact.numAdh }}</b></p>
 	<p>Section : 
 		{% if contact.section %}
-			<a href="{{ path('view_section',{'idSection':contact.section.id}) }}">{{ contact.section.nom }}</a>
+			<a href="{{ path('view_section',{'idSection':contact.section.id}) }}">[{{ contact.section.id }}] {{ contact.section.nom }}</a>
 		{% else %}
 			Aucune
 		{% endif %}
@@ -91,7 +91,7 @@
 		<p><a class="btn btn-default btn-block" href="{{ path('kit_adh_contact',{'idContact':contact.id}) }}">Kit adhésion</a></p>
 	{% endif %}
 	{% if app_security.hasAccess('CONTACT_ET_PRINT') %}
-		<p><a class="btn btn-default btn-block">Etiquettes</a></p>
+		<p><a class="btn btn-default btn-block" target="_blank" href="{{ path('contact_print_etiquette',{'idContact':contact.id}) }}">Imprimer l'étiquette</a></p>
 	{% endif %}
 	{% if app_security.hasAccess('PROCURATION_READ') %}
 		<p><a class="btn btn-default btn-block" href="{{ path('list_procurations',{'idContact':contact.id}) }}">Procuration</a></p>

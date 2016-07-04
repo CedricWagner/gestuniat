@@ -32,7 +32,7 @@ class ContratPrevObs
     /**
      * @var int
      * @Assert\NotBlank(message="Ce champ est obligatoire")
-     * @ORM\Column(name="numContrat", type="integer", unique=true)
+     * @ORM\Column(name="numContrat", type="string")
      */
     private $numContrat;
 
@@ -309,5 +309,17 @@ class ContratPrevObs
     public function getContact()
     {
         return $this->contact;
+    }
+
+    public function populateFromCSV($line){
+        $this->dateEffet = $line[5] != "" ? new \DateTime($line[5]) : null;
+        $this->numContrat = utf8_encode($line[6]);
+        $this->commentaire = utf8_encode($line[7]);
+        $this->isResilie = $line[8] == "True" ? true : false;
+        $this->dateRes = $line[9] != "" ? new \DateTime($line[9]) : null;
+        $this->dateVersement = $line[10] != "" ? new \DateTime($line[10]) : null;
+        $this->cible = 'CONTACT';
+
+        return $this;
     }
 }

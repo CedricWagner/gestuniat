@@ -13,6 +13,7 @@ use AppBundle\Entity\Patrimoine;
 use AppBundle\Entity\Section;
 use AppBundle\Entity\Permanence;
 use AppBundle\Entity\AssembleeGenerale;
+use AppBundle\Entity\StatutJuridique;
 use AppBundle\Form\SuiviDefaultType;
 use AppBundle\Form\PatrimoineType;
 use AppBundle\Form\SectionFullType;
@@ -273,7 +274,7 @@ class SectionController extends Controller
 
         $fields = [
             ['type'=>'select','name'=>'selSection','value'=>$idSection],
-            ['type'=>'checkbox','name'=>'cbStatut','value'=>2],
+            ['type'=>'checkbox','name'=>'cbStatut','value'=>StatutJuridique::getIdStatutAdherent()],
         ];
 
         $filterController = $this->get('app.filter.controller');
