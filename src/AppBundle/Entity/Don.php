@@ -30,6 +30,13 @@ class Don
     private $date;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateSaisie", type="date", nullable=true)
+     */
+    private $dateSaisie;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="intermediaire", type="string", length=100, nullable=true)
@@ -102,6 +109,30 @@ class Don
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set dateSaisie
+     *
+     * @param \DateTime $dateSaisie
+     *
+     * @return Don
+     */
+    public function setDateSaisie($dateSaisie)
+    {
+        $this->dateSaisie = $dateSaisie;
+
+        return $this;
+    }
+
+    /**
+     * Get dateSaisie
+     *
+     * @return \DateTime
+     */
+    public function getDateSaisie()
+    {
+        return $this->dateSaisie;
     }
 
     /**

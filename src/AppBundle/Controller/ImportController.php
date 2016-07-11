@@ -414,11 +414,11 @@ class ImportController extends Controller
 			// $this->importContratPrevoyance($path,$em);
 			// $this->importSuivi($path,$em);
 			// $this->importDiplome($path,$em);
-			$this->importCotisation($path,$em);
+			// $this->importCotisation($path,$em);
 
 			$em->flush();
 			
-			// $this->importFix($path,$em);
+			$this->importFix($path,$em);
 			
 			// $em->flush();
 
@@ -431,13 +431,39 @@ class ImportController extends Controller
 
 	public function importFix($path,$em){
 
+  //   	$maxId = $this->getDoctrine()
+		//  ->getRepository('AppBundle:AssocImport')
+		//  ->findMaxId('contact-fix-1');
+		// $handle = fopen('import/'.$path.'/'.$this->files['membres'], 'r');
+	 //    $row = 0;
+	 //    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE && $row < 400) {
+	 //        if(intval($data[0]) && $data[2]=="True" && $data[3] != "" && intval($data[0])>$maxId){
+		//         $this->incrementsCount();
+		//         $assocContact = $this->getDoctrine()
+		//         	->getRepository('AppBundle:AssocImport')
+		//         	->findOneBy(array('oldId'=>$data[0],'entity'=>'contact-membre'));
+		//         if($assocContact){
+		// 	        $contact = $this->getDoctrine()
+		// 	        	->getRepository('AppBundle:Contact')
+		// 	        	->find($assocContact->getNewId());
+			     	
+		// 	        $contact->setDateAdhesion(new \DateTime($data[3]));
+
+		// 	        $em->persist($contact);
+
+		// 	        $this->createAssoc($em,$data[0],$contact->getId(),'contact-fix-1');
+		//         }
+	 //        }
+	 //    }
+
+
     	$maxId = $this->getDoctrine()
 		 ->getRepository('AppBundle:AssocImport')
-		 ->findMaxId('contact-fix-1');
+		 ->findMaxId('contact-fix-2');
 		$handle = fopen('import/'.$path.'/'.$this->files['membres'], 'r');
 	    $row = 0;
 	    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE && $row < 400) {
-	        if(intval($data[0]) && $data[2]=="True" && $data[3] != "" && intval($data[0])>$maxId){
+	        if(intval($data[0]) && intval($data[0])>$maxId && $data[21] != ""){
 		        $this->incrementsCount();
 		        $assocContact = $this->getDoctrine()
 		        	->getRepository('AppBundle:AssocImport')
@@ -447,11 +473,36 @@ class ImportController extends Controller
 			        	->getRepository('AppBundle:Contact')
 			        	->find($assocContact->getNewId());
 			     	
-			        $contact->setDateAdhesion(new \DateTime($data[3]));
+			        $contact->setDateSaisieDeces(new \DateTime($data[21]));
 
 			        $em->persist($contact);
 
-			        $this->createAssoc($em,$data[0],$contact->getId(),'contact-fix-1');
+			        $this->createAssoc($em,$data[0],$contact->getId(),'contact-fix-2');
+		        }
+	        }
+	    }
+
+    	$maxId = $this->getDoctrine()
+		 ->getRepository('AppBundle:AssocImport')
+		 ->findMaxId('don-fix');
+		$handle = fopen('import/'.$path.'/'.$this->files['dons'], 'r');
+	    $row = 0;
+	    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE && $row < 400) {
+	        if(intval($data[0]) && intval($data[0])>$maxId){
+		        $this->incrementsCount();
+		        $assocDon = $this->getDoctrine()
+		        	->getRepository('AppBundle:AssocImport')
+		        	->findOneBy(array('oldId'=>$data[0],'entity'=>'don'));
+		        if($assocDon){
+			        $don = $this->getDoctrine()
+			        	->getRepository('AppBundle:Don')
+			        	->find($assocDon->getNewId());
+			     	
+			        $don->setDateSaisie(new \DateTime($data[9]));
+
+			        $em->persist($don);
+
+			        $this->createAssoc($em,$data[0],$don->getId(),'don-fix');
 		        }
 	        }
 	    }
@@ -1422,6 +1473,32 @@ class ImportController extends Controller
     	if($this->count > 200){
     		throw new \LengthException("more than 200 lines", 1);
     	}
+    }
+
+    /**
+     * @Route("/set-section-num", name="set_section_num")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function setSectionNumAction()
+    {
+
+    	$sections = $this->getDoctrine()
+    		->getRepository('AppBundle:Section')
+    		->findAll();
+
+    	foreach ($sections as $section) {
+    		$assoc = $this->getDoctrine()
+    			->getRepository('AppBundle:AssocImport')
+    			->findOneBy(array('newId'=>$section->getId(),'entity'=>'section'));
+    		$section->setNum($assoc->getOldId());
+    		$em = $this->get('doctrine.orm.entity_manager');
+    		$em->persist($section);
+    	}
+
+    	$em->flush();
+
+        return new Response('ok');
+
     }
 
 }

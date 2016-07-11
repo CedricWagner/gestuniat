@@ -80,6 +80,7 @@ class DonController extends Controller
 			$don = new Don();
 			$don->setContact($contact);
 			$don->setOperateur($this->getUser());
+			$don->setDateSaisie(new \DateTime());
 			$add = true;
 		}
 

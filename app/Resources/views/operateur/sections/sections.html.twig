@@ -54,6 +54,16 @@
 			{% endfor %}
 		</select>
 	</div>
+
+	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionStatut" aria-controls="sectionStatut">Statut<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
+	<div class="filter-section collapse" id="sectionStatut">
+		{% set statutOptions = {'':'Toutes','ACTIVE':'Actives','CLOSED':'Fermées'} %}
+		<select name="selStatut" class="form-control">
+			{% for key, option in statutOptions %}
+				<option {{ currentFilter and currentFilter.getFiltreValeur('selStatut') == key ? 'selected="selected"' : '' }} value="{{key}}">{{option}}</option>
+			{% endfor %}
+		</select>
+	</div>
 	<div class="filter-section section-save-filter">
 		<input class="form-control ignore" type="text" id="filter-name" placeholder="Nommez votre filtre" />
 		<a href="#" onclick="ajaxSaveFilter('#filter-section','{{ path('save_filter') }}','{{ path('list_sections') }}')">Sauvegarde de votre filtre</a>

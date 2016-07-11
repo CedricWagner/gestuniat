@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Entity\Alerte;
 use AppBundle\Entity\Section;
 use AppBundle\Entity\Effectif;
+use AppBundle\Entity\StatutJuridique;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use AppBundle\Form\AlerteCreationType;
 
@@ -111,12 +112,12 @@ class DefaultController extends Controller
                 }
             }
 
-            ksort($lstTerms);
+            krsort($lstTerms);
 
             $dateYesterday = new \DateTime(date('Y-m-d').' -1 day');
             $dateToday = new \DateTime();
             $dateTomorrow = new \DateTime(date('Y-m-d').' +1 day');
-            $dateNextWeek = new \DateTime(date('Y-m-d').' +7 day');
+            $date2NextWeeks = new \DateTime(date('Y-m-d').' +14 day');
 
             $lstAlertes = ['late'=>array(),'now'=>array(),'incoming'=>array()];
             $lstHistory = array();
@@ -127,7 +128,7 @@ class DefaultController extends Controller
                     if(!$term->getIsOk()){
                         $lstAlertes['late'][] = $term;
                     }
-                }elseif ($term->getDateEcheance()->format('Y-m-d') >= $dateTomorrow->format('Y-m-d') && $term->getDateEcheance()->format('Y-m-d') <= $dateNextWeek->format('Y-m-d')) {
+                }elseif ($term->getDateEcheance()->format('Y-m-d') >= $dateTomorrow->format('Y-m-d') && $term->getDateEcheance()->format('Y-m-d') <= $date2NextWeeks->format('Y-m-d')) {
                     if(!$term->getIsOk()){
                         $lstAlertes['incoming'][] = $term;
                     }
@@ -137,12 +138,11 @@ class DefaultController extends Controller
                     }
                 }
 
-                if($term->getDateEcheance()->format('Y-m-d') > $dateNextWeek->format('Y-m-d') ){
+                if($term->getDateEcheance()->format('Y-m-d') > $date2NextWeeks->format('Y-m-d') ){
                     if(!$term->getIsOk()){
                         $lstFuturTerms[] = $term;
                     }
                 }
-
             }
 
             $this->updateAlertesInSession();
@@ -196,7 +196,7 @@ class DefaultController extends Controller
 
             $contactsDivers = $this->getDoctrine()
                 ->getRepository('AppBundle:Contact')
-                ->findBy(array('section'=>$sectionDivers));
+                ->findBy(array('section'=>$sectionDivers,'statutJuridique'=>StatutJuridique::getIdStatutAdherent()));
 
             $nbUnpaidCotisations = 0;
             foreach ($contactsDivers as $_contact) {
@@ -415,7 +415,7 @@ class DefaultController extends Controller
             }
         }
 
-        ksort($lstTerms);
+        krsort($lstTerms);
 
         $dateToday = new \DateTime(date('Y-m-d'));
 

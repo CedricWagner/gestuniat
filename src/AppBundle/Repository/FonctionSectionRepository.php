@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Utils\Tools;
+
 /**
  * FonctionSectionRepository
  *
@@ -10,4 +12,16 @@ namespace AppBundle\Repository;
  */
 class FonctionSectionRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findWithCap($label){
+
+		$qb = $this->createQueryBuilder('fonctionSection');
+		$qb
+			->select('fonctionSection')
+			->where('fonctionSection.label LIKE :label')
+			->setParameters(array('label'=>strtoupper(Tools::stripAccents($label))));
+
+		$query = $qb->getQuery();
+
+        return $query->setMaxResults(1)->getOneOrNullResult();
+	}
 }

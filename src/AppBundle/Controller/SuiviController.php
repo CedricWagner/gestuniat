@@ -51,14 +51,14 @@ class SuiviController extends Controller
 
     $lstSuivis = $this->getDoctrine()
                        ->getRepository('AppBundle:Suivi')
-                       ->findBy(array('isOk'=>true),array(),$nb,$nb*($numPage-1));
+                       ->findBy(array('isOk'=>true),array('dateEcheance'=>'DESC'),$nb,$nb*($numPage-1));
     $countSuivis = $this->getDoctrine()
                         ->getRepository('AppBundle:Suivi')
                         ->countHistory();
 
     $lstAlertes = $this->getDoctrine()
                        ->getRepository('AppBundle:Alerte')
-                       ->findBy(array('isOk'=>true),array(),$nb,$nb*($numPage-1));
+                       ->findBy(array('isOk'=>true),array('dateEcheance'=>'DESC'),$nb,$nb*($numPage-1));
     $countAlertes = $this->getDoctrine()
                         ->getRepository('AppBundle:Alerte')
                         ->countHistory();
@@ -78,7 +78,7 @@ class SuiviController extends Controller
         }
     }
 
-     ksort($lstHistory);
+    krsort($lstHistory);
 
     return new Response($this->render('operateur/dashboard/listing-history.inc.html.twig',['lstHistory'=>$lstHistory,'nbPages'=>$nbPages,'currentPage'=>$numPage])->getContent());
   }

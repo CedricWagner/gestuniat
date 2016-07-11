@@ -124,11 +124,11 @@ class SectionController extends Controller
 
         $lstSuivis = $this->getDoctrine()
           ->getRepository('AppBundle:Suivi')
-          ->findBy(array('section'=>$section,'isOk'=>false),array('dateCreation'=>'ASC'),5);
+          ->findBy(array('section'=>$section,'isOk'=>false),array('dateCreation'=>'DESC'),5);
 
         $lstAllSuivis = $this->getDoctrine()
           ->getRepository('AppBundle:Suivi')
-          ->findBy(array('section'=>$section),array('dateCreation'=>'ASC'));
+          ->findBy(array('section'=>$section),array('dateCreation'=>'DESC'));
 
         $patrimoine = new Patrimoine();
         $patrimoine->setAnnee($datetime->format('Y'));
@@ -625,5 +625,7 @@ class SectionController extends Controller
         return new Response($nbContacts);
 
     }
+
+
 
 }

@@ -69,6 +69,17 @@
 		$('.section-line td:not(.cb-container)').click(function(){
 			location.href = '/section/'+$(this).parents('.section-line').data('id')+'/accueil';
 		})
+
+		$('table.selectable .cb-select-all').change(function(){
+			$(this).parents('table.selectable').find('tbody tr .cb-select-line').prop('checked', $(this).prop("checked"));
+			$('table.selectable .cb-select-line').each(function(){
+				toggleTableLine($(this));
+			})
+		});
+
+		$('table.selectable .cb-select-line').change(function(){
+			toggleTableLine($(this));
+		});
 	});
 
 

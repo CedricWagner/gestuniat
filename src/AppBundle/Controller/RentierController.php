@@ -33,10 +33,17 @@ class RentierController extends Controller
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastAnnee();
         }
+        if ($annee==null) {
+            $annee = (new \DateTime())->format('Y');
+        }
+
         if ($numTrimestre==0) {
             $numTrimestre = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastTrimestre($annee);
+        }
+        if ($numTrimestre==null) {
+            $numTrimestre = 1;
         }
         $envoisRentiers = $this->getDoctrine()
             ->getRepository('AppBundle:EnvoiRentier')
@@ -71,10 +78,17 @@ class RentierController extends Controller
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastAnnee();
         }
+        if ($annee==null) {
+            $annee = (new \DateTime())->format('Y');
+        }
+
         if ($numTrimestre==0) {
             $numTrimestre = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastTrimestre($annee);
+        }
+        if ($numTrimestre==null) {
+            $numTrimestre = 1;
         }
 
         $envoisRentiers = $this->getDoctrine()
@@ -111,10 +125,17 @@ class RentierController extends Controller
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastAnnee();
         }
+        if ($annee==null) {
+            $annee = (new \DateTime())->format('Y');
+        }
+
         if ($numTrimestre==0) {
             $numTrimestre = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastTrimestre($annee);
+        }
+        if ($numTrimestre==null) {
+            $numTrimestre = 1;
         }
 
         $lstDeces = $this->getDoctrine()
@@ -142,11 +163,18 @@ class RentierController extends Controller
             $annee = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastAnnee();
+        }        
+        if ($annee==null) {
+            $annee = (new \DateTime())->format('Y');
         }
+
         if ($numTrimestre==0) {
             $numTrimestre = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastTrimestre($annee);
+        }
+        if ($numTrimestre==null) {
+            $numTrimestre = 1;
         }
 
         $lstDonateurs = $this->getDoctrine()
@@ -174,11 +202,18 @@ class RentierController extends Controller
             $annee = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastAnnee();
+        }        
+        if ($annee==null) {
+            $annee = (new \DateTime())->format('Y');
         }
+
         if ($numTrimestre==0) {
             $numTrimestre = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastTrimestre($annee);
+        }
+        if ($numTrimestre==null) {
+            $numTrimestre = 1;
         }
 
         $envoisRentiers = $this->getDoctrine()
@@ -216,10 +251,17 @@ class RentierController extends Controller
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastAnnee();
         }
+        if ($annee==null) {
+            $annee = (new \DateTime())->format('Y');
+        }
+
         if ($numTrimestre==0) {
             $numTrimestre = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastTrimestre($annee);
+        }
+        if ($numTrimestre==null) {
+            $numTrimestre = 1;
         }
 
         $envoisRentiers = $this->getDoctrine()
@@ -257,10 +299,17 @@ class RentierController extends Controller
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastAnnee();
         }
+        if ($annee==null) {
+            $annee = (new \DateTime())->format('Y');
+        }
+
         if ($numTrimestre==0) {
             $numTrimestre = $this->getDoctrine()
                 ->getRepository('AppBundle:EnvoiRentier')
                 ->findLastTrimestre($annee);
+        }
+        if ($numTrimestre==null) {
+            $numTrimestre = 1;
         }
 
         $lstAGs = $this->getDoctrine()

@@ -32,7 +32,7 @@ class CarteIDFonction extends DefaultModel {
         $this->Cell(90,10,utf8_decode('UNIAT - GROUPEMENT ALSACE'));
         $this->Ln();
         $this->SetFont('','');
-        $this->MultiCell(90,5,utf8_decode("Association régionale à but non lucratif, créé en 1924, \ninscrite au registre des associations sous Vol. XIX n°12 \ndu tribunal d'Instance de Strasbourg. Associée à la \nFNAR et à la FNATH"));
+        $this->MultiCell(90,5,utf8_decode("Association régionale à but non lucratif, créé en 1924, \ninscrite au registre des associations sous Vol. XIX n°12 \ndu tribunal d'Instance de Strasbourg. Associée à la FNATH."));
         
         $this->Ln(2);
         $this->SetFont('','B');

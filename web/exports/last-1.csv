@@ -1,2 +1,333 @@
-Nom,PrÃ©nom,Num,Statut,Adresse,CP,Commune,Section,"Fonction (section)","Fonction (groupement)","Date d'entrÃ©e"
-Ackbar,Alain,8,DÃ©cÃ©dÃ©(e),,,,,,,26/05/2016
+Nom,Prénom,Num,Statut,Adresse,CP,Commune,Section,"Fonction (section)","Fonction (groupement)","Date d'entrée"
+,,10,Adhérent,"11 rue Kurnagel",67200,STRASBOURG,DIVERS,,,01/10/1989
+,,33,Adhérent,"21 Rue des vignes",67170,WINGERSHEIM,DIVERS,,,01/01/1978
+,,34,Adhérent,"3 rue de l'Emetteur",67520,NORDHEIM,DIVERS,,,01/10/1981
+,,74,Adhérent,"28 rue Molkenbronn",67380,LINGOLSHEIM,DIVERS,,,01/01/1989
+,,89,Adhérent,"26, rue du Moulin",67430,VOELLERDINGEN,DIVERS,,,01/10/1976
+,,93,Adhérent,"7, rue des Vosges",67790,STEINBOURG,DIVERS,,,01/01/1973
+,,94,Adhérent,"6 rue Creuse",67110,ZINSWILLER,DIVERS,,,01/01/1984
+,,100,Adhérent,"9, rue du Pasteur",76170,LILLEBONNE,DIVERS,,,01/01/1989
+,,107,Adhérent,"4 rue principale",67370,PFULGRIESHEIM,DIVERS,,,01/01/1979
+,,114,Adhérent,"36 rue de l'Eglise",67360,WOERTH,DIVERS,,,01/07/1989
+,,121,Adhérent,"7, rue du Marschallhof",67100,STRASBOURG,DIVERS,,,01/01/1979
+,,122,Adhérent,"1, Impasse de la Licorne",67117,ITTENHEIM,DIVERS,,,01/04/1987
+,,127,Adhérent,"11 quai du Moulin",67120,DUTTLENHEIM,DIVERS,,,01/07/1990
+,,130,Adhérent,"10 Rue du Temple",67850,OFFENDORF,DIVERS,,,01/10/1979
+,,148,Adhérent,"11 quai du Moulin",67120,DUTTLENHEIM,DIVERS,,,01/01/1979
+,,149,Adhérent,"192 b, Impasse des Amandiers",83260,"LA CRAU",DIVERS,,,01/01/1971
+,,166,Adhérent,"10 Rue du Dr Schweitzer",57970,YUTZ,DIVERS,,,01/07/1979
+,,188,Adhérent,"6 Rue du Fossé des Pois",67117,ITTENHEIM,DIVERS,,,01/07/1975
+,,215,Adhérent,"1, rue des Prés",67320,KIRRBERG,DIVERS,,,01/01/1983
+,,220,Adhérent,"22 Rue de Harbouey",54480,"CIREY SUR VEZOUZE",DIVERS,,,01/01/1987
+,,257,Adhérent,"8 Rue  Belle Vue",67350,UHLWILLER,DIVERS,,,01/01/1962
+,,269,Adhérent,"1 BUCHBERG",67440,MARMOUTIER,DIVERS,,,01/01/1986
+,,458,Adhérent,"18 Rue du Vignoble",67140,EICHHOFFEN,DIVERS,,,01/01/1976
+,,897,Adhérent,"22, rue des Petits Champs",67300,SCHILTIGHEIM,DIVERS,,,01/07/1976
+,,898,Adhérent,"2 rue Jacques et René Knecht",67000,STRASBOURG,DIVERS,,,01/04/1982
+,,901,Adhérent,,4475204,"GONDIN MAIA",DIVERS,,,01/01/1978
+,,986,Adhérent,"18, rue de Hochfelden",67330,KIRRWILLER,DIVERS,,,01/01/1985
+,,1045,Adhérent,"4 chemin Bahnel",57820,LUTZELBOURG,DIVERS,,,01/01/1990
+,,1189,Adhérent,"54, rue du Sonnenberg",67370,TRUCHTERSHEIM,DIVERS,,,01/07/1986
+,,1230,Adhérent,"Route de Mons",83440,FAYENCES,DIVERS,,,01/04/1980
+,,1231,Adhérent,"4 Fbg de la Robertsau",67170,WINGERSHEIM,DIVERS,,,01/01/1975
+,,1235,Adhérent,"7, rue du Couvent",67440,MARMOUTIER,DIVERS,,,01/10/1982
+SCHMITT,Lucienne,1342,Adhérent,"5 Rue des Vosges",68000,COLMAR,DIVERS,ADHERENT,,01/04/1978
+,,1454,Adhérent,"7 rue Goethe",67410,DRUSENHEIM,DIVERS,,,01/11/1957
+,,1701,Adhérent,"19, rue des Lilas",67117,ITTENHEIM,DIVERS,,,01/07/1985
+,,1708,Adhérent,"9 rue Sengenwald",67000,STRASBOURG,DIVERS,,,01/01/1978
+,,1792,Adhérent,"7, rue du Parc",67300,SCHILTIGHEIM,DIVERS,,,01/01/1991
+,,1793,Adhérent,"10, rue de Quatzenheim",67117,FURDENHEIM,DIVERS,,,01/01/1991
+,,1795,Adhérent,"18 rue du Nordfeld",67210,NIEDERNAI,DIVERS,,,01/01/1991
+,,1902,Adhérent,"9, rue de l'Eglise",67370,WILLGOtTHEIM,DIVERS,,,01/04/1991
+,,2014,Adhérent,"24 Rte de Mittelhausbergen",67200,STRASBOURG,DIVERS,,,01/01/1988
+,,2340,Adhérent,"31 Rue de Gambsheim",67850,OFFENDORF,DIVERS,,,01/01/1987
+,,2410,Adhérent,"32a, rue de Rosenwiller",67490,DETTWILLER,DIVERS,,,01/01/1984
+,,2665,Adhérent,"131 rue Niederweg",67190,HEILIGENBERG,DIVERS,,,01/01/1985
+,,2696,Adhérent,"5 rue des Capucins",67200,STRASBOURG,DIVERS,,,01/01/1978
+,,3064,Adhérent,"78 Rue du Moulin",67440,REINHARDSMUNSTER,DIVERS,,,03/10/1984
+,,3151,Adhérent,"3, Grand'Rue",68690,GEISHOUSE,DIVERS,,,01/07/1989
+,,3179,Adhérent,"3 Rue de la Mairie",67117,ITTENHEIM,DIVERS,,,01/01/1989
+,,3405,Adhérent,"323 Route de Colmar",67100,STRASBOURG,DIVERS,,,01/10/1990
+,,3414,Adhérent,"15 Square du Toc Midi",85300,CHALLANS,DIVERS,,,05/11/1984
+,,3901,Adhérent,"29, rue de la Mairie",67117,FURDENHEIM,DIVERS,,,14/03/1983
+,,4339,Adhérent,"22 rue Schurmfeld",67100,STRASBOURG,DIVERS,,,10/01/1975
+,,4349,Adhérent,"3, rue des Jardins",67220,"NEUVE EGLISE",DIVERS,,,01/04/1991
+,,4508,Adhérent,"5 rue d'Uttenhoffen",67110,GUNDERSHOFFEN,DIVERS,,,01/01/1987
+HOPPE,Lydie,4873,Adhérent,"Service MP - BP 70062",67067,"STRASBOURG CEDEX",DIVERS,ADHERENT,,01/04/1971
+,,4929,Adhérent,"10 rue de la Lavande",66500,PRADES,DIVERS,,,01/07/1985
+,,4996,Adhérent,"33 rue Clémenceau",67240,BISCHWILLER,DIVERS,,,01/07/1989
+,,5453,Adhérent,"27 Square Henri Barbuse",77610,"FONTENAY TRESIGNY",DIVERS,,,01/04/1989
+,,5808,Adhérent,"27 rue de la Gare",67720,HOERDT,DIVERS,,,01/04/1979
+,,5883,Adhérent,"25, rue de Hasloch",67720,HOERDT,DIVERS,,,01/01/1985
+OBERLE,Bernard,5938,Adhérent,"51b Rue Principale",67220,LALAYE,DIVERS,ADHERENT,,01/01/1998
+,,5961,Adhérent,"7, rue des Jardins",67810,HOLTZHEIM,DIVERS,,,01/01/1990
+,,5966,Adhérent,"16, rue de la Libération",67220,VILLE,DIVERS,,,01/04/1989
+,,6071,Adhérent,"18 rue des Artisans",67370,TRUCHTERSHEIM,DIVERS,,,01/01/1991
+,,6255,Adhérent,"4, rue des Noyers",67370,RUMERSHEIM,DIVERS,,,01/07/1974
+,,6288,Adhérent,"15, rue de Stosswihr",67100,STRASBOURG,DIVERS,,,01/04/1991
+,,6689,Adhérent,"147, rue de Hatten",67690,RITTERSHOFFEN,DIVERS,,,01/07/1980
+,,6778,Adhérent,"96 Impasse du Mariné",40210,LABOUHEYRE,DIVERS,,,01/01/2007
+,,7153,Adhérent,"6 Résidence Beaulieu",67400,"ILLKIRCH GRAFFENSTADEN",DIVERS,,,16/09/1973
+,,7699,Adhérent,"25 rue Engelbreit",67200,STRASBOURG,DIVERS,,,01/04/1976
+,,7752,Adhérent,"179, rue des Serruriers",67230,KOGENHEIM,DIVERS,,,01/04/1978
+,,7794,Adhérent,"17, Promenade Klosterwald",67220,VILLE,DIVERS,,,01/01/1991
+HORNECKER,Lucie,7936,Adhérent,"3 rue Ste Elisabeth",67085,STRASBOURG,DIVERS,ADHERENT,,01/01/1978
+,,8078,Adhérent,"24, rue de l'Industrie",67390,MARCKOLSHEIM,DIVERS,,,01/01/1979
+,,8293,Adhérent,"1, rue du Wahl",67580,MERTZWILLER,DIVERS,,,01/07/1979
+,,8360,Adhérent,"4 Rue de la Hardt",67580,MERTZWILLER,DIVERS,,,01/01/1976
+SCHEIDER,Marguerite,8384,Adhérent,"3 Rue des Près",67580,MIETESHEIM,DIVERS,ADHERENT,,12/01/1976
+,,8816,Adhérent,"24 Rue Louis Pasteur",68360,SOULTZ,DIVERS,,,01/01/1983
+,,8945,Adhérent,"89, rue du Maréchal Foch",67113,BLAESHEIM,DIVERS,,,01/10/1989
+,,9266,Adhérent,"25 rue de la Saone ",67800,"HOENHEIM ",DIVERS,,,01/10/1980
+,,9404,Adhérent,"29 rue de Fréland",67100,STRASBOURG,DIVERS,,,01/10/1979
+,,9521,Adhérent,"25 Avenue de la Résistance",06140,VENCE,DIVERS,,,01/10/1988
+,,9659,Adhérent,"72 rue du Dr Bagard",88140,CONTREXEVILLE,DIVERS,,,01/10/2004
+,,9668,Adhérent,"49, rue de la Ziegelau",67100,STRASBOURG,DIVERS,,,01/01/1987
+,,9685,Adhérent,"46 route de Wintershouse ",67500,HAGUENAU,DIVERS,,,01/07/1979
+,,9698,Adhérent,"77731 WILLSTATT HESSELHURST",77731,WILLSTATT3,DIVERS,,,01/07/1981
+,,9913,Adhérent,"82, rue des Jésuites",67100,STRASBOURG,DIVERS,,,01/01/1975
+,,10341,Adhérent,"59, rue de la Chapelle",67210,MEISTRATZHEIM,DIVERS,,,20/10/1983
+,,11320,Adhérent,"15 Rue de l'Ecole",67520,KIRCHHEIM,DIVERS,,,01/09/1955
+,,11613,Adhérent,"27, rue St-Paul",67115,PLOBSHEIM,DIVERS,,,01/07/1976
+,,11829,Adhérent,"22 place des Halles",67000,STRASBOURG,DIVERS,,,01/04/1991
+,,12836,Adhérent,"17 rue des Frères Angéli",63600,AMBERT,DIVERS,,,01/01/1988
+,,12837,Adhérent,"95 rue de la Fontaine",68210,"VALDIEU LUTRAN",DIVERS,,,01/01/1982
+,,13218,Adhérent,"1 route de Kembs",68510,SIERENTZ,DIVERS,,,01/01/1989
+,,13419,Adhérent,"14 rue Chanoine Straub",67100,STRASBOURG,DIVERS,,,01/09/1968
+,,13438,Adhérent,"7 rue Ampère",67100,STRASBOURG,DIVERS,,,01/10/1985
+,,13445,Adhérent,"4b Rue de Molsheim",67370,REITWILLER,DIVERS,,,01/04/1981
+,,13488,Adhérent,"4, rue du Stade",67800,HOENHEIM,DIVERS,,,01/01/1987
+,,13526,Adhérent,"4 rue du Marché",67000,STRASBOURG,DIVERS,,,10/08/1951
+,,13571,Adhérent,"48, bld La fontaine",67200,STRASBOURG,DIVERS,,,01/04/1973
+,,13602,Adhérent,"7 Hautes Merlusses",88490,LUSSE,DIVERS,,,01/04/1987
+,,13738,Adhérent,"11 chemin d'Arry",57680,ARRY,DIVERS,,,01/07/1991
+,,13935,Adhérent,"2 Impasse Perle",34490,"MURVIEL LES BEZIERS",DIVERS,,,01/04/1986
+,,14930,Adhérent,"35, rue de Salm",67200,STRASBOURG,DIVERS,,,01/01/1978
+,,14945,Adhérent,"7 b Rue de Mutzig",67000,STRASBOURG,DIVERS,,,01/07/1990
+,,14947,Adhérent,"1, rue des Fraises",67117,ITTENHEIM,DIVERS,,,01/01/1987
+,,14949,Adhérent,"4 quai altorffer",67067,"STRASBOURG cedex",DIVERS,,,01/01/1976
+,,14994,Adhérent,"35 Faubourg de Saverne",67000,STRASBOURG,DIVERS,,,01/01/1977
+,,15096,Adhérent,"13 Rue des Roses",67350,BITSCHHOFFEN,DIVERS,,,01/01/1995
+STREITH,Gérard,15230,Adhérent,"11, rue du Maréchal Joffre",67140,ANDLAU,DIVERS,"ANCIEN MEMBRE DU COMITE",,01/01/1986
+,,16010,Adhérent,"8, rue des Ecoles",68470,FELLERING,DIVERS,,,01/01/1982
+,,16016,Adhérent,"14, rue Vogelbach",68550,ST-AMARIN,DIVERS,,,21/09/1982
+,,16026,Adhérent,"9 Rue des Vosges",68550,MALMERSPACH,DIVERS,,,01/03/1964
+,,16039,Adhérent,"25, rue de Malmerspach",68690,MOOSCH,DIVERS,,,01/01/1986
+,,16135,Adhérent,"10a route de Wihr au Val",68230,WALBACH,DIVERS,,,01/10/1974
+,,16439,Adhérent,"5a rue du Château",67170,BRUMATH,DIVERS,,,01/10/1991
+,,16563,Adhérent,"8 rue Charles Michel",67400,"ILLKIRCH GRAFFENSTADEN",DIVERS,,,01/01/1992
+,,16586,Adhérent,"7, rue du Dauphiné",67380,LINGOLSHEIM,DIVERS,,,01/10/1992
+,,16673,Adhérent,"3 rue Konrad Adenauer",67500,HAGUENAU,DIVERS,,,01/07/1991
+,,16693,Adhérent,"12, rue du Ballon",67100,STRASBOURG,DIVERS,,,01/01/1992
+,,16781,Adhérent,"17 rue des Remparts",67520,KUTTOLSHEIM,DIVERS,,,01/07/1992
+,,16819,Adhérent,"30, rue du Rosenberg",67590,"SCHWEIGHOUSE SUR MODER",DIVERS,,,01/01/1992
+,,17056,Adhérent,"25, rue des Serruriers",67000,STRASBOURG,DIVERS,,,01/01/1979
+,,17094,Adhérent,"10 Rue des Vignes",67990,OSTHOFFEN,DIVERS,,,01/07/1992
+HOLZLEIDNER,Suzanne,17404,Adhérent,"2 Place Sainte-Claire",74000,ANNECY,DIVERS,ADHERENT,,01/10/1992
+,,17455,Adhérent,"1 rue du Presbytère",68740,FESSENHEIM,DIVERS,,,01/10/1992
+,,17608,Adhérent,"5, Rue de la Gare",67220,SAINT-MAURICE,DIVERS,,,10/12/1992
+,,17623,Adhérent,"32 rue principale",67220,URBEIS,DIVERS,,,01/01/1993
+,,17638,Adhérent,"1 Rue des Lilas",67170,WINGERSHEIM,DIVERS,,,01/01/1993
+,,17739,Adhérent,"9 Rue de la Fonderie",67570,ROTHAU,DIVERS,,,01/07/1993
+,,17835,Adhérent,"3 Rue de l'Eglise",67370,DINGSHEIM,DIVERS,,,01/04/1993
+,,17943,Adhérent,"3a Rue de l'Ecole",68127,"STE CROIX EN PLAINE",DIVERS,,,01/10/1993
+,,18283,Adhérent,"Rue Principale",67300,SCHILTIGHEIM,DIVERS,,,01/01/1994
+,,18319,Adhérent,"7 rue Honoré de Balzac",57400," SARREBOURG",DIVERS,,,01/01/1994
+,,18466,Adhérent,"2 rue Principale",67230,EHL-SAND,DIVERS,,,01/01/1994
+,,18485,Adhérent,"9 Rue de l'Ancien Bac",67100,STRASBOURG,DIVERS,,,01/01/1994
+,,18486,Adhérent,"14 B rue de l'Eglise",67280,URMATT,DIVERS,,,01/04/1994
+,,18506,Adhérent,"7 Rue des Jardins",67810,HOLTZHEIM,DIVERS,,,01/07/1994
+,,18545,Adhérent,"46 Rue des Gardes Champêtres",67000,STRASBOURG,DIVERS,,,01/04/1994
+,,18820,Adhérent,"21 rue de l'Engelbreit Apt 16",67200,STRASBOURG,DIVERS,,,01/01/1995
+,,18929,Adhérent,"54 rue du Rhin",68320,DURRENENTZEN,DIVERS,,,01/01/1995
+,,19119,Adhérent,"10 rue Jean-Henri Schnitzler",67000,STRASBOURG,DIVERS,,,01/04/1995
+,,19122,Adhérent,"2 Domaine du Château",67113,BLAESHEIM,DIVERS,,,01/01/1995
+,,19140,Adhérent,"24 Rue des Bruyères",68650,"LE BONHOMME",DIVERS,,,01/01/1995
+,,19183,Adhérent,"38 boulevard Victor Hugo",67200,STRASBOURG,DIVERS,,,01/04/1995
+,,19246,Adhérent,"30 rue Beethoven",68000,COLMAR,DIVERS,,,01/01/1995
+,,19504,Adhérent,"269 chemin des Visles",34230,PUILACHER,DIVERS,,,01/07/1995
+,,19609,Adhérent,"8, rue des Fleurs",68320,ARTZENHEIM,DIVERS,,,01/01/1996
+,,19622,Adhérent,"8 rue des Myrtilles",67960,ENTZHEIM,DIVERS,,,01/01/1996
+,,19683,Adhérent,"11 Place du Marché",67120,MOLSHEIM,DIVERS,,,01/01/1996
+,,19904,Adhérent,"12 Rue du Guirbaden",67800,BISCHHEIM,DIVERS,,,01/01/1996
+,,20003,Adhérent,"201 Avenue de Tringance",83690,TOURTOUR,DIVERS,,,01/07/1996
+,,20059,Adhérent,"8 Rue Migneret",67000,STRASBOURG,DIVERS,,,01/01/2011
+,,20172,Adhérent,"12 rue des Bouleaux",67850,HERRLISHEIM,DIVERS,,,01/10/1996
+,,20200,Adhérent,"13 rue de la piscine",23210,MARSAC,DIVERS,,,01/01/1997
+,,20207,Adhérent,"5 rue Siegfried",67100,STRASBOURG,DIVERS,,,01/07/1996
+,,20211,Adhérent,"9 rue des alouettes",67380,LINGOLSHEIM,DIVERS,,,01/07/1996
+,,20265,Adhérent,"17 Rue Sühr",67140,BOURGHEIM,DIVERS,,,01/01/1997
+,,20300,Adhérent,"19 rue de la Vallée",68210,ALTENACH,DIVERS,,,01/01/1997
+,,20438,Adhérent,"2 D rue des Glaieuls",67600,SELESTAT,DIVERS,,,01/01/1997
+,,20537,Adhérent,"18 Rue Iles des Epis",67000,STRASBOURG,DIVERS,,,01/04/1997
+,,20619,Adhérent,"5 Rue de la Fontaine",67260,DIEDENDORF,DIVERS,,,01/01/1997
+,,20655,Adhérent,"7 Cour Fernand Jaenger",67200,STRASBOURG,DIVERS,,,01/01/1997
+,,20710,Adhérent,"16 Rue Dagobert",67520,KIRCHHEIM,DIVERS,,,01/01/1997
+,,20768,Adhérent,"2 rue des Champs",67370,DINGSHEIM,DIVERS,,,01/04/1997
+,,20868,Adhérent,"5 Rue Gouvion St-Cyr",67170,BERSTHEIM,DIVERS,,,01/01/1998
+,,20883,Adhérent,"11 Rue de Rimbach",67100,STRASBOURG,DIVERS,,,01/10/1997
+,,20926,Adhérent,"77836 RHEINMUNSTER-SCHWARZACH",99109,Allemagne,DIVERS,,,01/01/1998
+,,20947,Adhérent,"17 rue de Châtenois",67100,STRASBOURG,DIVERS,,,01/07/1997
+,,21039,Adhérent,"15 Rue Albert Schweitzer",67117,ITTENHEIM,DIVERS,,,01/01/1998
+,,21117,Adhérent,"21 Rue de la Gare",67690,HATTEN,DIVERS,,,01/10/1997
+,,21171,Adhérent,"13 Rue Gustave Doré",67150,ERSTEIN,DIVERS,,,01/01/1998
+,,21184,Adhérent,"22 Rue des Capucins",67200,STRASBOURG,DIVERS,,,01/10/1997
+,,21207,Adhérent,"11 Rue des Fleurs",88150,"THAON LES VOSGES",DIVERS,,,01/01/1998
+,,21297,Adhérent,"20 rue du Kirchberg",67370,AVENHEIM,DIVERS,,,01/07/1998
+,,21324,Adhérent,"9 rue de l'Eglise",67220,"SAINT MARTIN",DIVERS,,,01/01/1998
+,,21388,Adhérent,"39 rue du Mal Joffre",67700,SAVERNE,DIVERS,,,01/04/1998
+,,21395,Adhérent,"22 place des Halles",67000,STRASBOURG,DIVERS,,,01/10/1998
+,,21397,Adhérent,"7 Rue de la Forêt",67640,ICHTRATZHEIM,DIVERS,,,01/10/1998
+,,21434,Adhérent,"4 Place de l'Hôtel de ville",67140,BARR,DIVERS,,,01/07/1998
+,,21531,Adhérent,"25 rue Macon",67100,STRASBOURG,DIVERS,,,
+,,21536,Adhérent,"3 rue Wickenfeld",67100,STRASBOURG,DIVERS,,,
+,,21632,Adhérent,"10 Rue de Goncourt",88300,SARTES,DIVERS,,,01/01/1999
+,,21649,Adhérent,"172 rue de l'Ecole",67690,RITTERSHOFFEN,DIVERS,,,01/01/1999
+,,21694,Adhérent,"49 rue St-Aloïse",67100,STRASBOURG,DIVERS,,,
+,,21785,Adhérent,"25 Rue des Serruriers",67000,STRASBOURG,DIVERS,,,01/01/1999
+,,21844,Adhérent,"25 rue de la Petite Hollande",25200,MONTBELIARD,DIVERS,,,01/01/1999
+,,21881,Adhérent,"10 rue des Chalets",67220,NEUBOIS,DIVERS,,,01/01/1999
+,,21984,Adhérent,"11a Rue des Seigneurs",67990,OSTHOFFEN,DIVERS,,,01/04/1999
+,,22041,Adhérent,"4 rue du Faubourg National",67000,STRASBOURG,DIVERS,,,01/01/1999
+,,22052,Adhérent,"17 Boulevard Saint Roch",6300,NICE,DIVERS,,,01/10/1999
+,,22073,Adhérent,"1a Rue de Gottenhouse",67700,HAEGEN,DIVERS,,,01/01/1999
+,,22098,Adhérent,"13 Rue de Hurtigheim",67117,QUATZENHEIM,DIVERS,,,01/10/1972
+,,22157,Adhérent,"4 Rue du Moulin",67660,SCHWABWILLER,DIVERS,,,01/01/2000
+,,22343,Adhérent,"2 rue Curie",67200,STRASBOURG,DIVERS,,,01/10/1999
+,,22394,Adhérent,"28 rue de Vendenheim",67800,BISCHHEIM,DIVERS,,,01/04/2000
+,,22539,Adhérent,"4 Rue de la Forge",67310,DANGOLSHEIM,DIVERS,,,01/10/1997
+,,22542,Adhérent,"3 rue d'Achenheim",67117,ITTENHEIM,DIVERS,,,01/04/2000
+,,22612,Adhérent,"22 Rue de Verdun",67000,STRASBOURG,DIVERS,,,01/01/2000
+,,22613,Adhérent,"1 rue du Stade",67470,SELTZ,DIVERS,,,01/01/2000
+,,22646,Adhérent,"13 rue du Moulin",67670,MOMMENHEIM,DIVERS,,,01/07/2000
+,,22664,Adhérent,"75 rue de la Goutte",67220,FOUCHY,DIVERS,,,01/01/2000
+,,22769,Adhérent,"1 rue des Violettes",67720,HOERDT,DIVERS,,,01/10/2000
+,,22816,Adhérent,"Lieu dit Neubruckweg",67600,SELESTAT,DIVERS,,,01/10/2000
+,,22836,Adhérent,"6 rue Marie Hart",67200,STRASBOURG,DIVERS,,,01/10/2000
+,,23046,Adhérent,"5 rue des Muguets",67110,"NEHWILLER REICHSHOFFEN",DIVERS,,,01/01/2001
+,,23096,Adhérent,"6 rue des Pois",67500,HAGUENAU,DIVERS,,,01/01/2001
+,,23103,Adhérent,"16 Impasse Emmanuel Chabrier",85180,"CHATEAU D'OLONNE",DIVERS,,,01/04/2001
+,,23109,Adhérent,"29 rue des Faisans",67170,DONNENHEIM,DIVERS,,,01/01/2001
+,,23139,Adhérent,"16 Grand Rue",67370,BEHLENHEIM,DIVERS,,,01/01/2001
+,,23148,Adhérent,"11 Rue de Stutzheim",67200,STRASBOURG,DIVERS,,,01/01/2001
+,,23191,Adhérent,"47 rue de la Charmille",67200,STRASBOURG,DIVERS,,,01/04/2001
+,,23232,Adhérent,"3 Square des Chasseurs",67760,GAMBSHEIM,DIVERS,,,01/01/2001
+,,23246,Adhérent,"5 rue de la Colline",67204,ACHENHEIM,DIVERS,,,01/07/2001
+,,23304,Adhérent,"8 rue des Géraniums",67600,SELESTAT,DIVERS,,,01/01/2001
+,,23321,Adhérent,"6 rue Principale",67230,EHL-SAND,DIVERS,,,01/01/2001
+,,23578,Adhérent,"9 rue de la Guadeloupe",68740,FESSENHEIM,DIVERS,,,01/07/2001
+,,23582,Adhérent,"17 rue de Mundolsheim",67300,SCHILTIGHEIM,DIVERS,,,01/01/2002
+,,23636,Adhérent,"3 Rue du Stade",57230,OEGUELSHARDT,DIVERS,,,01/01/2002
+,,23682,Adhérent,"9 rue du Bitzen",67140,BARR,DIVERS,,,01/01/2002
+,,23930,Adhérent,"1 Impasse des Saules",67118,"GEISPOLSHEIM VILLAGE",DIVERS,,,01/01/2002
+,,23951,Adhérent,"chemin du moulin des près",11500,GINOLES,DIVERS,,,01/01/2002
+,,23984,Adhérent,"16 Rue des Vergers",67370,TRUCHTERSHEIM,DIVERS,,,01/10/2001
+,,24014,Adhérent,"2 impasse du Keckshof",57230,STURTZELBRONN,DIVERS,,,01/01/2002
+,,24064,Adhérent,"28 Rue de Vendenheim",67800,BISCHHEIM,DIVERS,,,01/07/2002
+,,24130,Adhérent,"3 Rue Sainte Marie",67700,SAVERNE,DIVERS,,,01/01/1986
+,,24153,Adhérent,"40, rue du Hohwald",67640,LIPSHEIM,DIVERS,,,01/10/2002
+,,24188,Adhérent,"51 route de Strasbourg",67960,ENTZHEIM,DIVERS,,,01/01/2002
+,,24222,Adhérent,"2 impasse de l'Eglise",67117,ITTENHEIM,DIVERS,,,01/07/2002
+,,24272,Adhérent,"1 Allée des Mimosas",11400,FENDEILLE,DIVERS,,,01/07/2002
+,,24415,Adhérent,"Lieu dit Langabwand",67117,ITTENHEIM,DIVERS,,,01/01/2003
+,,24474,Adhérent,"1 rue Gustave Mauconduit",76210,BOLBEC,DIVERS,,,01/01/2003
+,,24523,Adhérent,"20 Quai des Alpes",67000,STRASBOURG,DIVERS,,,01/01/2003
+,,24592,Adhérent,"14 Quai des Bateliers",67000,STRASBOURG,DIVERS,,,01/01/2003
+,,24715,Adhérent,"30, rue Oberlin",67113,BLAESHEIM,DIVERS,,,01/01/2003
+,,24792,Adhérent,"11 rue Lamartine",67800,BISCHHEIM,DIVERS,,,01/01/1969
+,,24846,Adhérent,"89 Route des Romains",67200,STRASBOURG,DIVERS,,,01/01/2003
+,,25167,Adhérent,"5 Rue de Breuschwickersheim",67117,ITTENHEIM,DIVERS,,,01/07/2003
+,,25182,Adhérent,"9 Grand Rue",88490,"PROVENCHERES SUR FAVE",DIVERS,,,01/07/2003
+,,25222,Adhérent,"13 Route de Dabo",67710,OBERSTEIGEN,DIVERS,,,01/01/2004
+,,25465,Adhérent,"4 rue Herrenhaus",67140,"LE HOHWALD",DIVERS,,,01/01/2004
+,,25499,Adhérent,"4 Rue Belle-Vue",67770,"LA VANCELLE",DIVERS,,,01/07/2003
+,,25563,Adhérent,"7 rue de Schnersheim",67370,"ITTLENHEIM NEUGERTHEIM",DIVERS,,,01/01/2004
+,,25727,Adhérent,"37 rue Lutenbacher",88540,BUSSANG,DIVERS,,,01/01/2004
+,,25851,Adhérent,"24 Rue des Prés",67113,BLAESHEIM,DIVERS,,,01/01/2004
+,,25870,Adhérent,"11 rue de l'Ecole",25680,CHAZELOT,DIVERS,,,01/01/2004
+,,25883,Adhérent,"30 Allée de la Rondelle",67700,MONSWILLER,DIVERS,,,01/04/1982
+,,26048,Adhérent,"28 Rue Victor Schoelcher",67300,SCHILTIGHEIM,DIVERS,,,01/01/2003
+,,26075,Adhérent,"12 Rue de la Source",67390,BOESENBIESEN,DIVERS,,,01/01/2005
+,,26255,Adhérent,"61 Rue du Goeftberg",67370,WINTZENHEIM,DIVERS,,,01/07/1993
+HILLER,Hélène,26338,Adhérent,"8a rue du Général Leclerc",67210,OBERNAI,DIVERS,ADHERENT,,01/01/1987
+,,26385,Adhérent,"14 Rue de la Montée",67320,THAL-DRULINGEN,DIVERS,,,01/01/2005
+,,26488,Adhérent,"2 Rue de Siewiller",67320,BUST,DIVERS,,,01/01/2005
+,,26555,Adhérent,"Rés Les Voiliers - Logt 72",66140,"CANET PLAGE",DIVERS,,,01/01/2005
+,,26611,Adhérent,"26 rue de la Loue",45150,"OUVROUER LES CHAMPS",DIVERS,,,01/01/2005
+,,26795,Adhérent,"7 Rue de Hochfelden",67370,REITWILLER,DIVERS,,,01/01/2005
+,,26837,Adhérent,"3 Impasse des Vignes",67170,BERSTHEIM,DIVERS,,,01/07/2005
+,,26938,Adhérent,"12 Le Domaine",57340,LIDREZING,DIVERS,,,01/01/2006
+,,27006,Adhérent,"Les Arénies",24220,"SAINT CYPRIEN",DIVERS,,,01/01/2006
+,,27019,Adhérent,"12 avenue Mirabeau",13320,"LA MEDE CHATEAUNEUF",DIVERS,,,01/01/2006
+,,27040,Adhérent,"122 Route d'Oberhausbergen",67200,STRASBOURG,DIVERS,,,01/01/2005
+,,27105,Adhérent,"24 bis Rue Louis Pasteur",68360,SOULTZ,DIVERS,,,01/07/2005
+,,27137,Adhérent,"3 Rue du Milieu",67370,PFULGRIESHEIM,DIVERS,,,01/01/2006
+,,27170,Adhérent,"5 Rue des Chênes",67960,ENTZHEIM,DIVERS,,,01/01/2006
+,,27267,Adhérent,"12 Avenue Mirabeau",13320,"LA MEDE CHÂTEAU NEUF",DIVERS,,,01/01/2006
+,,27279,Adhérent,"15 chemin des Paquerettes",67300,SCHILTIGHEIM,DIVERS,,,01/01/2006
+,,27366,Adhérent,"13 Route de Turckheim",68040,INGERSHEIM,DIVERS,,,01/07/2006
+,,27394,Adhérent,"2 rue rené Laederich",88210,MOUSSEY,DIVERS,,,01/01/2006
+,,27456,Adhérent,"43 rue Pastel",31120,"LACROIX FALGARDE",DIVERS,,,01/01/2006
+,,27594,Adhérent,"1 rue des Juifs",67880,KRAUTERGERSHEIM,DIVERS,,,01/07/2006
+,,27596,Adhérent,"10 Rue du Spesbourg",67140,ANDLAU,DIVERS,,,01/01/2007
+,,27851,Adhérent,"46 rue des Gardes Champêtres",67000,STRASBOURG,DIVERS,,,01/01/2007
+,,27937,Adhérent,"5 A Rue du Général Leclerc",67220,VILLE,DIVERS,,,01/01/2007
+,,27939,Adhérent,"15 rue de la Montagne",67220,"DIEFFENBACH AU VAL",DIVERS,,,01/01/2007
+,,28021,Adhérent,"5 rue des pins",57070,METZ,DIVERS,,,01/01/2007
+,,28194,Adhérent,"8 rue des Quatre Vents",67760,GAMBSHEIM,DIVERS,,,01/01/2007
+,,28237,Adhérent,"38 rue Clémenceau",67140,ANDLAU,DIVERS,,,01/01/2007
+,,28238,Adhérent,"8 rue Kleber Haedens",31200,TOULOUSE,DIVERS,,,01/01/2007
+,,28352,Adhérent,"40 rue du Passage",67800,BISCHHEIM,DIVERS,,,01/01/2008
+,,28470,Adhérent,"14 rue des Forgerons",67990,OSTHOFFEN,DIVERS,,,01/01/2008
+,,28651,Adhérent,"8 rue Kleber Haedens",31200,TOULOUSE,DIVERS,,,01/07/2008
+,,28703,Adhérent,"18 rue des Vergers",67370,TRUCHTERSHEIM,DIVERS,,,01/07/2008
+,,28828,Adhérent,"27 rue de la Gare",67720,HOERDT,DIVERS,,,01/01/2008
+,,28839,Adhérent,"11 rue Cranach",67200,STRASBOURG,DIVERS,,,01/01/2008
+,,29033,Adhérent,"4 place De Gaulle",67220,VILLE,DIVERS,,,01/01/2009
+,,29233,Adhérent,"5a rue de la Garance",67117,ITTENHEIM,DIVERS,,,01/07/2009
+,,29267,Adhérent,"32 rue du Raisin",67118,"GEISPOLSHEIM GARE",DIVERS,,,01/01/2009
+,,29411,Adhérent,"7 rue de la Forêt",67150,OSTHOUSE,DIVERS,,,01/01/2010
+,,29441,Adhérent,"31 Route Romaine",67220,"SAINT PIERRE BOIS",DIVERS,,,01/01/2010
+,,29517,Adhérent,"54 rue de la Canardière",67100,STRASBOURG,DIVERS,,,01/01/2010
+,,29584,Adhérent,"2 rue du Chasseur",67370,WIWERSHEIM,DIVERS,,,01/01/2010
+,,29585,Adhérent,"1 impasse de la Licorne",67117,ITTENHEIM,DIVERS,,,01/01/2010
+,,29625,Adhérent,"3 rue de Périgueux",67610,"LA WANTZENAU",DIVERS,,,01/01/2010
+BARTHEL,Patrice,29785,Adhérent,"6d avenue Jean Sacchetti",33510,"ANDERNOS LES BAINS",DIVERS,ADHERENT,,01/01/2011
+,,29844,Adhérent,"9 rue Rebberg",67220,"SAINT MARTIN",DIVERS,,,01/01/2011
+,,29951,Adhérent,"54 rue du Sonnenberg",67370,TRUCHTERSHEIM,DIVERS,,,01/01/2011
+,,30050,Adhérent,"8 rue du Château",67140,ANDLAU,DIVERS,,,01/01/2011
+,,30099,Adhérent,"139 avenue André Favory",83740,"LA CADIERE",DIVERS,,,01/07/2011
+,,30132,Adhérent,"28 rue principale",67370,NEUGARTHEIM,DIVERS,,,01/07/2011
+,,30182,Adhérent,"5 rue des Acacias",67160,WISSEMBOURG,DIVERS,,,01/01/2009
+,,30262,Adhérent,"Rickenbacher strasse 104 b",88131,LINDAU,DIVERS,,,01/01/2012
+,,30420,Adhérent,"Sonnenweg 6 B",77694,"KEHL GOLDSCHEUER",DIVERS,,,01/07/2011
+,,30498,Adhérent,"65 route du Général de Gaulle",67300,SCHILTIGHEIM,DIVERS,,,01/01/2012
+,,30528,Adhérent,"4 impasse Saint Claude",71450,BLANZY,DIVERS,,,01/01/2012
+,,30530,Adhérent,"8 rue du 19 Novembre",67700,SAVERNE,DIVERS,,,01/01/2012
+,,30603,Adhérent,"15 rue des Acacias ",57400,SARREBOURG,DIVERS,,,01/07/2012
+,,30652,Adhérent,"43 rue de Champagne",67120,MOLSHEIM,DIVERS,,,01/01/2012
+,,30670,Adhérent,"12 rue Saint Nabor",67200,STRASBOURG,DIVERS,,,01/01/2013
+,,30747,Adhérent,"8 montée de la Croix ",67220,VILLE,DIVERS,,,01/01/2013
+,,30830,Adhérent,"6 rue Saint Nicolas",68160,"SAINTE CROIX AUX MINES",DIVERS,,,01/01/2013
+,,30831,Adhérent,"4 rue Bertran",31200,TOULOUSE,DIVERS,,,01/01/2013
+,,30878,Adhérent,"47 rue du Terrain d'Exercice",57370,PHALSBOURG,DIVERS,,,01/01/2013
+,,31241,Adhérent,"6 rue de la Zinsel",57370,METTING,DIVERS,,,01/01/2014
+,,31256,Adhérent,"12A rue de la Paix",67470,MOTHERN,DIVERS,,,01/01/2014
+,,31271,Adhérent,"5 rue de la Ferme",67110,"NIEDERBRONN LES BAINS",DIVERS,,,01/01/2014
+,,31314,Adhérent,"6 rue des Cigognes",67170,BRUMATH,DIVERS,,,01/01/2014
+,,31324,Adhérent,"20 rue des roses",67113,BLAESHEIM,DIVERS,,,01/01/2014
+,,31381,Adhérent,"16 rue de Siewiller",67320,BUST,DIVERS,,,01/01/2014
+,,31486,Adhérent,"22 Buchthal",57230,BAERENTHAL,DIVERS,,,01/01/2014
+,,31495,Adhérent,"Kutzendorf 12",77876,KAPPELRODECK-WALDULM,DIVERS,,,01/01/2014
+,,31569,Adhérent,"7 rue des Jardins",67810,HOLTZHEIM,DIVERS,,,01/01/2015
+,,31580,Adhérent,"11 rue de Breitenau",67220,VILLE,DIVERS,,,01/01/2015
+,,31650,Adhérent,"2 rue Jean Freysz",67113,BLAESHEIM,DIVERS,,,01/01/2015
+,,31706,Adhérent,"Richard Wagner str. 2",77694,KEHL,DIVERS,,,01/01/2015
+,,31729,Adhérent,"Château Beaumet",83590,GONFARON,DIVERS,,,01/01/2015
+,,31741,Adhérent,"23 rue des Rosignols",67590,WINTERSHOUSE,DIVERS,,,01/01/2015
+,,31875,Adhérent,"3947 Route de Vidauban",83340,"LE THORONET",DIVERS,,,01/07/2015
+,,31876,Adhérent,"85 Impasse des Prés",83140,"SIX FOURS LES PLAGES",DIVERS,,,01/01/2015
+,,31909,Adhérent,"34 impasse de la Tuilerie",57220,BOULAY,DIVERS,,,01/07/2015
+,,31940,Adhérent,"4 chemin du Paquis",88480,"ETIVAL CLAIREFONTAINE",DIVERS,,,01/07/2015
+,,31991,Adhérent,"10 quai de Turckheim",67000,STRASBOURG,DIVERS,,,01/01/2016
+,,32016,Adhérent,"S/C GRINNER Alexandre",3,"quai Kléber",DIVERS,,,01/01/2016

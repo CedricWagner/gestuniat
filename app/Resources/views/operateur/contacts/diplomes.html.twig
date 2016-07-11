@@ -25,11 +25,8 @@
 				{% if app_security.hasAccess('DIPLOME_PRINT') %}
 					<th>Invitation à l'AG</th>
 				{% endif %}
-				{% if app_security.hasAccess('DIPLOME_PRINT_ENVELOPPE') %}
+				{% if app_security.hasAccess('DIPLOME_PRINT_ETIQUETTE') %}
 					<th>Etiquette</th>
-				{% endif %}
-				{% if app_security.hasAccess('DIPLOME_PRINT_ENVELOPPE') %}
-					<th>Enveloppe</th>
 				{% endif %}
 			</tr>
 		</thead>
@@ -64,11 +61,6 @@
 					<td>
 						{% if app_security.hasAccess('DIPLOME_PRINT_ETIQUETTE') %}
 							<a target="_blank" class="btn btn-primary" href="{{ path('generate_etiquette_diplome',{'idContactDiplome':cd.id}) }}">Imprimer</a>
-						{% endif %}
-					</td>
-					<td>
-						{% if app_security.hasAccess('DIPLOME_PRINT_ENVELOPPE') %}
-							<a target="_blank" class="btn btn-primary" href="{{ path('generate_enveloppe_diplome',{'idContactDiplome':cd.id}) }}">Imprimer</a>
 						{% endif %}
 					</td>
 				</tr>

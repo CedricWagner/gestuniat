@@ -91,7 +91,7 @@
 		<p><a class="btn btn-default btn-block" href="{{ path('kit_adh_contact',{'idContact':contact.id}) }}">Kit adhésion</a></p>
 	{% endif %}
 	{% if app_security.hasAccess('CONTACT_ET_PRINT') %}
-		<p><a class="btn btn-default btn-block" target="_blank" href="{{ path('contact_print_etiquette',{'idContact':contact.id}) }}">Imprimer l'étiquette</a></p>
+		<p><a class="btn btn-default btn-block" target="_blank" href="{{ path('contact_print_enveloppe',{'idContact':contact.id}) }}">Imprimer l'enveloppe</a></p>
 	{% endif %}
 	{% if app_security.hasAccess('PROCURATION_READ') %}
 		<p><a class="btn btn-default btn-block" href="{{ path('list_procurations',{'idContact':contact.id}) }}">Procuration</a></p>

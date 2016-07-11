@@ -70,6 +70,11 @@
 		</tbody>
 	</table>
 </div>
+{% if currentFilter is defined and currentFilter != null %}
+	<input type="hidden" id="filter-id" value="{{ currentFilter.id }}" />
+{% else %}
+	<input type="hidden" id="filter-id" value="0" />
+{% endif %}
 
 <script type="text/javascript">
 	$(function(){

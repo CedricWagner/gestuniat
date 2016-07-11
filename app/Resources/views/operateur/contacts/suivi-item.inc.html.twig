@@ -9,9 +9,9 @@
 			</p>
 		{% endif %}
 		<p>
-			{{ suivi.dateEcheance and suivi.isOk ? '<s>' : ''  }}
+			{{ suivi.dateEcheance and suivi.isOk ? '' : ''  }}
 			{{ suivi.texte }}
-			{{ suivi.dateEcheance and suivi.isOk ? '</s>' : ''  }}
+			{{ suivi.dateEcheance and suivi.isOk ? '' : ''  }}
 		</p>
 		<p>
 			{{ suivi.dateCreation.format('d/m/Y') }}&nbsp;&nbsp;|&nbsp;&nbsp;<span class="due-to">{{ suivi.dateEcheance ? suivi.dateEcheance.format('d/m/Y') : '---' }}</span>&nbsp;&nbsp;|&nbsp;&nbsp;{{ suivi.operateur ? suivi.operateur.nom : '' }} {{ suivi.operateur ? suivi.operateur.prenom : '' }}

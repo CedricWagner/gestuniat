@@ -20,7 +20,12 @@ class CSVGenerator
 
     public function addLine($line=array()){
 
-    	$this->lines[]= $line;
+        $items = array();
+        foreach ($line as $item) {
+            $items[] = utf8_decode($item);
+        }
+
+    	$this->lines[]= $items;
 
         return $this;
     }

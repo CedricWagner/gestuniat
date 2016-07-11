@@ -54,9 +54,9 @@ Gestuniat - Section {{ section.nom }}
 					{% if app_security.hasAccess('TIMBRE_READ') %}
 						<p>Pour l'année {{ "now"|date("Y") - 1 }} </p>
 						<div class="btn-group-vertical" role="group">
-							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Timbres<span class="badge">{{ etatTimbres.payes }}</span></button>
-							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Adhérents<span class="badge">{{ etatTimbres.emis }}</span></button>
-							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Reste à régler<span class="badge red">{{ etatTimbres.remis }}</span></button>
+							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Timbres payés<span class="badge">{{ etatTimbres.payes }}</span></button>
+							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Timbres remis<span class="badge">{{ etatTimbres.emis }}</span></button>
+							<button style="cursor: default;" class="btn btn-default btn-block" role="button">Reste<span class="badge red">{{ etatTimbres.remis }}</span></button>
 						</div>
 						<br />
 						<a href="{{ path('list_remiseTimbres',{'idSection':section.id}) }}" class="btn btn-default btn-block" >Gestion des timbres >></a>

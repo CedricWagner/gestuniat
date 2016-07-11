@@ -71,7 +71,7 @@ class ContactFullEditionType extends AbstractType
             ->add('fonctionGroupement',EntityType::class,array('label' => 'Fonction de groupement','class'=>'AppBundle:FonctionGroupement','choice_label'=>'label','placeholder' => 'Aucune'))
             ->add('section',EntityType::class,array('label' => 'Section','class'=>'AppBundle:Section','choice_label'=>'nom','placeholder' => 'Aucune'))
             ->add('encaisseur',TextType::class,array('label' => 'Nom encaisseur'))
-            ->add('isDossierPaye',CheckboxType::class,array('label' => 'Frais de dossier payé'))
+            ->add('isDossierPaye',CheckboxType::class,array('label' => 'Frais de dossier payés'))
             ->add('isCA',CheckboxType::class,array('label' => 'Est membre du CA'))
             ->add('fonctionRepresentation',TextType::class,array('label' => 'Fonction représentation'))
             ->add('numSecu',TextType::class,array('label' => 'Numéro de sécu'))

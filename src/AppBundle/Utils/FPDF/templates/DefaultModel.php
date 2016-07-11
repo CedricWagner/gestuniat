@@ -154,7 +154,7 @@ class DefaultModel extends FPDF {
             $this->SetFont('helvetica','',10);
         }
         $this->Ln();
-        $this->WriteHTML(utf8_decode(str_replace('€',utf8_encode(chr(128)),$p)));
+        $this->WriteHTML(utf8_decode(str_replace(array('€',"\n"),array(utf8_encode(chr(128)),'<br />'),$p)));
         $this->Ln();
     }
 

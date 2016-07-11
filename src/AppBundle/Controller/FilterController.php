@@ -54,14 +54,24 @@ class FilterController extends Controller
      */
     public function deleteFilterAction($idFiltre)
     {
+        $em = $this->get('doctrine.orm.entity_manager');
 
         $filter = $this->getDoctrine()
             ->getRepository('AppBundle:FiltrePerso')
             ->find($idFiltre);
 
+        $valeurs = $this->getDoctrine()
+            ->getRepository('AppBundle:FiltreValeur')
+            ->findBy(array('filtrePerso'=>$filter));
+
+        foreach ($valeurs as $valeur) {
+            $em->remove($valeur);
+        }
+        
+        $em->flush();      
+
         $context = $filter->getContexte();
 
-        $em = $this->get('doctrine.orm.entity_manager');
         $em->remove($filter);
         $em->flush();
 

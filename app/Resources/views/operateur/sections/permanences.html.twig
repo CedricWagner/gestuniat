@@ -39,13 +39,7 @@
 					<td>
 					 {% if  app_security.hasAccess('PERMANENCE_PRINT') %}
 						<div class="btn-group">
-							<button href="" class="btn btn-primary dropdown-toggle" type="button" id="dd-gen-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Générer&nbsp;<span class="caret"></span></button>
-							 <ul class="dropdown-menu" aria-labelledby="dd-gen-order">
-							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Président'}) }}">Président</a></li>
-							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Vice-Président'}) }}">Vice-président</a></li>
-							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Trésorier'}) }}">Trésorier</a></li>
-							    <li><a target="_blank" href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id,'target':'Secrétaire'}) }}">Secrétaire</a></li>
-							  </ul>
+							<a  href="{{ path('generate_ordre_perm',{'idPermanence':permanence.id}) }}" class="btn btn-primary dropdown-toggle" type="button" id="dd-gen-order">Générer&nbsp;</a>
 						</div>
 					 {% endif %}
 					</td>

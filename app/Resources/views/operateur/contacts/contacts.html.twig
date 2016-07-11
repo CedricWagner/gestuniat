@@ -89,7 +89,11 @@
 			<label>
 			    <input type="checkbox" name="cbCA" {{ currentFilter and currentFilter.getFiltreValeur('cbCA') == '1' ? 'checked="checked"' : '' }} value="1">
 			    	Membre du CA
-			  </label>
+		  	</label>&nbsp;&nbsp;
+			<label>
+			    <input type="checkbox" name="cbBulletin" {{ currentFilter and currentFilter.getFiltreValeur('cbBulletin') == '1' ? 'checked="checked"' : '' }} value="1">
+			    	Bulletin d'info
+			</label>
 		</div>
 	</div>
 	<h3><a data-toggle="collapse" class="collapsed" aria-expanded="false" href="#sectionLocalisation" aria-controls="sectionLocalisation">Localisation<span class="glyphicons glyphicons-chevron-right rotate90"></span><span class="glyphicons glyphicons-chevron-right rotate270"></span></a></h3>
@@ -143,6 +147,7 @@
 			{% for diplome in diplomes %}
 				<option  {{ currentFilter and currentFilter.getFiltreValeur('selDiplome') == diplome.id ? 'selected="selected"' : '' }}  value="{{ diplome.id }}">{{ diplome.label }}</option>
 			{% endfor %}
+			<option value="NONE">Aucun</option>
 		</select>
 	</div>
 	<div class="filter-section section-save-filter">
@@ -158,18 +163,19 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="actions-container">
-				<span>Effectuer une action sur la sélection &nbsp;&nbsp;&nbsp;</span>
+				<span>Effectuer une action &nbsp;&nbsp;&nbsp;</span>
 				<select name="selAction" id="selAction" class="padded">
 					{% if app_security.hasAccess('CONTACT_DELETE') %}
-						<option value="DELETE_ITEMS">Supprimer les éléments</option>
+						<option value="DELETE_ITEMS">Supprimer les éléments (sélection)</option>
 					{% endif %}
 					{% if app_security.hasAccess('CONTACT_ET_PRINT') %}
-						<option value="ETIQUETTES">Imprimer les étiquettes</option>
+						<option value="ETIQUETTES">Imprimer les étiquettes (sélection)</option>
 					{% endif %}
 					{% if app_security.hasAccess('CONTACT_ET_PRINT') %}
-						<option value="ETIQUETTES_DIP">Imprimer les étiquettes pour diplômes</option>
+						<option value="ETIQUETTES_DIP">Imprimer les étiquettes pour diplômes (sélection)</option>
 					{% endif %}
-					<option value="EXPORT">Exporter la liste</option>
+					<option value="EXPORT">Exporter la liste (sélection)</option>
+					<option value="EXPORT_ALL">Exporter la liste (tous)</option>
 				</select>
 				<button class="btn btn-primary" onclick="doContactListingAction($('#selAction').val())">Valider</button>
 			</div>

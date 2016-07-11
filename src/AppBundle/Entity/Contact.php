@@ -222,6 +222,13 @@ class Contact
     private $dateDeces;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateSaisieDeces", type="date", nullable=true)
+     */
+    private $dateSaisieDeces;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="mentionDeces", type="text", nullable=true)
@@ -943,6 +950,31 @@ class Contact
         return $this->dateDeces;
     }
 
+
+    /**
+     * Set dateSaisieDeces
+     *
+     * @param \DateTime $dateSaisieDeces
+     *
+     * @return Contact
+     */
+    public function setDateSaisieDeces($dateSaisieDeces)
+    {
+        $this->dateSaisieDeces = $dateSaisieDeces;
+
+        return $this;
+    }
+
+    /**
+     * Get dateSaisieDeces
+     *
+     * @return \DateTime
+     */
+    public function getDateSaisieDeces()
+    {
+        return $this->dateSaisieDeces;
+    }
+
     /**
      * Set mentionDeces
      *
@@ -1465,23 +1497,36 @@ class Contact
         return $this->typeAdhesion;
     }
 
-    public function displayHeader(){
-        
-    }
-
     public function displayCivility(){
         $txt = '';
-        switch ($this->civilite->getLabel()) {
-            case 'Monsieur':
-                $txt = 'Cher Monsieur,';
-                break;
-            case 'Madame':
-                $txt = 'Chère Madame,';
-                break;
-            default:
-                $txt = 'Chère Madame, cher Monsieur,';
-                break;
+        if ($this->civilite) {
+            switch ($this->civilite->getLabel()) {
+                case 'Monsieur':
+                    $txt = 'Cher Monsieur,';
+                    break;
+                case 'Madame':
+                    $txt = 'Chère Madame,';
+                    break;
+                default:
+                    $txt = 'Chère Madame, cher Monsieur,';
+                    break;
+            }
+        }else{
+            $txt = 'Chère Madame, cher Monsieur,';
         }
+        return $txt;
+    }
+
+    public function displayHeader(){
+        $txt = '';
+        $txt.= $this->civilite?$this->civilite->getLabel().' ':'';
+        $txt.= $this->getNom().' '.$this->getPrenom()."\n";
+        $txt.= $this->adresse."\n";
+        if($this->adresseComp){
+            $txt.= $this->adresseComp."\n";
+        }
+        $txt.= $this->cp.' '.$this->commune;
+
         return $txt;
     }
 

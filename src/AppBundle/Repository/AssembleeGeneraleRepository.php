@@ -29,29 +29,33 @@ class AssembleeGeneraleRepository extends \Doctrine\ORM\EntityRepository
 
 	public function findAGs($annee,$numTrimestre){
 		
+		if(!$numTrimestre){
+			$numTrimestre = 1;
+		}
+		
 		switch ($numTrimestre) {
 			case 1:
-				$params = array(
-					'p_debut'=> new \DateTime($annee.'-01-01'),
-					'p_fin'=> new \DateTime($annee.'-03-31'),
-					);
-				break;
-			case 2:
 				$params = array(
 					'p_debut'=> new \DateTime($annee.'-04-01'),
 					'p_fin'=> new \DateTime($annee.'-06-30'),
 					);
 				break;
-			case 3:
+			case 2:
 				$params = array(
 					'p_debut'=> new \DateTime($annee.'-07-01'),
 					'p_fin'=> new \DateTime($annee.'-09-30'),
 					);
 				break;
-			case 4:
+			case 3:
 				$params = array(
 					'p_debut'=> new \DateTime($annee.'-10-01'),
 					'p_fin'=> new \DateTime($annee.'-12-31'),
+					);
+				break;
+			case 4:
+				$params = array(
+					'p_debut'=> new \DateTime(($annee+1).'-01-01'),
+					'p_fin'=> new \DateTime(($annee+1).'-03-31'),
 					);
 				break;
 			default:

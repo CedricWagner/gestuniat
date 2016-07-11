@@ -14,29 +14,33 @@ class DonRepository extends \Doctrine\ORM\EntityRepository
 
 	public function findDons($annee,$numTrimestre){
 		
+		if(!$numTrimestre){
+			$numTrimestre = 1;
+		}
+
 		switch ($numTrimestre) {
 			case 1:
 				$params = array(
-					'p_debut'=> (new \DateTime($annee.'-01-01'))->format('d/m/Y'),
-					'p_fin'=> (new \DateTime($annee.'-03-31'))->format('d/m/Y'),
+					'p_debut'=> (new \DateTime(($annee-1).'-12-11'))->format('Y/m/d'),
+					'p_fin'=> (new \DateTime($annee.'-03-20'))->format('Y/m/d'),
 					);
 				break;
 			case 2:
 				$params = array(
-					'p_debut'=> (new \DateTime($annee.'-04-01'))->format('d/m/Y'),
-					'p_fin'=> (new \DateTime($annee.'-06-30'))->format('d/m/Y'),
+					'p_debut'=> (new \DateTime($annee.'-03-21'))->format('Y/m/d'),
+					'p_fin'=> (new \DateTime($annee.'-06-20'))->format('Y/m/d'),
 					);
 				break;
 			case 3:
 				$params = array(
-					'p_debut'=> (new \DateTime($annee.'-07-01'))->format('d/m/Y'),
-					'p_fin'=> (new \DateTime($annee.'-09-30'))->format('d/m/Y'),
+					'p_debut'=> (new \DateTime($annee.'-06-21'))->format('Y/m/d'),
+					'p_fin'=> (new \DateTime($annee.'-09-20'))->format('Y/m/d'),
 					);
 				break;
 			case 4:
 				$params = array(
-					'p_debut'=> (new \DateTime($annee.'-10-01'))->format('d/m/Y'),
-					'p_fin'=> (new \DateTime($annee.'-12-31'))->format('d/m/Y'),
+					'p_debut'=> (new \DateTime($annee.'-9-21'))->format('Y/m/d'),
+					'p_fin'=> (new \DateTime($annee.'-12-10'))->format('Y/m/d'),
 					);
 				break;
 			default:
@@ -47,8 +51,8 @@ class DonRepository extends \Doctrine\ORM\EntityRepository
 		$qb = $this->createQueryBuilder('don');
 		$result = $qb
 			->select('don')
-			->where('don.date >= :p_debut')
-			->andwhere('don.date <= :p_fin')
+			->where('don.dateSaisie >= :p_debut')
+			->andwhere('don.dateSaisie <= :p_fin')
 			->andwhere('don.isAnonyme != true')
 			->setParameters($params)
 			->getQuery()

@@ -32,8 +32,8 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
 		$qb
 			->select('section')
 			->where('section.isActive = true')
-			->andwhere('section.nom LIKE :nom OR section.id = :id')
-			->setParameters(array('nom'=>$txtSearch.'%','id'=>$txtSearch))
+			->andwhere('section.nom LIKE :nom OR section.num = :num')
+			->setParameters(array('nom'=>$txtSearch.'%','num'=>$txtSearch))
             ->setFirstResult(0)
             ->setMaxResults(20);
 
@@ -100,6 +100,14 @@ class SectionRepository extends \Doctrine\ORM\EntityRepository
 							$qb->join('AppBundle:ContratPrevObs', 'cpo', 'WITH', 'cpo.section = section');
 						}elseif($fv->getValeur()=='AGRR'){
 							$qb->join('AppBundle:ContratPrevoyance', 'cp', 'WITH', 'cp.section = section');
+						}
+						break;
+					case 'selStatut':
+						$qb->andwhere('section.isActive = :p_is_active');
+						if ($fv->getValeur()=='ACTIVE') {
+							$params['p_is_active'] = 1;
+						}elseif($fv->getValeur()=='CLOSED'){
+							$params['p_is_active'] = 0;
 						}
 						break;
 					case 'cbRentier':

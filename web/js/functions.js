@@ -272,6 +272,7 @@ function ajaxApplyFilter(formFilter,ajaxUrl,page,orderby){
 		ajax_stop();
 		history.pushState({filtre:response.idFiltre}, "", response.path);
 		$('#list-'+$(formFilter).data('context')).html(response.html);
+		$('#filter-id').val(response.idFiltre);
 	});
 }
 
@@ -427,7 +428,7 @@ function doContactListingAction(value){
 	$.ajax({
 	  method: "POST",
 	  url: '/contact/listing/action',
-	  data: { action:value, selection:selection }
+	  data: { action:value, selection:selection, idFilter:$('#filter-id').val() }
 	})
 	.done(function(response) {
 		ajax_stop();

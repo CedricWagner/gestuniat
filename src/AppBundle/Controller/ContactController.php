@@ -25,6 +25,7 @@ use AppBundle\Form\DocumentType;
 use AppBundle\Utils\FPDF\FPDF;
 use AppBundle\Utils\FPDF\templates\Etiquette as PDF_Etiquette;
 use AppBundle\Utils\FPDF\templates\DefaultModel as PDF_DefaultModel;
+use AppBundle\Utils\FPDF\templates\Enveloppe1515 as PDF_Enveloppe1515;
 
 
 class ContactController extends Controller
@@ -171,7 +172,7 @@ class ContactController extends Controller
         $lstSuivis[$suiviDossier->getDateCreation()->format('Y-m-d').'_'.$suiviDossier->getId()] = $suiviDossier;
       }
 
-      ksort($lstSuivis);
+      krsort($lstSuivis);
 
       $lstAllSuivisContact = $this->getDoctrine()
         ->getRepository('AppBundle:Suivi')
@@ -191,7 +192,7 @@ class ContactController extends Controller
         $lstAllSuivis[$suiviDossier->getDateCreation()->format('Y-m-d').'_'.$suiviDossier->getId()] = $suiviDossier;
       }
 
-      ksort($lstAllSuivis);
+      krsort($lstAllSuivis);
 
       if ($contact->getMembreConjoint()) {
         $conjoint = $this->getDoctrine()
@@ -318,12 +319,13 @@ class ContactController extends Controller
               }
               $conjoint->setStatutMatrimonial($this->getDoctrine()->getRepository('AppBundle:StatutMatrimonial')->find(StatutMatrimonial::getIdVeuf()));
 
-
               $em = $this->get('doctrine.orm.entity_manager');
               $em->persist($conjoint);
               $em->flush(); 
             }
             $contact->setStatutJuridique($this->getDoctrine()->getRepository('AppBundle:StatutJuridique')->find(StatutJuridique::getIdDeces()));
+            $contact->setDateSaisieDeces(new \DateTime());
+            $this->get('app.suivi')->create($contact,'Saisie du décès');
           }
 
 
@@ -411,7 +413,7 @@ class ContactController extends Controller
 
       $arrContacts = array();
       foreach ($contacts as $contact) {
-        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getPrenom(),'numAdh'=>$contact->getSection()->getId(),'path'=>$this->generateUrl('view_contact',array('idContact'=>$contact->getId())));
+        $arrContacts[]=array('id'=>$contact->getId(),'nom'=>$contact->getNom(),'prenom'=>$contact->getPrenom(),'numAdh'=>$contact->getSection()->getNum(),'path'=>$this->generateUrl('view_contact',array('idContact'=>$contact->getId())));
       }  
 
       if($request->request->get('joinSection')){
@@ -420,7 +422,7 @@ class ContactController extends Controller
           ->search($request->request->get('txtSearch'));
 
         foreach ($sections as $section) {
-          $arrContacts[]=array('id'=>$section->getId(),'nom'=>'Section : '.$section->getNom(),'prenom'=>'','numAdh'=>$section->getId(),'path'=>$this->generateUrl('view_section',array('idSection'=>$section->getId())));
+          $arrContacts[]=array('id'=>$section->getId(),'nom'=>'Section : '.$section->getNom(),'prenom'=>'','numAdh'=>$section->getNum(),'path'=>$this->generateUrl('view_section',array('idSection'=>$section->getId())));
         }
       }
 
@@ -616,18 +618,6 @@ class ContactController extends Controller
                                           "Certificat de radiation de la précédente mutuelle",
                                           "Carte vitale",
                           )),
-            2 => array( 'title'=>"ATS",
-                        'fullTitle'=>"Objet : ATS",
-                        'values'=>array(
-                                          "Copie avis de non-imposition 2___",
-                                          "Copie carte d'identité",
-                                          "Copie de la notification d'admission à Pôle-Emploi",
-                                          "Copie du livret militaire",
-                                          "Copie du livret de famille",
-                                          "Justificatif de ressources pour la période du __________ au __________",
-                                          "Copie des avis de paiement Pôle-Emploi depuis le début de l'année",
-                                          "Autres :",
-                          )),
              3 => array( 'title'=>"FIVA",
                         'fullTitle'=>"Objet : FIVA",
                         'values'=>array(
@@ -644,7 +634,7 @@ class ContactController extends Controller
                                           "Pouvoir",
                                           "Autres",
                           )),
-             4 => array( 'title'=>"Carte d'invalidité",
+             4 => array( 'title'=>"MDPH",
                         'fullTitle'=>"Objet : Carte d'invalidité Macaron Européen <br />
                         AAH (Allocation aux Adultes Handicapés) / TH (Travailleur Handicapé)",
                         'values'=>array(
@@ -696,32 +686,7 @@ class ContactController extends Controller
                                           "Attestations fiscales de pension personnelle + RC",
                                           "Copie du livret militaire",
                                           "Copie de la carte d'identité",
-                          )),
-             7 => array( 'title'=>"Adhésion à la mutuelle : frais médicaux",
-                        'fullTitle'=>"Objet : Adhésion à la mutuelle : frais médicaux",
-                        'values'=>array(
-                                          "Formulaire complété",
-                                          "Copie de l'attestation vitale de chacun des souscripteurs",
-                                          "RIB",
-                                          "Certificat de radiation de la précédente mutuelle",
-                          )),
-             8 => array( 'title'=>"Adhésion à la mutuelle : options",
-                        'fullTitle'=>"Objet : Adhésion à la mutuelle : frais médicaux",
-                        'values'=>array(
-                                          "Formulaire complété",
-                                          "Copie de l'attestation vitale de chacun des souscripteurs",
-                                          "RIB",
-                                          "Certificat de radiation de la précédente mutuelle",
-                          )),
-             9 => array( 'title'=>"Prévoyance Obsèques UNIAT-IRIAL 
-                                    Versement capital décès",
-                        'fullTitle'=>"Objet : Prévoyance Obsèques UNIAT-IRIAL",
-                        'values'=>array(
-                                          "Acte de décès",
-                                          "Facture acquittée des Pompes Funèbres",
-                                          "Certificat d'hérédité, à se procurer en Mairie",
-                                          "Relevé d'identité bancaire ou postal, au nom de la personne qui a payé les obsèques",
-                          )),                                                                                                                                     
+                          )),                                                                                                                                
           );
 
         return $this->render('operateur/contacts/pieces-a-fournir.html.twig',array(
@@ -774,6 +739,45 @@ class ContactController extends Controller
         ->find($idContact);
       $text = sprintf("%s\n%s\n%s\n%s %s, %s", $contact->getNom().' '.$contact->getPrenom(), $contact->getAdresse(), $contact->getAdresseComp(), $contact->getCP(), $contact->getCommune(), $contact->getPays());
       $pdf->Add_Label(utf8_decode($text));
+
+      $response = new Response();
+      $response->setContent($pdf->Output());
+
+      $response->headers->set(
+         'Content-Type',
+         'application/pdf'
+      );
+
+      return $response;
+    }
+
+    /**
+     * @Route("/contact/{idContact}/imprimer/enveloppe", name="contact_print_enveloppe")
+     * @Security("has_role('ROLE_SPECTATOR')")
+     */
+    public function contactPrintEnveloppeAction($idContact)
+    {
+      $this->get('app.security')->checkAccess('CONTACT_ET_PRINT');
+
+      $pdf = new PDF_Enveloppe1515();
+      $pdf->AddPage();
+
+      $pdf->SetFont('Arial');
+
+      $contact = $this->getDoctrine()
+        ->getRepository('AppBundle:Contact')
+        ->find($idContact);
+
+      $lines = array();
+      $lines[] = $contact->getNom().' '.$contact->getPrenom();
+      $lines[] = $contact->getAdresse();
+      if($contact->getAdresseComp()){
+        $lines[] = $contact->getAdresseComp();
+      }
+      $lines[] = $contact->getCp().' '.$contact->getCommune();
+      $lines[] = $contact->getPays();
+
+      $pdf->AddDest($lines);
 
       $response = new Response();
       $response->setContent($pdf->Output());
@@ -843,6 +847,15 @@ class ContactController extends Controller
 
               $text = sprintf("%s", $contactDiplome->getDateObtention()->format('d/m/Y'));
               $pdf->Add_Label(utf8_decode($text));
+              
+              $text = sprintf("%s %s", $contactDiplome->getContact()->getNom(), $contactDiplome->getContact()->getPrenom());
+              $pdf->Add_Label(utf8_decode($text));
+
+              $text = sprintf("%s", $contactDiplome->getContact()->getSection()?$contactDiplome->getContact()->getSection()->getNom():'');
+              $pdf->Add_Label(utf8_decode($text));
+
+              $text = sprintf("%s", $contactDiplome->getDateObtention()->format('d/m/Y'));
+              $pdf->Add_Label(utf8_decode($text));
             }
 
           }
@@ -859,6 +872,42 @@ class ContactController extends Controller
             $contact = $this->getDoctrine()
               ->getRepository('AppBundle:Contact')
               ->find($id);
+            $fields = array(
+              $contact->getNom(),
+              $contact->getPrenom(),
+              $contact->getNumAdh(),
+              $contact->getStatutJuridique()->getLabel(),
+              $contact->getAdresse(),
+              $contact->getCp(),
+              $contact->getCommune(),
+              $contact->getSection()?$contact->getSection()->getNom():'',
+              $contact->getFonctionSection()?$contact->getFonctionSection()->getLabel():'',
+              $contact->getFonctionGroupement()?$contact->getFonctionGroupement()->getLabel():'',
+              $contact->getDateEntree()?$contact->getDateEntree()->format('d/m/Y'):'',
+            );
+            $csv->addLine($fields);
+          }
+          $csv->generateContent('exports/last-'.$this->getUser()->getId().'.csv');
+          
+          $path = $this->generateUrl('download_last_export',['fileName'=>'export_liste-contacts','type'=>'csv']);
+          break;
+          case 'EXPORT_ALL':
+
+          $idFilter = $request->request->get('idFilter');
+
+          $filtreValeurs = $this->getDoctrine()
+            ->getRepository('AppBundle:FiltreValeur')
+            ->findBy(array('filtrePerso'=>$idFilter));
+
+          $contacts = $this->getDoctrine()
+            ->getRepository('AppBundle:Contact')
+            ->findByFilter($filtreValeurs,1,2000);
+
+          $csv = $this->get('app.csvgenerator');
+          $csv->setName('export_liste-contacts');
+          $csv->addLine(array('Nom','Prénom','Num','Statut','Adresse','CP','Commune','Section','Fonction (section)','Fonction (groupement)','Date d\'entrée'));
+
+          foreach ($contacts as $contact) {
             $fields = array(
               $contact->getNom(),
               $contact->getPrenom(),

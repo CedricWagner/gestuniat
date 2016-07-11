@@ -101,6 +101,13 @@ class Section
     private $isActive;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="num", type="integer", nullable=true)
+     */
+    private $num;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Contact")
      * @ORM\JoinColumn(name="delegue_id", referencedColumnName="id")
      */
@@ -427,6 +434,30 @@ class Section
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set num
+     *
+     * @param boolean $num
+     *
+     * @return Section
+     */
+    public function setNum($num)
+    {
+        $this->num = $num;
+
+        return $this;
+    }
+
+    /**
+     * Get num
+     *
+     * @return integer
+     */
+    public function getNum()
+    {
+        return $this->num;
     }
 
     public static function getIdSectionDivers(){

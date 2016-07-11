@@ -55,7 +55,7 @@ class SupportController extends Controller
 		        ->setTo('dev@adn-studio.fr')
 		        ->setBody(
 		            $this->renderView(
-		                'Emails/support.html.twig',
+		                'emails/support.html.twig',
 		                array('support' => $support)
 		            ),
 		            'text/html'

@@ -41,7 +41,7 @@
 			<div class="col-md-3 dropdown">
 				<div class="kit-container"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
 					<div class="kit-label">
-						Lettre section
+						Transfert membre
 					</div>
 					<div class="kit-icon">
 						<span class="glyphicons glyphicons-message-full"></span>
@@ -56,7 +56,7 @@
 			<div class="col-md-3">
 				<div class="kit-container" onclick="window.open('{{path('generate_lettre_accompagnement',{'idContact':contact.id})}}')">
 					<div class="kit-label">
-						Lettre d'accompagnement
+						Proposition d'adhésion
 					</div>
 					<div class="kit-icon">
 						<span class="glyphicons glyphicons-message-full"></span>
@@ -70,7 +70,17 @@
 			<div class="col-md-3">
 				<div class="kit-container" onclick="window.open('{{path('generate_lettre_remerciement',{'idContact':contact.id})}}')">
 					<div class="kit-label">
-						Lettre de remerciement
+						Remerciement d'adhésion
+					</div>
+					<div class="kit-icon">
+						<span class="glyphicons glyphicons-message-full"></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="kit-container" onclick="window.open('{{path('generate_lettre_echeance',{'idContact':contact.id})}}')">
+					<div class="kit-label">
+						Échéance d'abonnement
 					</div>
 					<div class="kit-icon">
 						<span class="glyphicons glyphicons-message-full"></span>

@@ -73,7 +73,6 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 								$qb->andwhere('contact.dateEntree < :p_date_entree');
 								$params['p_date_entree'] = new \DateTime('-1 year');
 								break;
-								
 							default:
 								# code...
 								break;
@@ -117,6 +116,10 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 						if($fv->getValeur()==1)
 						$qb->andwhere('contact.isCA = true');
 						break;
+					case 'cbBulletin':
+						if($fv->getValeur()==1)
+						$qb->andwhere('contact.isBI = true');
+						break;
 					case 'selPaiement':
 						if($fv->getValeur() == 'V_PAYEE'){
 							$qb->join('AppBundle:Vignette', 'vign', 'WITH', 'vign.contact = contact');
@@ -145,9 +148,18 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 						}
 						break;
 					case 'selDiplome':
-						$qb->join('AppBundle:ContactDiplome', 'cd', 'WITH', 'cd.contact = contact');
-						$qb->andwhere('cd.diplome = :p_diplome');
-						$params['p_diplome'] = $fv->getValeur();
+						if ($fv->getValeur()=='NONE') {
+							$qb->andwhere('contact NOT IN (
+									SELECT c2 
+									FROM AppBundle\Entity\ContactDiplome cd 
+									JOIN AppBundle\Entity\Contact c2 WITH cd.contact = c2
+								)
+							');
+						}else{
+							$qb->join('AppBundle:ContactDiplome', 'cd', 'WITH', 'cd.contact = contact');
+							$qb->andwhere('cd.diplome = :p_diplome');
+							$params['p_diplome'] = $fv->getValeur();
+						}
 						break;
 					case 'selPrevoyance':
 						if ($fv->getValeur()=='OBS') {
@@ -210,6 +222,8 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 			->select('contact')
 			->where('contact.isActif = true')
 			->andwhere("contact.nom LIKE :nom OR contact.prenom LIKE :prenom OR contact.numAdh = :numAdh")
+			->addOrderBy('contact.prenom','ASC')
+			->addOrderBy('contact.nom','ASC')
             ->setFirstResult(0)
             ->setMaxResults(20);
 			if(sizeof($strs)>1){
@@ -250,8 +264,12 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
         return $result;
 	}
 
-	public function findDeces($annee,$numTrimestre){
+	public function findDeces($annee,$numTrimestre=1){
 		
+		if(!$numTrimestre){
+			$numTrimestre = 1;
+		}
+
 		switch ($numTrimestre) {
 			case 1:
 				$params = array(
@@ -285,8 +303,8 @@ class ContactRepository extends \Doctrine\ORM\EntityRepository
 		$qb = $this->createQueryBuilder('contact');
 		$result = $qb
 			->select('contact')
-			->where('contact.dateDeces >= :p_debut')
-			->andwhere('contact.dateDeces <= :p_fin')
+			->where('contact.dateSaisieDeces >= :p_debut')
+			->andwhere('contact.dateSaisieDeces <= :p_fin')
 			->setParameters($params)
 			->getQuery()
     		->execute();

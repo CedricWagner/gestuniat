@@ -600,7 +600,7 @@ form input, form textarea, form select{
 }
 
 .listing-item.done h4 span{
-    text-decoration: line-through;
+    /*text-decoration: line-through;*/
 }
 
 /* FILTER */

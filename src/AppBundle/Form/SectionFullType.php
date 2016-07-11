@@ -28,6 +28,7 @@ class SectionFullType extends AbstractType
 
         $builder
             ->add('nom',TextType::class,array('label' => 'Nom'))
+            ->add('num',TextType::class,array('label' => 'Numéro'))
             ->add('subventions',TextType::class,array('label' => 'Subventions'))
             ->add('destDernierListing',TextType::class,array('label' => 'Destinataire du dernier listing'))
             ->add('dateDernierListing',DateType::class,array('label' => 'Date du dernier listing','years'=>range($currentYear->format('Y'),1950),'placeholder' => array(

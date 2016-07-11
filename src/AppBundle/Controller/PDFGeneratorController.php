@@ -174,8 +174,8 @@ class PDFGeneratorController extends Controller
       $pdf->Signature('Le : ','Signature du mandataire ');
 
       $response = new Response();
-      $response->setContent($pdf->Output());
-      // $response->setContent(file_get_contents('pdf/last-'.$this->getUser()->getId().'.pdf'));
+      // $response->setContent($pdf->Output());
+      $response->setContent(file_get_contents('pdf/procuration.pdf'));
       $response->headers->set(
          'Content-Type',
          'application/pdf'
@@ -202,8 +202,8 @@ class PDFGeneratorController extends Controller
 
       $pdf = new PDF_DefaultModel();
       $pdf->AddPage();
-      $pdf->Title('LETTRE DE REMERCIEMENT');
-      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->Title('REMERCIEMENT D\'ADHESION');
+      $pdf->RightText($contact->displayHeader());
       $pdf->SetLeftMargin(40);
       $pdf->AddParagraphe($this->render('docs/lettres/remerciement.html.twig',['contact'=>$contact])->getContent());
 
@@ -235,8 +235,8 @@ class PDFGeneratorController extends Controller
 
       $pdf = new PDF_DefaultModel();
       $pdf->AddPage();
-      $pdf->Title('LETTRE D\'ECHEANCE');
-      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->Title('ÉCHÉANCE D\'ABONNEMENT');
+      $pdf->RightText($contact->displayHeader());
       $pdf->SetLeftMargin(40);
       $pdf->AddParagraphe($this->render('docs/lettres/echeance-decouverte.html.twig',['contact'=>$contact])->getContent());
 
@@ -268,8 +268,8 @@ class PDFGeneratorController extends Controller
 
       $pdf = new PDF_DefaultModel();
       $pdf->AddPage();
-      $pdf->Title('LETTRE DE FELICITATION');
-      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->Title('LETTRE DE FELICITATIONS');
+      $pdf->RightText($contact->displayHeader());
       $pdf->SetLeftMargin(40);
       $pdf->AddParagraphe($this->render('docs/lettres/felicitations.html.twig',['contact'=>$contact])->getContent());
 
@@ -301,7 +301,7 @@ class PDFGeneratorController extends Controller
 
       $pdf = new PDF_DefaultModel();
       $pdf->AddPage();
-      $pdf->Title('LETTRE SECTION');
+      $pdf->Title('TRANSFERT MEMBRE');
       $pdf->RightText("À l'attention du ".$target." de la section\nStrasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
       $pdf->SetLeftMargin(40);
       $pdf->AddParagraphe($this->render('docs/lettres/section.html.twig',['contact'=>$contact])->getContent());
@@ -318,10 +318,10 @@ class PDFGeneratorController extends Controller
     }
 
     /**
-     * @Route("pdf/contact/{idPermanence}/generer/ordre-permanence/{target}", name="generate_ordre_perm", requirements={"target":"Président|Vice-Président|Secrétaire|Trésorier"})
+     * @Route("pdf/contact/{idPermanence}/generer/ordre-permanence/", name="generate_ordre_perm")
      * @Security("has_role('ROLE_SPECTATOR')")
      */
-    public function generateOrdrePermAction($idPermanence,$target)
+    public function generateOrdrePermAction($idPermanence)
     {
 
       $this->get('app.security')->checkAccess('AG_PRINT');
@@ -332,22 +332,24 @@ class PDFGeneratorController extends Controller
               ->getRepository('AppBundle:Permanence')
               ->find($idPermanence);
 
-      $fonctionSection = $this->getDoctrine()
+      $fonctionPresident = $this->getDoctrine()
         ->getRepository('AppBundle:FonctionSection')
-        ->findOneBy(array('label'=>$target));
+        ->findWithCap('Président');
 
-      if(!$fonctionSection){
-        $this->get('session')->getFlashBag()->add('danger', 'Génération impossible : la fonction "'.$target.'"" n\'existe pas');
-        return $this->redirectToRoute('list_permanences',['idSection'=>$perm->getSection()->getId()]);
-      }else{
-        $contact = $this->getDoctrine()
+      $fonctionVicePresident = $this->getDoctrine()
+        ->getRepository('AppBundle:FonctionSection')
+        ->findWithCap('Vice-Président');
+
+      $fonctionTresorier = $this->getDoctrine()
+        ->getRepository('AppBundle:FonctionSection')
+        ->findWithCap('Trésorier');
+
+      $fonctions = array($fonctionPresident,$fonctionVicePresident,$fonctionTresorier);
+
+      foreach ($fonctions as $fonction) {
+        $contacts[]= $this->getDoctrine()
           ->getRepository('AppBundle:Contact')
-          ->findOneBy(array('section'=>$perm->getSection(),'fonctionSection'=>$fonctionSection));
-
-        if(!$contact){
-          $this->get('session')->getFlashBag()->add('danger', 'Génération impossible : aucun contact n\'occupe la fonction '.$target);
-          return $this->redirectToRoute('list_permanences',['idSection'=>$perm->getSection()->getId()]);
-        }
+          ->findOneBy(array('section'=>$perm->getSection(),'fonctionSection'=>$fonction));
       }
 
 
@@ -403,22 +405,23 @@ class PDFGeneratorController extends Controller
       $pdf->AddParagraphe('Personnes présentes :');
       $pdf->Ln(10);
       $pdf->AddParagraphe('Dons :');
-      $pdf->AddParagraphe('<b>Contact :</b>');
-      $pdf->InlineMultiCell(20,$contact->getNom().' '.$contact->getPrenom(),true);
-      $pdf->InlineMultiCell(20,$fonctionSection->getLabel());
-      $pdf->InlineMultiCell(40,$contact->getAdresse());
-      $pdf->InlineMultiCell(15,$contact->getCp());
-      $pdf->InlineMultiCell(25,$contact->getCommune());
-      $pdf->InlineMultiCell(25,$contact->getTelFixe()!=''?$contact->getTelFixe():$contact->getTelPort());
-      $pdf->Ln(5);
+      $pdf->AddParagraphe('<b>Contacts :</b>');
+      foreach ($contacts as $contact) {
+        if($contact){
+          $pdf->SetLeftMargin(40);
+          $pdf->SetX(40);
+          $pdf->InlineMultiCell(40,$contact->getNom().' '.$contact->getPrenom(),true);
+          $pdf->InlineMultiCell(40,$contact->getFonctionSection()->getLabel());
+          $pdf->InlineMultiCell(50,$contact->getTelFixe()!=''?$contact->getTelFixe():$contact->getTelPort());
+          $pdf->SetLeftMargin(40);
+          $pdf->SetX(40);
+          $pdf->InlineMultiCell(82,$contact->getAdresse(),true);
+          $pdf->InlineMultiCell(60,$contact->getCp().' '.$contact->getCommune());
+          $pdf->Ln(5);
+        }
+      }
       $pdf->SetLeftMargin(40);
       $pdf->AddParagraphe('<b>Subventions :</b> '.$perm->getSection()->getSubventions());
-      $pdf->AddParagraphe('<b>Effectifs : </b>');
-      $pdf->BorderedCells($effectifs);
-      $pdf->Ln(5);
-      $pdf->AddParagraphe('<b>Patrimoines : </b>');
-      $pdf->BorderedCells($patrimoines);
-      $pdf->Ln(5);
       $pdf->AddParagraphe('<b>Permanence Siège : </b>');
       $pdf->InlineMultiCell(50,$perm->getPeriodicite()->getLabel(),true);
       $pdf->InlineMultiCell(50,$perm->getHoraire());
@@ -429,6 +432,13 @@ class PDFGeneratorController extends Controller
       $pdf->AddParagraphe('<b>Destinataire(s) Rentier : </b>'.$txtDests);
       $pdf->AddParagraphe('<b>Nombre de Rentiers : </b>'.$nbRentiers);
       $pdf->AddParagraphe('<b>Autres informations : </b>');
+      $pdf->addHeader = false;
+      $pdf->AddPage();
+      $pdf->AddParagraphe('<b>Effectifs : </b>');
+      $pdf->BorderedCells($effectifs);
+      $pdf->Ln(5);
+      $pdf->AddParagraphe('<b>Patrimoines : </b>');
+      $pdf->BorderedCells($patrimoines);
 
       $response = new Response();
       $response->setContent($pdf->Output());
@@ -465,8 +475,8 @@ class PDFGeneratorController extends Controller
         "\n".$contact->getCp()." ".$contact->getCommune());
       $pdf->SetLeftMargin(40);
       $pdf->SetFontDefault();
-      $pdf->AddParagraphe('Cher(e) Membre,',true);
-      $pdf->AddParagraphe('Nous tenons à vous remercier pour votre fidélité à notre section locale et à la grande famille de l\'UNIAT-ALSACE. C\'est pourquoi le Comité de votre section a décidé de vous décerner le diplôme et l\'insigne d\'honneur de l\'UNIAT. Nous serons particulièrement heureux de pouvoir vous les remettre lors de l\'assemblée générale, qui se tiendra le :');
+      $pdf->AddParagraphe($contact->displayCivility(),true);
+      $pdf->AddParagraphe("Le combat que nous menons depuis 1924 pour nos adhérents est loin d'être terminé. Notre travail devient complexe et difficile face à une législation sociale en constante évolution, mais nous ne baisserons jamais les bras. Pour mener à bien cette mission, nous avons besoin de vous, nos adhérents. C'est pour vous remercier de votre fidélité à la grande famille de l'UNIAT, que le Comité de votre section a décidé de vous décerner le diplôme et l'insigne d'honneur de l'UNIAT-ALSACE. Nous serons particulièrement heureux de pouvoir vous remettre ces distinctions lors de l'Assemblée Générale qui se tiendra le :");
       $nextAg = $this->getDoctrine()
         ->getRepository('AppBundle:AssembleeGenerale')
         ->findNextBySection($contact->getSection());
@@ -481,8 +491,10 @@ class PDFGeneratorController extends Controller
       $pdf->AddParagraphe('Nous espérons que vous pourrez être parmi nous à cette occasion et vous remercions de nous retourner le talon ci-dessous.',true);
       $pdf->AddParagraphe('Recevez, Chere(e) Membre, nos cordiales salutations.',true);
 
+      $pdf->SetY($pdf->GetY()-5);
       $pdf->Signature('','Le '.$target.' : ');
 
+      $pdf->SetY($pdf->GetY()-15);
       $pdf->LigneDecoupe('TALON - REPONSE');
       $pdf->Ln(5);
 
@@ -530,8 +542,8 @@ class PDFGeneratorController extends Controller
 
       $pdf = new PDF_DefaultModel();
       $pdf->AddPage();
-      $pdf->Title('LETTRE D\'ACCOMPAGNEMENT');
-      $pdf->RightText("Strasbourg,\nle ".$date->format('d/m')."\nSection : ".$contact->getSection()->getNom());
+      $pdf->Title('PROPOSITION D\'ADHÉSION');
+      $pdf->RightText($contact->displayHeader());
       $pdf->SetLeftMargin(40);
       $pdf->AddParagraphe($this->render('docs/lettres/accompagnement.html.twig',['contact'=>$contact])->getContent());
 
@@ -586,7 +598,7 @@ class PDFGeneratorController extends Controller
       $pdf->SetLeftMargin(110);
       $pdf->AddDefaultLine('Nom : ',$contact->getNom());
       $pdf->AddDefaultLine('Prénom : ',$contact->getPrenom());
-      $pdf->AddDefaultLine('Né(e) le : ',$contact->getDateNaissance()->format('d/m/Y'));
+      $pdf->AddDefaultLine('Né(e) le : ',$contact->getDateNaissance()?$contact->getDateNaissance()->format('d/m/Y'):'');
       $pdf->AddDefaultLine('Adresse : ',$contact->getAdresse());
       if($contact->getAdresseComp()&&$contact->getAdresseComp()!=''){
         $pdf->AddDefaultLine('',$contact->getAdresseComp());
@@ -594,7 +606,7 @@ class PDFGeneratorController extends Controller
       $pdf->AddDefaultLine('',$contact->getCp().' - '.$contact->getCommune());
       $pdf->AddDefaultLine('Strasbourg, le : ',$date->format('d/m/Y'));
       $pdf->AddDefaultLine('Pour le Groupement Alsace,','');
-      $pdf->Signature('','Le président : ');
+      $pdf->Signature('','La Direction : ');
 
       $pdf->Separator();
       
@@ -739,7 +751,7 @@ class PDFGeneratorController extends Controller
         $pdf->AddParagraphe('in : <b>'.$pouvoir->getContact()->getLieuNaissance().'</b>');
         $pdf->AddParagraphe('Adresse : <b>'.$pouvoir->getContact()->getAdresse().' '.$pouvoir->getContact()->getAdresseComp().' '.$pouvoir->getContact()->getAdresseComp().' '.$pouvoir->getContact()->getCp().' '.$pouvoir->getContact()->getCommune().'</b>');
 
-        $pdf->AddParagraphe('erteile hiermit dem Allters- u. Invalidenverband UNIAT, dem ich als Mitglied angehöre.<br />Vollmacht mich zu vertreten.');
+        $pdf->AddParagraphe('erteile hiermit dem Allters- u. Invalidenverband UNIAT, dem ich als Mitglied angehöre <br />Vollmacht mich zu vertreten.');
 
         $pdf->AddParagraphe('gegen die/bei der : '.$pouvoir->getDestinataire());
 
@@ -841,13 +853,7 @@ donne délégation de pouvoir à l'UNIAT pour me représenter et me défendre da
       $pdf->TableLine("Somme en toutes lettres", strtoupper($this->get('app.tools')->asLetters($don->getMontant(),true)),'1/2');
       $pdf->specTableLine('Date de paiement : '.$don->getDate()->format('d/m/Y'),'Mode de versement : '.($don->getMoyenPaiement()?$don->getMoyenPaiement()->getLabel():''));
       $pdf->SetFont('','',8);
-      $pdf->AddParagraphe("<i>Le don n'ouvre droit à déduction que dans la mesure
-où les conditions générales prévues à l'article 238 bis-1
-du Code général des impôts sont remplies.
-C'est-à-dire s'il est effectué « au profit d'oeuvres ou
-d'organismes d'intérêt général, de caractère
-philantropique, éducatif, scientifique, social, familial
-ou culturel ».</i>");
+      $pdf->AddParagraphe("<i>Le don n'ouvre droit à déduction que dans la mesure où les conditions générales prévues à l'article 238 bis-1 du Code général des impôts sont remplies. C'est-à-dire s'il est effectué « au profit d'oeuvres ou d'organismes d'intérêt général, de caractère philantropique, éducatif, scientifique, social, familial ou culturel ».</i>");
 
       $response = new Response();
       $response->setContent($pdf->Output());
@@ -880,7 +886,7 @@ ou culturel ».</i>");
       $pdf->Title(strtoupper('LETTRE DE REMERCIEMENT'));
       $pdf->setFontDefault();
       $pdf->SetFont('','',10);
-      $pdf->RightText("Strasbourg \nle ".$date->format('d/m/Y')." \nSection : ".($don->getContact()->getSection()?$don->getContact()->getSection()->getNom():''));
+      $pdf->RightText($don->getContact()->displayHeader());
       $pdf->AddParagraphe($this->render('docs/lettres/remerciement-don.html.twig',['montant'=>$don->getMontant(),'contact'=>$don->getContact()])->getContent());
 
       $response = new Response();
@@ -1098,6 +1104,15 @@ ou culturel ».</i>");
 
       $pdf->AddFont('Mistral');
       $pdf->SetFont('mistral','',40);
+
+      $text = sprintf("%s %s", $contactDiplome->getContact()->getNom(), $contactDiplome->getContact()->getPrenom());
+      $pdf->Add_Label(utf8_decode($text));
+
+      $text = sprintf("%s", $contactDiplome->getContact()->getSection()?$contactDiplome->getContact()->getSection()->getNom():'');
+      $pdf->Add_Label(utf8_decode($text));
+
+      $text = sprintf("%s", $contactDiplome->getDateObtention()->format('d/m/Y'));
+      $pdf->Add_Label(utf8_decode($text));
 
       $text = sprintf("%s %s", $contactDiplome->getContact()->getNom(), $contactDiplome->getContact()->getPrenom());
       $pdf->Add_Label(utf8_decode($text));

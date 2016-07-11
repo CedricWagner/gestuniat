@@ -152,11 +152,11 @@ class DocumentController extends Controller
 
 	  	$vignettes = $this->getDoctrine()
 	  					->getRepository('AppBundle:Vignette')
-	  					->findBy(array('dossier'=>$dossier,));
+	  					->findBy(array('dossier'=>$dossier));
 
 	  	$suivis = $this->getDoctrine()
 	  					->getRepository('AppBundle:Suivi')
-	  					->findBy(array('dossier'=>$dossier,'isOk'=>false));
+	  					->findBy(array('dossier'=>$dossier,'isOk'=>false),array('dateCreation'=>'DESC'));
 
 	  	$suivi = new Suivi();
       	$suiviForm = $this->createForm(SuiviDefaultType::class, $suivi,array('action'=>$this->generateUrl('save_suivi_dossier').'?idDossier='.$dossier->getId()));
@@ -464,6 +464,7 @@ class DocumentController extends Controller
 	public function deleteDossierAction($idDossier)
 	{
 		$this->get('app.security')->checkAccess('DOSSIER_DELETE');
+		$em = $this->get('doctrine.orm.entity_manager');
 
 	    $dossier = $this->getDoctrine()
 	      ->getRepository('AppBundle:Dossier')
@@ -471,9 +472,28 @@ class DocumentController extends Controller
 		
 		$contact = $dossier->getContact();
 
-		$em = $this->get('doctrine.orm.entity_manager');
+		$documents = $this->getDoctrine()
+			->getRepository('AppBundle:Document')
+			->findBy(array('dossier'=>$dossier));
+
+		if (sizeof($documents) > 0) {
+			$this->get('session')->getFlashBag()->add('danger','Suppression impossible : il reste '.sizeof($documents).' document(s) rattaché(s) à ce dossier');
+			return $this->redirectToRoute('view_dossier',array('idContact'=>$contact->getId(),'idDossier'=>$dossier->getId()));;
+		}
+
+		$suivis = $this->getDoctrine()
+			->getRepository('AppBundle:Suivi')
+			->findBy(array('dossier'=>$dossier));
+
+		foreach ($suivis as $suivi) {
+			$em->remove($suivi);
+		}
+		$em->flush();
+
 		$em->remove($dossier);
 		$em->flush();
+
+
 
       	$history = $this->get('app.history');
       	$history->init($this->getUser(),['id'=>$idDossier,'name'=>'Dossier'],'DELETE')
